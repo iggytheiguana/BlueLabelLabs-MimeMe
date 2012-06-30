@@ -1,0 +1,284 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C523A010159F7CE7004AA39C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A00F159F7CE7004AA39C /* UIKit.framework */; };
+		C523A012159F7CE7004AA39C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A011159F7CE7004AA39C /* Foundation.framework */; };
+		C523A014159F7CE7004AA39C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A013159F7CE7004AA39C /* CoreGraphics.framework */; };
+		C523A016159F7CE7004AA39C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A015159F7CE7004AA39C /* CoreData.framework */; };
+		C523A01C159F7CE7004AA39C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C523A01A159F7CE7004AA39C /* InfoPlist.strings */; };
+		C523A01E159F7CE7004AA39C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C523A01D159F7CE7004AA39C /* main.m */; };
+		C523A022159F7CE7004AA39C /* Mime_meAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C523A021159F7CE7004AA39C /* Mime_meAppDelegate.m */; };
+		C523A025159F7CE7004AA39C /* Mime_me.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C523A023159F7CE7004AA39C /* Mime_me.xcdatamodeld */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C523A00B159F7CE7004AA39C /* Mime-me.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mime-me.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C523A00F159F7CE7004AA39C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C523A011159F7CE7004AA39C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C523A013159F7CE7004AA39C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C523A015159F7CE7004AA39C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		C523A019159F7CE7004AA39C /* Mime-me-Info.plist */ = {isa = PBXFileReference; path = "Mime-me-Info.plist"; sourceTree = "<group>"; };
+		C523A01B159F7CE7004AA39C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C523A01D159F7CE7004AA39C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C523A01F159F7CE7004AA39C /* Mime-me-Prefix.pch */ = {isa = PBXFileReference; path = "Mime-me-Prefix.pch"; sourceTree = "<group>"; };
+		C523A020159F7CE7004AA39C /* Mime_meAppDelegate.h */ = {isa = PBXFileReference; path = Mime_meAppDelegate.h; sourceTree = "<group>"; };
+		C523A021159F7CE7004AA39C /* Mime_meAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Mime_meAppDelegate.m; sourceTree = "<group>"; };
+		C523A024159F7CE7004AA39C /* Mime_me.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mime_me.xcdatamodel; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C523A008159F7CE7004AA39C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C523A010159F7CE7004AA39C /* UIKit.framework in Frameworks */,
+				C523A012159F7CE7004AA39C /* Foundation.framework in Frameworks */,
+				C523A014159F7CE7004AA39C /* CoreGraphics.framework in Frameworks */,
+				C523A016159F7CE7004AA39C /* CoreData.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C523A000159F7CE6004AA39C = {
+			isa = PBXGroup;
+			children = (
+				C523A017159F7CE7004AA39C /* Mime-me */,
+				C523A00E159F7CE7004AA39C /* Frameworks */,
+				C523A00C159F7CE7004AA39C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C523A00C159F7CE7004AA39C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C523A00B159F7CE7004AA39C /* Mime-me.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C523A00E159F7CE7004AA39C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C523A00F159F7CE7004AA39C /* UIKit.framework */,
+				C523A011159F7CE7004AA39C /* Foundation.framework */,
+				C523A013159F7CE7004AA39C /* CoreGraphics.framework */,
+				C523A015159F7CE7004AA39C /* CoreData.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C523A017159F7CE7004AA39C /* Mime-me */ = {
+			isa = PBXGroup;
+			children = (
+				C523A020159F7CE7004AA39C /* Mime_meAppDelegate.h */,
+				C523A021159F7CE7004AA39C /* Mime_meAppDelegate.m */,
+				C523A023159F7CE7004AA39C /* Mime_me.xcdatamodeld */,
+				C523A018159F7CE7004AA39C /* Supporting Files */,
+			);
+			path = "Mime-me";
+			sourceTree = "<group>";
+		};
+		C523A018159F7CE7004AA39C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C523A019159F7CE7004AA39C /* Mime-me-Info.plist */,
+				C523A01A159F7CE7004AA39C /* InfoPlist.strings */,
+				C523A01D159F7CE7004AA39C /* main.m */,
+				C523A01F159F7CE7004AA39C /* Mime-me-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C523A00A159F7CE7004AA39C /* Mime-me */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C523A028159F7CE7004AA39C /* Build configuration list for PBXNativeTarget "Mime-me" */;
+			buildPhases = (
+				C523A007159F7CE7004AA39C /* Sources */,
+				C523A008159F7CE7004AA39C /* Frameworks */,
+				C523A009159F7CE7004AA39C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Mime-me";
+			productName = "Mime-me";
+			productReference = C523A00B159F7CE7004AA39C /* Mime-me.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C523A002159F7CE6004AA39C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = "Mime-me";
+				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = "Blue Label Solutions LLC";
+			};
+			buildConfigurationList = C523A005159F7CE6004AA39C /* Build configuration list for PBXProject "Mime-me" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C523A000159F7CE6004AA39C;
+			productRefGroup = C523A00C159F7CE7004AA39C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C523A00A159F7CE7004AA39C /* Mime-me */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C523A009159F7CE7004AA39C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C523A01C159F7CE7004AA39C /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C523A007159F7CE7004AA39C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C523A01E159F7CE7004AA39C /* main.m in Sources */,
+				C523A022159F7CE7004AA39C /* Mime_meAppDelegate.m in Sources */,
+				C523A025159F7CE7004AA39C /* Mime_me.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C523A01A159F7CE7004AA39C /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C523A01B159F7CE7004AA39C /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C523A026159F7CE7004AA39C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C523A027159F7CE7004AA39C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C523A029159F7CE7004AA39C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Mime-me/Mime-me-Prefix.pch";
+				INFOPLIST_FILE = "Mime-me/Mime-me-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		C523A02A159F7CE7004AA39C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Mime-me/Mime-me-Prefix.pch";
+				INFOPLIST_FILE = "Mime-me/Mime-me-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C523A005159F7CE6004AA39C /* Build configuration list for PBXProject "Mime-me" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C523A026159F7CE7004AA39C /* Debug */,
+				C523A027159F7CE7004AA39C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C523A028159F7CE7004AA39C /* Build configuration list for PBXNativeTarget "Mime-me" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C523A029159F7CE7004AA39C /* Debug */,
+				C523A02A159F7CE7004AA39C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		C523A023159F7CE7004AA39C /* Mime_me.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C523A024159F7CE7004AA39C /* Mime_me.xcdatamodel */,
+			);
+			currentVersion = C523A024159F7CE7004AA39C /* Mime_me.xcdatamodel */;
+			path = Mime_me.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = C523A002159F7CE6004AA39C /* Project object */;
+}
