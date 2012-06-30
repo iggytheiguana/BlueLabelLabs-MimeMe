@@ -1,0 +1,40 @@
+//
+//  ApplicationSettings.m
+//  Test Project 2
+//
+//  Created by Bobby Gill on 6/16/11.
+//  Copyright 2011 Blue Label Solutions LLC. All rights reserved.
+//
+
+#import "ApplicationSettingsDefaults.h"
+
+
+//this URL is to connect to BOBBY's development environment
+//NSString* const default_BASEURL = @"http://108.54.179.39/mimeme/rest";
+
+//this URL is to connect to the PRODUCTION MIMEME environment
+NSString* const default_BASEURL = @"http://www.mime-me.com/mimeme/rest";
+
+
+int const progress_MAXSECONDSTODISPLAY = 45;
+int const maxsize_PHOTODOWNLOAD=1000;
+int const maxsize_THEMEDOWNLOAD=100;
+int const maxsize_CAPTIONDOWNLOAD = 1000;
+int const maxsize_FEEDDOWNLOAD = 50;
+int const pagesize = 10;
+int const size_NUMLINKEDOBJECTSTOTRETURN=5;
+int const timeout_HTTP = 60;
+int const threshold_FEED_ENUMERATION_TIME_GAP=60;
+int const threshold_CAPTION_ENUMERATION_TIME_GAP=60;
+int const threshold_PAGE_ENUMERATION_TIME_GAP=60;
+int const threshold_FOLLOW_ENUMERATION_TIME_GAP = 60;
+int const page_size_LINKEDOBJECTS = 5;
+int const page_DRAFTEXPIRES_SECONDS = 86400;
+NSString* const twitter_CONSUMERKEY=@"";
+NSString* const twitter_CONSUMERSECRET=@"";
+int const progress_WHEELSPINTIME = 8;
+int const default_POLL_EXPIRY_IN_SECONDS = 36000;
+int const default_POLL_NUM_PAGES = 3;
+int const EDITOR_MINIMUM = 30;
+int const maxsize_FOLLOWDOWNLOAD = 1000;
+int const delete_expired_objects = 30;

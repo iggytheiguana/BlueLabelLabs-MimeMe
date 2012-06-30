@@ -14,6 +14,37 @@
 @synthesize managedObjectContext = __managedObjectContext;
 @synthesize managedObjectModel = __managedObjectModel;
 @synthesize persistentStoreCoordinator = __persistentStoreCoordinator;
+@synthesize applicationSettingsManager = __applicationSettingsManager;
+@synthesize authenticationManager = __authenticationManager;
+@synthesize facebook = __facebook;
+@synthesize deviceToken = m_deviceToken;
+
+#define     kFACEBOOKAPPID  @"271328586292350"
+- (ApplicationSettingsManager*)applicationSettingsManager {
+    if (__applicationSettingsManager != nil) {
+        return __applicationSettingsManager;
+    }
+    __applicationSettingsManager = [ApplicationSettingsManager instance];
+    return __applicationSettingsManager;
+}
+- (Facebook*) facebook {
+    if (__facebook != nil) {
+        return __facebook;
+    }
+    
+    __facebook = [[Facebook alloc]initWithAppId:kFACEBOOKAPPID];
+    
+    return __facebook;
+    
+}
+- (AuthenticationManager*) authenticationManager {
+    if (__authenticationManager != nil) {
+        return __authenticationManager;
+    }
+    
+    __authenticationManager = [AuthenticationManager instance];
+    return __authenticationManager;
+}
 
 - (void)dealloc
 {
