@@ -14,11 +14,23 @@
 #import "Attributes.h"
 @implementation User
 
+@dynamic achievementthreshold;
+@dynamic app_version;
+@dynamic devicetoken;
+@dynamic displayname;
 @dynamic email;
-@dynamic firstname;
-@dynamic lastname;
-@dynamic numcompleted;
-@dynamic lastposition;
+@dynamic fb_user_id;
+@dynamic imageurl;
+@dynamic numberofpoints;
+@dynamic numberfollowing;
+@dynamic numberofpointslw;
+@dynamic numberofpointssw;
+@dynamic numberoffollowers;
+@dynamic prevachievementthreshold;
+@dynamic sharinglevel;
+@dynamic twitter_user_id;
+@dynamic username;
+@dynamic thumbnailurl;
 
 
 - (id) initFromJSONDictionary:(NSDictionary *)jsonDictionary {
