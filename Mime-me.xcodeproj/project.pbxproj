@@ -7,6 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		529BE9C515A2211700B7346A /* Mime-meMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9C315A2211700B7346A /* Mime-meMenuViewController.m */; };
+		529BE9C615A2211700B7346A /* Mime-meMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C415A2211700B7346A /* Mime-meMenuViewController.xib */; };
+		529BE9C915A2225D00B7346A /* logo-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C715A2225D00B7346A /* logo-MimeMe.png */; };
+		529BE9CA15A2225D00B7346A /* logo-MimeMe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */; };
+		529BE9CD15A22A1900B7346A /* logo_wName-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */; };
+		529BE9CE15A22A1900B7346A /* logo_wName-MimeMe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9CC15A22A1900B7346A /* logo_wName-MimeMe@2x.png */; };
+		529BE9D115A22D0A00B7346A /* gem.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9CF15A22D0A00B7346A /* gem.png */; };
+		529BE9D215A22D0A00B7346A /* gem@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9D015A22D0A00B7346A /* gem@2x.png */; };
+		529BE9D615A22EEA00B7346A /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9D515A22EEA00B7346A /* BaseViewController.m */; };
+		529BE9DC15A22F6200B7346A /* UIProgressHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9D915A22F6200B7346A /* UIProgressHUDView.xib */; };
+		529BE9DD15A22F6200B7346A /* UIProgressHUDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9DB15A22F6200B7346A /* UIProgressHUDView.m */; };
+		529BE9E015A22F9F00B7346A /* UILoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9DF15A22F9F00B7346A /* UILoginView.m */; };
+		529BE9E315A22FF800B7346A /* UICustomAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9E215A22FF700B7346A /* UICustomAlertView.m */; };
+		529BE9E615A231A200B7346A /* UICameraActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9E515A231A200B7346A /* UICameraActionSheet.m */; };
+		529BE9EA15A2339200B7346A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9E815A2339200B7346A /* LoginViewController.m */; };
+		529BE9EB15A2339200B7346A /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9E915A2339200B7346A /* LoginViewController.xib */; };
+		529BE9EF15A2387500B7346A /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9ED15A2387400B7346A /* SignUpViewController.m */; };
+		529BE9F015A2387500B7346A /* SignUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9EE15A2387500B7346A /* SignUpViewController.xib */; };
 		C523A010159F7CE7004AA39C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A00F159F7CE7004AA39C /* UIKit.framework */; };
 		C523A012159F7CE7004AA39C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A011159F7CE7004AA39C /* Foundation.framework */; };
 		C523A014159F7CE7004AA39C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A013159F7CE7004AA39C /* CoreGraphics.framework */; };
@@ -137,6 +155,32 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		529BE9C215A2211700B7346A /* Mime-meMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Mime-meMenuViewController.h"; sourceTree = "<group>"; };
+		529BE9C315A2211700B7346A /* Mime-meMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Mime-meMenuViewController.m"; sourceTree = "<group>"; };
+		529BE9C415A2211700B7346A /* Mime-meMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Mime-meMenuViewController.xib"; sourceTree = "<group>"; };
+		529BE9C715A2225D00B7346A /* logo-MimeMe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-MimeMe.png"; sourceTree = "<group>"; };
+		529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-MimeMe@2x.png"; sourceTree = "<group>"; };
+		529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo_wName-MimeMe.png"; sourceTree = "<group>"; };
+		529BE9CC15A22A1900B7346A /* logo_wName-MimeMe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo_wName-MimeMe@2x.png"; sourceTree = "<group>"; };
+		529BE9CF15A22D0A00B7346A /* gem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gem.png; sourceTree = "<group>"; };
+		529BE9D015A22D0A00B7346A /* gem@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gem@2x.png"; sourceTree = "<group>"; };
+		529BE9D415A22EEA00B7346A /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
+		529BE9D515A22EEA00B7346A /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
+		529BE9D915A22F6200B7346A /* UIProgressHUDView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIProgressHUDView.xib; sourceTree = "<group>"; };
+		529BE9DA15A22F6200B7346A /* UIProgressHUDView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIProgressHUDView.h; sourceTree = "<group>"; };
+		529BE9DB15A22F6200B7346A /* UIProgressHUDView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIProgressHUDView.m; sourceTree = "<group>"; };
+		529BE9DE15A22F9F00B7346A /* UILoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILoginView.h; sourceTree = "<group>"; };
+		529BE9DF15A22F9F00B7346A /* UILoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILoginView.m; sourceTree = "<group>"; };
+		529BE9E115A22FF700B7346A /* UICustomAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICustomAlertView.h; sourceTree = "<group>"; };
+		529BE9E215A22FF700B7346A /* UICustomAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICustomAlertView.m; sourceTree = "<group>"; };
+		529BE9E415A231A100B7346A /* UICameraActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICameraActionSheet.h; sourceTree = "<group>"; };
+		529BE9E515A231A200B7346A /* UICameraActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICameraActionSheet.m; sourceTree = "<group>"; };
+		529BE9E715A2339200B7346A /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		529BE9E815A2339200B7346A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		529BE9E915A2339200B7346A /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		529BE9EC15A2387400B7346A /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
+		529BE9ED15A2387400B7346A /* SignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpViewController.m; sourceTree = "<group>"; };
+		529BE9EE15A2387500B7346A /* SignUpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignUpViewController.xib; sourceTree = "<group>"; };
 		C523A00B159F7CE7004AA39C /* Mime-me.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mime-me.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C523A00F159F7CE7004AA39C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C523A011159F7CE7004AA39C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -444,6 +488,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		529BE9D315A22EDA00B7346A /* Abstract */ = {
+			isa = PBXGroup;
+			children = (
+				529BE9D415A22EEA00B7346A /* BaseViewController.h */,
+				529BE9D515A22EEA00B7346A /* BaseViewController.m */,
+			);
+			name = Abstract;
+			sourceTree = "<group>";
+		};
+		529BE9D715A22F4100B7346A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				529BE9D815A22F4800B7346A /* Generic */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		529BE9D815A22F4800B7346A /* Generic */ = {
+			isa = PBXGroup;
+			children = (
+				529BE9E415A231A100B7346A /* UICameraActionSheet.h */,
+				529BE9E515A231A200B7346A /* UICameraActionSheet.m */,
+				529BE9DE15A22F9F00B7346A /* UILoginView.h */,
+				529BE9DF15A22F9F00B7346A /* UILoginView.m */,
+				529BE9E115A22FF700B7346A /* UICustomAlertView.h */,
+				529BE9E215A22FF700B7346A /* UICustomAlertView.m */,
+				529BE9DA15A22F6200B7346A /* UIProgressHUDView.h */,
+				529BE9DB15A22F6200B7346A /* UIProgressHUDView.m */,
+				529BE9D915A22F6200B7346A /* UIProgressHUDView.xib */,
+			);
+			name = Generic;
+			sourceTree = "<group>";
+		};
 		C523A000159F7CE6004AA39C = {
 			isa = PBXGroup;
 			children = (
@@ -490,6 +567,7 @@
 		C523A017159F7CE7004AA39C /* Mime-me */ = {
 			isa = PBXGroup;
 			children = (
+				529BE9D715A22F4100B7346A /* Views */,
 				C523A1C3159F8E69004AA39C /* Controllers */,
 				C523A1C2159F8BCD004AA39C /* Macros.h */,
 				C523A020159F7CE7004AA39C /* Mime_meAppDelegate.h */,
@@ -947,6 +1025,12 @@
 		C523A042159F7F39004AA39C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				529BE9C715A2225D00B7346A /* logo-MimeMe.png */,
+				529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */,
+				529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */,
+				529BE9CC15A22A1900B7346A /* logo_wName-MimeMe@2x.png */,
+				529BE9CF15A22D0A00B7346A /* gem.png */,
+				529BE9D015A22D0A00B7346A /* gem@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -954,6 +1038,16 @@
 		C523A1C3159F8E69004AA39C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				529BE9D315A22EDA00B7346A /* Abstract */,
+				529BE9E715A2339200B7346A /* LoginViewController.h */,
+				529BE9E815A2339200B7346A /* LoginViewController.m */,
+				529BE9E915A2339200B7346A /* LoginViewController.xib */,
+				529BE9EC15A2387400B7346A /* SignUpViewController.h */,
+				529BE9ED15A2387400B7346A /* SignUpViewController.m */,
+				529BE9EE15A2387500B7346A /* SignUpViewController.xib */,
+				529BE9C215A2211700B7346A /* Mime-meMenuViewController.h */,
+				529BE9C315A2211700B7346A /* Mime-meMenuViewController.m */,
+				529BE9C415A2211700B7346A /* Mime-meMenuViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -967,6 +1061,7 @@
 			buildPhases = (
 				C523A007159F7CE7004AA39C /* Sources */,
 				C523A008159F7CE7004AA39C /* Frameworks */,
+				529BE9C115A2209B00B7346A /* ShellScript */,
 				C523A009159F7CE7004AA39C /* Resources */,
 			);
 			buildRules = (
@@ -1011,10 +1106,36 @@
 			buildActionMask = 2147483647;
 			files = (
 				C523A01C159F7CE7004AA39C /* InfoPlist.strings in Resources */,
+				529BE9C615A2211700B7346A /* Mime-meMenuViewController.xib in Resources */,
+				529BE9C915A2225D00B7346A /* logo-MimeMe.png in Resources */,
+				529BE9CA15A2225D00B7346A /* logo-MimeMe@2x.png in Resources */,
+				529BE9CD15A22A1900B7346A /* logo_wName-MimeMe.png in Resources */,
+				529BE9CE15A22A1900B7346A /* logo_wName-MimeMe@2x.png in Resources */,
+				529BE9D115A22D0A00B7346A /* gem.png in Resources */,
+				529BE9D215A22D0A00B7346A /* gem@2x.png in Resources */,
+				529BE9DC15A22F6200B7346A /* UIProgressHUDView.xib in Resources */,
+				529BE9EB15A2339200B7346A /* LoginViewController.xib in Resources */,
+				529BE9F015A2387500B7346A /* SignUpViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		529BE9C115A2209B00B7346A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash    \nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C523A007159F7CE7004AA39C /* Sources */ = {
@@ -1129,6 +1250,14 @@
 				C523A1BF159F8B97004AA39C /* PutAttributeOperation.m in Sources */,
 				C523A1C0159F8B97004AA39C /* DeleteResponse.m in Sources */,
 				C523A1C1159F8B97004AA39C /* AttributeChange.m in Sources */,
+				529BE9C515A2211700B7346A /* Mime-meMenuViewController.m in Sources */,
+				529BE9D615A22EEA00B7346A /* BaseViewController.m in Sources */,
+				529BE9DD15A22F6200B7346A /* UIProgressHUDView.m in Sources */,
+				529BE9E015A22F9F00B7346A /* UILoginView.m in Sources */,
+				529BE9E315A22FF800B7346A /* UICustomAlertView.m in Sources */,
+				529BE9E615A231A200B7346A /* UICameraActionSheet.m in Sources */,
+				529BE9EA15A2339200B7346A /* LoginViewController.m in Sources */,
+				529BE9EF15A2387500B7346A /* SignUpViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1248,6 +1377,7 @@
 				C523A02A159F7CE7004AA39C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

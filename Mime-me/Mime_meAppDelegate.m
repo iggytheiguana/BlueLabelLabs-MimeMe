@@ -7,6 +7,10 @@
 //
 
 #import "Mime_meAppDelegate.h"
+#import "User.h"
+#import "CloudEnumerator.h"
+#import "CloudEnumeratorFactory.h"
+#import "Macros.h"
 
 @implementation Mime_meAppDelegate
 
@@ -17,9 +21,21 @@
 @synthesize applicationSettingsManager = __applicationSettingsManager;
 @synthesize authenticationManager = __authenticationManager;
 @synthesize facebook = __facebook;
+@synthesize progressView = __progressView;
 @synthesize deviceToken = m_deviceToken;
 
 #define     kFACEBOOKAPPID  @"271328586292350"
+- (UIProgressHUDView*)progressView {
+    if (__progressView != nil) {
+        return __progressView;
+    }
+    UIProgressHUDView* pv = [[UIProgressHUDView alloc]initWithWindow:self.window];
+    __progressView = pv;
+    
+    
+    return __progressView;
+}
+
 - (ApplicationSettingsManager*)applicationSettingsManager {
     if (__applicationSettingsManager != nil) {
         return __applicationSettingsManager;
@@ -27,6 +43,7 @@
     __applicationSettingsManager = [ApplicationSettingsManager instance];
     return __applicationSettingsManager;
 }
+
 - (Facebook*) facebook {
     if (__facebook != nil) {
         return __facebook;
@@ -37,6 +54,7 @@
     return __facebook;
     
 }
+
 - (AuthenticationManager*) authenticationManager {
     if (__authenticationManager != nil) {
         return __authenticationManager;
@@ -59,6 +77,61 @@
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
+    
+    NSString* activityName = @"PlatformAppDelegate.applicationDidiFinishLoading:";
+    
+    AuthenticationManager* authenticationManager = [AuthenticationManager instance];
+    
+    //let us make some checks beginning with the user object
+    if ([authenticationManager isUserAuthenticated]) {
+        ResourceContext* resourceContext = [ResourceContext instance];
+        
+        //if the user is logged in, lets check to make sure we have a copy of their user object
+        //check to see if the profile picture is empty, if so, lets grab it from fb
+        User* currentUser = (User*)[resourceContext resourceWithType:USER withID:authenticationManager.m_LoggedInUserID]; 
+        
+        if (currentUser == nil) {
+            //if the user object isnt in the database, we need to fetch it from the web service
+            CloudEnumerator* userEnumerator = [[CloudEnumeratorFactory instance]enumeratorForUser:authenticationManager.m_LoggedInUserID];
+            
+            LOG_SECURITY(0,@"%@Downloading missing user object for user %@ from the cloud", activityName,authenticationManager.m_LoggedInUserID);
+            //execute the enumerator
+            [userEnumerator enumerateUntilEnd:nil];
+        }
+        else 
+        {
+//            //we perform a check to update the application version if necessary
+//            NSString* currentAppVersion = [ApplicationSettingsManager getApplicationVersion];
+//            
+//            if ([currentUser.app_version isEqualToString:@""] ||
+//                ![currentUser.app_version isEqualToString:currentAppVersion] ||
+//                currentUser.app_version == nil)
+//            {
+//                //we need to update the User object because the versions do not match
+//                currentUser.app_version = currentAppVersion;
+//                LOG_APPLICATIONSETTINGSMANAGER(0, @"%@Updating user's app version number from %@ to %@",activityName,currentUser.app_version,currentAppVersion);
+//                [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
+//            }
+            
+            
+        }
+    }
+    
+    
+    //we check to ensure the user is logged in first
+    if (![self.authenticationManager isUserAuthenticated]) {
+        
+        Callback* onSucccessCallback = [[Callback alloc]initWithTarget:self withSelector:@selector(onPageButtonPressed:) withContext:nil];        
+        Callback* onFailCallback = [[Callback alloc]initWithTarget:self withSelector:@selector(onLoginFailed:)];
+        
+        [self authenticateAndGetFacebook:NO getTwitter:NO onSuccessCallback:onSucccessCallback onFailureCallback:onFailCallback];
+        [onSucccessCallback release];
+        [onFailCallback release];
+        
+    }
+    else {
+    
+    
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
