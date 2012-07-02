@@ -152,6 +152,12 @@
 		C523A1BF159F8B97004AA39C /* PutAttributeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = C523A1AE159F8B97004AA39C /* PutAttributeOperation.m */; };
 		C523A1C0159F8B97004AA39C /* DeleteResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = C523A1B0159F8B97004AA39C /* DeleteResponse.m */; };
 		C523A1C1159F8B97004AA39C /* AttributeChange.m in Sources */ = {isa = PBXBuildFile; fileRef = C523A1B2159F8B97004AA39C /* AttributeChange.m */; };
+		C57AAEB415A1135D009FFCCF /* Mime.m in Sources */ = {isa = PBXBuildFile; fileRef = C57AAEB315A1135D009FFCCF /* Mime.m */; };
+		C57AAEB815A11452009FFCCF /* MimeAnswer.m in Sources */ = {isa = PBXBuildFile; fileRef = C57AAEB715A11452009FFCCF /* MimeAnswer.m */; };
+		C57AAEBB15A114E1009FFCCF /* Word.m in Sources */ = {isa = PBXBuildFile; fileRef = C57AAEBA15A114E1009FFCCF /* Word.m */; };
+		C57AAEBE15A1155A009FFCCF /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = C57AAEBD15A1155A009FFCCF /* Friend.m */; };
+		C57AAEC115A115A8009FFCCF /* Favorite.m in Sources */ = {isa = PBXBuildFile; fileRef = C57AAEC015A115A8009FFCCF /* Favorite.m */; };
+		C57AAEC415A115CF009FFCCF /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = C57AAEC315A115CF009FFCCF /* Comment.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -457,6 +463,18 @@
 		C523A1B2159F8B97004AA39C /* AttributeChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributeChange.m; sourceTree = "<group>"; };
 		C523A1B3159F8B97004AA39C /* SharingOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharingOptions.h; sourceTree = "<group>"; };
 		C523A1C2159F8BCD004AA39C /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
+		C57AAEB215A1135D009FFCCF /* Mime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime.h; sourceTree = "<group>"; };
+		C57AAEB315A1135D009FFCCF /* Mime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime.m; sourceTree = "<group>"; };
+		C57AAEB615A11452009FFCCF /* MimeAnswer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MimeAnswer.h; sourceTree = "<group>"; };
+		C57AAEB715A11452009FFCCF /* MimeAnswer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MimeAnswer.m; sourceTree = "<group>"; };
+		C57AAEB915A114E1009FFCCF /* Word.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Word.h; sourceTree = "<group>"; };
+		C57AAEBA15A114E1009FFCCF /* Word.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Word.m; sourceTree = "<group>"; };
+		C57AAEBC15A1155A009FFCCF /* Friend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Friend.h; sourceTree = "<group>"; };
+		C57AAEBD15A1155A009FFCCF /* Friend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Friend.m; sourceTree = "<group>"; };
+		C57AAEBF15A115A8009FFCCF /* Favorite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Favorite.h; sourceTree = "<group>"; };
+		C57AAEC015A115A8009FFCCF /* Favorite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Favorite.m; sourceTree = "<group>"; };
+		C57AAEC215A115CF009FFCCF /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
+		C57AAEC315A115CF009FFCCF /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -717,6 +735,18 @@
 				C523A16B159F8B30004AA39C /* FeedData.m */,
 				C523A16C159F8B30004AA39C /* ApplicationSettings.h */,
 				C523A16D159F8B30004AA39C /* ApplicationSettings.m */,
+				C57AAEB215A1135D009FFCCF /* Mime.h */,
+				C57AAEB315A1135D009FFCCF /* Mime.m */,
+				C57AAEB615A11452009FFCCF /* MimeAnswer.h */,
+				C57AAEB715A11452009FFCCF /* MimeAnswer.m */,
+				C57AAEB915A114E1009FFCCF /* Word.h */,
+				C57AAEBA15A114E1009FFCCF /* Word.m */,
+				C57AAEBC15A1155A009FFCCF /* Friend.h */,
+				C57AAEBD15A1155A009FFCCF /* Friend.m */,
+				C57AAEBF15A115A8009FFCCF /* Favorite.h */,
+				C57AAEC015A115A8009FFCCF /* Favorite.m */,
+				C57AAEC215A115CF009FFCCF /* Comment.h */,
+				C57AAEC315A115CF009FFCCF /* Comment.m */,
 			);
 			name = Application;
 			sourceTree = "<group>";

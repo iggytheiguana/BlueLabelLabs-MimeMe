@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="872" systemVersion="10K549" minimumToolsVersion="Xcode 4.2" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11E53" minimumToolsVersion="Xcode 4.2" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="applicationsettings" representedClassName="ApplicationSettings" parentEntity="resource">
         <attribute name="base_url" optional="YES" attributeType="String"/>
         <attribute name="caption_enumeration_timegap" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
@@ -55,6 +55,16 @@
         <attribute name="isfirsttime" optional="YES" attributeType="Boolean" defaultValueString="NO"/>
         <attribute name="userid" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
     </entity>
+    <entity name="Comment" representedClassName="Comment" parentEntity="resource" syncable="YES">
+        <attribute name="comment1" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="creatorid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="creatorname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mimeid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="Favorite" representedClassName="Favorite" parentEntity="resource" syncable="YES">
+        <attribute name="mimeid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="userid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
     <entity name="feed" representedClassName="Feed" parentEntity="resource">
         <attribute name="dateexpires" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
         <attribute name="feeddatas" optional="YES" attributeType="Transformable"/>
@@ -66,22 +76,35 @@
         <attribute name="rendertype" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
         <attribute name="userid" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
     </entity>
-    <entity name="meditation" representedClassName="Meditation" parentEntity="resource" syncable="YES">
-        <attribute name="audiourl" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="imageurl" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="numtimescompleted" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="numtimesstarted" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="position" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-    </entity>
-    <entity name="meditationinstance" representedClassName="MeditationInstance" parentEntity="resource" syncable="YES">
-        <attribute name="datecompleted" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="datescheduled" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="meditationid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="percentcompleted" optional="YES" attributeType="Double" defaultValueString="0" syncable="YES"/>
-        <attribute name="state" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    <entity name="Friend" representedClassName="Friend" parentEntity="resource" syncable="YES">
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="facebookid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="targetuserid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="userid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="Mime" representedClassName="Mime" parentEntity="resource" syncable="YES">
+        <attribute name="creatorid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="creatorname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="numberofattempts" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberoftimesviewed" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numbertimesanswered" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="thumbnailurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="visibility" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="word" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="worid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="MimeAnswer" representedClassName="MimeAnswer" parentEntity="resource" syncable="YES">
+        <attribute name="answer" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="creatorid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="creatorname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="didusehint" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="mimeid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="pointsawarded" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="state" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="targetemail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="targetfacebookid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="targetuserid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="request" representedClassName="Request">
         <attribute name="changedattributes" optional="YES" attributeType="String"/>
@@ -108,23 +131,46 @@
         <relationship name="resource" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="resource" inverseName="typeinstancedata" inverseEntity="resource" indexed="YES"/>
     </entity>
     <entity name="user" representedClassName="User" parentEntity="resource">
-        <attribute name="email" optional="YES" attributeType="String"/>
-        <attribute name="firstname" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lastname" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lastposition" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="numcompleted" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="achievementthreshold" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="app_version" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="devicetoken" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="displayname" optional="YES" attributeType="String"/>
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fb_user_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="imageurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="numberfollowing" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberoffollowers" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberofpoints" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberofpointslw" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberofpointssw" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="prevachievementthreshold" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="sharinglevel" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="thumbnailurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="twitter_user_Id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Word" representedClassName="Word" parentEntity="resource" syncable="YES">
+        <attribute name="creatorid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="creatorname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="difficultylevel" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberoftimesused" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="word1" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
         <element name="applicationsettings" positionX="18" positionY="810" width="128" height="420"/>
         <element name="attributechange" positionX="-207" positionY="1017" width="128" height="165"/>
         <element name="AttributeInstanceData" positionX="-216" positionY="-141" width="128" height="150"/>
         <element name="authenticationcontext" positionX="-198" positionY="336" width="128" height="150"/>
+        <element name="Comment" positionX="18" positionY="-189" width="128" height="105"/>
+        <element name="Favorite" positionX="466" positionY="-270" width="128" height="75"/>
         <element name="feed" positionX="367" positionY="576" width="128" height="180"/>
-        <element name="meditation" positionX="54" positionY="84" width="128" height="150"/>
-        <element name="meditationinstance" positionX="196" positionY="900" width="128" height="135"/>
+        <element name="Friend" positionX="529" positionY="-96" width="128" height="105"/>
+        <element name="Mime" positionX="313" positionY="-153" width="128" height="195"/>
+        <element name="MimeAnswer" positionX="81" positionY="9" width="128" height="195"/>
         <element name="request" positionX="340" positionY="90" width="128" height="165"/>
         <element name="resource" positionX="160" positionY="414" width="128" height="135"/>
         <element name="TypeInstanceData" positionX="90" positionY="-342" width="128" height="105"/>
-        <element name="user" positionX="358" positionY="810" width="128" height="120"/>
+        <element name="user" positionX="252" positionY="852" width="128" height="300"/>
+        <element name="Word" positionX="387" positionY="279" width="128" height="120"/>
     </elements>
 </model>
