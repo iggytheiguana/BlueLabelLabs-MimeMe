@@ -34,8 +34,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    // Disable the Get Gems button for now
-    [self.btn_getGems setEnabled:NO];
 }
 
 - (void)viewDidUnload
@@ -51,6 +49,11 @@
     self.btn_getGems = nil;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
@@ -59,8 +62,11 @@
 #pragma mark - UIButton Handlers
 - (IBAction) onMimeButtonPressed:(id)sender {
     Mime_meMimeViewController* mimeViewController = [Mime_meMimeViewController createInstance];
-    [self.navigationController pushViewController:mimeViewController animated:YES];
+    
+//    [self.navigationController pushViewController:mimeViewController animated:YES];
+    [self.navigationController setViewControllers:[NSArray arrayWithObject:mimeViewController] animated:YES];
 //    [self addChildViewController:mimeViewController];
+//    [mimeViewController didMoveToParentViewController:self];
 //    [self.tabBarController setSelectedIndex:1];
     
 }
