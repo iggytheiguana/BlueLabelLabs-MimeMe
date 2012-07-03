@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		529BE9C515A2211700B7346A /* Mime-meMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9C315A2211700B7346A /* Mime-meMenuViewController.m */; };
-		529BE9C615A2211700B7346A /* Mime-meMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C415A2211700B7346A /* Mime-meMenuViewController.xib */; };
+		529BE9C515A2211700B7346A /* Mime_meMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9C315A2211700B7346A /* Mime_meMenuViewController.m */; };
+		529BE9C615A2211700B7346A /* Mime_meMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C415A2211700B7346A /* Mime_meMenuViewController.xib */; };
 		529BE9C915A2225D00B7346A /* logo-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C715A2225D00B7346A /* logo-MimeMe.png */; };
 		529BE9CA15A2225D00B7346A /* logo-MimeMe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */; };
 		529BE9CD15A22A1900B7346A /* logo_wName-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */; };
@@ -25,6 +25,14 @@
 		529BE9EB15A2339200B7346A /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9E915A2339200B7346A /* LoginViewController.xib */; };
 		529BE9EF15A2387500B7346A /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9ED15A2387400B7346A /* SignUpViewController.m */; };
 		529BE9F015A2387500B7346A /* SignUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9EE15A2387500B7346A /* SignUpViewController.xib */; };
+		529BE9FA15A250C800B7346A /* icon-facebook-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9F615A250C800B7346A /* icon-facebook-white.png */; };
+		529BE9FB15A250C800B7346A /* icon-facebook-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9F715A250C800B7346A /* icon-facebook-white@2x.png */; };
+		529BE9FC15A250C800B7346A /* icon-twitter-bird.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9F815A250C800B7346A /* icon-twitter-bird.png */; };
+		529BE9FD15A250C800B7346A /* icon-twitter-bird@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9F915A250C800B7346A /* icon-twitter-bird@2x.png */; };
+		529BEA0015A2568900B7346A /* singleline_thin.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9FE15A2568900B7346A /* singleline_thin.png */; };
+		529BEA0115A2568900B7346A /* singleline_thin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9FF15A2568900B7346A /* singleline_thin@2x.png */; };
+		529BEA0515A260D200B7346A /* Mime_meMimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BEA0315A260D100B7346A /* Mime_meMimeViewController.m */; };
+		529BEA0615A260D200B7346A /* Mime_meMimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BEA0415A260D100B7346A /* Mime_meMimeViewController.xib */; };
 		C523A010159F7CE7004AA39C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A00F159F7CE7004AA39C /* UIKit.framework */; };
 		C523A012159F7CE7004AA39C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A011159F7CE7004AA39C /* Foundation.framework */; };
 		C523A014159F7CE7004AA39C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A013159F7CE7004AA39C /* CoreGraphics.framework */; };
@@ -161,9 +169,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		529BE9C215A2211700B7346A /* Mime-meMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Mime-meMenuViewController.h"; sourceTree = "<group>"; };
-		529BE9C315A2211700B7346A /* Mime-meMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Mime-meMenuViewController.m"; sourceTree = "<group>"; };
-		529BE9C415A2211700B7346A /* Mime-meMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Mime-meMenuViewController.xib"; sourceTree = "<group>"; };
+		529BE9C215A2211700B7346A /* Mime_meMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meMenuViewController.h; sourceTree = "<group>"; };
+		529BE9C315A2211700B7346A /* Mime_meMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meMenuViewController.m; sourceTree = "<group>"; };
+		529BE9C415A2211700B7346A /* Mime_meMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meMenuViewController.xib; sourceTree = "<group>"; };
 		529BE9C715A2225D00B7346A /* logo-MimeMe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-MimeMe.png"; sourceTree = "<group>"; };
 		529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-MimeMe@2x.png"; sourceTree = "<group>"; };
 		529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo_wName-MimeMe.png"; sourceTree = "<group>"; };
@@ -187,6 +195,15 @@
 		529BE9EC15A2387400B7346A /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
 		529BE9ED15A2387400B7346A /* SignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpViewController.m; sourceTree = "<group>"; };
 		529BE9EE15A2387500B7346A /* SignUpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignUpViewController.xib; sourceTree = "<group>"; };
+		529BE9F615A250C800B7346A /* icon-facebook-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-facebook-white.png"; sourceTree = "<group>"; };
+		529BE9F715A250C800B7346A /* icon-facebook-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-facebook-white@2x.png"; sourceTree = "<group>"; };
+		529BE9F815A250C800B7346A /* icon-twitter-bird.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter-bird.png"; sourceTree = "<group>"; };
+		529BE9F915A250C800B7346A /* icon-twitter-bird@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter-bird@2x.png"; sourceTree = "<group>"; };
+		529BE9FE15A2568900B7346A /* singleline_thin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = singleline_thin.png; sourceTree = "<group>"; };
+		529BE9FF15A2568900B7346A /* singleline_thin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "singleline_thin@2x.png"; sourceTree = "<group>"; };
+		529BEA0215A260D100B7346A /* Mime_meMimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meMimeViewController.h; sourceTree = "<group>"; };
+		529BEA0315A260D100B7346A /* Mime_meMimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meMimeViewController.m; sourceTree = "<group>"; };
+		529BEA0415A260D100B7346A /* Mime_meMimeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meMimeViewController.xib; sourceTree = "<group>"; };
 		C523A00B159F7CE7004AA39C /* Mime-me.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mime-me.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C523A00F159F7CE7004AA39C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C523A011159F7CE7004AA39C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1061,6 +1078,12 @@
 				529BE9CC15A22A1900B7346A /* logo_wName-MimeMe@2x.png */,
 				529BE9CF15A22D0A00B7346A /* gem.png */,
 				529BE9D015A22D0A00B7346A /* gem@2x.png */,
+				529BE9F615A250C800B7346A /* icon-facebook-white.png */,
+				529BE9F715A250C800B7346A /* icon-facebook-white@2x.png */,
+				529BE9F815A250C800B7346A /* icon-twitter-bird.png */,
+				529BE9F915A250C800B7346A /* icon-twitter-bird@2x.png */,
+				529BE9FE15A2568900B7346A /* singleline_thin.png */,
+				529BE9FF15A2568900B7346A /* singleline_thin@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1075,9 +1098,12 @@
 				529BE9EC15A2387400B7346A /* SignUpViewController.h */,
 				529BE9ED15A2387400B7346A /* SignUpViewController.m */,
 				529BE9EE15A2387500B7346A /* SignUpViewController.xib */,
-				529BE9C215A2211700B7346A /* Mime-meMenuViewController.h */,
-				529BE9C315A2211700B7346A /* Mime-meMenuViewController.m */,
-				529BE9C415A2211700B7346A /* Mime-meMenuViewController.xib */,
+				529BE9C215A2211700B7346A /* Mime_meMenuViewController.h */,
+				529BE9C315A2211700B7346A /* Mime_meMenuViewController.m */,
+				529BE9C415A2211700B7346A /* Mime_meMenuViewController.xib */,
+				529BEA0215A260D100B7346A /* Mime_meMimeViewController.h */,
+				529BEA0315A260D100B7346A /* Mime_meMimeViewController.m */,
+				529BEA0415A260D100B7346A /* Mime_meMimeViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1136,7 +1162,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C523A01C159F7CE7004AA39C /* InfoPlist.strings in Resources */,
-				529BE9C615A2211700B7346A /* Mime-meMenuViewController.xib in Resources */,
+				529BE9C615A2211700B7346A /* Mime_meMenuViewController.xib in Resources */,
 				529BE9C915A2225D00B7346A /* logo-MimeMe.png in Resources */,
 				529BE9CA15A2225D00B7346A /* logo-MimeMe@2x.png in Resources */,
 				529BE9CD15A22A1900B7346A /* logo_wName-MimeMe.png in Resources */,
@@ -1146,6 +1172,13 @@
 				529BE9DC15A22F6200B7346A /* UIProgressHUDView.xib in Resources */,
 				529BE9EB15A2339200B7346A /* LoginViewController.xib in Resources */,
 				529BE9F015A2387500B7346A /* SignUpViewController.xib in Resources */,
+				529BE9FA15A250C800B7346A /* icon-facebook-white.png in Resources */,
+				529BE9FB15A250C800B7346A /* icon-facebook-white@2x.png in Resources */,
+				529BE9FC15A250C800B7346A /* icon-twitter-bird.png in Resources */,
+				529BE9FD15A250C800B7346A /* icon-twitter-bird@2x.png in Resources */,
+				529BEA0015A2568900B7346A /* singleline_thin.png in Resources */,
+				529BEA0115A2568900B7346A /* singleline_thin@2x.png in Resources */,
+				529BEA0615A260D200B7346A /* Mime_meMimeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1280,7 +1313,13 @@
 				C523A1BF159F8B97004AA39C /* PutAttributeOperation.m in Sources */,
 				C523A1C0159F8B97004AA39C /* DeleteResponse.m in Sources */,
 				C523A1C1159F8B97004AA39C /* AttributeChange.m in Sources */,
-				529BE9C515A2211700B7346A /* Mime-meMenuViewController.m in Sources */,
+				C57AAEB415A1135D009FFCCF /* Mime.m in Sources */,
+				C57AAEB815A11452009FFCCF /* MimeAnswer.m in Sources */,
+				C57AAEBB15A114E1009FFCCF /* Word.m in Sources */,
+				C57AAEBE15A1155A009FFCCF /* Friend.m in Sources */,
+				C57AAEC115A115A8009FFCCF /* Favorite.m in Sources */,
+				C57AAEC415A115CF009FFCCF /* Comment.m in Sources */,
+				529BE9C515A2211700B7346A /* Mime_meMenuViewController.m in Sources */,
 				529BE9D615A22EEA00B7346A /* BaseViewController.m in Sources */,
 				529BE9DD15A22F6200B7346A /* UIProgressHUDView.m in Sources */,
 				529BE9E015A22F9F00B7346A /* UILoginView.m in Sources */,
@@ -1288,6 +1327,7 @@
 				529BE9E615A231A200B7346A /* UICameraActionSheet.m in Sources */,
 				529BE9EA15A2339200B7346A /* LoginViewController.m in Sources */,
 				529BE9EF15A2387500B7346A /* SignUpViewController.m in Sources */,
+				529BEA0515A260D200B7346A /* Mime_meMimeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

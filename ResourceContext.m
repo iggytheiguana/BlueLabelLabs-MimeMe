@@ -1129,9 +1129,6 @@ static ResourceContext* sharedInstance;
             LOG_RESOURCECONTEXT(1,@"%@%@",activityName,@"Singleton object either doesn't exist, or has multiple instances in the database");
             retVal = [results objectAtIndex:0];
         }
-        
-               
-        
     }
     else {
          LOG_RESOURCECONTEXT(1,@"%@Resource type %@ doesn't exist",activityName,typeName);

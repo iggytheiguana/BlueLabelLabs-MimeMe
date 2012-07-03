@@ -181,4 +181,11 @@ static ApplicationSettingsManager* instance;
     
     return settings;
 }
+
++ (NSString*) getApplicationVersion {
+    NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSString* appVersionNum = [infoDict objectForKey:@"CFBundleShortVersionString"];
+    return appVersionNum;
+}
+
 @end

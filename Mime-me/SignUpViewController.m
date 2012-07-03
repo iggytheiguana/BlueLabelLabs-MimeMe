@@ -32,33 +32,6 @@
     if (self) {
         // Custom initialization
         
-        // Set background pattern
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"page_pattern.png"]]];
-        
-        // Add rounded corners to custom buttons
-        self.btn_join.layer.cornerRadius = 8;
-        
-        // Add border to custom buttons
-        [self.btn_join.layer setBorderColor: [[UIColor lightGrayColor] CGColor]];
-        [self.btn_join.layer setBorderWidth: 1.0];
-        
-        // Set text shadow of custom buttons
-        [self.btn_join.titleLabel setShadowOffset:CGSizeMake(0.0, -1.0)];
-        
-        // Add mask on custom buttons
-        [self.btn_join.layer setMasksToBounds:YES];
-        
-        // Set highlight state background color of custom buttons
-        CGRect rect = CGRectMake(0, 0, 1, 1);
-        UIGraphicsBeginImageContext(rect.size);
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextSetFillColorWithColor(context, [[UIColor lightGrayColor] CGColor]);
-        CGContextFillRect(context, rect);
-        UIImage *lightGreyImg = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        [self.btn_join setBackgroundImage:lightGreyImg forState:UIControlStateHighlighted];
-        [self.btn_join setTitleShadowColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
     }
     return self;
 }
@@ -77,6 +50,33 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    // Set background pattern
+    //[self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"page_pattern.png"]]];
+    
+    // Add rounded corners to custom buttons
+    self.btn_join.layer.cornerRadius = 8;
+    
+    // Add border to custom buttons
+    [self.btn_join.layer setBorderColor: [[UIColor lightGrayColor] CGColor]];
+    [self.btn_join.layer setBorderWidth: 1.0];
+    
+    // Set text shadow of custom buttons
+    [self.btn_join.titleLabel setShadowOffset:CGSizeMake(0.0, 1.0)];
+    
+    // Add mask on custom buttons
+    [self.btn_join.layer setMasksToBounds:YES];
+    
+    // Set highlight state background color of custom buttons
+    CGRect rect = CGRectMake(0, 0, 1, 1);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [[UIColor lightGrayColor] CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *lightGreyImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [self.btn_join setBackgroundImage:lightGreyImg forState:UIControlStateHighlighted];
+    [self.btn_join setTitleShadowColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
     
     // Make sure navigation bar is shown
     [self.navigationController setNavigationBarHidden:NO animated:NO];
@@ -336,7 +336,7 @@
                                                    trackProgressWith:progressView];
         
         
-        [self showDeterminateProgressBarWithMaximumDisplayTime:settings.progress_maxsecondstodisplay onSuccessMessage:@"Welcome, get ready to Bahndr!" onFailureMessage:@"Let's try this again..."  inProgressMessages:[NSArray arrayWithObject:@"Creating account..."]];
+        [self showDeterminateProgressBarWithMaximumDisplayTime:settings.progress_maxsecondstodisplay onSuccessMessage:@"Welcome to MimeMe!" onFailureMessage:@"Let's try this again..."  inProgressMessages:[NSArray arrayWithObject:@"Creating account..."]];
     }
     
 }

@@ -68,50 +68,6 @@
     if (self) {
         // Custom initialization
         
-        // Set background pattern
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"page_pattern.png"]]];
-        
-        // Add rounded corners to custom buttons
-        self.btn_loginFacebook.layer.cornerRadius = 8;
-        self.btn_loginTwitter.layer.cornerRadius = 8;
-        self.btn_login.layer.cornerRadius = 8;
-        self.btn_newUser.layer.cornerRadius = 8;
-        
-        // Add border to custom buttons
-        [self.btn_loginFacebook.layer setBorderColor: [[UIColor lightGrayColor] CGColor]];
-        [self.btn_loginFacebook.layer setBorderWidth: 1.0];
-        [self.btn_loginTwitter.layer setBorderColor: [[UIColor lightGrayColor] CGColor]];
-        [self.btn_loginTwitter.layer setBorderWidth: 1.0];
-        [self.btn_login.layer setBorderColor: [[UIColor lightGrayColor] CGColor]];
-        [self.btn_login.layer setBorderWidth: 1.0];
-        [self.btn_newUser.layer setBorderColor: [[UIColor lightGrayColor] CGColor]];
-        [self.btn_newUser.layer setBorderWidth: 1.0];
-        
-        // Add mask on custom buttons
-        [self.btn_loginFacebook.layer setMasksToBounds:YES];
-        [self.btn_loginTwitter.layer setMasksToBounds:YES];
-        [self.btn_login.layer setMasksToBounds:YES];
-        [self.btn_newUser.layer setMasksToBounds:YES];
-        
-        // Set text shadow of custom buttons
-        [self.btn_loginFacebook.titleLabel setShadowOffset:CGSizeMake(0.0, -1.0)];
-        [self.btn_loginTwitter.titleLabel setShadowOffset:CGSizeMake(0.0, -1.0)];
-        //[self.btn_login.titleLabel setShadowOffset:CGSizeMake(0.0, -1.0)];
-        //[self.btn_newUser.titleLabel setShadowOffset:CGSizeMake(0.0, -1.0)];
-        
-        // Set highlight state background color of custom buttons
-        CGRect rect = CGRectMake(0, 0, 1, 1);
-        UIGraphicsBeginImageContext(rect.size);
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextSetFillColorWithColor(context, [[UIColor lightGrayColor] CGColor]);
-        CGContextFillRect(context, rect);
-        UIImage *lightGreyImg = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        [self.btn_login setBackgroundImage:lightGreyImg forState:UIControlStateHighlighted];
-        [self.btn_newUser setBackgroundImage:lightGreyImg forState:UIControlStateHighlighted];
-        [self.btn_login setTitleShadowColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
-        [self.btn_newUser setTitleShadowColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
     }
     return self;
 }
@@ -189,34 +145,49 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    // Navigation bar
-    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
-    [self.navigationController.navigationBar setTranslucent:NO];
-    [self.navigationController.navigationBar setTintColor:nil];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    // Set background pattern
+    //[self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"page_pattern.png"]]];
     
-    // Navigation Bar Buttons
-    UIBarButtonItem* rightButton = [[[UIBarButtonItem alloc]
-                                     initWithTitle:@"Cancel"
-                                     style:UIBarButtonItemStylePlain
-                                     target:self
-                                     action:@selector(onCancelButtonPressed:)] autorelease];
-    self.navigationItem.rightBarButtonItem = rightButton;
+    // Add rounded corners to custom buttons
+    self.btn_loginFacebook.layer.cornerRadius = 8;
+    self.btn_loginTwitter.layer.cornerRadius = 8;
+    self.btn_login.layer.cornerRadius = 8;
+    self.btn_newUser.layer.cornerRadius = 8;
     
-    // Set Navigation bar title style with typewriter font
-    CGSize labelSize = [@"Bahndr" sizeWithFont:[UIFont fontWithName:@"AmericanTypewriter-Bold" size:20.0]];
-    UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, labelSize.width, 44)];
-    titleLabel.text = @"Bahndr";
-    titleLabel.font = [UIFont fontWithName:@"AmericanTypewriter-Bold" size:20.0];
-    titleLabel.textAlignment = UITextAlignmentCenter;
-    titleLabel.textColor = [UIColor whiteColor];
-    titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.adjustsFontSizeToFitWidth = YES;
-    // emboss so that the label looks OK
-    [titleLabel setShadowColor:[UIColor blackColor]];
-    [titleLabel setShadowOffset:CGSizeMake(0.0, -1.0)];
-    self.navigationItem.titleView = titleLabel;
-    [titleLabel release];
+    // Add border to custom buttons
+    [self.btn_loginFacebook.layer setBorderColor: [[UIColor whiteColor] CGColor]];
+    [self.btn_loginFacebook.layer setBorderWidth: 1.0];
+    [self.btn_loginTwitter.layer setBorderColor: [[UIColor whiteColor] CGColor]];
+    [self.btn_loginTwitter.layer setBorderWidth: 1.0];
+    [self.btn_login.layer setBorderColor: [[UIColor lightGrayColor] CGColor]];
+    [self.btn_login.layer setBorderWidth: 1.0];
+    [self.btn_newUser.layer setBorderColor: [[UIColor lightGrayColor] CGColor]];
+    [self.btn_newUser.layer setBorderWidth: 1.0];
+    
+    // Add mask on custom buttons
+    [self.btn_loginFacebook.layer setMasksToBounds:YES];
+    [self.btn_loginTwitter.layer setMasksToBounds:YES];
+    [self.btn_login.layer setMasksToBounds:YES];
+    [self.btn_newUser.layer setMasksToBounds:YES];
+    
+    // Set text shadow of custom buttons
+    [self.btn_loginFacebook.titleLabel setShadowOffset:CGSizeMake(0.0, -1.0)];
+    [self.btn_loginTwitter.titleLabel setShadowOffset:CGSizeMake(0.0, -1.0)];
+    [self.btn_login.titleLabel setShadowOffset:CGSizeMake(0.0, 1.0)];
+    [self.btn_newUser.titleLabel setShadowOffset:CGSizeMake(0.0, 1.0)];
+    
+    // Set highlight state background color of custom buttons
+    CGRect rect = CGRectMake(0, 0, 1, 1);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [[UIColor lightGrayColor] CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *lightGreyImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [self.btn_login setBackgroundImage:lightGreyImg forState:UIControlStateHighlighted];
+    [self.btn_newUser setBackgroundImage:lightGreyImg forState:UIControlStateHighlighted];
+    [self.btn_login setTitleShadowColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
+    [self.btn_newUser setTitleShadowColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
     
     // Register for keyboard notifications to slide view up when typing
     [self registerForKeyboardNotifications];
