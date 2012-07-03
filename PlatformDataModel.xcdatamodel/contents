@@ -99,6 +99,7 @@
         <attribute name="creatorid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="creatorname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="didusehint" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="issentbyfriend" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="mimeid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="pointsawarded" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="state" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -166,7 +167,7 @@
         <element name="feed" positionX="367" positionY="576" width="128" height="180"/>
         <element name="Friend" positionX="529" positionY="-96" width="128" height="105"/>
         <element name="Mime" positionX="313" positionY="-153" width="128" height="195"/>
-        <element name="MimeAnswer" positionX="81" positionY="9" width="128" height="195"/>
+        <element name="MimeAnswer" positionX="81" positionY="9" width="128" height="210"/>
         <element name="request" positionX="340" positionY="90" width="128" height="165"/>
         <element name="resource" positionX="160" positionY="414" width="128" height="135"/>
         <element name="TypeInstanceData" positionX="90" positionY="-342" width="128" height="105"/>

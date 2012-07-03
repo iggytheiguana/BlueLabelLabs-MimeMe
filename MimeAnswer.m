@@ -19,4 +19,5 @@
 @dynamic targetemail;
 @dynamic targetfacebookid;
 @dynamic targetuserid;
+@dynamic issentbyfriend;
 @end
