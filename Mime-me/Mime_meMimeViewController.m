@@ -61,9 +61,6 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    // Make sure the status bar remains hidden, otherwise it comes back after the image picker is dismissed
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
-    
     [self.btn_mime setHighlighted:YES];
     [self.btn_mime setUserInteractionEnabled:NO];
     
@@ -213,12 +210,18 @@
 
 #pragma mark - UICameraActionSheetDelegate methods
 - (void) displayPicker:(UIImagePickerController*) picker {
+    // Make sure the status bar remains hidden, otherwise it comes back after the image picker is dismissed
+//    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
+    
     [self presentModalViewController:picker animated:YES];
 }
 
 - (void) onPhotoTakenWithThumbnailImage:(UIImage*)thumbnailImage 
                           withFullImage:(UIImage*)image {
     //we handle back end processing of the image from the camera sheet here
+    
+    // Make sure the status bar remains hidden, otherwise it comes back after the image picker is dismissed
+//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
     
 }
 
