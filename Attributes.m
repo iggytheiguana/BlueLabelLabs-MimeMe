@@ -123,3 +123,4 @@ NSString* const NUMTIMESCOMPLETED       =@"numtimescompleted";
 NSString* const NUMTIMESSTARTED         =@"numtimestarted";
 NSString* const LASTPOSITION            =@"lastposition";
 NSString* const TITLE                   =@"title";
+NSString* const ISSENTBYFRIEND          =@"issentbyfriend";
