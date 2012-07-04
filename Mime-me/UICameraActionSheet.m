@@ -62,7 +62,11 @@
         if (sourceType == UIImagePickerControllerSourceTypeCamera) {
             self.picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
             self.picker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
-            self.picker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+            if( [UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront])
+            {
+                //default to front facing camera on supported devices
+                self.picker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+            }
         }
         
         id<UICameraActionSheetDelegate> del = (id<UICameraActionSheetDelegate>)self.a_delegate;
@@ -88,9 +92,6 @@
     didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
     if (buttonIndex != [actionSheet cancelButtonIndex]) {
-        // make sure the status bar is visible for the picker to control it
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
-        
         if (buttonIndex == 0) {
             [self getMediaFromSource:UIImagePickerControllerSourceTypeCamera];
         } else {

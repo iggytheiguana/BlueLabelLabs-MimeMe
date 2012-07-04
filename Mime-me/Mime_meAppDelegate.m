@@ -220,6 +220,17 @@
     }
 }
 
+- (NSString*) getImageCacheStorageDirectory {
+    NSString *path = nil;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    if ([paths count])
+    {
+        NSString *bundleName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
+        path = [[paths objectAtIndex:0]stringByAppendingPathComponent:bundleName];
+    }
+    return path;
+}
+
 #pragma mark - Login Callback Handlers
 - (void) onLoginFailed:(CallbackResult *)result {
     NSString* activityName = @"PlatformAppDelegate.onLoginFailed:";

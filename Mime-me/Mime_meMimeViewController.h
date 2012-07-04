@@ -19,9 +19,11 @@
     UIButton    *m_btn_settings;
     UIButton    *m_btn_getWords;
     
-    UITableView *m_tbl_words;
+    UITableView         *m_tbl_words;
+    UITableViewCell     *m_tc_header;
     
     NSArray     *m_wordsArray;
+    UICameraActionSheet     *m_cameraActionSheet;
 }
 
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_home;
@@ -33,8 +35,10 @@
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_getWords;
 
 @property (nonatomic, retain) IBOutlet  UITableView     *tbl_words;
+@property (nonatomic, retain) IBOutlet  UITableViewCell *tc_header;
 
 @property (nonatomic, retain)           NSArray         *wordsArray;
+@property (nonatomic, retain)           UICameraActionSheet     *cameraActionSheet;
 
 - (IBAction) onMimeButtonPressed:(id)sender;
 - (IBAction) onGuessButtonPressed:(id)sender;

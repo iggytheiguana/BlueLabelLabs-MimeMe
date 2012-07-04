@@ -18,7 +18,7 @@
 
 @end
 
-@interface UICameraActionSheet : UIActionSheet <UIActionSheetDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate> {
+@interface UICameraActionSheet : UIActionSheet < UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate > {
     id<UICameraActionSheetDelegate>  m_delegate;
     
     BOOL m_allowsEditing;

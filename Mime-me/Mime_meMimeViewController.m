@@ -9,6 +9,7 @@
 #import "Mime_meMimeViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Mime_meMenuViewController.h"
+#import "Mime_meFriendsPickerViewController.h"
 
 @interface Mime_meMimeViewController ()
 
@@ -22,7 +23,9 @@
 @synthesize btn_settings    = m_btn_settings;
 @synthesize btn_getWords    = m_btn_getWords;
 @synthesize tbl_words       = m_tbl_words;
+@synthesize tc_header       = m_tc_header;
 @synthesize wordsArray      = m_wordsArray;
+@synthesize cameraActionSheet = m_cameraActionSheet;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -56,6 +59,7 @@
     self.btn_settings = nil;
     self.btn_getWords = nil;
     self.tbl_words = nil;
+    self.tc_header = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -72,7 +76,6 @@
 }
 
 #pragma mark - Table view data source
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -93,15 +96,17 @@
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            cell = self.tc_header;
             
-            cell.textLabel.text = @"Pick a word to play!";
-            cell.textLabel.textAlignment = UITextAlignmentCenter;
-            cell.textLabel.font = [UIFont boldSystemFontOfSize:22];
-            cell.textLabel.shadowColor = [UIColor lightGrayColor];
-            cell.textLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-            cell.textLabel.textColor = [UIColor whiteColor];
-            cell.backgroundColor = [UIColor yellowColor];
+//            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+//            
+//            cell.textLabel.text = @"Pick a word to play!";
+//            cell.textLabel.textAlignment = UITextAlignmentCenter;
+//            cell.textLabel.font = [UIFont boldSystemFontOfSize:22];
+//            cell.textLabel.shadowColor = [UIColor lightGrayColor];
+//            cell.textLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+//            cell.textLabel.textColor = [UIColor whiteColor];
+//            cell.backgroundColor = [UIColor colorWithRed:252.0 green:217.0 blue:76.0 alpha:1.0];
             
             cell.userInteractionEnabled = NO;
         }
@@ -165,15 +170,14 @@
  */
 
 #pragma mark - Table view delegate
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     // Launch photo picker
-    UICameraActionSheet *cameraActionSheet = [UICameraActionSheet createCameraActionSheetWithTitle:nil allowsEditing:NO];
-    cameraActionSheet.a_delegate = self;
-    [cameraActionSheet showInView:self.view];
+    self.cameraActionSheet = [UICameraActionSheet createCameraActionSheetWithTitle:nil allowsEditing:NO];
+    self.cameraActionSheet.a_delegate = self;
+    [self.cameraActionSheet showInView:self.view];
     
 }
 
@@ -187,9 +191,6 @@
                          [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.navigationController.view cache:NO];
                      }];
     [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
-    
-//    [self.navigationController popViewControllerAnimated:YES];
-//    [self removeFromParentViewController];
 }
 
 - (IBAction) onMimeButtonPressed:(id)sender {
@@ -211,7 +212,6 @@
 #pragma mark - UICameraActionSheetDelegate methods
 - (void) displayPicker:(UIImagePickerController*) picker {
     // Make sure the status bar remains hidden, otherwise it comes back after the image picker is dismissed
-//    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
     
     [self presentModalViewController:picker animated:YES];
 }
@@ -221,7 +221,10 @@
     //we handle back end processing of the image from the camera sheet here
     
     // Make sure the status bar remains hidden, otherwise it comes back after the image picker is dismissed
-//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    
+    Mime_meFriendsPickerViewController *friendsViewController = [Mime_meFriendsPickerViewController createInstance];
+    [self.navigationController pushViewController:friendsViewController animated:YES];
     
 }
 
