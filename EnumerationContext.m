@@ -171,4 +171,16 @@
 //
 //}
 
+#pragma mark - Mime me Static Initializers
++(EnumerationContext*)contextForFriends:(NSNumber *)userid
+{
+    ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize = settingsObject.pagesize;
+    
+    enumerationContext.maximumNumberOfResults = settingsObject.follow_maxnumtodownload;   
+    return enumerationContext;
+
+}
+
 @end

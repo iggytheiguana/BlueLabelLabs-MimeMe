@@ -297,4 +297,28 @@
     [queryExpression release];
     return query;
 }
+#pragma mark - Initializers for Mime-me
++ (Query*)queryForFriends:(NSNumber*)userID {
+    Query* query = [[[Query alloc]init]autorelease];
+    query.filterObjectType = FRIEND;
+    
+    QueryExpression* queryExpression = [[QueryExpression alloc]init];
+    queryExpression.attributeName = USERID;
+    queryExpression.opCode = opcode_QUERYEQUALITY;
+    queryExpression.value = [userID stringValue];
+    
+    QueryExpression* queryExpression2 = [[QueryExpression alloc]init];
+    queryExpression2.attributeName = TARGETUSERID;
+    queryExpression2.opCode = opcode_QUERYEQUALITY;
+    queryExpression2.value = [userID stringValue];
+    
+    NSArray* expressions = [NSArray arrayWithObjects:queryExpression,queryExpression2,nil];
+    query.attributeExpressions = expressions;
+    
+    [queryExpression release];
+    return query;
+
+
+    
+}
 @end

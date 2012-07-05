@@ -499,6 +499,20 @@ static NSLock* _lock; //lock used to synchronize the processing of enumeration r
     enumerator.secondsBetweenConsecutiveSearches = [settings.page_enumeration_timegap intValue];
     return enumerator;
 }
+
+#pragma mark - Mime-me Enumerators
++ (CloudEnumerator*) enumeratorForFriends:(NSNumber *)userid
+{
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    Query* query = [Query queryForFriends:userid];
+    QueryOptions* queryOptions = [QueryOptions queryForFriends:userid];
+    EnumerationContext* enumerationContext = [EnumerationContext contextForFriends:userid];
+    query.queryOptions = queryOptions;
+    
+    CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.follow_enumeration_timegap intValue];
+    return enumerator;
+}
 //
 //+ (CloudEnumerator*) enumeratorForFollowers:(NSNumber *)userid
 //{
