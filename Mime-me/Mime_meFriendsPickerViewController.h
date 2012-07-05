@@ -10,6 +10,9 @@
 #import "BaseViewController.h"
 
 @interface Mime_meFriendsPickerViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate > {
+    UIButton            *m_btn_home;
+    
+    UIButton            *m_btn_go;
     UITableView         *m_tbl_friends;
     UITableViewCell     *m_tc_friendsHeader;
     UITableViewCell     *m_tc_addContactsHeader;
@@ -17,11 +20,18 @@
     NSArray             *m_friendsArray;
 }
 
+@property (nonatomic, retain) IBOutlet  UIButton            *btn_home;
+
+@property (nonatomic, retain) IBOutlet  UIButton            *btn_go;
 @property (nonatomic, retain) IBOutlet  UITableView         *tbl_friends;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_friendsHeader;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_addContactsHeader;
 
-@property (nonatomic, retain)           NSArray         *friendsArray;
+@property (nonatomic, retain)           NSArray             *friendsArray;
+
+- (IBAction) onHomeButtonPressed:(id)sender;
+
+- (IBAction) onGoButtonPressed:(id)sender;
 
 + (Mime_meFriendsPickerViewController*)createInstance;
 

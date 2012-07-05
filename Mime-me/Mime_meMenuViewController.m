@@ -8,6 +8,7 @@
 
 #import "Mime_meMenuViewController.h"
 #import "Mime_meMimeViewController.h"
+#import "Mime_meGuessMenuViewController.h"
 
 @interface Mime_meMenuViewController ()
 
@@ -72,7 +73,9 @@
 }
 
 - (IBAction) onGuessButtonPressed:(id)sender {
+    Mime_meGuessMenuViewController* mimeViewController = [Mime_meGuessMenuViewController createInstance];
     
+    [self.navigationController setViewControllers:[NSArray arrayWithObject:mimeViewController] animated:YES];
 }
 
 - (IBAction) onScrapbookButtonPressed:(id)sender {

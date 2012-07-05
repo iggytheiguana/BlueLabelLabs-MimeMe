@@ -10,13 +10,14 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Mime_meMenuViewController.h"
 #import "Mime_meFriendsPickerViewController.h"
+#import "Mime_meGuessMenuViewController.h"
 
 @interface Mime_meMimeViewController ()
 
 @end
 
 @implementation Mime_meMimeViewController
-@synthesize btn_home    = m_btn_home;
+@synthesize btn_home        = m_btn_home;
 @synthesize btn_mime        = m_btn_mime;
 @synthesize btn_guess       = m_btn_guess;
 @synthesize btn_scrapbook   = m_btn_scrapbook;
@@ -198,7 +199,9 @@
 }
 
 - (IBAction) onGuessButtonPressed:(id)sender {
+    Mime_meGuessMenuViewController *guessMenuViewController = [Mime_meGuessMenuViewController createInstance];
     
+    [self.navigationController setViewControllers:[NSArray arrayWithObject:guessMenuViewController] animated:NO];
 }
 
 - (IBAction) onScrapbookButtonPressed:(id)sender {

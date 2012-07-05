@@ -7,13 +7,15 @@
 //
 
 #import "Mime_meFriendsPickerViewController.h"
-#import <AddressBook/AddressBook.h>
+#import "Mime_meMenuViewController.h"
 
 @interface Mime_meFriendsPickerViewController ()
 
 @end
 
 @implementation Mime_meFriendsPickerViewController
+@synthesize btn_home                = m_btn_home;
+@synthesize btn_go                  = m_btn_go;
 @synthesize tbl_friends             = m_tbl_friends;
 @synthesize tc_friendsHeader        = m_tc_friendsHeader;
 @synthesize tc_addContactsHeader    = m_tc_addContactsHeader;
@@ -43,6 +45,8 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     
+    self.btn_home = nil;
+    self.btn_go = nil;
     self.tbl_friends = nil;
     self.tc_friendsHeader = nil;
     self.tc_addContactsHeader = nil;
@@ -269,6 +273,23 @@
     }
     
 }
+
+#pragma mark - UIButton Handlers
+- (IBAction) onHomeButtonPressed:(id)sender {
+    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+    
+    [UIView animateWithDuration:0.75
+                     animations:^{
+                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.navigationController.view cache:NO];
+                     }];
+    [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
+}
+
+- (IBAction) onGoButtonPressed:(id)sender {
+    
+}
+
 
 #pragma mark - Static Initializers
 + (Mime_meFriendsPickerViewController*)createInstance {
