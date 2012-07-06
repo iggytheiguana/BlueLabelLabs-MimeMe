@@ -212,7 +212,22 @@
             return cell;
         }
         else {
-            return nil;
+            static NSString *CellIdentifier = @"NoWords";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                
+                cell.textLabel.text = @"No words availalbe!";
+                cell.textLabel.textAlignment = UITextAlignmentCenter;
+                cell.textLabel.shadowColor = [UIColor whiteColor];
+                cell.textLabel.shadowOffset = CGSizeMake(0.0, 1.0);
+                cell.textLabel.textColor = [UIColor lightGrayColor];
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                
+            }
+            
+            return cell;
         }
         
     }
