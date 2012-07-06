@@ -9,6 +9,7 @@
 #import "Mime_meGuessMenuViewController.h"
 #import "Mime_meMenuViewController.h"
 #import "Mime_meMimeViewController.h"
+#import "Mime_meGuessFullTableViewController.h"
 
 @interface Mime_meGuessMenuViewController ()
 
@@ -28,6 +29,7 @@
 @synthesize friendsArray        = m_friendsArray;
 @synthesize recentArray         = m_recentArray;
 @synthesize staffPicksArray     = m_staffPicksArray;
+@synthesize showAllFriends      = m_showAllFrineds;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -43,7 +45,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    self.friendsArray = [NSArray arrayWithObjects:@"Laura", @"Julie", @"Matt", @"David", nil];
+    self.friendsArray = [NSArray arrayWithObjects:@"Laura", @"Julie", @"Matt", @"David", @"Walter", @"John", nil];
     self.recentArray = [NSArray arrayWithObjects:@"Timmy", nil];
     self.staffPicksArray = [NSArray arrayWithObjects:@"Julie", @"Bobby", @"Jordan", nil];
 }
@@ -102,7 +104,13 @@
         count = [self.staffPicksArray count] + 2;  // Add 2 to the count to include 1. Header, and 2. More
     }
     
-    int rows = MIN(count, 5);   // Maximize the number of rows per section to 5
+    int rows; 
+    if (self.showAllFriends == YES) {
+        rows = count;
+    }
+    else {
+        rows = MIN(count, 5);   // Maximize the number of rows per section to 5
+    }
     
     return rows;
 }
@@ -112,7 +120,13 @@
     if (indexPath.section == 0) {
         // From Friends section
         
-        NSInteger count = MIN([self.friendsArray count], 3);    // Maximize the number of friends to show to 3
+        NSInteger count;
+        if (self.showAllFriends == YES) {
+            count = [self.friendsArray count];
+        }
+        else {
+            count = MIN([self.friendsArray count], 3);    // Maximize the number of friends to show to 3
+        }
         
         if (indexPath.row == 0) {
             // Set the header
@@ -156,7 +170,6 @@
                         
                         cell.textLabel.text = @"More from friends";
                         cell.textLabel.textAlignment = UITextAlignmentCenter;
-//                        cell.textLabel.font = [UIFont boldSystemFontOfSize:20];
                         cell.textLabel.shadowColor = [UIColor whiteColor];
                         cell.textLabel.shadowOffset = CGSizeMake(0.0, 1.0);
                         cell.textLabel.textColor = [UIColor lightGrayColor];
@@ -232,7 +245,6 @@
                         
                         cell.textLabel.text = @"More recent mimes";
                         cell.textLabel.textAlignment = UITextAlignmentCenter;
-//                        cell.textLabel.font = [UIFont boldSystemFontOfSize:20];
                         cell.textLabel.shadowColor = [UIColor whiteColor];
                         cell.textLabel.shadowOffset = CGSizeMake(0.0, 1.0);
                         cell.textLabel.textColor = [UIColor lightGrayColor];
@@ -314,7 +326,6 @@
                         
                         cell.textLabel.text = @"More staff picks";
                         cell.textLabel.textAlignment = UITextAlignmentCenter;
-//                        cell.textLabel.font = [UIFont boldSystemFontOfSize:20];
                         cell.textLabel.shadowColor = [UIColor whiteColor];
                         cell.textLabel.shadowOffset = CGSizeMake(0.0, 1.0);
                         cell.textLabel.textColor = [UIColor lightGrayColor];
@@ -397,10 +408,21 @@
     
     if (indexPath.section == 0) {
         // Friends mime selected
-        NSInteger count = [self.friendsArray count];
+        NSInteger count;
+        if (self.showAllFriends == YES) {
+            count = [self.friendsArray count];
+        }
+        else {
+            count = MIN([self.friendsArray count], 3);    // Maximize the number of friends to show to 3
+        }
         
         if (indexPath.row > 0 && indexPath.row <= count) {
             
+        }
+        else {
+            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstance];
+            
+            [self.navigationController pushViewController:fullTableViewController animated:YES];
         }
     }
     if (indexPath.section == 1) {

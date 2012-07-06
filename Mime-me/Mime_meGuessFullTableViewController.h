@@ -1,5 +1,5 @@
 //
-//  Mime_meGuessMenuViewController.h
+//  Mime_meGuessFullTableViewController.h
 //  Mime-me
 //
 //  Created by Jordan Gurrieri on 7/5/12.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 
-@interface Mime_meGuessMenuViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate > {
+@interface Mime_meGuessFullTableViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate > {
     UIButton    *m_btn_home;
     
     UIButton    *m_btn_mime;
@@ -25,7 +25,6 @@
     NSArray             *m_friendsArray;
     NSArray             *m_recentArray;
     NSArray             *m_staffPicksArray;
-    BOOL                m_showAllFrineds;
     
 }
 
@@ -38,13 +37,10 @@
 
 @property (nonatomic, retain) IBOutlet  UITableView         *tbl_mimes;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_friendsHeader;
-@property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_recentHeader;
-@property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_staffPicksHeader;
 
 @property (nonatomic, retain)           NSArray             *friendsArray;
 @property (nonatomic, retain)           NSArray             *recentArray;
 @property (nonatomic, retain)           NSArray             *staffPicksArray;
-@property                               BOOL                showAllFriends;
 
 
 - (IBAction) onHomeButtonPressed:(id)sender;
@@ -54,6 +50,7 @@
 - (IBAction) onScrapbookButtonPressed:(id)sender;
 - (IBAction) onSettingsButtonPressed:(id)sender;
 
-+ (Mime_meGuessMenuViewController*)createInstance;
++ (Mime_meGuessFullTableViewController*)createInstance;
+
 
 @end
