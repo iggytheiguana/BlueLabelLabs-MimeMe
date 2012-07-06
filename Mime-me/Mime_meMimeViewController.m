@@ -43,13 +43,13 @@
     Mime_meAppDelegate* app = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:WORD inManagedObjectContext:app.managedObjectContext];
     
-    // Sort in ascending order of number of times the word is used so the user does not get words they have already used before
+    // Sort in ascending order of number of times the word is used so the user is less likely to get words they have used already
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:NUMBEROFTIMESUSED ascending:YES];
     
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     [fetchRequest setEntity:entityDescription];
     
-    // Fetch 100 words then perform a random selection 
+    // Fetch 100 words then we'll perform a random selection
     [fetchRequest setFetchBatchSize:100];
     
     NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:resourceContext.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
