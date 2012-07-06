@@ -35,6 +35,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    // Add rounded corners to view
+    [self.view.layer setCornerRadius:8.0f];
+    
 }
 
 - (void)viewDidUnload

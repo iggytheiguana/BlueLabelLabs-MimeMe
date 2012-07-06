@@ -16,6 +16,8 @@
 			<array>
 				<string>appIcon-MimeMe_57.png</string>
 				<string>appIcon-MimeMe_114.png</string>
+				<string>Default.png</string>
+				<string>Default@2x.png</string>
 			</array>
 		</dict>
 	</dict>
@@ -41,7 +43,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>211</string>
+	<string>214</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>

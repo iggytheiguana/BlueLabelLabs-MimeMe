@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5209C5BF15A3BACD0054EAF3 /* appIcon-MimeMe_57.png in Resources */ = {isa = PBXBuildFile; fileRef = 5209C5BE15A3BACD0054EAF3 /* appIcon-MimeMe_57.png */; };
-		5209C5C115A3BAD20054EAF3 /* appIcon-MimeMe_114.png in Resources */ = {isa = PBXBuildFile; fileRef = 5209C5C015A3BAD20054EAF3 /* appIcon-MimeMe_114.png */; };
 		520DD0CB15A434DE00C58BF1 /* Mime_meFriendsPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DD0C915A434DE00C58BF1 /* Mime_meFriendsPickerViewController.m */; };
 		520DD0CC15A434DE00C58BF1 /* Mime_meFriendsPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0CA15A434DE00C58BF1 /* Mime_meFriendsPickerViewController.xib */; };
 		520DD0D415A60DA100C58BF1 /* icon-settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0D215A60DA100C58BF1 /* icon-settings.png */; };
@@ -21,6 +19,10 @@
 		520DD0E315A6C30F00C58BF1 /* icon-back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0E115A6C30F00C58BF1 /* icon-back@2x.png */; };
 		520DD0E615A6CD0900C58BF1 /* Mime_meUINavigationHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0E515A6CD0900C58BF1 /* Mime_meUINavigationHeaderView.xib */; };
 		520DD0E915A6CE3500C58BF1 /* Mime_meUINavigationHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DD0E815A6CE3400C58BF1 /* Mime_meUINavigationHeaderView.m */; };
+		520DD0EF15A6E9BF00C58BF1 /* appIcon-MimeMe_57.png in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0EE15A6E9BF00C58BF1 /* appIcon-MimeMe_57.png */; };
+		520DD0F115A6E9C400C58BF1 /* appIcon-MimeMe_114.png in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0F015A6E9C400C58BF1 /* appIcon-MimeMe_114.png */; };
+		520DD0F315A6EB4800C58BF1 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0F215A6EB4800C58BF1 /* Default.png */; };
+		520DD0F515A6EB4C00C58BF1 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0F415A6EB4B00C58BF1 /* Default@2x.png */; };
 		529BE9C515A2211700B7346A /* Mime_meMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9C315A2211700B7346A /* Mime_meMenuViewController.m */; };
 		529BE9C615A2211700B7346A /* Mime_meMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C415A2211700B7346A /* Mime_meMenuViewController.xib */; };
 		529BE9C915A2225D00B7346A /* logo-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C715A2225D00B7346A /* logo-MimeMe.png */; };
@@ -183,8 +185,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5209C5BE15A3BACD0054EAF3 /* appIcon-MimeMe_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "appIcon-MimeMe_57.png"; sourceTree = "<group>"; };
-		5209C5C015A3BAD20054EAF3 /* appIcon-MimeMe_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "appIcon-MimeMe_114.png"; sourceTree = "<group>"; };
 		520DD0C815A434DE00C58BF1 /* Mime_meFriendsPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meFriendsPickerViewController.h; sourceTree = "<group>"; };
 		520DD0C915A434DE00C58BF1 /* Mime_meFriendsPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meFriendsPickerViewController.m; sourceTree = "<group>"; };
 		520DD0CA15A434DE00C58BF1 /* Mime_meFriendsPickerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meFriendsPickerViewController.xib; sourceTree = "<group>"; };
@@ -201,6 +201,10 @@
 		520DD0E515A6CD0900C58BF1 /* Mime_meUINavigationHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meUINavigationHeaderView.xib; sourceTree = "<group>"; };
 		520DD0E715A6CE3400C58BF1 /* Mime_meUINavigationHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meUINavigationHeaderView.h; sourceTree = "<group>"; };
 		520DD0E815A6CE3400C58BF1 /* Mime_meUINavigationHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meUINavigationHeaderView.m; sourceTree = "<group>"; };
+		520DD0EE15A6E9BF00C58BF1 /* appIcon-MimeMe_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "appIcon-MimeMe_57.png"; sourceTree = "<group>"; };
+		520DD0F015A6E9C400C58BF1 /* appIcon-MimeMe_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "appIcon-MimeMe_114.png"; sourceTree = "<group>"; };
+		520DD0F215A6EB4800C58BF1 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		520DD0F415A6EB4B00C58BF1 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		529BE9C215A2211700B7346A /* Mime_meMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meMenuViewController.h; sourceTree = "<group>"; };
 		529BE9C315A2211700B7346A /* Mime_meMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meMenuViewController.m; sourceTree = "<group>"; };
 		529BE9C415A2211700B7346A /* Mime_meMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meMenuViewController.xib; sourceTree = "<group>"; };
@@ -602,8 +606,10 @@
 		C523A000159F7CE6004AA39C = {
 			isa = PBXGroup;
 			children = (
-				5209C5C015A3BAD20054EAF3 /* appIcon-MimeMe_114.png */,
-				5209C5BE15A3BACD0054EAF3 /* appIcon-MimeMe_57.png */,
+				520DD0F415A6EB4B00C58BF1 /* Default@2x.png */,
+				520DD0F215A6EB4800C58BF1 /* Default.png */,
+				520DD0F015A6E9C400C58BF1 /* appIcon-MimeMe_114.png */,
+				520DD0EE15A6E9BF00C58BF1 /* appIcon-MimeMe_57.png */,
 				C523A114159F88B9004AA39C /* libz.1.1.3.dylib */,
 				C523A115159F88B9004AA39C /* libz.1.2.5.dylib */,
 				C523A116159F88B9004AA39C /* libz.dylib */,
@@ -1237,8 +1243,6 @@
 				529BEA0015A2568900B7346A /* singleline_thin.png in Resources */,
 				529BEA0115A2568900B7346A /* singleline_thin@2x.png in Resources */,
 				529BEA0615A260D200B7346A /* Mime_meMimeViewController.xib in Resources */,
-				5209C5BF15A3BACD0054EAF3 /* appIcon-MimeMe_57.png in Resources */,
-				5209C5C115A3BAD20054EAF3 /* appIcon-MimeMe_114.png in Resources */,
 				520DD0CC15A434DE00C58BF1 /* Mime_meFriendsPickerViewController.xib in Resources */,
 				520DD0D415A60DA100C58BF1 /* icon-settings.png in Resources */,
 				520DD0D515A60DA100C58BF1 /* icon-settings@2x.png in Resources */,
@@ -1247,6 +1251,10 @@
 				520DD0E215A6C30F00C58BF1 /* icon-back.png in Resources */,
 				520DD0E315A6C30F00C58BF1 /* icon-back@2x.png in Resources */,
 				520DD0E615A6CD0900C58BF1 /* Mime_meUINavigationHeaderView.xib in Resources */,
+				520DD0EF15A6E9BF00C58BF1 /* appIcon-MimeMe_57.png in Resources */,
+				520DD0F115A6E9C400C58BF1 /* appIcon-MimeMe_114.png in Resources */,
+				520DD0F315A6EB4800C58BF1 /* Default.png in Resources */,
+				520DD0F515A6EB4C00C58BF1 /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
