@@ -27,3 +27,5 @@ extern NSString* const ATTRIBUTECHANGE;
 extern NSString* const MEDITATIONINSTANCE;
 extern NSString* const MEDITATION;
 
+extern NSString* const FRIEND;
+extern NSString* const WORD;

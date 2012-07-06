@@ -37,6 +37,11 @@
 + (EnumerationContext*) contextForApplicationSettings:(NSNumber*)userid;
 //+ (EnumerationContext*) contextForFollowers:    (NSNumber*)userid;
 //+ (EnumerationContext*) contextForFollowing:    (NSNumber*)userid;
+
+//mime me static initializers
++(EnumerationContext*) contextForFriends:(NSNumber*)userid;
++(EnumerationContext*) contextForWords;
++(EnumerationContext*) contextForSingleWorld:(NSString*)word;
 - (id) init;
 - (NSString*) toJSON;
 @end

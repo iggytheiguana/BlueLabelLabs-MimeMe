@@ -40,6 +40,7 @@ extern NSString* const LINKED_RESULTS_SORTASCENDING;
 extern NSString* const LINKED_RESULTS_SORTATTRIBUTE;
 extern NSString* const PRIMARY_RESULTS_SORTASCENDING;
 extern NSString* const PRIMARY_RESULTS_SORTATTRIBUTE;
+extern NSString* const CLAUSE_OPERATOR;
 extern NSString* const PAGEID;
 extern NSString* const PHOTOID;
 extern NSString* const CAPTIONID;
@@ -110,7 +111,7 @@ extern NSString* const FINISHEDWRITERID;
 extern NSString* const NUMBEROFUNREADCAPTIONS;
 extern NSString* const SHARINGLEVEL;
 extern NSString* const CONSEQUENTIALUPDATES;
-
+extern NSString* const TARGETUSERID;
 
 
 extern NSString* const DATECOMPLETED;

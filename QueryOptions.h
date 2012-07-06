@@ -19,6 +19,8 @@
     
     BOOL        m_primary_results_sortascending;
     NSString*   m_primary_results_sortattribute;
+    
+    int         m_clause_operator;
 }
 
 
@@ -30,6 +32,7 @@
 @property (nonatomic,retain) NSString* linked_results_sortattribute;
 @property (nonatomic, retain) NSString* primary_results_sortattribute;
 @property BOOL primary_results_sortascending;
+@property int   clause_operator;
 
 - (NSString*)       toJSON;
 - (NSDictionary*)   toDictionary;
@@ -46,4 +49,9 @@
 +(QueryOptions*)queryForApplicationSettings:(NSNumber*)userid;
 +(QueryOptions*)queryForFollowers;
 +(QueryOptions*)queryForFollowing;
+
+//static initializers for mime-me
++(QueryOptions*)queryForFriends:(NSNumber*)userID;
++(QueryOptions*)queryForWords;
++(QueryOptions*)queryForSingleWord:(NSString*)word;
 @end

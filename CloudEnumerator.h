@@ -80,4 +80,10 @@
 + (CloudEnumerator*) enumeratorForIDs:(NSArray*)objectIDs 
                             withTypes:(NSArray*)objectTypes;
 + (CloudEnumerator*) enumeratorForApplicationSettings:(NSNumber*)userid;
+
+//mime me enumerators
++ (CloudEnumerator*) enumeratorForFriends:(NSNumber*)userid;
++ (CloudEnumerator*) enumeratorForWords;
++ (CloudEnumerator*) enumeratorForSingleWord:(NSString*)word;
+
 @end

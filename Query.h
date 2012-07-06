@@ -40,4 +40,8 @@
 + (id) queryForFollowers:(NSNumber*)userid;
 + (id) queryForFollowing:(NSNumber*)userid;
 
+//mimeme static initializers
++ (id) queryForFriends:(NSNumber*)userID;
++ (id) queryForWords;
++ (id) queryForSingleWorld:(NSString*)word;
 @end

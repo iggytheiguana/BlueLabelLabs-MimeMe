@@ -12,7 +12,7 @@
 #import "ApplicationSettings.h"
 #import "ApplicationSettingsManager.h"
 #import "JSONKit.h"
-
+#import "OpCodes.h"
 @implementation QueryOptions
 @synthesize  includelinkedobjects           = m_includelinkedobjects;
 @synthesize  referencingattribute           = m_referencingattribute;
@@ -22,6 +22,7 @@
 @synthesize linked_results_sortattribute    = m_linked_results_sortattribute;
 @synthesize primary_results_sortattribute   = m_primary_results_sortattribute;
 @synthesize primary_results_sortascending   = m_primary_results_sortascending;
+@synthesize clause_operator                 = m_clause_operator;
 
 - (id) initFromJSON:(NSString *)json {
     NSDictionary* jsonDictionary = [json objectFromJSONString];
@@ -40,7 +41,7 @@
         self.linked_results_sortattribute = [jsonDictionary valueForKey:LINKED_RESULTS_SORTATTRIBUTE];
         self.primary_results_sortascending = [[jsonDictionary valueForKey:PRIMARY_RESULTS_SORTASCENDING]boolValue];
         self.primary_results_sortattribute = [jsonDictionary valueForKey:PRIMARY_RESULTS_SORTATTRIBUTE];
-
+        self.clause_operator = [[jsonDictionary valueForKey:CLAUSE_OPERATOR] intValue];
     }
     return self;
 }
@@ -68,7 +69,7 @@
 
 #pragma mark - Static Initializers
 +(QueryOptions*)queryForPhotos {
-    ApplicationSettings* settingsObjects = [[ApplicationSettingsManager instance]settings];
+   // ApplicationSettings* settingsObjects = [[ApplicationSettingsManager instance]settings];
     QueryOptions *newQuery = [[QueryOptions alloc]autorelease];
     newQuery.referencingattribute=PHOTOID;
     newQuery.referencingobjecttype =CAPTION;
@@ -91,7 +92,7 @@
 }
 
 + (QueryOptions*)queryForDrafts {
-    ApplicationSettings* settingsObjects = [[ApplicationSettingsManager instance]settings];
+  //  ApplicationSettings* settingsObjects = [[ApplicationSettingsManager instance]settings];
     QueryOptions *newQuery = [[QueryOptions alloc]autorelease];
     newQuery.referencingattribute=THEMEID;
     newQuery.referencingobjecttype =PHOTO;
@@ -119,7 +120,7 @@
 }
 
 +(QueryOptions*)queryForPages {
-     ApplicationSettings* settingsObjects = [[ApplicationSettingsManager instance]settings];
+     //ApplicationSettings* settingsObjects = [[ApplicationSettingsManager instance]settings];
     QueryOptions *newQuery = [[QueryOptions alloc]autorelease];
     newQuery.referencingattribute=THEMEID;
     newQuery.referencingobjecttype = PHOTO;
@@ -190,4 +191,37 @@
     newQuery.primary_results_sortattribute = nil;
     return newQuery;
 }
+
+#pragma mark - Mime-me Initializers
++(QueryOptions*) queryForFriends:(NSNumber *)userID
+{
+    QueryOptions* queryForFriends = [[QueryOptions alloc]autorelease];
+    queryForFriends.includelinkedobjects = NO;
+    queryForFriends.primary_results_sortascending = NO;
+    queryForFriends.primary_results_sortattribute = DATECREATED;
+    queryForFriends.clause_operator = opcode_CLAUSEOR;
+    return queryForFriends;
+}
+
+
++(QueryOptions*) queryForWords
+{
+    QueryOptions* queryForWords = [[QueryOptions alloc]autorelease];
+    queryForWords.includelinkedobjects = NO;
+    queryForWords.primary_results_sortascending = NO;
+    queryForWords.primary_results_sortattribute = DATECREATED;
+   
+    return queryForWords;
+}
+
++ (QueryOptions*) queryForSingleWord:(NSString *)word
+{
+    QueryOptions* queryForWords = [[QueryOptions alloc]autorelease];
+    queryForWords.includelinkedobjects = NO;
+    queryForWords.primary_results_sortascending = NO;
+    queryForWords.primary_results_sortattribute = DATECREATED;
+    
+    return queryForWords;
+}
+
 @end

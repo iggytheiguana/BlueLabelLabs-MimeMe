@@ -12,3 +12,7 @@
 
 int const opcode_QUERYEQUALITY=1;
 int const opcode_QUERYGREATERTHAN=2;
+
+
+int const opcode_CLAUSEAND = 0;
+int const opcode_CLAUSEOR = 1;

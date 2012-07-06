@@ -11,3 +11,6 @@
 
 extern int const opcode_QUERYEQUALITY;
 extern int const opcode_QUERYGREATERTHAN;
+
+extern int const opcode_CLAUSEAND;
+extern int const opcode_CLAUSEOR;
