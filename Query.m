@@ -321,4 +321,33 @@
 
     
 }
+
++ (Query*)queryForWords {
+    Query* query = [[[Query alloc]init]autorelease];
+    query.filterObjectType = WORD;
+    
+    return query;
+    
+}
+
++ (Query*)queryForSingleWord:(NSString*)word
+{
+    Query* query = [[[Query alloc]init ]autorelease];
+    query.filterObjectType = WORD;
+    
+    QueryExpression* queryExpression = [[QueryExpression alloc]init];
+    queryExpression.attributeName = WORD;
+    queryExpression.opCode = opcode_QUERYEQUALITY;
+    queryExpression.value = word;
+    
+    NSArray* expressions = [NSArray arrayWithObject:queryExpression];
+    query.attributeExpressions = expressions;
+    
+    [queryExpression release];
+    return query;
+
+}
+
+
+
 @end

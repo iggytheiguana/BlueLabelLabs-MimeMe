@@ -52,5 +52,6 @@
 
 //static initializers for mime-me
 +(QueryOptions*)queryForFriends:(NSNumber*)userID;
-
++(QueryOptions*)queryForWords;
++(QueryOptions*)queryForSingleWord:(NSString*)word;
 @end

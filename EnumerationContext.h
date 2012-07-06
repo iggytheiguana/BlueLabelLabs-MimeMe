@@ -40,6 +40,8 @@
 
 //mime me static initializers
 +(EnumerationContext*) contextForFriends:(NSNumber*)userid;
++(EnumerationContext*) contextForWords;
++(EnumerationContext*) contextForSingleWorld:(NSString*)word;
 - (id) init;
 - (NSString*) toJSON;
 @end

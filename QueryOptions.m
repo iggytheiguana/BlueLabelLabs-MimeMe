@@ -202,4 +202,26 @@
     queryForFriends.clause_operator = opcode_CLAUSEOR;
     return queryForFriends;
 }
+
+
++(QueryOptions*) queryForWords
+{
+    QueryOptions* queryForWords = [[QueryOptions alloc]autorelease];
+    queryForWords.includelinkedobjects = NO;
+    queryForWords.primary_results_sortascending = NO;
+    queryForWords.primary_results_sortattribute = DATECREATED;
+   
+    return queryForWords;
+}
+
++ (QueryOptions*) queryForSingleWord:(NSString *)word
+{
+    QueryOptions* queryForWords = [[QueryOptions alloc]autorelease];
+    queryForWords.includelinkedobjects = NO;
+    queryForWords.primary_results_sortascending = NO;
+    queryForWords.primary_results_sortattribute = DATECREATED;
+    
+    return queryForWords;
+}
+
 @end

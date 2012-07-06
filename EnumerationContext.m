@@ -183,4 +183,24 @@
 
 }
 
++(EnumerationContext*)contextForWords
+{
+    ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize = settingsObject.pagesize;
+    
+    enumerationContext.maximumNumberOfResults = settingsObject.page_maxnumtodownload;   
+    return enumerationContext;
+    
+}
+
++(EnumerationContext*)contextForSingleWorld:(NSString *)word
+{
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize = [NSNumber numberWithInt:1];
+    
+    enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:1];  
+    return enumerationContext;
+}
+
 @end

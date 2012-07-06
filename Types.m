@@ -29,3 +29,4 @@ NSString* const MEDITATIONINSTANCE          =@"meditationinstance";
 
 
 NSString* const FRIEND                      =@"friend";
+NSString* const WORD                        =@"word";
