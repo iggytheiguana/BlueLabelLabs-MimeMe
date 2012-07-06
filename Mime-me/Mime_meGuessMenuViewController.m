@@ -16,11 +16,8 @@
 @end
 
 @implementation Mime_meGuessMenuViewController
-@synthesize btn_home        = m_btn_home;
-@synthesize btn_mime        = m_btn_mime;
-@synthesize btn_guess       = m_btn_guess;
-@synthesize btn_scrapbook   = m_btn_scrapbook;
-@synthesize btn_settings    = m_btn_settings;
+@synthesize nv_navigationHeader = m_nv_navigationHeader;
+
 @synthesize tbl_mimes           = m_tbl_mimes;
 @synthesize tc_friendsHeader    = m_tc_friendsHeader;
 @synthesize tc_recentHeader     = m_tc_recentHeader;
@@ -29,7 +26,6 @@
 @synthesize friendsArray        = m_friendsArray;
 @synthesize recentArray         = m_recentArray;
 @synthesize staffPicksArray     = m_staffPicksArray;
-@synthesize showAllFriends      = m_showAllFrineds;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -45,6 +41,18 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    // Add rounded corners to view
+    [self.view.layer setCornerRadius:8.0f];
+    
+    // Add the navigation header
+    Mime_meUINavigationHeaderView *navigationHeader = [[Mime_meUINavigationHeaderView alloc]initWithFrame:[Mime_meUINavigationHeaderView frameForNavigationHeader]];
+    navigationHeader.delegate = self;
+    navigationHeader.btn_back.hidden = YES;
+    self.nv_navigationHeader = navigationHeader;
+    [self.view addSubview:self.nv_navigationHeader];
+    [navigationHeader release];
+    
+    // TEMP: Data arrays for tableview
     self.friendsArray = [NSArray arrayWithObjects:@"Laura", @"Julie", @"Matt", @"David", @"Walter", @"John", nil];
     self.recentArray = [NSArray arrayWithObjects:@"Timmy", nil];
     self.staffPicksArray = [NSArray arrayWithObjects:@"Julie", @"Bobby", @"Jordan", nil];
@@ -56,11 +64,7 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     
-    self.btn_home = nil;
-    self.btn_mime = nil;
-    self.btn_guess = nil;
-    self.btn_scrapbook = nil;
-    self.btn_settings = nil;
+    self.nv_navigationHeader = nil;
     
     self.tbl_mimes = nil;
     self.tc_friendsHeader = nil;
@@ -71,8 +75,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.btn_guess setHighlighted:YES];
-    [self.btn_guess setUserInteractionEnabled:NO];
+    [self.nv_navigationHeader.btn_guess setHighlighted:YES];
+    [self.nv_navigationHeader.btn_guess setUserInteractionEnabled:NO];
     
 }
 
@@ -104,13 +108,7 @@
         count = [self.staffPicksArray count] + 2;  // Add 2 to the count to include 1. Header, and 2. More
     }
     
-    int rows; 
-    if (self.showAllFriends == YES) {
-        rows = count;
-    }
-    else {
-        rows = MIN(count, 5);   // Maximize the number of rows per section to 5
-    }
+    int rows = MIN(count, 5);   // Maximize the number of rows per section
     
     return rows;
 }
@@ -120,13 +118,7 @@
     if (indexPath.section == 0) {
         // From Friends section
         
-        NSInteger count;
-        if (self.showAllFriends == YES) {
-            count = [self.friendsArray count];
-        }
-        else {
-            count = MIN([self.friendsArray count], 3);    // Maximize the number of friends to show to 3
-        }
+        NSInteger count = MIN([self.friendsArray count], 3);    // Maximize the number of friends to show
         
         if (indexPath.row == 0) {
             // Set the header
@@ -408,13 +400,7 @@
     
     if (indexPath.section == 0) {
         // Friends mime selected
-        NSInteger count;
-        if (self.showAllFriends == YES) {
-            count = [self.friendsArray count];
-        }
-        else {
-            count = MIN([self.friendsArray count], 3);    // Maximize the number of friends to show to 3
-        }
+        NSInteger count = MIN([self.friendsArray count], 3);    // Maximize the number of friends to show
         
         if (indexPath.row > 0 && indexPath.row <= count) {
             

@@ -8,14 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
+#import "Mime_meUINavigationHeaderView.h"
 
-@interface Mime_meGuessFullTableViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate > {
-    UIButton    *m_btn_home;
-    
-    UIButton    *m_btn_mime;
-    UIButton    *m_btn_guess;
-    UIButton    *m_btn_scrapbook;
-    UIButton    *m_btn_settings;
+@interface Mime_meGuessFullTableViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate > {
+    Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
     
     UITableView         *m_tbl_mimes;
     UITableViewCell     *m_tc_friendsHeader;
@@ -28,15 +24,12 @@
     
 }
 
-@property (nonatomic, retain) IBOutlet  UIButton        *btn_home;
-
-@property (nonatomic, retain) IBOutlet  UIButton        *btn_mime;
-@property (nonatomic, retain) IBOutlet  UIButton        *btn_guess;
-@property (nonatomic, retain) IBOutlet  UIButton        *btn_scrapbook;
-@property (nonatomic, retain) IBOutlet  UIButton        *btn_settings;
+@property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
 
 @property (nonatomic, retain) IBOutlet  UITableView         *tbl_mimes;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_friendsHeader;
+@property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_recentHeader;
+@property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_staffPicksHeader;
 
 @property (nonatomic, retain)           NSArray             *friendsArray;
 @property (nonatomic, retain)           NSArray             *recentArray;
@@ -48,7 +41,9 @@
 - (IBAction) onMimeButtonPressed:(id)sender;
 - (IBAction) onGuessButtonPressed:(id)sender;
 - (IBAction) onScrapbookButtonPressed:(id)sender;
+
 - (IBAction) onSettingsButtonPressed:(id)sender;
+- (IBAction) onBackButtonPressed:(id)sender;
 
 + (Mime_meGuessFullTableViewController*)createInstance;
 

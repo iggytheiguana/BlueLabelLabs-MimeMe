@@ -14,7 +14,7 @@
 @end
 
 @implementation Mime_meFriendsPickerViewController
-@synthesize btn_home                = m_btn_home;
+@synthesize nv_navigationHeader     = m_nv_navigationHeader;
 @synthesize btn_go                  = m_btn_go;
 @synthesize tbl_friends             = m_tbl_friends;
 @synthesize tc_friendsHeader        = m_tc_friendsHeader;
@@ -35,6 +35,25 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    // Add rounded corners to view
+    [self.view.layer setCornerRadius:8.0f];
+    
+    // Add the navigation header
+    Mime_meUINavigationHeaderView *navigationHeader = [[Mime_meUINavigationHeaderView alloc]initWithFrame:[Mime_meUINavigationHeaderView frameForNavigationHeader]];
+    navigationHeader.delegate = self;
+    navigationHeader.btn_back.hidden = YES;
+    navigationHeader.btn_settings.hidden = YES;
+    navigationHeader.btn_mime.hidden = YES;
+    navigationHeader.btn_guess.hidden = YES;
+    navigationHeader.btn_scrapbook.hidden = YES;
+    self.nv_navigationHeader = navigationHeader;
+    [self.view addSubview:self.nv_navigationHeader];
+    [navigationHeader release];
+    
+    // Add the Go button to the navigation header
+    [self.nv_navigationHeader addSubview:self.btn_go];
+    
+    // TEMP: Data arrays for tableview
     self.friendsArray = [NSArray arrayWithObjects:@"Laura", @"Julie", @"Matt", @"David", nil];
     
 }
@@ -45,7 +64,7 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     
-    self.btn_home = nil;
+    self.nv_navigationHeader = nil;
     self.btn_go = nil;
     self.tbl_friends = nil;
     self.tc_friendsHeader = nil;
@@ -87,24 +106,6 @@
             
             if (cell == nil) {
                 cell = self.tc_friendsHeader;
-                
-//                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-//                
-//                // Cell title
-//                cell.textLabel.text = @"MimeMe Friends";
-//                cell.textLabel.textAlignment = UITextAlignmentCenter;
-//                cell.textLabel.font = [UIFont boldSystemFontOfSize:20];
-//                cell.textLabel.shadowColor = [UIColor lightGrayColor];
-//                cell.textLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-//                cell.textLabel.textColor = [UIColor whiteColor];
-//                
-//                // Cell subtitle
-//                cell.detailTextLabel.text = @"Select who will guess your mime!";
-//                cell.detailTextLabel.textAlignment = UITextAlignmentCenter;
-//                cell.detailTextLabel.font = [UIFont boldSystemFontOfSize:15];
-//                cell.detailTextLabel.shadowColor = [UIColor lightGrayColor];
-//                cell.detailTextLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-//                cell.detailTextLabel.textColor = [UIColor whiteColor];
                 
                 // Cell properties
                 cell.userInteractionEnabled = NO;
@@ -151,24 +152,6 @@
             
             if (cell == nil) {
                 cell = self.tc_addContactsHeader;
-                
-//                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-//                
-//                // Cell title
-//                cell.textLabel.text = @"Add friends";
-//                cell.textLabel.textAlignment = UITextAlignmentCenter;
-//                cell.textLabel.font = [UIFont boldSystemFontOfSize:20];
-//                cell.textLabel.shadowColor = [UIColor lightGrayColor];
-//                cell.textLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-//                cell.textLabel.textColor = [UIColor whiteColor];
-//                
-//                // Cell subtitle
-//                cell.detailTextLabel.text = @"Invite friends to mime with you!";
-//                cell.detailTextLabel.textAlignment = UITextAlignmentCenter;
-//                cell.detailTextLabel.font = [UIFont boldSystemFontOfSize:15];
-//                cell.detailTextLabel.shadowColor = [UIColor lightGrayColor];
-//                cell.detailTextLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-//                cell.detailTextLabel.textColor = [UIColor whiteColor];
                 
                 // Cell properties
                 cell.userInteractionEnabled = NO;

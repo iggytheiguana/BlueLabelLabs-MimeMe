@@ -17,6 +17,10 @@
 		520DD0DA15A6157800C58BF1 /* Mime_meGuessMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0D815A6157800C58BF1 /* Mime_meGuessMenuViewController.xib */; };
 		520DD0DE15A652DD00C58BF1 /* Mime_meGuessFullTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DD0DC15A652DC00C58BF1 /* Mime_meGuessFullTableViewController.m */; };
 		520DD0DF15A652DD00C58BF1 /* Mime_meGuessFullTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0DD15A652DC00C58BF1 /* Mime_meGuessFullTableViewController.xib */; };
+		520DD0E215A6C30F00C58BF1 /* icon-back.png in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0E015A6C30F00C58BF1 /* icon-back.png */; };
+		520DD0E315A6C30F00C58BF1 /* icon-back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0E115A6C30F00C58BF1 /* icon-back@2x.png */; };
+		520DD0E615A6CD0900C58BF1 /* Mime_meUINavigationHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0E515A6CD0900C58BF1 /* Mime_meUINavigationHeaderView.xib */; };
+		520DD0E915A6CE3500C58BF1 /* Mime_meUINavigationHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DD0E815A6CE3400C58BF1 /* Mime_meUINavigationHeaderView.m */; };
 		529BE9C515A2211700B7346A /* Mime_meMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9C315A2211700B7346A /* Mime_meMenuViewController.m */; };
 		529BE9C615A2211700B7346A /* Mime_meMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C415A2211700B7346A /* Mime_meMenuViewController.xib */; };
 		529BE9C915A2225D00B7346A /* logo-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C715A2225D00B7346A /* logo-MimeMe.png */; };
@@ -192,6 +196,11 @@
 		520DD0DB15A652DC00C58BF1 /* Mime_meGuessFullTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meGuessFullTableViewController.h; sourceTree = "<group>"; };
 		520DD0DC15A652DC00C58BF1 /* Mime_meGuessFullTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meGuessFullTableViewController.m; sourceTree = "<group>"; };
 		520DD0DD15A652DC00C58BF1 /* Mime_meGuessFullTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meGuessFullTableViewController.xib; sourceTree = "<group>"; };
+		520DD0E015A6C30F00C58BF1 /* icon-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-back.png"; sourceTree = "<group>"; };
+		520DD0E115A6C30F00C58BF1 /* icon-back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-back@2x.png"; sourceTree = "<group>"; };
+		520DD0E515A6CD0900C58BF1 /* Mime_meUINavigationHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meUINavigationHeaderView.xib; sourceTree = "<group>"; };
+		520DD0E715A6CE3400C58BF1 /* Mime_meUINavigationHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meUINavigationHeaderView.h; sourceTree = "<group>"; };
+		520DD0E815A6CE3400C58BF1 /* Mime_meUINavigationHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meUINavigationHeaderView.m; sourceTree = "<group>"; };
 		529BE9C215A2211700B7346A /* Mime_meMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meMenuViewController.h; sourceTree = "<group>"; };
 		529BE9C315A2211700B7346A /* Mime_meMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meMenuViewController.m; sourceTree = "<group>"; };
 		529BE9C415A2211700B7346A /* Mime_meMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meMenuViewController.xib; sourceTree = "<group>"; };
@@ -546,6 +555,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		520DD0E415A6C64D00C58BF1 /* Abstract */ = {
+			isa = PBXGroup;
+			children = (
+				520DD0E715A6CE3400C58BF1 /* Mime_meUINavigationHeaderView.h */,
+				520DD0E815A6CE3400C58BF1 /* Mime_meUINavigationHeaderView.m */,
+				520DD0E515A6CD0900C58BF1 /* Mime_meUINavigationHeaderView.xib */,
+			);
+			name = Abstract;
+			sourceTree = "<group>";
+		};
 		529BE9D315A22EDA00B7346A /* Abstract */ = {
 			isa = PBXGroup;
 			children = (
@@ -558,6 +577,7 @@
 		529BE9D715A22F4100B7346A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				520DD0E415A6C64D00C58BF1 /* Abstract */,
 				529BE9D815A22F4800B7346A /* Generic */,
 			);
 			name = Views;
@@ -1111,6 +1131,8 @@
 				529BE9FF15A2568900B7346A /* singleline_thin@2x.png */,
 				520DD0D215A60DA100C58BF1 /* icon-settings.png */,
 				520DD0D315A60DA100C58BF1 /* icon-settings@2x.png */,
+				520DD0E015A6C30F00C58BF1 /* icon-back.png */,
+				520DD0E115A6C30F00C58BF1 /* icon-back@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1222,6 +1244,9 @@
 				520DD0D515A60DA100C58BF1 /* icon-settings@2x.png in Resources */,
 				520DD0DA15A6157800C58BF1 /* Mime_meGuessMenuViewController.xib in Resources */,
 				520DD0DF15A652DD00C58BF1 /* Mime_meGuessFullTableViewController.xib in Resources */,
+				520DD0E215A6C30F00C58BF1 /* icon-back.png in Resources */,
+				520DD0E315A6C30F00C58BF1 /* icon-back@2x.png in Resources */,
+				520DD0E615A6CD0900C58BF1 /* Mime_meUINavigationHeaderView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1374,6 +1399,7 @@
 				520DD0CB15A434DE00C58BF1 /* Mime_meFriendsPickerViewController.m in Sources */,
 				520DD0D915A6157800C58BF1 /* Mime_meGuessMenuViewController.m in Sources */,
 				520DD0DE15A652DD00C58BF1 /* Mime_meGuessFullTableViewController.m in Sources */,
+				520DD0E915A6CE3500C58BF1 /* Mime_meUINavigationHeaderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

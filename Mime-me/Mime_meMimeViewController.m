@@ -17,14 +17,10 @@
 @end
 
 @implementation Mime_meMimeViewController
-@synthesize btn_home        = m_btn_home;
-@synthesize btn_mime        = m_btn_mime;
-@synthesize btn_guess       = m_btn_guess;
-@synthesize btn_scrapbook   = m_btn_scrapbook;
-@synthesize btn_settings    = m_btn_settings;
-@synthesize btn_getWords    = m_btn_getWords;
+@synthesize nv_navigationHeader = m_nv_navigationHeader;
 @synthesize tbl_words       = m_tbl_words;
 @synthesize tc_header       = m_tc_header;
+@synthesize btn_getWords    = m_btn_getWords;
 @synthesize wordsArray      = m_wordsArray;
 @synthesize cameraActionSheet = m_cameraActionSheet;
 
@@ -43,6 +39,18 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    // Add rounded corners to view
+    [self.view.layer setCornerRadius:8.0f];
+    
+    // Add the navigation header
+    Mime_meUINavigationHeaderView *navigationHeader = [[Mime_meUINavigationHeaderView alloc]initWithFrame:[Mime_meUINavigationHeaderView frameForNavigationHeader]];
+    navigationHeader.delegate = self;
+    navigationHeader.btn_back.hidden = YES;
+    self.nv_navigationHeader = navigationHeader;
+    [self.view addSubview:self.nv_navigationHeader];
+    [navigationHeader release];
+    
+    // TEMP: Data arrays for tableview
     self.wordsArray = [NSArray arrayWithObjects:@"high-five", @"ghost", @"waldo", nil];
     
 }
@@ -53,21 +61,17 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     
-    self.btn_home = nil;
-    self.btn_mime = nil;
-    self.btn_guess = nil;
-    self.btn_scrapbook = nil;
-    self.btn_settings = nil;
-    self.btn_getWords = nil;
+    self.nv_navigationHeader = nil;
     self.tbl_words = nil;
     self.tc_header = nil;
+    self.btn_getWords = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.btn_mime setHighlighted:YES];
-    [self.btn_mime setUserInteractionEnabled:NO];
+    [self.nv_navigationHeader.btn_mime setHighlighted:YES];
+    [self.nv_navigationHeader.btn_mime setUserInteractionEnabled:NO];
     
 }
 
@@ -98,16 +102,6 @@
         
         if (cell == nil) {
             cell = self.tc_header;
-            
-//            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-//            
-//            cell.textLabel.text = @"Pick a word to play!";
-//            cell.textLabel.textAlignment = UITextAlignmentCenter;
-//            cell.textLabel.font = [UIFont boldSystemFontOfSize:22];
-//            cell.textLabel.shadowColor = [UIColor lightGrayColor];
-//            cell.textLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-//            cell.textLabel.textColor = [UIColor whiteColor];
-//            cell.backgroundColor = [UIColor colorWithRed:252.0 green:217.0 blue:76.0 alpha:1.0];
             
             cell.userInteractionEnabled = NO;
         }
