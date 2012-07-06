@@ -54,6 +54,15 @@
 #define LOG_APPLICATIONSETTINGSMANAGER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"applicationsettingsmanager",level,__VA_ARGS__)
 
 #define LOG_PROGRESSVIEW(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"progressview",level,__VA_ARGS__)
+
+
+// Mime-Me spcecific logs
+#define LOG_MIME_MEMIMEVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_memimeviewvontroller",level,__VA_ARGS__)
+
+
+
+
+
 #else
 #define LOG_NETWORK(...)    do{}while(0)
 #define LOG_GENERAL(...)    do{}while(0)

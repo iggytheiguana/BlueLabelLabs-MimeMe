@@ -14,6 +14,7 @@
 #import "LoginViewController.h"
 #import "Mime_meMenuViewController.h"
 #import "Mime_meMimeViewController.h"
+#import "ApplicationSettings.h"
 
 @implementation Mime_meAppDelegate
 

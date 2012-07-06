@@ -134,3 +134,4 @@ extern NSString* const NUMTIMESSTARTED;
 extern NSString* const LASTPOSITION;
 extern NSString* const TITLE;
 extern NSString* const ISSENTBYFRIEND;
+extern NSString* const NUMBEROFTIMESUSED;

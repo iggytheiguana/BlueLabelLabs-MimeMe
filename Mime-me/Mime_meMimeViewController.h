@@ -11,7 +11,8 @@
 #import "UICameraActionSheet.h"
 #import "Mime_meUINavigationHeaderView.h"
 
-@interface Mime_meMimeViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, UICameraActionSheetDelegate, Mime_meUINavigationHeaderViewDelgate > {
+@interface Mime_meMimeViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, UICameraActionSheetDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate, UIProgressHUDViewDelegate > {
+    
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
     
     UITableView         *m_tbl_words;
@@ -21,7 +22,12 @@
     
     NSArray             *m_wordsArray;
     UICameraActionSheet *m_cameraActionSheet;
+    
+    CloudEnumerator     *m_wordsCloudEnumerator;
 }
+
+@property (nonatomic, retain)           NSFetchedResultsController      *frc_words;
+@property (nonatomic, retain)           CloudEnumerator                 *wordsCloudEnumerator;
 
 @property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
 

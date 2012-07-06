@@ -126,3 +126,5 @@ NSString* const LASTPOSITION            =@"lastposition";
 NSString* const TITLE                   =@"title";
 NSString* const ISSENTBYFRIEND          =@"issentbyfriend";
 NSString* const TARGETUSERID            =@"targetuserid";
+
+NSString* const NUMBEROFTIMESUSED       =@"numberoftimesused";

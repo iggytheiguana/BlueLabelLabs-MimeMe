@@ -7,6 +7,7 @@
 //
 
 #import "Mime_meMenuViewController.h"
+#import <QuartzCore/QuartzCore.h>
 #import "Mime_meMimeViewController.h"
 #import "Mime_meGuessMenuViewController.h"
 

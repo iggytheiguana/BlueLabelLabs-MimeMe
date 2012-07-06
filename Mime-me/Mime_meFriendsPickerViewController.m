@@ -7,6 +7,7 @@
 //
 
 #import "Mime_meFriendsPickerViewController.h"
+#import <QuartzCore/QuartzCore.h>
 #import "Mime_meMenuViewController.h"
 
 @interface Mime_meFriendsPickerViewController ()

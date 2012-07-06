@@ -7,6 +7,7 @@
 //
 
 #import "Mime_meGuessMenuViewController.h"
+#import <QuartzCore/QuartzCore.h>
 #import "Mime_meMenuViewController.h"
 #import "Mime_meMimeViewController.h"
 #import "Mime_meGuessFullTableViewController.h"
@@ -416,7 +417,9 @@
         NSInteger count = [self.recentArray count];
         
         if (indexPath.row > 0 && indexPath.row <= count) {
+            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstance];
             
+            [self.navigationController pushViewController:fullTableViewController animated:YES];
         }
     }
     else {
@@ -424,7 +427,9 @@
         NSInteger count = [self.staffPicksArray count];
         
         if (indexPath.row > 0 && indexPath.row <= count) {
+            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstance];
             
+            [self.navigationController pushViewController:fullTableViewController animated:YES];
         }
     }
     

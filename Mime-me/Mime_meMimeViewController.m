@@ -11,19 +11,92 @@
 #import "Mime_meMenuViewController.h"
 #import "Mime_meFriendsPickerViewController.h"
 #import "Mime_meGuessMenuViewController.h"
+#import "Mime_meAppDelegate.h"
+#import "Macros.h"
+#import "Attributes.h"
 
 @interface Mime_meMimeViewController ()
 
 @end
 
 @implementation Mime_meMimeViewController
+@synthesize frc_words           = __frc_words;
+@synthesize wordsCloudEnumerator = m_wordsCloudEnumerator;
 @synthesize nv_navigationHeader = m_nv_navigationHeader;
-@synthesize tbl_words       = m_tbl_words;
-@synthesize tc_header       = m_tc_header;
-@synthesize btn_getWords    = m_btn_getWords;
-@synthesize wordsArray      = m_wordsArray;
-@synthesize cameraActionSheet = m_cameraActionSheet;
+@synthesize tbl_words           = m_tbl_words;
+@synthesize tc_header           = m_tc_header;
+@synthesize btn_getWords        = m_btn_getWords;
+@synthesize wordsArray          = m_wordsArray;
+@synthesize cameraActionSheet   = m_cameraActionSheet;
 
+
+#pragma mark - Properties
+- (NSFetchedResultsController*)frc_words {
+    NSString* activityName = @"Mime_meMimeViewController.frc_words:";
+    if (__frc_words != nil) {
+        return __frc_words;
+    }
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime_meAppDelegate* app = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:WORD inManagedObjectContext:app.managedObjectContext];
+    
+    // Sort in ascending order of number of times the word is used so the user does not get words they have already used before
+    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:NUMBEROFTIMESUSED ascending:YES];
+    
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    [fetchRequest setEntity:entityDescription];
+    
+    // Fetch 100 words then perform a random selection 
+    [fetchRequest setFetchBatchSize:100];
+    
+    NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:resourceContext.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+    
+    controller.delegate = self;
+    self.frc_words = controller;
+    
+    NSError* error = nil;
+    [controller performFetch:&error];
+  	if (error != nil)
+    {
+        LOG_MIME_MEMIMEVIEWCONTROLLER(1, @"%@Could not create instance of NSFetchedResultsController due to %@", activityName, [error userInfo]);
+    }
+    
+    [controller release];
+    [fetchRequest release];
+    [sortDescriptor release];
+    return __frc_words;
+    
+}
+
+- (void)showHUDForWordsDownload {
+    Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    UIProgressHUDView* progressView = appDelegate.progressView;
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+    progressView.delegate = self;
+    
+    NSString* message = @"Downloading words...";
+    [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
+    
+}
+
+- (void) enumerateWords {    
+    if (self.wordsCloudEnumerator != nil) {
+        [self.wordsCloudEnumerator enumerateUntilEnd:nil];
+    }
+    else 
+    {
+        self.wordsCloudEnumerator = nil;
+        self.wordsCloudEnumerator = [CloudEnumerator enumeratorForWords];
+        self.wordsCloudEnumerator.delegate = self;
+        [self.wordsCloudEnumerator enumerateUntilEnd:nil];
+    }
+    
+    [self showHUDForWordsDownload];
+}
+
+#pragma mark - View Lifecycle
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -50,6 +123,10 @@
     [self.view addSubview:self.nv_navigationHeader];
     [navigationHeader release];
     
+    // Set up cloud enumerator for words
+    self.wordsCloudEnumerator = [CloudEnumerator enumeratorForWords];
+    self.wordsCloudEnumerator.delegate = self;
+    
     // TEMP: Data arrays for tableview
     self.wordsArray = [NSArray arrayWithObjects:@"high-five", @"ghost", @"waldo", nil];
     
@@ -72,6 +149,9 @@
     
     [self.nv_navigationHeader.btn_mime setHighlighted:YES];
     [self.nv_navigationHeader.btn_mime setUserInteractionEnabled:NO];
+    
+    // Enumerate words
+    [self enumerateWords];
     
 }
 
@@ -230,6 +310,49 @@
     
 }
 
+#pragma mark -  MBProgressHUD Delegate
+-(void)hudWasHidden:(MBProgressHUD *)hud {
+    NSString* activityName = @"Mime_meMimeViewController.hudWasHidden";
+    [self hideProgressBar];
+    
+    UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
+    
+    if (progressView.didSucceed) {
+        //enumeration was sucesful
+        LOG_REQUEST(0, @"%@ Enumeration request was successful", activityName);
+        
+    }
+    else {
+        //enumeration failed
+        LOG_REQUEST(0, @"%@ Enumeration request failure", activityName);
+        
+    }
+}
+
+#pragma mark - CloudEnumeratorDelegate
+- (void) onEnumerateComplete:(CloudEnumerator*)enumerator 
+                 withResults:(NSArray *)results 
+                withUserInfo:(NSDictionary *)userInfo
+{
+    if (enumerator == self.wordsCloudEnumerator) {
+        [self hideProgressBar];
+    }
+}
+
+#pragma mark - NSFetchedResultsControllerDelegate methods
+- (void) controller:(NSFetchedResultsController *)controller 
+    didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath 
+      forChangeType:(NSFetchedResultsChangeType)type 
+       newIndexPath:(NSIndexPath *)newIndexPath {
+    
+    NSString* activityName = @"Mime_meMimeViewController.controller.didChangeObject:";
+    if (controller == self.frc_words) {
+        
+    }
+    else {
+        LOG_MIME_MEMIMEVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController that isnt mine. %p", activityName, &controller);
+    }
+}
 
 #pragma mark - Static Initializers
 + (Mime_meMimeViewController*)createInstance {
