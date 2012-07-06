@@ -14,6 +14,7 @@
 #import "Mime_meAppDelegate.h"
 #import "Macros.h"
 #import "Attributes.h"
+#import "Word.h"
 
 @interface Mime_meMimeViewController ()
 
@@ -189,19 +190,31 @@
         return cell;
     }
     else {
-        static NSString *CellIdentifier = @"Word";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        int wordCount = [[self.frc_words fetchedObjects]count];
         
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        if (indexPath.row <= wordCount) {
+            static NSString *CellIdentifier = @"Word";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
-            cell.textLabel.text = [self.wordsArray objectAtIndex:(indexPath.row - 1)];
-            cell.textLabel.textAlignment = UITextAlignmentCenter;
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                
+                //            cell.textLabel.text = [self.wordsArray objectAtIndex:(indexPath.row - 1)];
+                
+                Word *word = [[self.frc_words fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+                
+                cell.textLabel.text = word.word1;
+                cell.textLabel.textAlignment = UITextAlignmentCenter;
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                
+            }
             
+            return cell;
+        }
+        else {
+            return nil;
         }
         
-        return cell;
     }
 }
 

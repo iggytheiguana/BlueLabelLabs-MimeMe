@@ -31,13 +31,13 @@
 
 @property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
 
-@property (nonatomic, retain) IBOutlet  UITableView             *tbl_words;
-@property (nonatomic, retain) IBOutlet  UITableViewCell         *tc_header;
+@property (nonatomic, retain) IBOutlet  UITableView                     *tbl_words;
+@property (nonatomic, retain) IBOutlet  UITableViewCell                 *tc_header;
 
-@property (nonatomic, retain) IBOutlet  UIButton                *btn_getWords;
+@property (nonatomic, retain) IBOutlet  UIButton                        *btn_getWords;
 
-@property (nonatomic, retain)           NSArray                 *wordsArray;
-@property (nonatomic, retain)           UICameraActionSheet     *cameraActionSheet;
+@property (nonatomic, retain)           NSArray                         *wordsArray;
+@property (nonatomic, retain)           UICameraActionSheet             *cameraActionSheet;
 
 - (IBAction) onHomeButtonPressed:(id)sender;
 
