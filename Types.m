@@ -28,5 +28,5 @@ NSString* const MEDITATION                  =@"meditation";
 NSString* const MEDITATIONINSTANCE          =@"meditationinstance";
 
 
-NSString* const FRIEND                      =@"friend";
-NSString* const WORD                        =@"word";
+NSString* const FRIEND                      =@"Friend";
+NSString* const WORD                        =@"Word";
