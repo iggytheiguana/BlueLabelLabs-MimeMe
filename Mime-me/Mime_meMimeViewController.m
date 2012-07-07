@@ -395,8 +395,16 @@
 
 #pragma mark - UIButton Handlers
 - (IBAction) onMoreWordsButtonPressed:(id)sender {
-    // Enumerate words for new words
-    [self enumerateWords];
+    //We only donwload new words if we haven't done so recently and the enumerator is ready
+    if ((!self.wordsCloudEnumerator.isLoading) && ([self.wordsCloudEnumerator canEnumerate])) {
+        // Enumerate for new words
+        [self enumerateWords];
+    }
+    else {
+        // Get a new selection of words from the existing words in the FRC
+        [self makeWordsArray];
+        [self.tbl_words reloadData];
+    }
 }
 
 - (IBAction) onMakeWordButtonPressed:(id)sender {
