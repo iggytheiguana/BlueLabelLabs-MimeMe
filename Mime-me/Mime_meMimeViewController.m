@@ -26,7 +26,8 @@
 @synthesize nv_navigationHeader = m_nv_navigationHeader;
 @synthesize tbl_words           = m_tbl_words;
 @synthesize tc_header           = m_tc_header;
-@synthesize btn_getWords        = m_btn_getWords;
+@synthesize btn_moreWords       = m_btn_moreWords;
+@synthesize btn_makeWord        = m_btn_makeWord;
 @synthesize wordsArray          = m_wordsArray;
 @synthesize cameraActionSheet   = m_cameraActionSheet;
 
@@ -77,7 +78,7 @@
     ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
     progressView.delegate = self;
     
-    NSString* message = @"Downloading words...";
+    NSString* message = @"Getting more words...";
     [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
     
 }
@@ -95,6 +96,73 @@
     }
     
     [self showHUDForWordsDownload];
+}
+
+- (NSString*) getRandomWord {
+    // We'll use an inverted Roulette Selection algorithm to find the 3 words to display to the user
+    
+    int wordCount = [[self.frc_words fetchedObjects]count];
+    
+    NSMutableArray *fitnessArray = [[NSMutableArray alloc]init];
+    
+    float sum = 0.0;    // This is the sum of the population fitness
+    
+    for (int i = 0; i < wordCount; i++) {
+        Word *word = [[self.frc_words fetchedObjects] objectAtIndex:i];
+        
+        // Get the fitness of the word and invert it
+        float fitnessF = 0.0;
+        if ([word.numberoftimesused floatValue] > 0.0) {
+            fitnessF = (1.0 / [word.numberoftimesused floatValue]);
+        }
+        
+        // Add the words fitness to the fitness total sum
+        sum = sum + fitnessF;
+        
+        NSNumber *fitnessNSNUM = [NSNumber numberWithFloat:fitnessF];
+        
+        // Add the word's inverted fitness to the fitness array
+        [fitnessArray addObject:fitnessNSNUM];
+    }
+    
+    float random = (((float) (arc4random() % ((unsigned)RAND_MAX + 1)) / RAND_MAX) * sum);
+    
+    int wordIndex = 0;
+    
+    if (random > 0) {
+        while (random > 0) {
+            random = random - [[fitnessArray objectAtIndex:wordIndex] floatValue];
+            wordIndex++;
+        }
+    }
+    else {
+        wordIndex = arc4random() % wordCount;
+    }
+    
+    Word *randomWord = [[self.frc_words fetchedObjects] objectAtIndex:wordIndex];
+    
+    NSString *randWordStr = randomWord.word1;
+    
+    if (randWordStr == nil) {
+        randWordStr = @"MimeMe";
+    }
+    
+    return randWordStr;
+}
+
+- (void) makeWordsArray {
+    // Release any existing array
+    [self.wordsArray release];
+    
+    NSMutableArray *wordMtblArray = [[NSMutableArray alloc]init];
+    
+    // Get 3 random words from the words FRC
+    for (int i = 0; i < 3; i++) {
+        [wordMtblArray addObject:[self getRandomWord]];
+    }
+    
+    self.wordsArray = [wordMtblArray retain];
+    [wordMtblArray release];
 }
 
 #pragma mark - View Lifecycle
@@ -129,7 +197,18 @@
     self.wordsCloudEnumerator.delegate = self;
     
     // TEMP: Data arrays for tableview
-    self.wordsArray = [NSArray arrayWithObjects:@"high-five", @"ghost", @"waldo", nil];
+//    self.wordsArray = [NSArray arrayWithObjects:@"high-five", @"ghost", @"waldo", nil];
+    
+//    // Get 3 random words form the words FRC
+//    NSMutableArray *wordMtblArray = [[NSMutableArray alloc]init];
+//    for (int i = 0; i < 3; i++) {
+//        [wordMtblArray addObject:[self getRandomWord]];
+//    }
+//    self.wordsArray = wordMtblArray;
+//    [wordMtblArray release];
+    
+    // Create the array of words to present to the user
+    [self makeWordsArray];
     
 }
 
@@ -142,7 +221,8 @@
     self.nv_navigationHeader = nil;
     self.tbl_words = nil;
     self.tc_header = nil;
-    self.btn_getWords = nil;
+    self.btn_moreWords = nil;
+    self.btn_makeWord = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -150,9 +230,6 @@
     
     [self.nv_navigationHeader.btn_mime setHighlighted:YES];
     [self.nv_navigationHeader.btn_mime setUserInteractionEnabled:NO];
-    
-    // Enumerate words
-    [self enumerateWords];
     
 }
 
@@ -199,15 +276,15 @@
             if (cell == nil) {
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                 
-                //            cell.textLabel.text = [self.wordsArray objectAtIndex:(indexPath.row - 1)];
-                
-                Word *word = [[self.frc_words fetchedObjects] objectAtIndex:(indexPath.row - 1)];
-                
-                cell.textLabel.text = word.word1;
                 cell.textLabel.textAlignment = UITextAlignmentCenter;
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 
             }
+            
+            cell.textLabel.text = [self.wordsArray objectAtIndex:(indexPath.row - 1)];
+            
+//            Word *word = [[self.frc_words fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+//            cell.textLabel.text = word.word1;
             
             return cell;
         }
@@ -218,12 +295,14 @@
             if (cell == nil) {
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                 
-                cell.textLabel.text = @"No words availalbe!";
+                cell.textLabel.text = @"No words available!";
                 cell.textLabel.textAlignment = UITextAlignmentCenter;
                 cell.textLabel.shadowColor = [UIColor whiteColor];
                 cell.textLabel.shadowOffset = CGSizeMake(0.0, 1.0);
                 cell.textLabel.textColor = [UIColor lightGrayColor];
                 cell.accessoryType = UITableViewCellAccessoryNone;
+                
+                cell.userInteractionEnabled = NO;
                 
             }
             
@@ -284,7 +363,7 @@
     
 }
 
-#pragma mark - UIButton Handlers
+#pragma mark - Mime_meUINavigationHeader Delegate Methods
 - (IBAction) onHomeButtonPressed:(id)sender {
     Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
     
@@ -311,6 +390,16 @@
 }
 
 - (IBAction) onSettingsButtonPressed:(id)sender {
+    
+}
+
+#pragma mark - UIButton Handlers
+- (IBAction) onMoreWordsButtonPressed:(id)sender {
+    // Enumerate words for new words
+    [self enumerateWords];
+}
+
+- (IBAction) onMakeWordButtonPressed:(id)sender {
     
 }
 
@@ -346,7 +435,7 @@
     UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
     
     if (progressView.didSucceed) {
-        //enumeration was sucesful
+        //enumeration was sucessful
         LOG_REQUEST(0, @"%@ Enumeration request was successful", activityName);
         
     }
@@ -364,6 +453,8 @@
 {
     if (enumerator == self.wordsCloudEnumerator) {
         [self hideProgressBar];
+        [self makeWordsArray];
+        [self.tbl_words reloadData];
     }
 }
 

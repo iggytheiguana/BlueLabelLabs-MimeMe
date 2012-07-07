@@ -258,7 +258,7 @@
     
 }
 
-#pragma mark - UIButton Handlers
+#pragma mark - Mime_meUINavigationHeader Delegate Methods
 - (IBAction) onHomeButtonPressed:(id)sender {
     Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
     
@@ -270,6 +270,7 @@
     [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
 }
 
+#pragma mark - UIButton Handlers
 - (IBAction) onGoButtonPressed:(id)sender {
     
 }

@@ -223,7 +223,7 @@
     
 }
 
-#pragma mark - UIButton Handlers
+#pragma mark - Mime_meUINavigationHeader Delegate Methods
 - (IBAction) onHomeButtonPressed:(id)sender {
     Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
     

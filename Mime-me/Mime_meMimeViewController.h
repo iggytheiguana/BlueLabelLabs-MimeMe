@@ -18,7 +18,8 @@
     UITableView         *m_tbl_words;
     UITableViewCell     *m_tc_header;
     
-    UIButton            *m_btn_getWords;
+    UIButton            *m_btn_moreWords;
+    UIButton            *m_btn_makeWord;
     
     NSArray             *m_wordsArray;
     UICameraActionSheet *m_cameraActionSheet;
@@ -34,7 +35,8 @@
 @property (nonatomic, retain) IBOutlet  UITableView                     *tbl_words;
 @property (nonatomic, retain) IBOutlet  UITableViewCell                 *tc_header;
 
-@property (nonatomic, retain) IBOutlet  UIButton                        *btn_getWords;
+@property (nonatomic, retain) IBOutlet  UIButton                        *btn_moreWords;
+@property (nonatomic, retain) IBOutlet  UIButton                        *btn_makeWord;
 
 @property (nonatomic, retain)           NSArray                         *wordsArray;
 @property (nonatomic, retain)           UICameraActionSheet             *cameraActionSheet;
@@ -45,6 +47,9 @@
 - (IBAction) onGuessButtonPressed:(id)sender;
 - (IBAction) onScrapbookButtonPressed:(id)sender;
 - (IBAction) onSettingsButtonPressed:(id)sender;
+
+- (IBAction) onMoreWordsButtonPressed:(id)sender;
+- (IBAction) onMakeWordButtonPressed:(id)sender;
 
 + (Mime_meMimeViewController*)createInstance;
 
