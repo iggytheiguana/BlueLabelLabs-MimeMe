@@ -1515,6 +1515,7 @@
 					"iphoneos/usr/include/libxml2/**",
 				);
 				INFOPLIST_FILE = "Mime-me/Mime-me-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1535,6 +1536,7 @@
 					"iphoneos/usr/include/libxml2/**",
 				);
 				INFOPLIST_FILE = "Mime-me/Mime-me-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
