@@ -29,7 +29,7 @@
 @synthesize deviceToken = m_deviceToken;
 @synthesize tabBarController = m_tabBarController;
 
-#define     kFACEBOOKAPPID  @"271328586292350"
+#define     kFACEBOOKAPPID  @"496697550344824"
 - (UIProgressHUDView*)progressView {
     if (__progressView != nil) {
         return __progressView;
