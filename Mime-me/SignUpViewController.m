@@ -12,6 +12,7 @@
 #import "ApplicationSettingsManager.h"
 #import "GetAuthenticatorResponse.h"
 #import "ErrorCodes.h"
+#import "Mime_meMenuViewController.h"
 
 @implementation SignUpViewController
 @synthesize sv_scrollView   = m_sv_scrollView;
@@ -50,9 +51,6 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
-    // Set background pattern
-    //[self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"page_pattern.png"]]];
     
     // Add rounded corners to custom buttons
     self.btn_join.layer.cornerRadius = 8;
@@ -335,7 +333,6 @@
                                                       onFinishNotify:callback 
                                                    trackProgressWith:progressView];
         
-        
         [self showDeterminateProgressBarWithMaximumDisplayTime:settings.progress_maxsecondstodisplay onSuccessMessage:@"Welcome to MimeMe!" onFailureMessage:@"Let's try this again..."  inProgressMessages:[NSArray arrayWithObject:@"Creating account..."]];
     }
     
@@ -358,8 +355,6 @@
     {
         [self dismissModalViewControllerAnimated:YES];
     }
-    
-                            
 }
 
 - (void) hudWasHidden
@@ -371,13 +366,12 @@
 #pragma mark - Async Event Handlers
 - (void) onJoinComplete:(CallbackResult*)result
 {
-
     //called when operation completes
     GetAuthenticatorResponse* response = (GetAuthenticatorResponse*)result.response;
     AuthenticationManager* authenticationManager = [AuthenticationManager instance];
     if ([response.didSucceed boolValue] == YES)
     {
-        ///it did succeed, we need to login the user and  dismiss ourselves
+        ///it did succeed, we need to login the user and dismiss ourselves
         BOOL didLoginSuccessfully = [authenticationManager processAuthenticationResponse:result];
         
         if (didLoginSuccessfully)

@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Mime_meMimeViewController.h"
 #import "Mime_meGuessMenuViewController.h"
+#import "Mime_meSettingsViewController.h"
 
 @interface Mime_meMenuViewController ()
 
@@ -87,7 +88,15 @@
 }
 
 - (IBAction) onSettingsButtonPressed:(id)sender {
+    Mime_meSettingsViewController *settingsViewController = [Mime_meSettingsViewController createInstance];
     
+    [UIView animateWithDuration:0.75
+                     animations:^{
+                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.navigationController.view cache:YES];
+                     }];
+    
+    [self.navigationController pushViewController:settingsViewController animated:NO];
 }
 
 #pragma mark - Static Initializers

@@ -21,6 +21,7 @@
 
 #define kMaximumBusyWaitTimeFacebookLogin       30
 #define kMaximumBusyWaitTimePutAuthenticator    30
+#define kMaximumBusyWaitTimeEmailLogin          30
 
 @implementation LoginViewController
 @synthesize sv_scrollView       = m_sv_scrollView;
@@ -146,8 +147,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    // Set background pattern
-    //[self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"page_pattern.png"]]];
+    // Add rounded corners to view
+    [self.view.layer setCornerRadius:8.0f];
     
     // Add rounded corners to custom buttons
     self.btn_loginFacebook.layer.cornerRadius = 8;
@@ -617,6 +618,9 @@
         Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onGetAuthenticationContextDownloaded:)];
         callback.fireOnMainThread = YES;
         
+        //show the progress bar
+        [self showProgressBar:@"Logging in..." withCustomView:nil withMaximumDisplayTime:[NSNumber numberWithInt:kMaximumBusyWaitTimeEmailLogin]];
+        
         [resourceContext getAuthenticatorTokenWithEmail:email withPassword:password withDeviceToken:deviceToken onFinishNotify:callback];
         
         [callback release];
@@ -669,15 +673,15 @@
 {
 //    NSString* activityName = @"LoginViewController.onUserLoggedIn:";
     
-    // Successful user login, launch menu
-    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
-    
-    [UIView animateWithDuration:0.75
-                     animations:^{
-                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.navigationController.view cache:NO];
-                     }];
-    [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
+//    // Successful user login, launch menu
+//    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+//    
+//    [UIView animateWithDuration:0.75
+//                     animations:^{
+//                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+//                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.navigationController.view cache:NO];
+//                     }];
+//    [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
     
 }
 

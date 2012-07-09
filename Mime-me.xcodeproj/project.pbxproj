@@ -27,8 +27,17 @@
 		520DD0FA15A7838500C58BF1 /* Mime_meShareMimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0F815A7838500C58BF1 /* Mime_meShareMimeViewController.xib */; };
 		520DD0FD15A785E500C58BF1 /* waldo.png in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0FB15A785E500C58BF1 /* waldo.png */; };
 		520DD0FE15A785E500C58BF1 /* waldo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0FC15A785E500C58BF1 /* waldo@2x.png */; };
-		529BE9C515A2211700B7346A /* Mime_meMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9C315A2211700B7346A /* Mime_meMenuViewController.m */; };
-		529BE9C615A2211700B7346A /* Mime_meMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C415A2211700B7346A /* Mime_meMenuViewController.xib */; };
+		52324CC315ABA1DA00D5DD91 /* icon-close-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 52324CC115ABA1DA00D5DD91 /* icon-close-highlighted.png */; };
+		52324CC415ABA1DA00D5DD91 /* icon-close-highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52324CC215ABA1DA00D5DD91 /* icon-close-highlighted@2x.png */; };
+		52324CCE15ABA23100D5DD91 /* Mime_meSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52324CCC15ABA23100D5DD91 /* Mime_meSettingsViewController.m */; };
+		52324CCF15ABA23100D5DD91 /* Mime_meSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52324CCD15ABA23100D5DD91 /* Mime_meSettingsViewController.xib */; };
+		52324CD315ABA28D00D5DD91 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52324CD115ABA28D00D5DD91 /* LoginViewController.m */; };
+		52324CD415ABA28D00D5DD91 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52324CD215ABA28D00D5DD91 /* LoginViewController.xib */; };
+		52324CD815ABA2EE00D5DD91 /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52324CD615ABA2ED00D5DD91 /* SignUpViewController.m */; };
+		52324CD915ABA2EE00D5DD91 /* SignUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52324CD715ABA2ED00D5DD91 /* SignUpViewController.xib */; };
+		52324CDD15ABA32B00D5DD91 /* Mime_meMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52324CDB15ABA32B00D5DD91 /* Mime_meMenuViewController.m */; };
+		52324CDE15ABA32B00D5DD91 /* Mime_meMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52324CDC15ABA32B00D5DD91 /* Mime_meMenuViewController.xib */; };
+		52324CE115ABA36000D5DD91 /* Mime_meAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 52324CE015ABA36000D5DD91 /* Mime_meAppDelegate.m */; };
 		529BE9C915A2225D00B7346A /* logo-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C715A2225D00B7346A /* logo-MimeMe.png */; };
 		529BE9CA15A2225D00B7346A /* logo-MimeMe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */; };
 		529BE9CD15A22A1900B7346A /* logo_wName-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */; };
@@ -41,10 +50,6 @@
 		529BE9E015A22F9F00B7346A /* UILoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9DF15A22F9F00B7346A /* UILoginView.m */; };
 		529BE9E315A22FF800B7346A /* UICustomAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9E215A22FF700B7346A /* UICustomAlertView.m */; };
 		529BE9E615A231A200B7346A /* UICameraActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9E515A231A200B7346A /* UICameraActionSheet.m */; };
-		529BE9EA15A2339200B7346A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9E815A2339200B7346A /* LoginViewController.m */; };
-		529BE9EB15A2339200B7346A /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9E915A2339200B7346A /* LoginViewController.xib */; };
-		529BE9EF15A2387500B7346A /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9ED15A2387400B7346A /* SignUpViewController.m */; };
-		529BE9F015A2387500B7346A /* SignUpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9EE15A2387500B7346A /* SignUpViewController.xib */; };
 		529BE9FA15A250C800B7346A /* icon-facebook-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9F615A250C800B7346A /* icon-facebook-white.png */; };
 		529BE9FB15A250C800B7346A /* icon-facebook-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9F715A250C800B7346A /* icon-facebook-white@2x.png */; };
 		529BE9FC15A250C800B7346A /* icon-twitter-bird.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9F815A250C800B7346A /* icon-twitter-bird.png */; };
@@ -59,7 +64,6 @@
 		C523A016159F7CE7004AA39C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A015159F7CE7004AA39C /* CoreData.framework */; };
 		C523A01C159F7CE7004AA39C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C523A01A159F7CE7004AA39C /* InfoPlist.strings */; };
 		C523A01E159F7CE7004AA39C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C523A01D159F7CE7004AA39C /* main.m */; };
-		C523A022159F7CE7004AA39C /* Mime_meAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C523A021159F7CE7004AA39C /* Mime_meAppDelegate.m */; };
 		C523A025159F7CE7004AA39C /* Mime_me.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C523A023159F7CE7004AA39C /* Mime_me.xcdatamodeld */; };
 		C523A101159F883D004AA39C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A100159F883D004AA39C /* QuartzCore.framework */; };
 		C523A103159F8847004AA39C /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A102159F8847004AA39C /* MessageUI.framework */; };
@@ -214,9 +218,22 @@
 		520DD0F815A7838500C58BF1 /* Mime_meShareMimeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meShareMimeViewController.xib; sourceTree = "<group>"; };
 		520DD0FB15A785E500C58BF1 /* waldo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = waldo.png; sourceTree = "<group>"; };
 		520DD0FC15A785E500C58BF1 /* waldo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "waldo@2x.png"; sourceTree = "<group>"; };
-		529BE9C215A2211700B7346A /* Mime_meMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meMenuViewController.h; sourceTree = "<group>"; };
-		529BE9C315A2211700B7346A /* Mime_meMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meMenuViewController.m; sourceTree = "<group>"; };
-		529BE9C415A2211700B7346A /* Mime_meMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meMenuViewController.xib; sourceTree = "<group>"; };
+		52324CC115ABA1DA00D5DD91 /* icon-close-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-close-highlighted.png"; sourceTree = "<group>"; };
+		52324CC215ABA1DA00D5DD91 /* icon-close-highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-close-highlighted@2x.png"; sourceTree = "<group>"; };
+		52324CCB15ABA23100D5DD91 /* Mime_meSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meSettingsViewController.h; sourceTree = "<group>"; };
+		52324CCC15ABA23100D5DD91 /* Mime_meSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meSettingsViewController.m; sourceTree = "<group>"; };
+		52324CCD15ABA23100D5DD91 /* Mime_meSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meSettingsViewController.xib; sourceTree = "<group>"; };
+		52324CD015ABA28D00D5DD91 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		52324CD115ABA28D00D5DD91 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		52324CD215ABA28D00D5DD91 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		52324CD515ABA2ED00D5DD91 /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
+		52324CD615ABA2ED00D5DD91 /* SignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpViewController.m; sourceTree = "<group>"; };
+		52324CD715ABA2ED00D5DD91 /* SignUpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignUpViewController.xib; sourceTree = "<group>"; };
+		52324CDA15ABA32B00D5DD91 /* Mime_meMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meMenuViewController.h; sourceTree = "<group>"; };
+		52324CDB15ABA32B00D5DD91 /* Mime_meMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meMenuViewController.m; sourceTree = "<group>"; };
+		52324CDC15ABA32B00D5DD91 /* Mime_meMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meMenuViewController.xib; sourceTree = "<group>"; };
+		52324CDF15ABA36000D5DD91 /* Mime_meAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meAppDelegate.h; sourceTree = "<group>"; };
+		52324CE015ABA36000D5DD91 /* Mime_meAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meAppDelegate.m; sourceTree = "<group>"; };
 		529BE9C715A2225D00B7346A /* logo-MimeMe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-MimeMe.png"; sourceTree = "<group>"; };
 		529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-MimeMe@2x.png"; sourceTree = "<group>"; };
 		529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo_wName-MimeMe.png"; sourceTree = "<group>"; };
@@ -234,12 +251,6 @@
 		529BE9E215A22FF700B7346A /* UICustomAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICustomAlertView.m; sourceTree = "<group>"; };
 		529BE9E415A231A100B7346A /* UICameraActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICameraActionSheet.h; sourceTree = "<group>"; };
 		529BE9E515A231A200B7346A /* UICameraActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICameraActionSheet.m; sourceTree = "<group>"; };
-		529BE9E715A2339200B7346A /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
-		529BE9E815A2339200B7346A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		529BE9E915A2339200B7346A /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
-		529BE9EC15A2387400B7346A /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
-		529BE9ED15A2387400B7346A /* SignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpViewController.m; sourceTree = "<group>"; };
-		529BE9EE15A2387500B7346A /* SignUpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignUpViewController.xib; sourceTree = "<group>"; };
 		529BE9F615A250C800B7346A /* icon-facebook-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-facebook-white.png"; sourceTree = "<group>"; };
 		529BE9F715A250C800B7346A /* icon-facebook-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-facebook-white@2x.png"; sourceTree = "<group>"; };
 		529BE9F815A250C800B7346A /* icon-twitter-bird.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter-bird.png"; sourceTree = "<group>"; };
@@ -258,8 +269,6 @@
 		C523A01B159F7CE7004AA39C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C523A01D159F7CE7004AA39C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C523A01F159F7CE7004AA39C /* Mime-me-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mime-me-Prefix.pch"; sourceTree = "<group>"; };
-		C523A020159F7CE7004AA39C /* Mime_meAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mime_meAppDelegate.h; sourceTree = "<group>"; };
-		C523A021159F7CE7004AA39C /* Mime_meAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Mime_meAppDelegate.m; sourceTree = "<group>"; };
 		C523A024159F7CE7004AA39C /* Mime_me.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mime_me.xcdatamodel; sourceTree = "<group>"; };
 		C523A043159F7F62004AA39C /* DateTimeHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DateTimeHelper.h; sourceTree = "<group>"; };
 		C523A044159F7F62004AA39C /* DateTimeHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DateTimeHelper.m; sourceTree = "<group>"; };
@@ -665,8 +674,8 @@
 				529BE9D715A22F4100B7346A /* Views */,
 				C523A1C3159F8E69004AA39C /* Controllers */,
 				C523A1C2159F8BCD004AA39C /* Macros.h */,
-				C523A020159F7CE7004AA39C /* Mime_meAppDelegate.h */,
-				C523A021159F7CE7004AA39C /* Mime_meAppDelegate.m */,
+				52324CDF15ABA36000D5DD91 /* Mime_meAppDelegate.h */,
+				52324CE015ABA36000D5DD91 /* Mime_meAppDelegate.m */,
 				C523A023159F7CE7004AA39C /* Mime_me.xcdatamodeld */,
 				C523A018159F7CE7004AA39C /* Supporting Files */,
 			);
@@ -1148,6 +1157,8 @@
 				520DD0D315A60DA100C58BF1 /* icon-settings@2x.png */,
 				520DD0E015A6C30F00C58BF1 /* icon-back.png */,
 				520DD0E115A6C30F00C58BF1 /* icon-back@2x.png */,
+				52324CC115ABA1DA00D5DD91 /* icon-close-highlighted.png */,
+				52324CC215ABA1DA00D5DD91 /* icon-close-highlighted@2x.png */,
 				520DD0FB15A785E500C58BF1 /* waldo.png */,
 				520DD0FC15A785E500C58BF1 /* waldo@2x.png */,
 			);
@@ -1158,15 +1169,15 @@
 			isa = PBXGroup;
 			children = (
 				529BE9D315A22EDA00B7346A /* Abstract */,
-				529BE9E715A2339200B7346A /* LoginViewController.h */,
-				529BE9E815A2339200B7346A /* LoginViewController.m */,
-				529BE9E915A2339200B7346A /* LoginViewController.xib */,
-				529BE9EC15A2387400B7346A /* SignUpViewController.h */,
-				529BE9ED15A2387400B7346A /* SignUpViewController.m */,
-				529BE9EE15A2387500B7346A /* SignUpViewController.xib */,
-				529BE9C215A2211700B7346A /* Mime_meMenuViewController.h */,
-				529BE9C315A2211700B7346A /* Mime_meMenuViewController.m */,
-				529BE9C415A2211700B7346A /* Mime_meMenuViewController.xib */,
+				52324CD015ABA28D00D5DD91 /* LoginViewController.h */,
+				52324CD115ABA28D00D5DD91 /* LoginViewController.m */,
+				52324CD215ABA28D00D5DD91 /* LoginViewController.xib */,
+				52324CD515ABA2ED00D5DD91 /* SignUpViewController.h */,
+				52324CD615ABA2ED00D5DD91 /* SignUpViewController.m */,
+				52324CD715ABA2ED00D5DD91 /* SignUpViewController.xib */,
+				52324CDA15ABA32B00D5DD91 /* Mime_meMenuViewController.h */,
+				52324CDB15ABA32B00D5DD91 /* Mime_meMenuViewController.m */,
+				52324CDC15ABA32B00D5DD91 /* Mime_meMenuViewController.xib */,
 				529BEA0215A260D100B7346A /* Mime_meMimeViewController.h */,
 				529BEA0315A260D100B7346A /* Mime_meMimeViewController.m */,
 				529BEA0415A260D100B7346A /* Mime_meMimeViewController.xib */,
@@ -1182,6 +1193,9 @@
 				520DD0F615A7838300C58BF1 /* Mime_meShareMimeViewController.h */,
 				520DD0F715A7838300C58BF1 /* Mime_meShareMimeViewController.m */,
 				520DD0F815A7838500C58BF1 /* Mime_meShareMimeViewController.xib */,
+				52324CCB15ABA23100D5DD91 /* Mime_meSettingsViewController.h */,
+				52324CCC15ABA23100D5DD91 /* Mime_meSettingsViewController.m */,
+				52324CCD15ABA23100D5DD91 /* Mime_meSettingsViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1240,7 +1254,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C523A01C159F7CE7004AA39C /* InfoPlist.strings in Resources */,
-				529BE9C615A2211700B7346A /* Mime_meMenuViewController.xib in Resources */,
 				529BE9C915A2225D00B7346A /* logo-MimeMe.png in Resources */,
 				529BE9CA15A2225D00B7346A /* logo-MimeMe@2x.png in Resources */,
 				529BE9CD15A22A1900B7346A /* logo_wName-MimeMe.png in Resources */,
@@ -1248,8 +1261,6 @@
 				529BE9D115A22D0A00B7346A /* gem.png in Resources */,
 				529BE9D215A22D0A00B7346A /* gem@2x.png in Resources */,
 				529BE9DC15A22F6200B7346A /* UIProgressHUDView.xib in Resources */,
-				529BE9EB15A2339200B7346A /* LoginViewController.xib in Resources */,
-				529BE9F015A2387500B7346A /* SignUpViewController.xib in Resources */,
 				529BE9FA15A250C800B7346A /* icon-facebook-white.png in Resources */,
 				529BE9FB15A250C800B7346A /* icon-facebook-white@2x.png in Resources */,
 				529BE9FC15A250C800B7346A /* icon-twitter-bird.png in Resources */,
@@ -1272,6 +1283,12 @@
 				520DD0FA15A7838500C58BF1 /* Mime_meShareMimeViewController.xib in Resources */,
 				520DD0FD15A785E500C58BF1 /* waldo.png in Resources */,
 				520DD0FE15A785E500C58BF1 /* waldo@2x.png in Resources */,
+				52324CC315ABA1DA00D5DD91 /* icon-close-highlighted.png in Resources */,
+				52324CC415ABA1DA00D5DD91 /* icon-close-highlighted@2x.png in Resources */,
+				52324CCF15ABA23100D5DD91 /* Mime_meSettingsViewController.xib in Resources */,
+				52324CD415ABA28D00D5DD91 /* LoginViewController.xib in Resources */,
+				52324CD915ABA2EE00D5DD91 /* SignUpViewController.xib in Resources */,
+				52324CDE15ABA32B00D5DD91 /* Mime_meMenuViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1373,7 +1390,6 @@
 				C523A163159F8A47004AA39C /* JSONKit.m in Sources */,
 				C523A164159F8A47004AA39C /* MBProgressHUD.m in Sources */,
 				C523A01E159F7CE7004AA39C /* main.m in Sources */,
-				C523A022159F7CE7004AA39C /* Mime_meAppDelegate.m in Sources */,
 				C523A025159F7CE7004AA39C /* Mime_me.xcdatamodeld in Sources */,
 				C523A16E159F8B30004AA39C /* PlatformDataModel.xcdatamodel in Sources */,
 				C523A16F159F8B30004AA39C /* Feed.m in Sources */,
@@ -1412,20 +1428,22 @@
 				C57AAEBE15A1155A009FFCCF /* Friend.m in Sources */,
 				C57AAEC115A115A8009FFCCF /* Favorite.m in Sources */,
 				C57AAEC415A115CF009FFCCF /* Comment.m in Sources */,
-				529BE9C515A2211700B7346A /* Mime_meMenuViewController.m in Sources */,
 				529BE9D615A22EEA00B7346A /* BaseViewController.m in Sources */,
 				529BE9DD15A22F6200B7346A /* UIProgressHUDView.m in Sources */,
 				529BE9E015A22F9F00B7346A /* UILoginView.m in Sources */,
 				529BE9E315A22FF800B7346A /* UICustomAlertView.m in Sources */,
 				529BE9E615A231A200B7346A /* UICameraActionSheet.m in Sources */,
-				529BE9EA15A2339200B7346A /* LoginViewController.m in Sources */,
-				529BE9EF15A2387500B7346A /* SignUpViewController.m in Sources */,
 				529BEA0515A260D200B7346A /* Mime_meMimeViewController.m in Sources */,
 				520DD0CB15A434DE00C58BF1 /* Mime_meFriendsPickerViewController.m in Sources */,
 				520DD0D915A6157800C58BF1 /* Mime_meGuessMenuViewController.m in Sources */,
 				520DD0DE15A652DD00C58BF1 /* Mime_meGuessFullTableViewController.m in Sources */,
 				520DD0E915A6CE3500C58BF1 /* Mime_meUINavigationHeaderView.m in Sources */,
 				520DD0F915A7838500C58BF1 /* Mime_meShareMimeViewController.m in Sources */,
+				52324CCE15ABA23100D5DD91 /* Mime_meSettingsViewController.m in Sources */,
+				52324CD315ABA28D00D5DD91 /* LoginViewController.m in Sources */,
+				52324CD815ABA2EE00D5DD91 /* SignUpViewController.m in Sources */,
+				52324CDD15ABA32B00D5DD91 /* Mime_meMenuViewController.m in Sources */,
+				52324CE115ABA36000D5DD91 /* Mime_meAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
