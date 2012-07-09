@@ -133,12 +133,17 @@
         int wordIndex = 0;
         
         if (random > 0) {
+            // So long as the random value retuned form the roulette selection is > 0
+            // we can move forward with the algorithm. If it is less than or = to 0 it means 
+            // the sum of the fitness values is 0.
             while (random > 0) {
                 random = random - [[fitnessArray objectAtIndex:wordIndex] floatValue];
                 wordIndex++;
             }
         }
         else {
+            // If the random value is 0, there is not enough information from the fitness values.
+            // We need to use a standard random selection from the availalbe words.
             wordIndex = arc4random() % wordCount;
         }
         
@@ -147,10 +152,12 @@
         randWordStr = randomWord.word1;
         
         if (randWordStr == nil) {
+            // If for any reason the wird is nil, use a wildcard
             randWordStr = @"MimeMe";
         }
     }
     else {
+        // If for any reason there are no words available, use a wildcard
         randWordStr = @"MimeMe";
     }
     
