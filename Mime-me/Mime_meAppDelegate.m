@@ -85,72 +85,78 @@
     
     NSString* activityName = @"PlatformAppDelegate.applicationDidiFinishLoading:";
     
-//    [self.applicationSettingsManager settings];
-//    AuthenticationManager* authenticationManager = [AuthenticationManager instance];
+    [self.applicationSettingsManager settings];
+    AuthenticationManager* authenticationManager = [AuthenticationManager instance];
     
-//    UINavigationController* navigationController;
-//    
-//    //let us make some checks beginning with the user object
-//    if ([authenticationManager isUserAuthenticated]) {
-//        ResourceContext* resourceContext = [ResourceContext instance];
-//        
-//        //if the user is logged in, lets check to make sure we have a copy of their user object
-//        //check to see if the profile picture is empty, if so, lets grab it from fb
-//        User* currentUser = (User*)[resourceContext resourceWithType:USER withID:authenticationManager.m_LoggedInUserID]; 
-//        
-//        if (currentUser == nil) {
-//            //if the user object isnt in the database, we need to fetch it from the web service
-//            CloudEnumerator* userEnumerator = [[CloudEnumeratorFactory instance]enumeratorForUser:authenticationManager.m_LoggedInUserID];
-//            
-//            LOG_SECURITY(0,@"%@Downloading missing user object for user %@ from the cloud", activityName,authenticationManager.m_LoggedInUserID);
-//            //execute the enumerator
-//            [userEnumerator enumerateUntilEnd:nil];
-//        }
-//        else 
-//        {
-//            //we perform a check to update the application version if necessary
-//            NSString* currentAppVersion = [ApplicationSettingsManager getApplicationVersion];
-//            
-//            if ([currentUser.app_version isEqualToString:@""] ||
-//                ![currentUser.app_version isEqualToString:currentAppVersion] ||
-//                currentUser.app_version == nil)
-//            {
-//                //we need to update the User object because the versions do not match
-//                currentUser.app_version = currentAppVersion;
-//                LOG_APPLICATIONSETTINGSMANAGER(0, @"%@Updating user's app version number from %@ to %@",activityName,currentUser.app_version,currentAppVersion);
-//                [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
-//            }
-//            
-//            // We are ready to launch the menu
-//            Mime_meMenuViewController* menuViewController = [Mime_meMenuViewController createInstance];
-//            navigationController = [[[UINavigationController alloc]initWithRootViewController:menuViewController] autorelease];
-//        }
-//    }
-//    else {
-//        // User is not logged in, we need a login
-//        Callback* onSucccessCallback = [[Callback alloc]initWithTarget:self withSelector:@selector(onLoginSuccess:) withContext:nil];        
-//        Callback* onFailCallback = [[Callback alloc]initWithTarget:self withSelector:@selector(onLoginFailed:)];
-//        
-//        // Launch login view controller
-//        LoginViewController* loginViewController = [LoginViewController createAuthenticationInstance:NO shouldGetTwitter:NO onSuccessCallback:onSucccessCallback onFailureCallback:onFailCallback];
-//        navigationController = [[[UINavigationController alloc]initWithRootViewController:loginViewController] autorelease];
-//        
-//    }
+    UINavigationController* navigationController;
+    
+    //let us make some checks beginning with the user object
+    if ([authenticationManager isUserAuthenticated]) {
+        ResourceContext* resourceContext = [ResourceContext instance];
+        
+        //if the user is logged in, lets check to make sure we have a copy of their user object
+        //check to see if the profile picture is empty, if so, lets grab it from fb
+        User* currentUser = (User*)[resourceContext resourceWithType:USER withID:authenticationManager.m_LoggedInUserID]; 
+        
+        if (currentUser == nil) {
+            //if the user object isnt in the database, we need to fetch it from the web service
+            CloudEnumerator* userEnumerator = [[CloudEnumeratorFactory instance]enumeratorForUser:authenticationManager.m_LoggedInUserID];
+            
+            LOG_SECURITY(0,@"%@Downloading missing user object for user %@ from the cloud", activityName,authenticationManager.m_LoggedInUserID);
+            //execute the enumerator
+            [userEnumerator enumerateUntilEnd:nil];
+        }
+        else 
+        {
+            //we perform a check to update the application version if necessary
+            NSString* currentAppVersion = [ApplicationSettingsManager getApplicationVersion];
+            
+            if ([currentUser.app_version isEqualToString:@""] ||
+                ![currentUser.app_version isEqualToString:currentAppVersion] ||
+                currentUser.app_version == nil)
+            {
+                //we need to update the User object because the versions do not match
+                currentUser.app_version = currentAppVersion;
+                LOG_APPLICATIONSETTINGSMANAGER(0, @"%@Updating user's app version number from %@ to %@",activityName,currentUser.app_version,currentAppVersion);
+                [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
+            }
+            
+            // We are ready to launch the menu
+            Mime_meMenuViewController* menuViewController = [Mime_meMenuViewController createInstance];
+            navigationController = [[[UINavigationController alloc]initWithRootViewController:menuViewController] autorelease];
+        }
+    }
+    else {
+        // User is not logged in, we need a login
+        Callback* onSucccessCallback = [[Callback alloc]initWithTarget:self withSelector:@selector(onLoginSuccess:) withContext:nil];        
+        Callback* onFailCallback = [[Callback alloc]initWithTarget:self withSelector:@selector(onLoginFailed:)];
+        
+        // Launch login view controller
+        LoginViewController* loginViewController = [LoginViewController createAuthenticationInstance:NO shouldGetTwitter:NO onSuccessCallback:onSucccessCallback onFailureCallback:onFailCallback];
+        navigationController = [[[UINavigationController alloc]initWithRootViewController:loginViewController] autorelease];
+        
+    }
+    
+    // We are ready to launch the menu or the login screen as appropriate
+    [navigationController hidesBottomBarWhenPushed];
+    [navigationController setNavigationBarHidden:YES animated:NO];
+    
+    self.window.rootViewController = navigationController;
     
     // We are ready to launch the menu
-    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
-    UINavigationController* menuNavigationController = [[UINavigationController alloc]initWithRootViewController:menuViewController];
-    [menuNavigationController hidesBottomBarWhenPushed];
-    [menuNavigationController setNavigationBarHidden:YES animated:NO];
+//    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+//    UINavigationController* menuNavigationController = [[UINavigationController alloc]initWithRootViewController:menuViewController];
+//    [menuNavigationController hidesBottomBarWhenPushed];
+//    [menuNavigationController setNavigationBarHidden:YES animated:NO];
     
 //    Mime_meMimeViewController *mimeViewController = [Mime_meMimeViewController createInstance];
 //    UINavigationController* mimeNavigationController = [[UINavigationController alloc]initWithRootViewController:mimeViewController];
 //    [mimeNavigationController hidesBottomBarWhenPushed];
 //    [mimeNavigationController setNavigationBarHidden:YES animated:NO];
     
-    menuNavigationController = [[[UINavigationController alloc]initWithRootViewController:menuViewController] autorelease];
-    [menuNavigationController setNavigationBarHidden:YES animated:NO];
-    self.window.rootViewController = menuNavigationController;
+//    menuNavigationController = [[[UINavigationController alloc]initWithRootViewController:menuViewController] autorelease];
+//    [menuNavigationController setNavigationBarHidden:YES animated:NO];
+//    self.window.rootViewController = menuNavigationController;
     
 //    NSArray *viewControllersArray = [[NSArray alloc] initWithObjects:menuNavigationController, mimeNavigationController, nil];
 //    self.tabBarController = [[UITabBarController alloc] init];

@@ -17,6 +17,7 @@
 #import "Response.h"
 #import "NSStringGUIDCategory.h"
 #import "SignUpViewController.h"
+#import "Mime_meMenuViewController.h"
 
 #define kMaximumBusyWaitTimeFacebookLogin       30
 #define kMaximumBusyWaitTimePutAuthenticator    30
@@ -669,7 +670,16 @@
 //    NSString* activityName = @"LoginViewController.onUserLoggedIn:";
 //    
 //    
-    [self dismissModalViewControllerAnimated:YES];
+    // We are ready to launch the menu
+    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+    
+    [UIView animateWithDuration:0.75
+                     animations:^{
+                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.navigationController.view cache:NO];
+                     }];
+    [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
+    
 }
 
 - (void) onGetAuthenticationContextDownloaded:(CallbackResult*)result 
