@@ -103,47 +103,54 @@
     
     int wordCount = [[self.frc_words fetchedObjects]count];
     
-    NSMutableArray *fitnessArray = [[NSMutableArray alloc]init];
+    NSString *randWordStr;
     
-    float sum = 0.0;    // This is the sum of the population fitness
-    
-    for (int i = 0; i < wordCount; i++) {
-        Word *word = [[self.frc_words fetchedObjects] objectAtIndex:i];
+    if (wordCount > 0) {
+        NSMutableArray *fitnessArray = [[NSMutableArray alloc]init];
         
-        // Get the fitness of the word and invert it
-        float fitnessF = 0.0;
-        if ([word.numberoftimesused floatValue] > 0.0) {
-            fitnessF = (1.0 / [word.numberoftimesused floatValue]);
+        float sum = 0.0;    // This is the sum of the population fitness
+        
+        for (int i = 0; i < wordCount; i++) {
+            Word *word = [[self.frc_words fetchedObjects] objectAtIndex:i];
+            
+            // Get the fitness of the word and invert it
+            float fitnessF = 0.0;
+            if ([word.numberoftimesused floatValue] > 0.0) {
+                fitnessF = (1.0 / [word.numberoftimesused floatValue]);
+            }
+            
+            // Add the words fitness to the fitness total sum
+            sum = sum + fitnessF;
+            
+            NSNumber *fitnessNSNUM = [NSNumber numberWithFloat:fitnessF];
+            
+            // Add the word's inverted fitness to the fitness array
+            [fitnessArray addObject:fitnessNSNUM];
         }
         
-        // Add the words fitness to the fitness total sum
-        sum = sum + fitnessF;
+        float random = (((float) (arc4random() % ((unsigned)RAND_MAX + 1)) / RAND_MAX) * sum);
         
-        NSNumber *fitnessNSNUM = [NSNumber numberWithFloat:fitnessF];
+        int wordIndex = 0;
         
-        // Add the word's inverted fitness to the fitness array
-        [fitnessArray addObject:fitnessNSNUM];
-    }
-    
-    float random = (((float) (arc4random() % ((unsigned)RAND_MAX + 1)) / RAND_MAX) * sum);
-    
-    int wordIndex = 0;
-    
-    if (random > 0) {
-        while (random > 0) {
-            random = random - [[fitnessArray objectAtIndex:wordIndex] floatValue];
-            wordIndex++;
+        if (random > 0) {
+            while (random > 0) {
+                random = random - [[fitnessArray objectAtIndex:wordIndex] floatValue];
+                wordIndex++;
+            }
+        }
+        else {
+            wordIndex = arc4random() % wordCount;
+        }
+        
+        Word *randomWord = [[self.frc_words fetchedObjects] objectAtIndex:wordIndex];
+        
+        randWordStr = randomWord.word1;
+        
+        if (randWordStr == nil) {
+            randWordStr = @"MimeMe";
         }
     }
     else {
-        wordIndex = arc4random() % wordCount;
-    }
-    
-    Word *randomWord = [[self.frc_words fetchedObjects] objectAtIndex:wordIndex];
-    
-    NSString *randWordStr = randomWord.word1;
-    
-    if (randWordStr == nil) {
         randWordStr = @"MimeMe";
     }
     
