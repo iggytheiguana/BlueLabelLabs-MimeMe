@@ -668,9 +668,8 @@
 - (void) onUserLoggedIn:(CallbackResult *)result
 {
 //    NSString* activityName = @"LoginViewController.onUserLoggedIn:";
-//    
-//    
-    // We are ready to launch the menu
+    
+    // Successful user login, launch menu
     Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
     
     [UIView animateWithDuration:0.75

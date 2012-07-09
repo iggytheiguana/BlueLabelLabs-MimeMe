@@ -13,9 +13,9 @@
 #import "UIProgressHUDView.h"
 
 @interface Mime_meAppDelegate : UIResponder <UIApplicationDelegate> {
-    NSString*           m_deviceToken;
+    NSString*               m_deviceToken;
     
-    UITabBarController  *m_tabBarController;
+    UINavigationController  *m_navigationController;
 }
 
 @property (strong, nonatomic) UIWindow *window;
@@ -29,7 +29,7 @@
 @property (nonatomic, retain)           UIProgressHUDView*              progressView;
 @property (nonatomic, retain)           NSString*                       deviceToken;
 
-@property (nonatomic, strong)           UITabBarController              *tabBarController;
+@property (nonatomic, strong)           UINavigationController          *navigationController;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

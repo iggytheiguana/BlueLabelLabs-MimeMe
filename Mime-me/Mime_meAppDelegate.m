@@ -27,7 +27,7 @@
 @synthesize facebook = __facebook;
 @synthesize progressView = __progressView;
 @synthesize deviceToken = m_deviceToken;
-@synthesize tabBarController = m_tabBarController;
+@synthesize navigationController = m_navigationController;
 
 #define     kFACEBOOKAPPID  @"496697550344824"
 - (UIProgressHUDView*)progressView {
@@ -75,6 +75,7 @@
     [__managedObjectContext release];
     [__managedObjectModel release];
     [__persistentStoreCoordinator release];
+    [self.navigationController release];
     [super dealloc];
 }
 
@@ -87,8 +88,6 @@
     
     [self.applicationSettingsManager settings];
     AuthenticationManager* authenticationManager = [AuthenticationManager instance];
-    
-    UINavigationController* navigationController;
     
     //let us make some checks beginning with the user object
     if ([authenticationManager isUserAuthenticated]) {
@@ -123,7 +122,7 @@
             
             // We are ready to launch the menu
             Mime_meMenuViewController* menuViewController = [Mime_meMenuViewController createInstance];
-            navigationController = [[[UINavigationController alloc]initWithRootViewController:menuViewController] autorelease];
+            self.navigationController = [[[UINavigationController alloc]initWithRootViewController:menuViewController] autorelease];
         }
     }
     else {
@@ -133,15 +132,15 @@
         
         // Launch login view controller
         LoginViewController* loginViewController = [LoginViewController createAuthenticationInstance:NO shouldGetTwitter:NO onSuccessCallback:onSucccessCallback onFailureCallback:onFailCallback];
-        navigationController = [[[UINavigationController alloc]initWithRootViewController:loginViewController] autorelease];
+        self.navigationController = [[[UINavigationController alloc]initWithRootViewController:loginViewController] autorelease];
         
     }
     
     // We are ready to launch the menu or the login screen as appropriate
-    [navigationController hidesBottomBarWhenPushed];
-    [navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController hidesBottomBarWhenPushed];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    self.window.rootViewController = navigationController;
+    self.window.rootViewController = self.navigationController;
     
     // We are ready to launch the menu
 //    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
@@ -253,6 +252,14 @@
     LOG_SECURITY(1, @"%@Authentication successful",activityName);
     
     // Successful user login, launch menu
+    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+    
+    [UIView animateWithDuration:0.75
+                     animations:^{
+                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.navigationController.view cache:NO];
+                     }];
+    [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
     
 }
 
