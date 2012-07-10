@@ -12,7 +12,6 @@
 #import "ApplicationSettingsManager.h"
 #import "GetAuthenticatorResponse.h"
 #import "ErrorCodes.h"
-#import "Mime_meMenuViewController.h"
 
 @implementation SignUpViewController
 @synthesize sv_scrollView   = m_sv_scrollView;
