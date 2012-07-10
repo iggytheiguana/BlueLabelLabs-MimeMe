@@ -496,7 +496,7 @@ static NSLock* _lock; //lock used to synchronize the processing of enumeration r
     query.queryOptions = queryOptions;
 
     CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
-    enumerator.secondsBetweenConsecutiveSearches = [settings.page_enumeration_timegap intValue];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
     return enumerator;
 }
 
@@ -510,7 +510,7 @@ static NSLock* _lock; //lock used to synchronize the processing of enumeration r
     query.queryOptions = queryOptions;
     
     CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
-    enumerator.secondsBetweenConsecutiveSearches = [settings.follow_enumeration_timegap intValue];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
     return enumerator;
 }
 
@@ -523,7 +523,7 @@ static NSLock* _lock; //lock used to synchronize the processing of enumeration r
     query.queryOptions = queryOptions;
     
     CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
-    enumerator.secondsBetweenConsecutiveSearches = [settings.page_enumeration_timegap intValue];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
     return enumerator;
 }
 
@@ -536,7 +536,7 @@ static NSLock* _lock; //lock used to synchronize the processing of enumeration r
     query.queryOptions = queryOptions;
     
     CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
-    enumerator.secondsBetweenConsecutiveSearches = [settings.page_enumeration_timegap intValue];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
     return enumerator;
 }
 //
