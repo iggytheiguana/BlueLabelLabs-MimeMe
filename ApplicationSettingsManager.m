@@ -155,28 +155,28 @@ static ApplicationSettingsManager* instance;
     //settings.fb_app_id = facebook_APPID;
     settings.base_url = default_BASEURL;
     settings.feed_maxnumtodownload =[NSNumber numberWithInt:maxsize_FEEDDOWNLOAD];
-    settings.photo_maxnumtodownload = [NSNumber numberWithInt:maxsize_PHOTODOWNLOAD];
-    settings.page_maxnumtodownload = [NSNumber numberWithInt:maxsize_THEMEDOWNLOAD];
-    settings.caption_maxnumtodownload = [NSNumber numberWithInt:maxsize_CAPTIONDOWNLOAD];
+  //  settings.photo_maxnumtodownload = [NSNumber numberWithInt:maxsize_PHOTODOWNLOAD];
+  //  settings.page_maxnumtodownload = [NSNumber numberWithInt:maxsize_THEMEDOWNLOAD];
+  //  settings.caption_maxnumtodownload = [NSNumber numberWithInt:maxsize_CAPTIONDOWNLOAD];
     settings.numberoflinkedobjectstoreturn = [NSNumber numberWithInt:size_NUMLINKEDOBJECTSTOTRETURN];
     settings.pagesize = [NSNumber numberWithInt:pagesize];
     settings.http_timeout_seconds = [NSNumber numberWithInt:timeout_HTTP];
     settings.feed_enumeration_timegap = [NSNumber numberWithInt:threshold_FEED_ENUMERATION_TIME_GAP];
-    settings.caption_enumeration_timegap = [NSNumber numberWithInt:threshold_CAPTION_ENUMERATION_TIME_GAP];
+  //  settings.caption_enumeration_timegap = [NSNumber numberWithInt:threshold_CAPTION_ENUMERATION_TIME_GAP];
     settings.progress_maxsecondstodisplay = [NSNumber numberWithInt:progress_MAXSECONDSTODISPLAY];
     settings.twitter_consumerkey = twitter_CONSUMERKEY;
     settings.twitter_consumersecret = twitter_CONSUMERSECRET;    
-    settings.page_enumeration_timegap = [NSNumber numberWithInt:threshold_PAGE_ENUMERATION_TIME_GAP];
-    settings.page_draftexpiry_seconds = [NSNumber numberWithInt:page_DRAFTEXPIRES_SECONDS];
+  //  settings.page_enumeration_timegap = [NSNumber numberWithInt:threshold_PAGE_ENUMERATION_TIME_GAP];
+  //  settings.page_draftexpiry_seconds = [NSNumber numberWithInt:page_DRAFTEXPIRES_SECONDS];
     settings.version = [NSNumber numberWithInt:0];
     settings.poll_expiry_seconds = [NSNumber numberWithInt:default_POLL_EXPIRY_IN_SECONDS];
-    settings.poll_num_pages = [NSNumber numberWithInt:default_POLL_NUM_PAGES];
-    settings.editor_minimum = [NSNumber numberWithInt:EDITOR_MINIMUM];
+  //  settings.poll_num_pages = [NSNumber numberWithInt:default_POLL_NUM_PAGES];
+  //  settings.editor_minimum = [NSNumber numberWithInt:EDITOR_MINIMUM];
     
     settings.follow_maxnumtodownload = [NSNumber numberWithInt:maxsize_FEEDDOWNLOAD];
     settings.follow_enumeration_timegap = [NSNumber numberWithInt:threshold_FOLLOW_ENUMERATION_TIME_GAP];
     
-     settings.delete_objects_after = [NSNumber numberWithInt:delete_expired_objects];
+ //    settings.delete_objects_after = [NSNumber numberWithInt:delete_expired_objects];
     [context save:YES onFinishCallback:nil trackProgressWith:nil];
     
     return settings;

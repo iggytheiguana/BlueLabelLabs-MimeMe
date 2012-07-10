@@ -29,25 +29,13 @@
 @property (nonatomic,retain) NSNumber* feed_maxnumtodownload;
 @property (nonatomic,retain) NSNumber* feed_enumeration_timegap;
 
-//Photo settings
-@property (nonatomic,retain) NSNumber* photo_maxnumtodownload;
 
-
-//Page settings
-@property (nonatomic,retain) NSNumber* page_maxnumtodownload;
-
-@property (nonatomic,retain) NSNumber* page_enumeration_timegap;
-@property (nonatomic,retain) NSNumber* page_draftexpiry_seconds;
-
-//Caption settings
-@property (nonatomic,retain) NSNumber* caption_maxnumtodownload;
-@property (nonatomic,retain) NSNumber* caption_enumeration_timegap;
 
 @property (nonatomic,retain) NSNumber* version;
 
 @property (nonatomic,retain) NSNumber* poll_expiry_seconds;
-@property (nonatomic,retain) NSNumber* poll_num_pages;
-@property (nonatomic,retain) NSNumber* editor_minimum;
+
+
 @property (nonatomic,retain) NSNumber* num_users;
 @property (nonatomic,retain) NSNumber* progress_maxsecondstodisplay;
 
@@ -58,7 +46,7 @@
 @property (nonatomic,retain) NSNumber* follow_enumeration_timegap;
 
 
-@property (nonatomic,retain) NSNumber* delete_objects_after;
+
 
 
 
