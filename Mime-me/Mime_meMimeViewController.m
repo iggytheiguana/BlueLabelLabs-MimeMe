@@ -15,6 +15,7 @@
 #import "Macros.h"
 #import "Attributes.h"
 #import "Word.h"
+#import "Mime_meSettingsViewController.h"
 
 @interface Mime_meMimeViewController ()
 
@@ -384,7 +385,7 @@
     [UIView animateWithDuration:0.75
                      animations:^{
                          [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.navigationController.view cache:NO];
+                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.navigationController.view cache:YES];
                      }];
     [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
 }
@@ -404,7 +405,15 @@
 }
 
 - (IBAction) onSettingsButtonPressed:(id)sender {
+    Mime_meSettingsViewController *settingsViewController = [Mime_meSettingsViewController createInstance];
     
+    [UIView animateWithDuration:0.75
+                     animations:^{
+                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.navigationController.view cache:YES];
+                     }];
+    
+    [self.navigationController pushViewController:settingsViewController animated:NO];
 }
 
 #pragma mark - UIButton Handlers
@@ -488,7 +497,7 @@
     
     NSString* activityName = @"Mime_meMimeViewController.controller.didChangeObject:";
     if (controller == self.frc_words) {
-        
+        LOG_MIME_MEMIMEVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
     }
     else {
         LOG_MIME_MEMIMEVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController that isnt mine. %p", activityName, &controller);

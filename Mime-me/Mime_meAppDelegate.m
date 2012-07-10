@@ -142,41 +142,6 @@
     
     self.window.rootViewController = self.navigationController;
     
-    // We are ready to launch the menu
-//    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
-//    UINavigationController* menuNavigationController = [[UINavigationController alloc]initWithRootViewController:menuViewController];
-//    [menuNavigationController hidesBottomBarWhenPushed];
-//    [menuNavigationController setNavigationBarHidden:YES animated:NO];
-    
-//    Mime_meMimeViewController *mimeViewController = [Mime_meMimeViewController createInstance];
-//    UINavigationController* mimeNavigationController = [[UINavigationController alloc]initWithRootViewController:mimeViewController];
-//    [mimeNavigationController hidesBottomBarWhenPushed];
-//    [mimeNavigationController setNavigationBarHidden:YES animated:NO];
-    
-//    menuNavigationController = [[[UINavigationController alloc]initWithRootViewController:menuViewController] autorelease];
-//    [menuNavigationController setNavigationBarHidden:YES animated:NO];
-//    self.window.rootViewController = menuNavigationController;
-    
-//    NSArray *viewControllersArray = [[NSArray alloc] initWithObjects:menuNavigationController, mimeNavigationController, nil];
-//    self.tabBarController = [[UITabBarController alloc] init];
-//    [self.tabBarController.tabBar setHidden:YES];
-//    CGRect bounds = [[UIScreen mainScreen] bounds];
-//    CGRect tabBarFrame = self.tabBarController.tabBar.frame;
-//    CGRect tabBarViewFrame = CGRectMake(0, 0, 320, bounds.size.height + tabBarFrame.size.height);
-//    tabBarFrame.origin.y = tabBarFrame.origin.y + tabBarFrame.size.height;
-//    self.tabBarController.tabBar.frame = tabBarFrame;
-//    self.tabBarController.view.frame = tabBarViewFrame;
-    
-//    CGRect bounds = [[UIScreen mainScreen] bounds];
-//    CGRect tabBarFrame = self.tabBarController.tabBar.frame;
-//    tabBarFrame.origin.y = bounds.size.height;
-//    self.tabBarController.view.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height + tabBarFrame.size.height);
-//    self.tabBarController.tabBar.frame = tabBarFrame;
-//    
-//    [self.tabBarController setViewControllers:viewControllersArray animated:YES];
-//    [self.tabBarController setSelectedIndex:0];
-//    self.window.rootViewController = self.tabBarController;
-    
     self.window.backgroundColor = [UIColor blackColor];
     
     [self.window makeKeyAndVisible];

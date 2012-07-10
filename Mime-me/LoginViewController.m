@@ -551,7 +551,7 @@
     //if (!CGRectContainsPoint(aRect, self.tf_active.frame.origin)) {
     //CGPoint scrollPoint = CGPointMake(0.0, self.tf_active.frame.origin.y+(self.tf_active.frame.size.height*1.5)-kbSize.height);
     
-    CGPoint scrollPoint = CGPointMake(0.0, self.tf_active.frame.origin.y-(self.tf_active.frame.size.height*1.5));
+    CGPoint scrollPoint = CGPointMake(0.0, self.tf_active.frame.origin.y-(self.tf_active.frame.size.height*2.0));
     [self.sv_scrollView setContentOffset:scrollPoint animated:YES];
     //}
 }

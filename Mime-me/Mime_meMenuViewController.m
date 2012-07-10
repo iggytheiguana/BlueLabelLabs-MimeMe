@@ -69,12 +69,7 @@
 - (IBAction) onMimeButtonPressed:(id)sender {
     Mime_meMimeViewController* mimeViewController = [Mime_meMimeViewController createInstance];
     
-//    [self.navigationController pushViewController:mimeViewController animated:YES];
     [self.navigationController setViewControllers:[NSArray arrayWithObject:mimeViewController] animated:YES];
-//    [self addChildViewController:mimeViewController];
-//    [mimeViewController didMoveToParentViewController:self];
-//    [self.tabBarController setSelectedIndex:1];
-    
 }
 
 - (IBAction) onGuessButtonPressed:(id)sender {
