@@ -8,8 +8,6 @@
 
 #import "Mime_meUINavigationHeaderView.h"
 #import <QuartzCore/QuartzCore.h>
-#import "Mime_meMenuViewController.h"
-#import "Mime_meMimeViewController.h"
 
 @implementation Mime_meUINavigationHeaderView
 @synthesize view                = m_view;
