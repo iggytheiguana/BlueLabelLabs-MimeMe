@@ -42,6 +42,7 @@
 						<int key="NSvFlags">274</int>
 						<string key="NSFrame">{{10, 125}, {300, 355}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">2</int>
@@ -66,7 +67,7 @@
 				</array>
 				<string key="NSFrameSize">{320, 480}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSNextKeyView"/>
+				<reference key="NSNextKeyView" ref="310087814"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">2</int>
 					<bytes key="NSRGB">MCAwLjY4MjM1Mjk2MDEgMC4zOTIxNTY4OTkAA</bytes>
@@ -86,13 +87,14 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{20, 12}, {240, 25}}</string>
 								<reference key="NSSuperview" ref="885740601"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">From Friends</string>
+								<string key="IBUIText">All From Friends</string>
 								<object class="NSColor" key="IBUITextColor" id="110650344">
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MQA</bytes>
@@ -157,13 +159,14 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{20, 12}, {240, 25}}</string>
 								<reference key="NSSuperview" ref="701187871"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Most Recent</string>
+								<string key="IBUIText">All Most Recent</string>
 								<reference key="IBUITextColor" ref="110650344"/>
 								<reference key="IBUIHighlightedColor" ref="110650344"/>
 								<reference key="IBUIShadowColor" ref="783023909"/>
@@ -212,13 +215,14 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{20, 12}, {240, 25}}</string>
 								<reference key="NSSuperview" ref="83468293"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Staff Picks</string>
+								<string key="IBUIText">All Staff Picks</string>
 								<reference key="IBUITextColor" ref="110650344"/>
 								<reference key="IBUIHighlightedColor" ref="110650344"/>
 								<reference key="IBUIShadowColor" ref="783023909"/>

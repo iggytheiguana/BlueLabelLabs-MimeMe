@@ -11,6 +11,9 @@
 #import "Mime_meMenuViewController.h"
 #import "Mime_meMimeViewController.h"
 #import "Mime_meGuessFullTableViewController.h"
+#import "Mime_meSettingsViewController.h"
+
+#define kMAXROWS 3
 
 @interface Mime_meGuessMenuViewController ()
 
@@ -109,7 +112,7 @@
         count = [self.staffPicksArray count] + 2;  // Add 2 to the count to include 1. Header, and 2. More
     }
     
-    int rows = MIN(count, 5);   // Maximize the number of rows per section
+    int rows = MIN(count, kMAXROWS + 2);   // Maximize the number of rows per section
     
     return rows;
 }
@@ -119,7 +122,7 @@
     if (indexPath.section == 0) {
         // From Friends section
         
-        NSInteger count = MIN([self.friendsArray count], 3);    // Maximize the number of friends to show
+        NSInteger count = MIN([self.friendsArray count], kMAXROWS);    // Maximize the number of friends to show
         
         if (indexPath.row == 0) {
             // Set the header
@@ -194,7 +197,7 @@
     if (indexPath.section == 1) {
         // Recent section
         
-        NSInteger count = MIN([self.recentArray count], 3);    // Maximize the number of recent mimes to show to 3
+        NSInteger count = MIN([self.recentArray count], kMAXROWS);    // Maximize the number of recent mimes to show to 3
         
         if (indexPath.row == 0) {
             // Set the header
@@ -275,7 +278,7 @@
     else {
         // Staff Picks section
         
-        NSInteger count = MIN([self.staffPicksArray count], 3);    // Maximize the number of staff pick mimes to show to 3
+        NSInteger count = MIN([self.staffPicksArray count], kMAXROWS);    // Maximize the number of staff pick mimes to show to 3
         
         if (indexPath.row == 0) {
             // Set the header
@@ -401,7 +404,7 @@
     
     if (indexPath.section == 0) {
         // Friends mime selected
-        NSInteger count = MIN([self.friendsArray count], 3);    // Maximize the number of friends to show
+        NSInteger count = MIN([self.friendsArray count], kMAXROWS);    // Maximize the number of friends to show
         
         if (indexPath.row > 0 && indexPath.row <= count) {
             
@@ -412,7 +415,7 @@
             [self.navigationController pushViewController:fullTableViewController animated:YES];
         }
     }
-    if (indexPath.section == 1) {
+    else if (indexPath.section == 1) {
         // Recent mime selected
         NSInteger count = [self.recentArray count];
         
@@ -462,7 +465,15 @@
 }
 
 - (IBAction) onSettingsButtonPressed:(id)sender {
+    Mime_meSettingsViewController *settingsViewController = [Mime_meSettingsViewController createInstance];
     
+    [UIView animateWithDuration:0.75
+                     animations:^{
+                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.navigationController.view cache:YES];
+                     }];
+    
+    [self.navigationController pushViewController:settingsViewController animated:NO];
 }
 
 #pragma mark - Static Initializers
