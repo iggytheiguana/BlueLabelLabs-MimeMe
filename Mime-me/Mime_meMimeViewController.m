@@ -25,11 +25,15 @@
 @synthesize frc_words           = __frc_words;
 @synthesize wordsCloudEnumerator = m_wordsCloudEnumerator;
 @synthesize nv_navigationHeader = m_nv_navigationHeader;
+@synthesize v_makeWordView      = m_v_makeWordView;
 @synthesize tbl_words           = m_tbl_words;
 @synthesize tc_header           = m_tc_header;
 @synthesize btn_moreWords       = m_btn_moreWords;
 @synthesize btn_makeWord        = m_btn_makeWord;
 @synthesize wordsArray          = m_wordsArray;
+@synthesize didMakeWord         = m_didMakeWord;
+@synthesize chosenWord          = m_chosenWord;
+@synthesize chosenWordStr       = m_chosenWordStr;
 @synthesize cameraActionSheet   = m_cameraActionSheet;
 
 
@@ -99,12 +103,13 @@
     [self showHUDForWordsDownload];
 }
 
-- (NSString*) getRandomWord {
+- (Word*) getRandomWord {
+//- (NSString*) getRandomWord {
     // We'll use an inverted Roulette Selection algorithm to find the 3 words to display to the user
     
-    int wordCount = [[self.frc_words fetchedObjects]count];
+    int wordCount = [[self.frc_words fetchedObjects] count];
     
-    NSString *randWordStr;
+//    NSString *randWordStr;
     
     if (wordCount > 0) {
         NSMutableArray *fitnessArray = [[NSMutableArray alloc]init];
@@ -117,7 +122,12 @@
             // Get the fitness of the word and invert it
             float fitnessF = 0.0;
             if ([word.numberoftimesused floatValue] > 0.0) {
+                // invert the fitness value for this word so it is less likely to be chosen
                 fitnessF = (1.0 / [word.numberoftimesused floatValue]);
+            }
+            else {
+                // give unused words a fitness of 1.0 so they are more likely to be selected
+                fitnessF = 1.0;
             }
             
             // Add the words fitness to the fitness total sum
@@ -141,6 +151,7 @@
                 random = random - [[fitnessArray objectAtIndex:wordIndex] floatValue];
                 wordIndex++;
             }
+            wordIndex--;
         }
         else {
             // If the random value is 0, there is not enough information from the fitness values.
@@ -150,19 +161,25 @@
         
         Word *randomWord = [[self.frc_words fetchedObjects] objectAtIndex:wordIndex];
         
-        randWordStr = randomWord.word1;
-        
-        if (randWordStr == nil) {
-            // If for any reason the wird is nil, use a wildcard
-            randWordStr = @"MimeMe";
-        }
+        return randomWord;
     }
     else {
-        // If for any reason there are no words available, use a wildcard
-        randWordStr = @"MimeMe";
+        return nil;
     }
-    
-    return randWordStr;
+        
+//        randWordStr = randomWord.word1;
+//        
+//        if (randWordStr == nil) {
+//            // If for any reason the wird is nil, use a wildcard
+//            randWordStr = @"MimeMe";
+//        }
+//    }
+//    else {
+//        // If for any reason there are no words available, use a wildcard
+//        randWordStr = @"MimeMe";
+//    }
+//    
+//    return randWordStr;
 }
 
 - (void) makeWordsArray {
@@ -222,9 +239,6 @@
 //    self.wordsArray = wordMtblArray;
 //    [wordMtblArray release];
     
-    // Create the array of words to present to the user
-    [self makeWordsArray];
-    
 }
 
 - (void)viewDidUnload
@@ -234,6 +248,7 @@
     // e.g. self.myOutlet = nil;
     
     self.nv_navigationHeader = nil;
+    self.v_makeWordView = nil;
     self.tbl_words = nil;
     self.tc_header = nil;
     self.btn_moreWords = nil;
@@ -246,6 +261,16 @@
     [self.nv_navigationHeader.btn_mime setHighlighted:YES];
     [self.nv_navigationHeader.btn_mime setUserInteractionEnabled:NO];
     
+    // Enumerate for words if we don't already have some
+    int wordCount = [[self.frc_words fetchedObjects] count];
+    if (wordCount <= 0 ) {
+        // There are no words, enumerate
+        [self enumerateWords];
+    }
+    else {
+        // Create the array of words to present to the user
+        [self makeWordsArray];
+    }
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -296,7 +321,9 @@
                 
             }
             
-            cell.textLabel.text = [self.wordsArray objectAtIndex:(indexPath.row - 1)];
+            Word *word = [self.wordsArray objectAtIndex:(indexPath.row - 1)];
+            
+            cell.textLabel.text = word.word1;
             
 //            Word *word = [[self.frc_words fetchedObjects] objectAtIndex:(indexPath.row - 1)];
 //            cell.textLabel.text = word.word1;
@@ -371,12 +398,40 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    // Store the chosen word locally for now
+    self.didMakeWord = NO;
+    self.chosenWord = [self.wordsArray objectAtIndex:(indexPath.row - 1)];
+    self.chosenWordStr = self.chosenWord.word1;
+    
     // Launch photo picker
     self.cameraActionSheet = [UICameraActionSheet createCameraActionSheetWithTitle:nil allowsEditing:NO];
     self.cameraActionSheet.a_delegate = self;
     [self.cameraActionSheet showInView:self.view];
     
 }
+
+#pragma mark - UIButton Handlers
+- (IBAction) onMoreWordsButtonPressed:(id)sender {
+    //We only download new words if we haven't done so recently and the enumerator is ready
+    if ((!self.wordsCloudEnumerator.isLoading) && ([self.wordsCloudEnumerator canEnumerate])) {
+        // Enumerate for new words
+        [self enumerateWords];
+    }
+    else {
+        // Get a new selection of words from the existing words in the FRC
+        [self makeWordsArray];
+        [self.tbl_words reloadData];
+    }
+}
+
+- (IBAction) onMakeWordButtonPressed:(id)sender {
+    self.v_makeWordView = [[[Mime_meUIMakeWordView alloc] initWithFrame:[Mime_meUIMakeWordView frameForMakeWordView]] autorelease];
+    self.v_makeWordView.delegate = self;
+    
+    [self.view addSubview:self.v_makeWordView];
+    
+}
+
 
 #pragma mark - Mime_meUINavigationHeader Delegate Methods
 - (IBAction) onHomeButtonPressed:(id)sender {
@@ -416,22 +471,16 @@
     [self.navigationController pushViewController:settingsViewController animated:NO];
 }
 
-#pragma mark - UIButton Handlers
-- (IBAction) onMoreWordsButtonPressed:(id)sender {
-    //We only donwload new words if we haven't done so recently and the enumerator is ready
-    if ((!self.wordsCloudEnumerator.isLoading) && ([self.wordsCloudEnumerator canEnumerate])) {
-        // Enumerate for new words
-        [self enumerateWords];
-    }
-    else {
-        // Get a new selection of words from the existing words in the FRC
-        [self makeWordsArray];
-        [self.tbl_words reloadData];
-    }
-}
-
-- (IBAction) onMakeWordButtonPressed:(id)sender {
+#pragma mark - Mime_meUIMakeWordView Delegate Methods
+- (IBAction) onOkButtonPressed:(id)sender {
+    // Store the new word locally for now
+    self.didMakeWord = YES;
+    self.chosenWordStr = self.v_makeWordView.tf_newWord.text;
     
+    // Launch photo picker
+    self.cameraActionSheet = [UICameraActionSheet createCameraActionSheetWithTitle:nil allowsEditing:NO];
+    self.cameraActionSheet.a_delegate = self;
+    [self.cameraActionSheet showInView:self.view];
 }
 
 #pragma mark - UICameraActionSheetDelegate methods
@@ -445,17 +494,36 @@
                           withFullImage:(UIImage*)image {
     //we handle back end processing of the image from the camera sheet here
     
-    // Make sure the status bar remains hidden, otherwise it comes back after the image picker is dismissed
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    ResourceContext *resourceContext = [ResourceContext instance];
     
+    // Update the chosen word object
+    if (self.didMakeWord == YES) {
+        self.chosenWord = [Word createWordWithString:self.chosenWordStr];
+    }
+    else {
+        // Increment the counter for the number of times this word has been used
+        NSInteger numTimesUsed = [self.chosenWord.numberoftimesused intValue] + 1;
+        self.chosenWord.numberoftimesused = [NSNumber numberWithInt:numTimesUsed];
+    }
+    
+    // Save the new word or updates to an existing word
+    [resourceContext save:NO onFinishCallback:nil trackProgressWith:nil];
+    
+    // Launch the friends picker
     Mime_meFriendsPickerViewController *friendsViewController = [Mime_meFriendsPickerViewController createInstance];
     [self.navigationController pushViewController:friendsViewController animated:YES];
     
 }
 
 - (void) onCancel {
-    // we deal with cancel operations from the action sheet here
+    // we deal with cancel operations from the action sheet and image picker here
     
+    // Set the new word textfield as the first responder again to launch the keyboard
+    for (UIView *checkView in [self.view subviews] ) {
+        if ((id)checkView == (id)self.v_makeWordView) {
+           [self.v_makeWordView.tf_newWord becomeFirstResponder];
+        }
+    }
 }
 
 #pragma mark -  MBProgressHUD Delegate

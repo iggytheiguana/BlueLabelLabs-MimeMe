@@ -127,6 +127,9 @@
                 // Cell subtitle
                 cell.detailTextLabel.text = @"Share with everyone on MimeMe!";
                 
+                // Default to selected
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                
             }
             
             return cell;

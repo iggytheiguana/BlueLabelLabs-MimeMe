@@ -108,6 +108,9 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     self.picker = picker;
     [self.picker dismissModalViewControllerAnimated:YES];
+
+    id<UICameraActionSheetDelegate> del = (id<UICameraActionSheetDelegate>)self.a_delegate;
+    [del onCancel];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker

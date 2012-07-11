@@ -15,4 +15,6 @@
 @property (nonatomic,retain) NSNumber* creatorid;
 @property (nonatomic,retain) NSNumber* difficultylevel;
 
++ (Word*)createWordWithString:(NSString *)string;
+
 @end

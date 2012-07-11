@@ -12,7 +12,7 @@
 #import "ApplicationSettingsManager.h"
 #import "UIProgressHUDView.h"
 
-@interface Mime_meAppDelegate : UIResponder <UIApplicationDelegate> {
+@interface Mime_meAppDelegate : UIResponder < UIApplicationDelegate, CloudEnumeratorDelegate > {
     NSString*               m_deviceToken;
     
     UINavigationController  *m_navigationController;

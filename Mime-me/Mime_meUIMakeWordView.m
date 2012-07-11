@@ -9,10 +9,15 @@
 #import "Mime_meUIMakeWordView.h"
 #import <QuartzCore/QuartzCore.h>
 
+#define kMAXWORDLENGTH 15
+
 @implementation Mime_meUIMakeWordView
-@synthesize view        = m_view;
-@synthesize tf_newWord  = m_tf_newWord;
-@synthesize btn_ok      = m_btn_ok;
+@synthesize view                = m_view;
+@synthesize v_makeWordContainer = m_v_makeWordContainer;
+@synthesize v_makeWordHeader    = m_v_makeWordHeader;
+@synthesize tf_newWord          = m_tf_newWord;
+@synthesize btn_ok              = m_btn_ok;
+@synthesize btn_close           = m_btn_close;
 
 #pragma mark - Properties
 - (id)delegate {
@@ -38,19 +43,43 @@
             NSLog(@"Error! Could not load Mime_meUIMakeWordView file.\n");
         }
         
-        [self addSubview:self.view];
-        
-        // Add rounded corners to navigation header
-        [self.view.layer setCornerRadius:8.0f];
-        
-        // Add drop shadow to navigation header
-        [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
-        [self.view.layer setShadowOpacity:0.7f];
-        [self.view.layer setShadowRadius:2.0f];
-        [self.view.layer setShadowOffset:CGSizeMake(0.0f, 3.0f)];
-        [self.view.layer setMasksToBounds:NO];
+        // Add drop shadow to container view
+        [self.v_makeWordContainer.layer setShadowColor:[UIColor blackColor].CGColor];
+        [self.v_makeWordContainer.layer setShadowOpacity:0.7f];
+        [self.v_makeWordContainer.layer setShadowRadius:5.0f];
+        [self.v_makeWordContainer.layer setShadowOffset:CGSizeMake(0.0f, 0.0f)];
+        [self.v_makeWordContainer.layer setMasksToBounds:NO];
         CGPathRef shadowPath = [UIBezierPath bezierPathWithRect:self.view.layer.bounds].CGPath;
         [self.view.layer setShadowPath:shadowPath];
+        
+        // Add rounded corners to container view
+        [self.v_makeWordContainer.layer setCornerRadius:8.0f];
+        [self.v_makeWordContainer.layer setOpaque:NO];
+        
+        // Add rounded corners to top part of header view
+        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.v_makeWordHeader.bounds 
+                                                       byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight
+                                                             cornerRadii:CGSizeMake(8.0, 8.0)];
+        
+        // Create the shape layer and set its path
+        CAShapeLayer *maskLayer = [CAShapeLayer layer];
+        maskLayer.frame = self.v_makeWordHeader.bounds;
+        maskLayer.path = maskPath.CGPath;
+        
+        // Set the newly created shape layer as the mask for the image view's layer
+        self.v_makeWordHeader.layer.mask = maskLayer;
+        
+        // Add reveal animation to whole view
+        CATransition *loadViewIn = [CATransition animation];
+        [loadViewIn setDuration:0.5];
+        [loadViewIn setType:kCATransitionReveal];
+        [loadViewIn setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [[self.view layer]addAnimation:loadViewIn forKey:kCATransitionReveal];
+        
+        // Show keyboard ready for text entry
+        [self.tf_newWord becomeFirstResponder];
+        
+        [self addSubview:self.view];
 
     }
     return self;
@@ -58,29 +87,88 @@
 
 - (void)dealloc {
     self.view = nil;
+    self.v_makeWordContainer = nil;
+    self.v_makeWordHeader = nil;
     self.tf_newWord = nil;
     self.btn_ok = nil;
+    self.btn_close = nil;
     
     [super dealloc];
 }
 
+/*
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect
+ {
+ // Drawing code
+ }
+ */
+
 #pragma mark - UIButton Handlers
 - (IBAction) onOkButtonPressed:(id)sender {
-    [self.delegate onOkButtonPressed:sender];
+    
+    NSString *newWordStr = self.tf_newWord.text;
+    
+    // Check to see that the newWord is not empty and does not contain any whitespace
+    if (newWordStr == nil ||
+        [newWordStr isEqualToString:@""] ||
+        [newWordStr isEqualToString:@" "] ||
+        [newWordStr rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]].location != NSNotFound) {
+        
+        // there is no word or whitespace present
+        self.tf_newWord.placeholder = @"please enter a word";
+    }
+    else {
+        [self.tf_newWord resignFirstResponder];
+        [self.delegate onOkButtonPressed:sender];
+    }
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
+- (IBAction) onCloseButtonPressed:(id)sender {
+    // Animate the hiding of the view
+    [UIView animateWithDuration:0.3
+                     animations:^{self.alpha = 0.0;}
+                     completion:^(BOOL finished){[self removeFromSuperview];}];
 }
-*/
+
+#pragma mark - TextField Delegate Methods
+//- (void)textFieldDidBeginEditing:(UITextField *)textField
+//{
+//    // textfield editing has begun
+//}
+//
+//- (void)textFieldDidEndEditing:(UITextField *)textField
+//{
+//    // textfield editing has ended
+//    
+//}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)text {    
+    // Prevent numbers, spaces, special characters and capitals in the word and limit to 15 letters
+    
+    if ([text rangeOfCharacterFromSet:[[NSCharacterSet lowercaseLetterCharacterSet] invertedSet]].location != NSNotFound) {
+        // only lower case letters allowed
+        return NO;
+    }
+    else if ([textField.text length] >= kMAXWORDLENGTH) {
+        return NO;
+    }
+    
+    self.tf_newWord.placeholder = @" ";
+    
+    return YES;
+}
+
+// Handles keyboard Return button pressed while editing the textfield
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self onOkButtonPressed:(id)textField];
+    return NO;
+}
 
 #pragma mark - Statics
 + (CGRect)frameForMakeWordView {
-    return CGRectMake(20, 20, 280, 155);
+    return CGRectMake(0, 0, 320, 480);
 }
 
 @end
