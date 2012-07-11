@@ -15,6 +15,7 @@
 @synthesize view                = m_view;
 @synthesize v_makeWordContainer = m_v_makeWordContainer;
 @synthesize v_makeWordHeader    = m_v_makeWordHeader;
+@synthesize v_background        = m_v_background;
 @synthesize tf_newWord          = m_tf_newWord;
 @synthesize btn_ok              = m_btn_ok;
 @synthesize btn_close           = m_btn_close;
@@ -69,12 +70,33 @@
         // Set the newly created shape layer as the mask for the view's layer
         self.v_makeWordHeader.layer.mask = maskLayer;
         
-        // Add reveal animation to whole view
-        CATransition *loadViewIn = [CATransition animation];
-        [loadViewIn setDuration:0.5];
-        [loadViewIn setType:kCATransitionReveal];
-        [loadViewIn setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [[self.view layer]addAnimation:loadViewIn forKey:kCATransitionReveal];
+        // Animate the showing of the make word container views
+        self.v_makeWordContainer.transform = CGAffineTransformMakeScale(0.6, 0.6);
+        self.v_background.alpha = 0.0;
+        [UIView animateWithDuration:0.2
+                         animations:^{
+                             self.v_makeWordContainer.transform = CGAffineTransformMakeScale(1.05, 1.05);
+                             self.v_makeWordContainer.alpha = 0.8;
+                             
+                             self.v_background.alpha = 0.5;
+                         }
+                         completion:^(BOOL finished){
+                             [UIView animateWithDuration:1/15.0
+                                              animations:^{
+                                                  self.v_makeWordContainer.transform = CGAffineTransformMakeScale(0.9, 0.9);
+                                                  self.v_makeWordContainer.alpha = 0.9;
+                                              }
+                                              completion:^(BOOL finished) {
+                                                  [UIView animateWithDuration:1/7.5
+                                                                   animations:^{
+                                                                       self.v_makeWordContainer.transform = CGAffineTransformIdentity;                                                             
+                                                                       self.v_makeWordContainer.alpha = 1.0;
+                                                                   }
+                                                   ];
+                                              }
+                              ];
+                         }
+         ];
         
         // Show keyboard ready for text entry
         [self.tf_newWord becomeFirstResponder];
@@ -89,6 +111,7 @@
     self.view = nil;
     self.v_makeWordContainer = nil;
     self.v_makeWordHeader = nil;
+    self.v_background = nil;
     self.tf_newWord = nil;
     self.btn_ok = nil;
     self.btn_close = nil;
@@ -128,8 +151,12 @@
 - (IBAction) onCloseButtonPressed:(id)sender {
     // Animate the hiding of the view
     [UIView animateWithDuration:0.3
-                     animations:^{self.alpha = 0.0;}
-                     completion:^(BOOL finished){[self removeFromSuperview];}];
+                     animations:^{
+                         self.alpha = 0.0;
+                     }
+                     completion:^(BOOL finished){
+                         [self removeFromSuperview];
+                     }];
 }
 
 #pragma mark - TextField Delegate Methods

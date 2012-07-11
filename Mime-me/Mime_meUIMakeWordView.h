@@ -22,6 +22,7 @@
     
     UIView          *m_v_makeWordContainer;
     UIView          *m_v_makeWordHeader;
+    UIView          *m_v_background;
     
     UITextField     *m_tf_newWord;
     
@@ -33,6 +34,7 @@
 
 @property (nonatomic, retain) IBOutlet  UIView          *v_makeWordContainer;
 @property (nonatomic, retain) IBOutlet  UIView          *v_makeWordHeader;
+@property (nonatomic, retain) IBOutlet  UIView          *v_background;
 
 @property (nonatomic, retain) IBOutlet  UIView          *view;
 

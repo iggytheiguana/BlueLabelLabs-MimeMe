@@ -394,6 +394,31 @@
     self.v_makeWordView = [[[Mime_meUIMakeWordView alloc] initWithFrame:[Mime_meUIMakeWordView frameForMakeWordView]] autorelease];
     self.v_makeWordView.delegate = self;
     
+//    // Animate the showing of the make word container views
+//    self.v_makeWordView.v_makeWordContainer.transform = CGAffineTransformMakeScale(0.6, 0.6);
+//    [UIView animateWithDuration:0.2
+//                     animations:^{
+//                         self.v_makeWordView.v_makeWordContainer.transform = CGAffineTransformMakeScale(1.05, 1.05);
+//                         self.v_makeWordView.v_makeWordContainer.alpha = 0.8;
+//                     }
+//                     completion:^(BOOL finished){
+//                         [UIView animateWithDuration:1/15.0
+//                                          animations:^{
+//                                              self.v_makeWordView.v_makeWordContainer.transform = CGAffineTransformMakeScale(0.9, 0.9);
+//                                              self.v_makeWordView.v_makeWordContainer.alpha = 0.9;
+//                                          }
+//                                          completion:^(BOOL finished) {
+//                                              [UIView animateWithDuration:1/7.5
+//                                                               animations:^{
+//                                                                   self.v_makeWordView.v_makeWordContainer.transform = CGAffineTransformIdentity;                                                             
+//                                                                   self.v_makeWordView.v_makeWordContainer.alpha = 1.0;
+//                                                               }
+//                                               ];
+//                                          }
+//                          ];
+//                     }
+//     ];
+    
     [self.view addSubview:self.v_makeWordView];
     
 }
