@@ -45,5 +45,9 @@
 - (NSString*)saveImage:(UIImage*)image forPhotoWithID:(NSNumber*)photoid;
 - (NSString*)saveThumbnailImage:(UIImage*)image forPhotoWithID:(NSNumber*)photoid;
 
+// Mime-Me Methods
+- (NSString*)saveImage:(UIImage *)image forMimeWithID:(NSNumber *)mimeID;
+- (NSString*)saveThumbnailImage:(UIImage *)image forMimeWithID:(NSNumber *)mimeID;
+
 
 @end

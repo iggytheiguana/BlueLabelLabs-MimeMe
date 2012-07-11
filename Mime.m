@@ -7,6 +7,10 @@
 //
 
 #import "Mime.h"
+#import "AuthenticationManager.h"
+#import "User.h"
+#import "Word.h"
+#import "ImageManager.h"
 
 @implementation Mime
 @dynamic creatorid;
@@ -19,4 +23,39 @@
 @dynamic visibility;
 @dynamic word;
 @dynamic wordid;
+
+#pragma mark - Static Initializers
+//creates a Mime object
++ (Mime*)createMimeWithWordID:(NSNumber *)wordID
+                    withImage:(UIImage *)image
+                withThumbnail:(UIImage *)thumbnailImage {
+    
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime *retVal = (Mime*)[Resource createInstanceOfType:MIME withResourceContext:resourceContext];
+    
+    AuthenticationManager* authenticationManager = [AuthenticationManager instance];
+    User *user = (User*)[resourceContext resourceWithType:USER withID:authenticationManager.m_LoggedInUserID];
+    
+    if (user != nil) {
+        retVal.creatorid = user.objectid;
+        retVal.creatorname = user.username;
+    }
+    
+    retVal.wordid = wordID;
+    Word *word = (Word*)[resourceContext resourceWithType:WORD withID:wordID];
+    retVal.word = word.word1;
+    
+    ImageManager* imageManager = [ImageManager instance];
+    retVal.imageurl = [imageManager saveImage:image forMimeWithID:retVal.objectid];
+    retVal.thumbnailurl = [imageManager saveThumbnailImage:thumbnailImage forMimeWithID:retVal.objectid];
+    
+    retVal.numberofattempts = [NSNumber numberWithInt:0];
+    retVal.numberoftimesviewed = [NSNumber numberWithInt:0];
+    retVal.numbertimesanswered = [NSNumber numberWithInt:0];
+    
+    retVal.visibility = [NSNumber numberWithInt:0];
+    
+    return retVal;
+}
+
 @end

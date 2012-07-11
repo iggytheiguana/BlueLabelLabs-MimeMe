@@ -82,7 +82,7 @@
         <attribute name="thumbnailurl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="visibility" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="word" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="worid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="wordid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="MimeAnswer" representedClassName="MimeAnswer" parentEntity="resource" syncable="YES">
         <attribute name="answer" optional="YES" attributeType="String" syncable="YES"/>

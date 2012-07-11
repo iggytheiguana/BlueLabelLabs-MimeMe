@@ -30,3 +30,4 @@ NSString* const MEDITATIONINSTANCE          =@"meditationinstance";
 
 NSString* const FRIEND                      =@"Friend";
 NSString* const WORD                        =@"Word";
+NSString* const MIME                        =@"Mime";

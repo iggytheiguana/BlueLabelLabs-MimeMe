@@ -21,4 +21,9 @@
 @property (nonatomic,retain) NSNumber* visibility;
 @property (nonatomic,retain) NSString* word;
 @property (nonatomic,retain) NSNumber* wordid;
+
++ (Mime*)createMimeWithWordID:(NSNumber *)wordID
+                    withImage:(UIImage *)image
+                withThumbnail:(UIImage *)thumbnailImage;
+
 @end

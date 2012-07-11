@@ -18,6 +18,8 @@
     UITableViewCell     *m_tc_friendsHeader;
     UITableViewCell     *m_tc_addContactsHeader;
     
+    NSNumber            *m_mimeID;
+    
     NSArray             *m_friendsArray;
 }
 
@@ -28,12 +30,14 @@
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_friendsHeader;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_addContactsHeader;
 
+@property (nonatomic, retain)           NSNumber            *mimeID;
+
 @property (nonatomic, retain)           NSArray             *friendsArray;
 
 - (IBAction) onHomeButtonPressed:(id)sender;
 
 - (IBAction) onGoButtonPressed:(id)sender;
 
-+ (Mime_meFriendsPickerViewController*)createInstance;
++ (Mime_meFriendsPickerViewController*)createInstanceWithMimeID:(NSNumber *)mimeID;
 
 @end

@@ -16,6 +16,7 @@
 #import "Attributes.h"
 #import "Word.h"
 #import "Mime_meSettingsViewController.h"
+#import "Mime.h"
 
 @interface Mime_meMimeViewController ()
 
@@ -104,12 +105,9 @@
 }
 
 - (Word*) getRandomWord {
-//- (NSString*) getRandomWord {
     // We'll use an inverted Roulette Selection algorithm to find the 3 words to display to the user
     
     int wordCount = [[self.frc_words fetchedObjects] count];
-    
-//    NSString *randWordStr;
     
     if (wordCount > 0) {
         NSMutableArray *fitnessArray = [[NSMutableArray alloc]init];
@@ -120,14 +118,10 @@
             Word *word = [[self.frc_words fetchedObjects] objectAtIndex:i];
             
             // Get the fitness of the word and invert it
-            float fitnessF = 0.0;
+            float fitnessF = 1.0;   // the defualt fitness value is 1.0, therefore we need to add 1.0 to each fitness value
             if ([word.numberoftimesused floatValue] > 0.0) {
                 // invert the fitness value for this word so it is less likely to be chosen
-                fitnessF = (1.0 / [word.numberoftimesused floatValue]);
-            }
-            else {
-                // give unused words a fitness of 1.0 so they are more likely to be selected
-                fitnessF = 1.0;
+                fitnessF = (1.0 / ([word.numberoftimesused floatValue] + 1.0));
             }
             
             // Add the words fitness to the fitness total sum
@@ -166,20 +160,6 @@
     else {
         return nil;
     }
-        
-//        randWordStr = randomWord.word1;
-//        
-//        if (randWordStr == nil) {
-//            // If for any reason the wird is nil, use a wildcard
-//            randWordStr = @"MimeMe";
-//        }
-//    }
-//    else {
-//        // If for any reason there are no words available, use a wildcard
-//        randWordStr = @"MimeMe";
-//    }
-//    
-//    return randWordStr;
 }
 
 - (void) makeWordsArray {
@@ -227,17 +207,6 @@
     // Set up cloud enumerator for words
     self.wordsCloudEnumerator = [CloudEnumerator enumeratorForWords];
     self.wordsCloudEnumerator.delegate = self;
-    
-    // TEMP: Data arrays for tableview
-//    self.wordsArray = [NSArray arrayWithObjects:@"high-five", @"ghost", @"waldo", nil];
-    
-//    // Get 3 random words form the words FRC
-//    NSMutableArray *wordMtblArray = [[NSMutableArray alloc]init];
-//    for (int i = 0; i < 3; i++) {
-//        [wordMtblArray addObject:[self getRandomWord]];
-//    }
-//    self.wordsArray = wordMtblArray;
-//    [wordMtblArray release];
     
 }
 
@@ -324,9 +293,6 @@
             Word *word = [self.wordsArray objectAtIndex:(indexPath.row - 1)];
             
             cell.textLabel.text = word.word1;
-            
-//            Word *word = [[self.frc_words fetchedObjects] objectAtIndex:(indexPath.row - 1)];
-//            cell.textLabel.text = word.word1;
             
             return cell;
         }
@@ -506,11 +472,14 @@
         self.chosenWord.numberoftimesused = [NSNumber numberWithInt:numTimesUsed];
     }
     
-    // Save the new word or updates to an existing word
+    // Create the Mime object
+    Mime *mime = [Mime createMimeWithWordID:self.chosenWord.objectid withImage:image withThumbnail:thumbnailImage];
+    
+    // Save
     [resourceContext save:NO onFinishCallback:nil trackProgressWith:nil];
     
     // Launch the friends picker
-    Mime_meFriendsPickerViewController *friendsViewController = [Mime_meFriendsPickerViewController createInstance];
+    Mime_meFriendsPickerViewController *friendsViewController = [Mime_meFriendsPickerViewController createInstanceWithMimeID:mime.objectid];
     [self.navigationController pushViewController:friendsViewController animated:YES];
     
 }

@@ -337,5 +337,24 @@ static inline double radians (double degrees) {
     return path;
 }
 
+#pragma mark - Mime-Me Methods
+- (NSString*)saveImage:(UIImage *)image forMimeWithID:(NSNumber *)mimeID {
+    
+    NSString* fileNameWithoutExtension = [NSString stringWithFormat:@"%@-imageurl",mimeID];
+    
+    NSString* path = [self fullPathForPhotoWithName:fileNameWithoutExtension];
+    [UIImageJPEGRepresentation(image, .5) writeToFile:path atomically:YES];
+    return path;
+}
+
+- (NSString*)saveThumbnailImage:(UIImage *)image forMimeWithID:(NSNumber *)mimeID {
+    
+    NSString* fileNameWithoutExtension = [NSString stringWithFormat:@"%@-thumbnailurl", mimeID];
+    
+    NSString* path = [self fullPathForPhotoWithName:fileNameWithoutExtension];
+    [UIImageJPEGRepresentation(image, .5) writeToFile:path atomically:YES];
+    return path;
+}
+
 
 @end

@@ -20,6 +20,7 @@
 @synthesize tbl_friends             = m_tbl_friends;
 @synthesize tc_friendsHeader        = m_tc_friendsHeader;
 @synthesize tc_addContactsHeader    = m_tc_addContactsHeader;
+@synthesize mimeID                  = m_mimeID;
 @synthesize friendsArray            = m_friendsArray;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -280,9 +281,10 @@
 
 
 #pragma mark - Static Initializers
-+ (Mime_meFriendsPickerViewController*)createInstance {
++ (Mime_meFriendsPickerViewController*)createInstanceWithMimeID:(NSNumber *)mimeID {
     Mime_meFriendsPickerViewController* instance = [[Mime_meFriendsPickerViewController alloc]initWithNibName:@"Mime_meFriendsPickerViewController" bundle:nil];
     [instance autorelease];
+    instance.mimeID = mimeID;
     return instance;
 }
 
