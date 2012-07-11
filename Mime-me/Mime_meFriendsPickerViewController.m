@@ -9,6 +9,7 @@
 #import "Mime_meFriendsPickerViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Mime_meMenuViewController.h"
+#import "MimeAnswer.h"
 
 @interface Mime_meFriendsPickerViewController ()
 
@@ -276,7 +277,37 @@
 
 #pragma mark - UIButton Handlers
 - (IBAction) onGoButtonPressed:(id)sender {
+    // Create MimeAnswer objects for each tableview row selected
     
+    ResourceContext *resourceContext = [ResourceContext instance];
+    
+    // First check if "Public" has been seleced
+    UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+    
+    if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
+        // Create a public MimeAnswer
+        NSLog(@"Pubic");
+        
+        // Create a Public MimeAnswer object
+//        [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetUserID:nil isPublic:YES];
+    }
+    
+    NSInteger count = [self.tbl_friends numberOfRowsInSection:0];
+    
+    // Now itterate through each row of friends and crate a MimeAnswer for each friend row selected
+    for (int i = 2; i < count; i++) {
+        UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        
+        if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
+            // Create a MimeAnswer for friend target
+            NSLog([self.friendsArray objectAtIndex:(i - 2)]);
+            
+//            [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetUserID:nil isPublic:YES];
+        }
+    }
+    
+    // Save
+    [resourceContext save:NO onFinishCallback:nil trackProgressWith:nil];
 }
 
 

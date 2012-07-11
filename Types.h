@@ -30,3 +30,4 @@ extern NSString* const MEDITATION;
 extern NSString* const FRIEND;
 extern NSString* const WORD;
 extern NSString* const MIME;
+extern NSString* const MIMEANSWER;
