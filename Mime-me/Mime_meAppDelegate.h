@@ -33,5 +33,6 @@
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+- (NSString*) getImageCacheStorageDirectory;
 
 @end

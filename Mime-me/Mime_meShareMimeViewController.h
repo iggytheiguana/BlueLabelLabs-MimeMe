@@ -10,7 +10,7 @@
 #import "BaseViewController.h"
 
 @interface Mime_meShareMimeViewController : BaseViewController {
-    UIImageView     *m_iv_image;
+    UIImageView     *m_iv_photo;
     
     UIView          *m_v_sentContainer;
     UIView          *m_v_sentHeader;
@@ -24,10 +24,11 @@
     UIButton        *m_btn_scrapbook;
     
     NSNumber        *m_mimeID;
+    CGSize          m_imageSize;
     
 }
 
-@property (nonatomic, retain) IBOutlet  UIImageView     *iv_image;
+@property (nonatomic, retain) IBOutlet  UIImageView     *iv_photo;
 
 @property (nonatomic, retain) IBOutlet  UIView          *v_sentContainer;
 @property (nonatomic, retain) IBOutlet  UIView          *v_sentHeader;
@@ -42,6 +43,7 @@
 
 
 @property (nonatomic, retain)           NSNumber        *mimeID;
+@property                               CGSize          imageSize;
 
 - (IBAction) onCloseButtonPressed:(id)sender;
 - (IBAction) onOkButtonPressed:(id)sender;

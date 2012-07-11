@@ -11,13 +11,17 @@
 #import "Mime_meMenuViewController.h"
 #import "Mime.h"
 #import "ImageManager.h"
+#import "ImageDownloadResponse.h"
+#import "Macros.h"
+
+#define kMIMEID @"mimeid"
 
 @interface Mime_meShareMimeViewController ()
 
 @end
 
 @implementation Mime_meShareMimeViewController
-@synthesize iv_image            = m_iv_image;
+@synthesize iv_photo            = m_iv_photo;
 @synthesize v_sentContainer     = m_v_sentContainer;
 @synthesize v_sentHeader        = m_v_sentHeader;
 @synthesize v_background        = m_v_background;
@@ -28,6 +32,7 @@
 @synthesize btn_email           = m_btn_email;
 @synthesize btn_scrapbook       = m_btn_scrapbook;
 @synthesize mimeID              = m_mimeID;
+@synthesize imageSize           = m_imageSize;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -91,22 +96,46 @@
     [oneFingerTap setNumberOfTouchesRequired:1];
     
     // Add the gesture to the photo image view
-    [self.iv_image addGestureRecognizer:oneFingerTap];
+    [self.iv_photo addGestureRecognizer:oneFingerTap];
     
     //enable gesture events on the photo
-    [self.iv_image setUserInteractionEnabled:YES];
+    [self.iv_photo setUserInteractionEnabled:YES];
     
     // Hide the sent container views so we can animate the showing of them
     self.v_sentContainer.hidden = YES;
     self.v_background.hidden = YES;
     
-//    // Set the Mime image on the image view
-//    ResourceContext* resourceContext = [ResourceContext instance];
-//    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
-//    
-//    ImageManager* imageManager = [ImageManager instance];
-//    UIImage* image = [imageManager downloadImage:mime.imageurl withUserInfo:nil atCallback:nil];
-//    [self.iv_image setImage:image];
+    // Setup notification for device orientation change
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didRotate)
+                                                 name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+    
+    // Set the Mime image on the image view
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+    
+    ImageManager* imageManager = [ImageManager instance];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:mime.objectid forKey:kMIMEID];
+    
+    if (mime.imageurl != nil && ![mime.imageurl isEqualToString:@""]) {
+        Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
+        callback.fireOnMainThread = YES;
+        UIImage* image = [imageManager downloadImage:mime.imageurl withUserInfo:nil atCallback:callback];
+        [callback release];
+        if (image != nil) {
+            self.imageSize = image.size;
+            
+            if (self.imageSize.height > self.imageSize.width) {
+                self.iv_photo.contentMode = UIViewContentModeScaleAspectFill;
+            }
+            else {
+                self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
+            }
+            self.iv_photo.image = image;
+            
+            [self.view setNeedsDisplay];
+        }
+    }
     
 }
 
@@ -116,7 +145,7 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     
-    self.iv_image = nil;
+    self.iv_photo = nil;
     self.v_sentContainer = nil;
     self.v_sentHeader = nil;
     self.v_background = nil;
@@ -131,13 +160,40 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    // Animate the showing of the sent container views
-    [self showSentContainer];
+//    // Animate the showing of the sent container views
+//    [self showSentContainer];
+    
+    // Adjust layout based on orientation
+    [self didRotate];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return (interfaceOrientation == UIInterfaceOrientationPortrait ||
+            interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+            interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+}
+
+#pragma mark - Landscape Photo Rotation Event Handler
+- (void) didRotate {
+    if (self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft || self.interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+//        self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
+        
+        [self.iv_photo setUserInteractionEnabled:NO];
+        [self onCloseButtonPressed:nil];
+    }
+    else {
+//        if (self.imageSize.height > self.imageSize.width) {
+//            self.iv_photo.contentMode = UIViewContentModeScaleAspectFill;
+//        }
+//        else {
+//            self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
+//        }
+        
+        [self.iv_photo setUserInteractionEnabled:YES];
+        [self showSentContainer];
+    }
+    
 }
 
 #pragma mark - UIButton Handlers
@@ -201,6 +257,39 @@
                          [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.navigationController.view cache:YES];
                      }];
     [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
+}
+
+#pragma mark - ImageManager Delegate Methods
+- (void)onImageDownloadComplete:(CallbackResult*)result {
+    NSString* activityName = @"Mime_meShareMimeViewController.onImageDownloadComplete:";
+    NSDictionary* userInfo = result.context;
+    NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
+    ImageDownloadResponse* response = (ImageDownloadResponse*)result.response;
+    
+    if ([response.didSucceed boolValue] == YES) {
+        if ([mimeID isEqualToNumber:self.mimeID]) {
+            //we only draw the image if this view hasnt been repurposed for another photo
+            LOG_IMAGE(1,@"%@settings UIImage object equal to downloaded response",activityName);
+            [self.iv_photo performSelectorOnMainThread:@selector(setImage:) withObject:response.image waitUntilDone:NO];
+            
+            self.imageSize = response.image.size;
+            
+            if (self.imageSize.height > self.imageSize.width) {
+                self.iv_photo.contentMode = UIViewContentModeScaleAspectFill;
+            }
+            else {
+                self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
+            }
+            
+            [self.view setNeedsDisplay];
+        }
+    }
+    else {
+        self.iv_photo.backgroundColor = [UIColor blackColor];
+        self.iv_photo.image = [UIImage imageNamed:@"logo-MimeMe.png"];
+        LOG_IMAGE(1,@"%@Image failed to download",activityName);
+    }
+    
 }
 
 

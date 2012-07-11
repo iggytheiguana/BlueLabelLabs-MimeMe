@@ -501,7 +501,7 @@
     Mime *mime = [Mime createMimeWithWordID:self.chosenWord.objectid withImage:image withThumbnail:thumbnailImage];
     
     // Save
-    [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
+    [resourceContext save:NO onFinishCallback:nil trackProgressWith:nil];
     
     // Launch the friends picker
     Mime_meFriendsPickerViewController *friendsViewController = [Mime_meFriendsPickerViewController createInstanceWithMimeID:mime.objectid];
