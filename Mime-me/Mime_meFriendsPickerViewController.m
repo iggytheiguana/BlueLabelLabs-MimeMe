@@ -289,7 +289,7 @@
         NSLog(@"Pubic");
         
         // Create a Public MimeAnswer object
-//        [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetUserID:nil isPublic:YES];
+        [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetUserID:nil isPublic:YES];
     }
     
     NSInteger count = [self.tbl_friends numberOfRowsInSection:0];
@@ -302,7 +302,7 @@
             // Create a MimeAnswer for friend target
             NSLog([self.friendsArray objectAtIndex:(i - 2)]);
             
-//            [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetUserID:nil isPublic:YES];
+            [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetUserID:nil isPublic:NO];
         }
     }
     
