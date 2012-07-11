@@ -311,7 +311,7 @@
     [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
     
     // Now show the confirmation share screen
-    Mime_meShareMimeViewController *shareViewController = [Mime_meShareMimeViewController createInstance];
+    Mime_meShareMimeViewController *shareViewController = [Mime_meShareMimeViewController createInstanceWithMimeID:self.mimeID];
     [self.navigationController pushViewController:shareViewController animated:YES];
     
 }

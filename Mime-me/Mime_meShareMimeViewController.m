@@ -9,14 +9,18 @@
 #import "Mime_meShareMimeViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Mime_meMenuViewController.h"
+#import "Mime.h"
+#import "ImageManager.h"
 
 @interface Mime_meShareMimeViewController ()
 
 @end
 
 @implementation Mime_meShareMimeViewController
+@synthesize iv_image            = m_iv_image;
 @synthesize v_sentContainer     = m_v_sentContainer;
 @synthesize v_sentHeader        = m_v_sentHeader;
+@synthesize mimeID              = m_mimeID;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -58,6 +62,14 @@
     // Set the newly created shape layer as the mask for the view's layer
     self.v_sentHeader.layer.mask = maskLayer;
     
+//    // Set the Mime image on the image view
+//    ResourceContext* resourceContext = [ResourceContext instance];
+//    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+//    
+//    ImageManager* imageManager = [ImageManager instance];
+//    UIImage* image = [imageManager downloadImage:mime.imageurl withUserInfo:nil atCallback:nil];
+//    [self.iv_image setImage:image];
+    
 }
 
 - (void)viewDidUnload
@@ -66,6 +78,7 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     
+    self.iv_image = nil;
     self.v_sentContainer = nil;
     self.v_sentHeader = nil;
 }
@@ -89,9 +102,10 @@
 
 
 #pragma mark - Static Initializers
-+ (Mime_meShareMimeViewController*)createInstance {
++ (Mime_meShareMimeViewController*)createInstanceWithMimeID:(NSNumber *)mimeID {
     Mime_meShareMimeViewController* instance = [[Mime_meShareMimeViewController alloc]initWithNibName:@"Mime_meShareMimeViewController" bundle:nil];
     [instance autorelease];
+    instance.mimeID = mimeID;
     return instance;
 }
 
