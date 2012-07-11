@@ -42,6 +42,14 @@
 		52324CE615ABA86C00D5DD91 /* Mime_meMimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52324CE415ABA86C00D5DD91 /* Mime_meMimeViewController.xib */; };
 		52324CE815AC9C7D00D5DD91 /* Mime_meUIMakeWordView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52324CE715AC9C7D00D5DD91 /* Mime_meUIMakeWordView.xib */; };
 		52324CEB15AC9E9A00D5DD91 /* Mime_meUIMakeWordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 52324CEA15AC9E9A00D5DD91 /* Mime_meUIMakeWordView.m */; };
+		52324CF615AD63F800D5DD91 /* f_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 52324CF415AD63F800D5DD91 /* f_logo.png */; };
+		52324CF915AD644000D5DD91 /* twitter-bird-white-on-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 52324CF815AD644000D5DD91 /* twitter-bird-white-on-blue.png */; };
+		52324CFC15AD69D200D5DD91 /* icon-favorite-yellow.png in Resources */ = {isa = PBXBuildFile; fileRef = 52324CFA15AD69D200D5DD91 /* icon-favorite-yellow.png */; };
+		52324CFD15AD69D200D5DD91 /* icon-favorite-yellow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52324CFB15AD69D200D5DD91 /* icon-favorite-yellow@2x.png */; };
+		52324D0015AD6D5400D5DD91 /* icon-favorite.png in Resources */ = {isa = PBXBuildFile; fileRef = 52324CFE15AD6D5400D5DD91 /* icon-favorite.png */; };
+		52324D0115AD6D5400D5DD91 /* icon-favorite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52324CFF15AD6D5400D5DD91 /* icon-favorite@2x.png */; };
+		52324D0815AD6F6400D5DD91 /* icon-email.png in Resources */ = {isa = PBXBuildFile; fileRef = 52324D0615AD6F6400D5DD91 /* icon-email.png */; };
+		52324D0915AD6F6400D5DD91 /* icon-email@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52324D0715AD6F6400D5DD91 /* icon-email@2x.png */; };
 		529BE9C915A2225D00B7346A /* logo-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C715A2225D00B7346A /* logo-MimeMe.png */; };
 		529BE9CA15A2225D00B7346A /* logo-MimeMe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */; };
 		529BE9CD15A22A1900B7346A /* logo_wName-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */; };
@@ -242,6 +250,14 @@
 		52324CE715AC9C7D00D5DD91 /* Mime_meUIMakeWordView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meUIMakeWordView.xib; sourceTree = "<group>"; };
 		52324CE915AC9E9A00D5DD91 /* Mime_meUIMakeWordView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meUIMakeWordView.h; sourceTree = "<group>"; };
 		52324CEA15AC9E9A00D5DD91 /* Mime_meUIMakeWordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meUIMakeWordView.m; sourceTree = "<group>"; };
+		52324CF415AD63F800D5DD91 /* f_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = f_logo.png; sourceTree = "<group>"; };
+		52324CF815AD644000D5DD91 /* twitter-bird-white-on-blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter-bird-white-on-blue.png"; sourceTree = "<group>"; };
+		52324CFA15AD69D200D5DD91 /* icon-favorite-yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-favorite-yellow.png"; sourceTree = "<group>"; };
+		52324CFB15AD69D200D5DD91 /* icon-favorite-yellow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-favorite-yellow@2x.png"; sourceTree = "<group>"; };
+		52324CFE15AD6D5400D5DD91 /* icon-favorite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-favorite.png"; sourceTree = "<group>"; };
+		52324CFF15AD6D5400D5DD91 /* icon-favorite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-favorite@2x.png"; sourceTree = "<group>"; };
+		52324D0615AD6F6400D5DD91 /* icon-email.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-email.png"; sourceTree = "<group>"; };
+		52324D0715AD6F6400D5DD91 /* icon-email@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-email@2x.png"; sourceTree = "<group>"; };
 		529BE9C715A2225D00B7346A /* logo-MimeMe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-MimeMe.png"; sourceTree = "<group>"; };
 		529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-MimeMe@2x.png"; sourceTree = "<group>"; };
 		529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo_wName-MimeMe.png"; sourceTree = "<group>"; };
@@ -1169,6 +1185,14 @@
 				52324CC215ABA1DA00D5DD91 /* icon-close-highlighted@2x.png */,
 				520DD0FB15A785E500C58BF1 /* waldo.png */,
 				520DD0FC15A785E500C58BF1 /* waldo@2x.png */,
+				52324CF415AD63F800D5DD91 /* f_logo.png */,
+				52324CF815AD644000D5DD91 /* twitter-bird-white-on-blue.png */,
+				52324CFA15AD69D200D5DD91 /* icon-favorite-yellow.png */,
+				52324CFB15AD69D200D5DD91 /* icon-favorite-yellow@2x.png */,
+				52324CFE15AD6D5400D5DD91 /* icon-favorite.png */,
+				52324CFF15AD6D5400D5DD91 /* icon-favorite@2x.png */,
+				52324D0615AD6F6400D5DD91 /* icon-email.png */,
+				52324D0715AD6F6400D5DD91 /* icon-email@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1298,6 +1322,14 @@
 				52324CDE15ABA32B00D5DD91 /* Mime_meMenuViewController.xib in Resources */,
 				52324CE615ABA86C00D5DD91 /* Mime_meMimeViewController.xib in Resources */,
 				52324CE815AC9C7D00D5DD91 /* Mime_meUIMakeWordView.xib in Resources */,
+				52324CF615AD63F800D5DD91 /* f_logo.png in Resources */,
+				52324CF915AD644000D5DD91 /* twitter-bird-white-on-blue.png in Resources */,
+				52324CFC15AD69D200D5DD91 /* icon-favorite-yellow.png in Resources */,
+				52324CFD15AD69D200D5DD91 /* icon-favorite-yellow@2x.png in Resources */,
+				52324D0015AD6D5400D5DD91 /* icon-favorite.png in Resources */,
+				52324D0115AD6D5400D5DD91 /* icon-favorite@2x.png in Resources */,
+				52324D0815AD6F6400D5DD91 /* icon-email.png in Resources */,
+				52324D0915AD6F6400D5DD91 /* icon-email@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -49,8 +49,8 @@
         [self.v_makeWordContainer.layer setShadowRadius:5.0f];
         [self.v_makeWordContainer.layer setShadowOffset:CGSizeMake(0.0f, 0.0f)];
         [self.v_makeWordContainer.layer setMasksToBounds:NO];
-        CGPathRef shadowPath = [UIBezierPath bezierPathWithRect:self.view.layer.bounds].CGPath;
-        [self.view.layer setShadowPath:shadowPath];
+        CGPathRef shadowPath = [UIBezierPath bezierPathWithRect:self.v_makeWordContainer.layer.bounds].CGPath;
+        [self.v_makeWordContainer.layer setShadowPath:shadowPath];
         
         // Add rounded corners to container view
         [self.v_makeWordContainer.layer setCornerRadius:8.0f];
@@ -66,7 +66,7 @@
         maskLayer.frame = self.v_makeWordHeader.bounds;
         maskLayer.path = maskPath.CGPath;
         
-        // Set the newly created shape layer as the mask for the image view's layer
+        // Set the newly created shape layer as the mask for the view's layer
         self.v_makeWordHeader.layer.mask = maskLayer;
         
         // Add reveal animation to whole view

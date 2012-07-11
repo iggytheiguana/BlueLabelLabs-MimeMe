@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Mime_meMenuViewController.h"
 #import "MimeAnswer.h"
+#import "Mime_meShareMimeViewController.h"
 
 @interface Mime_meFriendsPickerViewController ()
 
@@ -307,7 +308,12 @@
     }
     
     // Save
-    [resourceContext save:NO onFinishCallback:nil trackProgressWith:nil];
+    [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
+    
+    // Now show the confirmation share screen
+    Mime_meShareMimeViewController *shareViewController = [Mime_meShareMimeViewController createInstance];
+    [self.navigationController pushViewController:shareViewController animated:YES];
+    
 }
 
 
