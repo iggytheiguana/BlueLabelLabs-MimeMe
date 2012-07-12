@@ -19,6 +19,7 @@
 #import "ImageManager.h"
 #import "ImageDownloadResponse.h"
 #import "DateTimeHelper.h"
+#import "UIImage+UIImageCategory.h"
 
 #define kMIMEID @"mimeid"
 #define kMAXROWS 3
@@ -43,8 +44,8 @@
 @synthesize staffPicksArray     = m_staffPicksArray;
 
 #pragma mark - Properties
-- (NSFetchedResultsController*)frc_words {
-    NSString* activityName = @"Mime_meGuessMenuViewController.frc_words:";
+- (NSFetchedResultsController*)frc_mimes {
+    NSString* activityName = @"Mime_meGuessMenuViewController.frc_mimes:";
     if (__frc_mimes != nil) {
         return __frc_mimes;
     }
@@ -54,7 +55,7 @@
     Mime_meAppDelegate* app = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:MIME inManagedObjectContext:app.managedObjectContext];
     
-    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:YES];
+    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     [fetchRequest setEntity:entityDescription];
@@ -162,12 +163,11 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger count;
-    int rows;
+    NSInteger rows;
     
     if (section == 0) {
         // From Friends section
-//        count = [self.friendsArray count] + 2;  // Add 2 to the count to include 1. Header, and 2. More/None
-        count = [[self.frc_words fetchedObjects]count] + 2;
+        count = [[self.frc_mimes fetchedObjects]count] + 2;     // Add 2 to the count to include 1. Header, and 2. More
         rows = MIN(count, kMAXROWSFRIENDS + 2);   // Maximize the number of rows per section
     }
     else if (section == 1) {
@@ -189,7 +189,7 @@
     if (indexPath.section == 0) {
         // From Friends section
         
-        NSInteger count = MIN([[self.frc_words fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
+        NSInteger count = MIN([[self.frc_mimes fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
         
         if (indexPath.row == 0) {
             // Set the header
@@ -216,6 +216,23 @@
                         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
                         
                         cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+                        cell.imageView.layer.masksToBounds = YES;
+                        cell.imageView.layer.cornerRadius = 8.0;
+                        cell.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+                        cell.imageView.layer.borderWidth = 1.0;
+                        
+//                        // Add drop shadow to cell image view
+//                        [cell.imageView.layer setShadowColor:[UIColor blackColor].CGColor];
+//                        [cell.imageView.layer setShadowOpacity:0.7f];
+//                        [cell.imageView.layer setShadowRadius:2.0f];
+//                        [cell.imageView.layer setShadowOffset:CGSizeMake(0.0f, 0.0f)];
+//                        [cell.imageView.layer setMasksToBounds:NO];
+//                        CGPathRef shadowPath = [UIBezierPath bezierPathWithRect:cell.imageView.layer.bounds].CGPath;
+//                        [cell.imageView.layer setShadowPath:shadowPath];
+//                        
+//                        // Add rounded corners to container view
+//                        [cell.imageView.layer setCornerRadius:8.0f];
+//                        [cell.imageView.layer setOpaque:NO];
                         
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         
@@ -227,7 +244,6 @@
                     
                     NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
                     cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
-//                    cell.detailTextLabel.text = [mime.datecreated stringValue];
                     
                     ImageManager* imageManager = [ImageManager instance];
                     NSDictionary* userInfo = [NSDictionary dictionaryWithObject:mime.objectid forKey:kMIMEID];
@@ -239,13 +255,13 @@
                         [callback release];
                         if (image != nil) {
                             
-                            cell.imageView.image = image;
+                            cell.imageView.image = [image imageScaledToSize:CGSizeMake(50, 50)];
                                                         
                             [self.view setNeedsDisplay];
                         }
                         else {
-                            cell.imageView.backgroundColor = [UIColor blackColor];
-                            cell.imageView.image = [UIImage imageNamed:@"logo-MimeMe.png"];
+                            cell.imageView.backgroundColor = [UIColor lightGrayColor];
+                            cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(50, 50)];
                         }
                     }
                     
@@ -493,13 +509,45 @@
  */
 
 #pragma mark - Table view delegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSUInteger count;
+    NSUInteger rows;
+    
+    if (indexPath.section == 0) {
+        count = [[self.frc_mimes fetchedObjects]count];
+        rows = MIN(count, kMAXROWSFRIENDS);
+    }
+    else if (indexPath.section == 1) {
+        // Recent section
+        count = [self.recentArray count];
+        rows = MIN(count, kMAXROWS);
+    }
+    else {
+        // Staff Picks section
+        count = [self.staffPicksArray count];
+        rows = MIN(count, kMAXROWS);
+    }
+    
+    if (indexPath.row == 0) {
+        // Header
+        return 50;
+    }
+    else if (indexPath.row > rows) {
+        // Last row
+        return 50;
+    }
+    else {
+        return 60;
+    }
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (indexPath.section == 0) {
         // Friends mime selected
-        NSInteger count = MIN([[self.frc_words fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
+        NSInteger count = MIN([[self.frc_mimes fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
         
         if (indexPath.row > 0 && indexPath.row <= count) {
             
@@ -578,7 +626,7 @@
        newIndexPath:(NSIndexPath *)newIndexPath {
     
     NSString* activityName = @"Mime_meGuessMenuViewController.controller.didChangeObject:";
-    if (controller == self.frc_words) {
+    if (controller == self.frc_mimes) {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
     }
     else {

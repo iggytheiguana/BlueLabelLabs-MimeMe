@@ -50,6 +50,7 @@
 		52324D0115AD6D5400D5DD91 /* icon-favorite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52324CFF15AD6D5400D5DD91 /* icon-favorite@2x.png */; };
 		52324D0815AD6F6400D5DD91 /* icon-email.png in Resources */ = {isa = PBXBuildFile; fileRef = 52324D0615AD6F6400D5DD91 /* icon-email.png */; };
 		52324D0915AD6F6400D5DD91 /* icon-email@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52324D0715AD6F6400D5DD91 /* icon-email@2x.png */; };
+		52324D1215AE86D400D5DD91 /* UIImage+UIImageCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 52324D1115AE86D400D5DD91 /* UIImage+UIImageCategory.m */; };
 		529BE9C915A2225D00B7346A /* logo-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C715A2225D00B7346A /* logo-MimeMe.png */; };
 		529BE9CA15A2225D00B7346A /* logo-MimeMe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */; };
 		529BE9CD15A22A1900B7346A /* logo_wName-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */; };
@@ -258,6 +259,8 @@
 		52324CFF15AD6D5400D5DD91 /* icon-favorite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-favorite@2x.png"; sourceTree = "<group>"; };
 		52324D0615AD6F6400D5DD91 /* icon-email.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-email.png"; sourceTree = "<group>"; };
 		52324D0715AD6F6400D5DD91 /* icon-email@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-email@2x.png"; sourceTree = "<group>"; };
+		52324D1015AE86D400D5DD91 /* UIImage+UIImageCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+UIImageCategory.h"; sourceTree = "<group>"; };
+		52324D1115AE86D400D5DD91 /* UIImage+UIImageCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIImageCategory.m"; sourceTree = "<group>"; };
 		529BE9C715A2225D00B7346A /* logo-MimeMe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-MimeMe.png"; sourceTree = "<group>"; };
 		529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-MimeMe@2x.png"; sourceTree = "<group>"; };
 		529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo_wName-MimeMe.png"; sourceTree = "<group>"; };
@@ -1079,6 +1082,8 @@
 				C523A07B159F7FE5004AA39C /* NSMutableArray+NSMutableArrayCategory.m */,
 				C523A07C159F7FE5004AA39C /* UILabel+ScrollingHighlightAnimation.h */,
 				C523A07D159F7FE5004AA39C /* UILabel+ScrollingHighlightAnimation.m */,
+				52324D1015AE86D400D5DD91 /* UIImage+UIImageCategory.h */,
+				52324D1115AE86D400D5DD91 /* UIImage+UIImageCategory.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1486,6 +1491,7 @@
 				52324CE115ABA36000D5DD91 /* Mime_meAppDelegate.m in Sources */,
 				52324CE515ABA86C00D5DD91 /* Mime_meMimeViewController.m in Sources */,
 				52324CEB15AC9E9A00D5DD91 /* Mime_meUIMakeWordView.m in Sources */,
+				52324D1215AE86D400D5DD91 /* UIImage+UIImageCategory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

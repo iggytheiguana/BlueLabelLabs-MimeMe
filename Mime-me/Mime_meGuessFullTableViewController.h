@@ -10,7 +10,7 @@
 #import "BaseViewController.h"
 #import "Mime_meUINavigationHeaderView.h"
 
-@interface Mime_meGuessFullTableViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate > {
+@interface Mime_meGuessFullTableViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate > {
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
     
     UITableView         *m_tbl_mimes;
@@ -23,6 +23,8 @@
     NSArray             *m_staffPicksArray;
     
 }
+
+@property (nonatomic, retain)           NSFetchedResultsController      *frc_mimes;
 
 @property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
 
