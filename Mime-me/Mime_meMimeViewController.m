@@ -170,7 +170,11 @@
     
     // Get 3 random words from the words FRC
     for (int i = 0; i < 3; i++) {
-        [wordMtblArray addObject:[self getRandomWord]];
+        Word* randomWord = [self getRandomWord];
+        if (randomWord != nil) 
+        {
+            [wordMtblArray addObject:randomWord];
+        }
     }
     
     self.wordsArray = [wordMtblArray retain];
@@ -501,7 +505,7 @@
     Mime *mime = [Mime createMimeWithWordID:self.chosenWord.objectid withImage:image withThumbnail:thumbnailImage];
     
     // Save
-    [resourceContext save:NO onFinishCallback:nil trackProgressWith:nil];
+    [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
     
     // Launch the friends picker
     Mime_meFriendsPickerViewController *friendsViewController = [Mime_meFriendsPickerViewController createInstanceWithMimeID:mime.objectid];

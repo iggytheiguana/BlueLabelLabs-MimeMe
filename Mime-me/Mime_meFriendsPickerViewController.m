@@ -308,7 +308,7 @@
     }
     
     // Save
-    [resourceContext save:NO onFinishCallback:nil trackProgressWith:nil];
+    [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
     
     // Now show the confirmation share screen
     Mime_meShareMimeViewController *shareViewController = [Mime_meShareMimeViewController createInstanceWithMimeID:self.mimeID];

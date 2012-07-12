@@ -343,17 +343,23 @@
             NSNumber* currNumberValue = (NSNumber*)currVal;
             NSNumber* otherNumberValue = (NSNumber*)value;
             
-            if (![currNumberValue isEqualToNumber:otherNumberValue] &&
-                ![attributeMetadata.islocked boolValue]) {
-                //the values differ and the local value is not locked
-                retVal = YES;
-                
+            if (otherNumberValue != nil)
+            {
+                if (![currNumberValue isEqualToNumber:otherNumberValue] &&
+                    ![attributeMetadata.islocked boolValue]) {
+                    //the values differ and the local value is not locked
+                    retVal = YES;
+                    
+                }
+                else {
+                    //  LOG_RESOURCE(0,@"%@Skipping copying of attribute %@ as the attribute is either locked or the same on source object",activityName,attributeName);
+                    retVal = NO;
+                }
             }
             else {
-              //  LOG_RESOURCE(0,@"%@Skipping copying of attribute %@ as the attribute is either locked or the same on source object",activityName,attributeName);
+                //LOG_RESOURCE(0,@"Skipping copying of attribute %@ as it is nil",activityName,attributeName);
                 retVal = NO;
             }
-          
             
         }
       

@@ -112,13 +112,7 @@ insertIntoResourceContext:(ResourceContext *)context
         retVal.islocked = [NSNumber numberWithBool:YES];
     }
     
-    //we lock the audiourl to prevent overwriting
-    if([lowerCaseName isEqualToString:AUDIOURL] ||
-       [lowerCaseName isEqualToString:TITLE] ||
-       [lowerCaseName isEqualToString:IMAGEURL]) {
-        retVal.islocked = [NSNumber numberWithBool:YES];
-        retVal.islocal = [NSNumber numberWithBool:YES];
-    }
+
     
     
     
@@ -161,7 +155,8 @@ insertIntoResourceContext:(ResourceContext *)context
         [lowerCaseName isEqualToString:NUMLIKES] ||
         [lowerCaseName isEqualToString:NUMPEOPLE] ||
         [lowerCaseName isEqualToString:NUMTIMESCOMPLETED] ||
-        [lowerCaseName isEqualToString:NUMTIMESSTARTED]) {
+        [lowerCaseName isEqualToString:NUMTIMESSTARTED] ||
+        [lowerCaseName isEqualToString:NUMBEROFTIMESUSED]) {
         //these are all counter variables
         retVal.iscounter = [NSNumber numberWithBool:YES];
     }
