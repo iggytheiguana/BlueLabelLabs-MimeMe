@@ -135,6 +135,11 @@
             
             [self.view setNeedsDisplay];
         }
+        else {
+            self.iv_photo.contentMode = UIViewContentModeCenter;
+            self.iv_photo.backgroundColor = [UIColor blackColor];
+            self.iv_photo.image = [UIImage imageNamed:@"logo-MimeMe.png"];
+        }
     }
     
 }
@@ -285,6 +290,7 @@
         }
     }
     else {
+        self.iv_photo.contentMode = UIViewContentModeCenter;
         self.iv_photo.backgroundColor = [UIColor blackColor];
         self.iv_photo.image = [UIImage imageNamed:@"logo-MimeMe.png"];
         LOG_IMAGE(1,@"%@Image failed to download",activityName);

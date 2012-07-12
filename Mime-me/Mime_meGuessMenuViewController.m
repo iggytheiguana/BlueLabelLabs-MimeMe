@@ -12,14 +12,25 @@
 #import "Mime_meMimeViewController.h"
 #import "Mime_meGuessFullTableViewController.h"
 #import "Mime_meSettingsViewController.h"
+#import "Mime_meAppDelegate.h"
+#import "Attributes.h"
+#import "Macros.h"
+#import "Mime.h"
+#import "ImageManager.h"
+#import "ImageDownloadResponse.h"
+#import "DateTimeHelper.h"
 
+#define kMIMEID @"mimeid"
 #define kMAXROWS 3
+#define kMAXROWSFRIENDS 5
 
 @interface Mime_meGuessMenuViewController ()
 
 @end
 
 @implementation Mime_meGuessMenuViewController
+@synthesize frc_mimes           = __frc_mimes;
+
 @synthesize nv_navigationHeader = m_nv_navigationHeader;
 
 @synthesize tbl_mimes           = m_tbl_mimes;
@@ -31,6 +42,59 @@
 @synthesize recentArray         = m_recentArray;
 @synthesize staffPicksArray     = m_staffPicksArray;
 
+#pragma mark - Properties
+- (NSFetchedResultsController*)frc_words {
+    NSString* activityName = @"Mime_meGuessMenuViewController.frc_words:";
+    if (__frc_mimes != nil) {
+        return __frc_mimes;
+    }
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime_meAppDelegate* app = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:MIME inManagedObjectContext:app.managedObjectContext];
+    
+    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:YES];
+    
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    [fetchRequest setEntity:entityDescription];
+    
+    [fetchRequest setFetchBatchSize:(kMAXROWSFRIENDS + 1)];
+    
+    NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:resourceContext.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+    
+    controller.delegate = self;
+    self.frc_mimes = controller;
+    
+    NSError* error = nil;
+    [controller performFetch:&error];
+  	if (error != nil)
+    {
+        LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Could not create instance of NSFetchedResultsController due to %@", activityName, [error userInfo]);
+    }
+    
+    [controller release];
+    [fetchRequest release];
+    [sortDescriptor release];
+    return __frc_mimes;
+    
+}
+
+- (NSString*) getDateStringForMimeDate:(NSDate*)date {
+    NSDate* now = [NSDate date];
+    NSTimeInterval intervalSinceCreated = [now timeIntervalSinceDate:date];
+    NSString* timeSinceCreated = nil;
+    if (intervalSinceCreated < 1 ) {
+        timeSinceCreated = @"a moment";
+    }
+    else {
+        timeSinceCreated = [DateTimeHelper formatTimeInterval:intervalSinceCreated];
+    }
+    
+    return [NSString stringWithFormat:@"%@ ago",timeSinceCreated];
+}
+
+#pragma mark - View Lifecycle
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -98,21 +162,24 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger count;
+    int rows;
     
     if (section == 0) {
         // From Friends section
-        count = [self.friendsArray count] + 2;  // Add 2 to the count to include 1. Header, and 2. More/None
+//        count = [self.friendsArray count] + 2;  // Add 2 to the count to include 1. Header, and 2. More/None
+        count = [[self.frc_words fetchedObjects]count] + 2;
+        rows = MIN(count, kMAXROWSFRIENDS + 2);   // Maximize the number of rows per section
     }
     else if (section == 1) {
         // Recent section
         count = [self.recentArray count] + 2;  // Add 2 to the count to include 1. Header, and 2. More
+        rows = MIN(count, kMAXROWS + 2);   // Maximize the number of rows per section
     }
     else {
         // Staff Picks section
         count = [self.staffPicksArray count] + 2;  // Add 2 to the count to include 1. Header, and 2. More
+        rows = MIN(count, kMAXROWS + 2);   // Maximize the number of rows per section
     }
-    
-    int rows = MIN(count, kMAXROWS + 2);   // Maximize the number of rows per section
     
     return rows;
 }
@@ -122,7 +189,7 @@
     if (indexPath.section == 0) {
         // From Friends section
         
-        NSInteger count = MIN([self.friendsArray count], kMAXROWS);    // Maximize the number of friends to show
+        NSInteger count = MIN([[self.frc_words fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
         
         if (indexPath.row == 0) {
             // Set the header
@@ -146,12 +213,40 @@
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     if (cell == nil) {
-                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
                         
-                        cell.textLabel.text = [self.friendsArray objectAtIndex:(indexPath.row - 1)];
+                        cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
                         
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         
+                    }
+                    
+                    Mime *mime = [[self.frc_mimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+                    
+                    cell.textLabel.text = mime.creatorname;
+                    
+                    NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
+                    cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
+//                    cell.detailTextLabel.text = [mime.datecreated stringValue];
+                    
+                    ImageManager* imageManager = [ImageManager instance];
+                    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:mime.objectid forKey:kMIMEID];
+                    
+                    if (mime.thumbnailurl != nil && ![mime.thumbnailurl isEqualToString:@""]) {
+                        Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
+                        callback.fireOnMainThread = YES;
+                        UIImage* image = [imageManager downloadImage:mime.thumbnailurl withUserInfo:nil atCallback:callback];
+                        [callback release];
+                        if (image != nil) {
+                            
+                            cell.imageView.image = image;
+                                                        
+                            [self.view setNeedsDisplay];
+                        }
+                        else {
+                            cell.imageView.backgroundColor = [UIColor blackColor];
+                            cell.imageView.image = [UIImage imageNamed:@"logo-MimeMe.png"];
+                        }
                     }
                     
                     return cell;
@@ -404,7 +499,7 @@
     
     if (indexPath.section == 0) {
         // Friends mime selected
-        NSInteger count = MIN([self.friendsArray count], kMAXROWS);    // Maximize the number of friends to show
+        NSInteger count = MIN([[self.frc_words fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
         
         if (indexPath.row > 0 && indexPath.row <= count) {
             
@@ -474,6 +569,53 @@
                      }];
     
     [self.navigationController pushViewController:settingsViewController animated:NO];
+}
+
+#pragma mark - NSFetchedResultsControllerDelegate methods
+- (void) controller:(NSFetchedResultsController *)controller 
+    didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath 
+      forChangeType:(NSFetchedResultsChangeType)type 
+       newIndexPath:(NSIndexPath *)newIndexPath {
+    
+    NSString* activityName = @"Mime_meGuessMenuViewController.controller.didChangeObject:";
+    if (controller == self.frc_words) {
+        LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
+    }
+    else {
+        LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController that isnt mine. %p", activityName, &controller);
+    }
+}
+
+#pragma mark - ImageManager Delegate Methods
+- (void)onImageDownloadComplete:(CallbackResult*)result {
+//    NSString* activityName = @"Mime_meGuessMenuMimeViewController.onImageDownloadComplete:";
+//    NSDictionary* userInfo = result.context;
+//    NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
+//    ImageDownloadResponse* response = (ImageDownloadResponse*)result.response;
+//    
+//    if ([response.didSucceed boolValue] == YES) {
+//        if ([mimeID isEqualToNumber:self.mimeID]) {
+//            //we only draw the image if this view hasnt been repurposed for another photo
+//            LOG_IMAGE(1,@"%@settings UIImage object equal to downloaded response",activityName);
+//            [self.iv_photo performSelectorOnMainThread:@selector(setImage:) withObject:response.image waitUntilDone:NO];
+//            
+//            self.imageSize = response.image.size;
+//            
+//            if (self.imageSize.height > self.imageSize.width) {
+//                self.iv_photo.contentMode = UIViewContentModeScaleAspectFill;
+//            }
+//            else {
+//                self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
+//            }
+//            
+//            [self.view setNeedsDisplay];
+//        }
+//    }
+//    else {
+//        self.iv_photo.backgroundColor = [UIColor blackColor];
+//        self.iv_photo.image = [UIImage imageNamed:@"logo-MimeMe.png"];
+//        LOG_IMAGE(1,@"%@Image failed to download",activityName);
+//    }    
 }
 
 #pragma mark - Static Initializers

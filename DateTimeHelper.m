@@ -134,11 +134,17 @@
     else if ([breakdownInfo day] == 1) {
         timeRemaining = [NSString stringWithFormat:@"%d day",[breakdownInfo day]];
     }
+//    else if ([breakdownInfo hour] > 1) {
+//        timeRemaining = [NSString stringWithFormat:@"%d hrs %d min",[breakdownInfo hour], [breakdownInfo minute]];
+//    }
+//    else if ([breakdownInfo hour] == 1) {
+//        timeRemaining = [NSString stringWithFormat:@"%d hr %d min",[breakdownInfo hour], [breakdownInfo minute]];
+//    }
     else if ([breakdownInfo hour] > 1) {
-        timeRemaining = [NSString stringWithFormat:@"%d hrs %d min",[breakdownInfo hour], [breakdownInfo minute]];
+        timeRemaining = [NSString stringWithFormat:@"%d hours",[breakdownInfo hour]];
     }
     else if ([breakdownInfo hour] == 1) {
-        timeRemaining = [NSString stringWithFormat:@"%d hr %d min",[breakdownInfo hour], [breakdownInfo minute]];
+        timeRemaining = [NSString stringWithFormat:@"%d hour",[breakdownInfo hour]];
     }
     else if ([breakdownInfo minute] > 0) {
         //timeRemaining = [NSString stringWithFormat:@"%d min %d sec",[breakdownInfo minute], [breakdownInfo second]];
