@@ -148,6 +148,12 @@
     return YES;
 }
 
+// For iOS 4.2+ support
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    return [self.facebook handleOpenURL:url]; 
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -213,7 +219,7 @@
 - (void) onLoginSuccess:(CallbackResult *)result {
     NSString* activityName = @"PlatformAppDelegate.onLoginSuccess:";
     
-    LOG_SECURITY(1, @"%@Authentication successful",activityName);
+    LOG_SECURITY(0, @"%@Authentication successful",activityName);
     
     // Successful user login, launch menu
     Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
