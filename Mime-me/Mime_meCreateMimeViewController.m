@@ -40,7 +40,7 @@
 
 #pragma mark - Properties
 - (NSFetchedResultsController*)frc_words {
-    NSString* activityName = @"Mime_meMimeViewController.frc_words:";
+    NSString* activityName = @"Mime_meCreateMimeViewController.frc_words:";
     if (__frc_words != nil) {
         return __frc_words;
     }
@@ -68,7 +68,7 @@
     [controller performFetch:&error];
   	if (error != nil)
     {
-        LOG_MIME_MEMIMEVIEWCONTROLLER(1, @"%@Could not create instance of NSFetchedResultsController due to %@", activityName, [error userInfo]);
+        LOG_MIME_MECREATEMIMEVIEWCONTROLLER(1, @"%@Could not create instance of NSFetchedResultsController due to %@", activityName, [error userInfo]);
     }
     
     [controller release];
@@ -526,7 +526,7 @@
 
 #pragma mark -  MBProgressHUD Delegate
 -(void)hudWasHidden:(MBProgressHUD *)hud {
-    NSString* activityName = @"Mime_meMimeViewController.hudWasHidden";
+    NSString* activityName = @"Mime_meCreateMimeViewController.hudWasHidden";
     [self hideProgressBar];
     
     UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
@@ -561,18 +561,18 @@
       forChangeType:(NSFetchedResultsChangeType)type 
        newIndexPath:(NSIndexPath *)newIndexPath {
     
-    NSString* activityName = @"Mime_meMimeViewController.controller.didChangeObject:";
+    NSString* activityName = @"Mime_meCreateMimeViewController.controller.didChangeObject:";
     if (controller == self.frc_words) {
-        LOG_MIME_MEMIMEVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
+        LOG_MIME_MECREATEMIMEVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
     }
     else {
-        LOG_MIME_MEMIMEVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController that isnt mine. %p", activityName, &controller);
+        LOG_MIME_MECREATEMIMEVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController that isnt mine. %p", activityName, &controller);
     }
 }
 
 #pragma mark - Static Initializers
 + (Mime_meCreateMimeViewController*)createInstance {
-    Mime_meCreateMimeViewController* instance = [[Mime_meCreateMimeViewController alloc]initWithNibName:@"Mime_meMimeViewController" bundle:nil];
+    Mime_meCreateMimeViewController* instance = [[Mime_meCreateMimeViewController alloc]initWithNibName:@"Mime_meCreateMimeViewController" bundle:nil];
     [instance autorelease];
     return instance;
 }

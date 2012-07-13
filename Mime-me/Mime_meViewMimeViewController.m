@@ -103,7 +103,7 @@
         }
         else {
             self.iv_photo.contentMode = UIViewContentModeCenter;
-            self.iv_photo.backgroundColor = [UIColor blackColor];
+            self.iv_photo.backgroundColor = [UIColor lightGrayColor];
             self.iv_photo.image = [UIImage imageNamed:@"logo-MimeMe.png"];
         }
     }
@@ -265,7 +265,7 @@
 
 #pragma mark - Static Initializers
 + (Mime_meViewMimeViewController*)createInstanceForCase:(int)viewMimeCase withMimeID:(NSNumber *)mimeID withMimeAnswerIDorNil:(NSNumber *)mimeAnswerID {
-    Mime_meViewMimeViewController* instance = [[Mime_meViewMimeViewController alloc]initWithNibName:@"Mime_meShareMimeViewController" bundle:nil];
+    Mime_meViewMimeViewController* instance = [[Mime_meViewMimeViewController alloc]initWithNibName:@"Mime_meViewMimeViewController" bundle:nil];
     [instance autorelease];
     instance.viewMimeCase = viewMimeCase;
     instance.mimeID = mimeID;
