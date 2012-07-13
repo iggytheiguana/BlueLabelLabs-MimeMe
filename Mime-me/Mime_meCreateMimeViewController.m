@@ -489,8 +489,6 @@
                           withFullImage:(UIImage*)image {
     //we handle back end processing of the image from the camera sheet here
     
-    ResourceContext *resourceContext = [ResourceContext instance];
-    
     // Update the chosen word object
     if (self.didMakeWord == YES) {
         self.chosenWord = [Word createWordWithString:self.chosenWordStr];
@@ -503,9 +501,6 @@
     
     // Create the Mime object
     Mime *mime = [Mime createMimeWithWordID:self.chosenWord.objectid withImage:image withThumbnail:thumbnailImage];
-    
-    // Save
-    [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
     
     // Launch the friends picker
     Mime_meFriendsPickerViewController *friendsViewController = [Mime_meFriendsPickerViewController createInstanceWithMimeID:mime.objectid];
