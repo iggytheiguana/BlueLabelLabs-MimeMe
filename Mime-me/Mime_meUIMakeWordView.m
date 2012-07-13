@@ -69,6 +69,7 @@
         
         // Set the newly created shape layer as the mask for the view's layer
         self.v_makeWordHeader.layer.mask = maskLayer;
+        [self.v_makeWordHeader.layer setOpaque:NO];
         
         // Animate the showing of the make word container views
         self.v_makeWordContainer.transform = CGAffineTransformMakeScale(0.6, 0.6);

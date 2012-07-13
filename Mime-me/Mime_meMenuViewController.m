@@ -8,7 +8,7 @@
 
 #import "Mime_meMenuViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "Mime_meMimeViewController.h"
+#import "Mime_meCreateMimeViewController.h"
 #import "Mime_meGuessMenuViewController.h"
 #import "Mime_meSettingsViewController.h"
 
@@ -67,7 +67,7 @@
 
 #pragma mark - UIButton Handlers
 - (IBAction) onMimeButtonPressed:(id)sender {
-    Mime_meMimeViewController* mimeViewController = [Mime_meMimeViewController createInstance];
+    Mime_meCreateMimeViewController* mimeViewController = [Mime_meCreateMimeViewController createInstance];
     
     [self.navigationController setViewControllers:[NSArray arrayWithObject:mimeViewController] animated:YES];
 }

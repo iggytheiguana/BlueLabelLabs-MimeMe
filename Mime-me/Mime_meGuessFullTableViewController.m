@@ -9,7 +9,7 @@
 #import "Mime_meGuessFullTableViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Mime_meMenuViewController.h"
-#import "Mime_meMimeViewController.h"
+#import "Mime_meCreateMimeViewController.h"
 #import "Mime_meSettingsViewController.h"
 #import "Mime_meAppDelegate.h"
 #import "Attributes.h"
@@ -357,7 +357,7 @@
 }
 
 - (IBAction) onMimeButtonPressed:(id)sender {
-    Mime_meMimeViewController *mimeViewController = [Mime_meMimeViewController createInstance];
+    Mime_meCreateMimeViewController *mimeViewController = [Mime_meCreateMimeViewController createInstance];
     
     [self.navigationController setViewControllers:[NSArray arrayWithObject:mimeViewController] animated:NO];
 }

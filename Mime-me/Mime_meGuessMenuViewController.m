@@ -9,7 +9,7 @@
 #import "Mime_meGuessMenuViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Mime_meMenuViewController.h"
-#import "Mime_meMimeViewController.h"
+#import "Mime_meCreateMimeViewController.h"
 #import "Mime_meGuessFullTableViewController.h"
 #import "Mime_meSettingsViewController.h"
 #import "Mime_meAppDelegate.h"
@@ -220,19 +220,6 @@
                         cell.imageView.layer.cornerRadius = 8.0;
                         cell.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
                         cell.imageView.layer.borderWidth = 1.0;
-                        
-//                        // Add drop shadow to cell image view
-//                        [cell.imageView.layer setShadowColor:[UIColor blackColor].CGColor];
-//                        [cell.imageView.layer setShadowOpacity:0.7f];
-//                        [cell.imageView.layer setShadowRadius:2.0f];
-//                        [cell.imageView.layer setShadowOffset:CGSizeMake(0.0f, 0.0f)];
-//                        [cell.imageView.layer setMasksToBounds:NO];
-//                        CGPathRef shadowPath = [UIBezierPath bezierPathWithRect:cell.imageView.layer.bounds].CGPath;
-//                        [cell.imageView.layer setShadowPath:shadowPath];
-//                        
-//                        // Add rounded corners to container view
-//                        [cell.imageView.layer setCornerRadius:8.0f];
-//                        [cell.imageView.layer setOpaque:NO];
                         
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         
@@ -594,7 +581,7 @@
 }
 
 - (IBAction) onMimeButtonPressed:(id)sender {
-    Mime_meMimeViewController *mimeViewController = [Mime_meMimeViewController createInstance];
+    Mime_meCreateMimeViewController *mimeViewController = [Mime_meCreateMimeViewController createInstance];
     
     [self.navigationController setViewControllers:[NSArray arrayWithObject:mimeViewController] animated:NO];
 }
