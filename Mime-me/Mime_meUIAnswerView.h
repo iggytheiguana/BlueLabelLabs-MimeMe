@@ -11,8 +11,9 @@
 @protocol Mime_meUIAnswerViewDelgate <NSObject>
 @required
 
-- (IBAction) onDismissButtonPressed:(id)sender;
+- (IBAction) onSlideButtonPressed:(id)sender;
 - (IBAction) onClueButtonPressed:(id)sender;
+- (void) onSubmitAnswer;
 
 
 @end
@@ -23,10 +24,14 @@
     UIView          *m_view;
     
     UIView          *m_v_answerHeader;
-    UILabel         *m_lbl_from;
-    UIButton        *m_btn_dismiss;
+    UILabel         *m_lbl_title;
+    UIButton        *m_btn_slide;
     UIButton        *m_btn_clue;
     UITextField     *m_tf_answer;
+    UIView          *m_v_wrongAnswer;
+    
+    NSString        *m_word;
+    BOOL            m_isViewHidden;
 }
 
 @property (nonatomic, assign) id<Mime_meUIAnswerViewDelgate>  delegate;
@@ -34,11 +39,16 @@
 @property (nonatomic, retain) IBOutlet  UIView          *view;
 
 @property (nonatomic, retain) IBOutlet  UIView          *v_answerHeader;
-@property (nonatomic, retain) IBOutlet  UILabel         *lbl_from;
-@property (nonatomic, retain) IBOutlet  UIButton        *btn_dismiss;
+@property (nonatomic, retain) IBOutlet  UILabel         *lbl_title;
+@property (nonatomic, retain) IBOutlet  UIButton        *btn_slide;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_clue;
 @property (nonatomic, retain) IBOutlet  UITextField     *tf_answer;
+@property (nonatomic, retain) IBOutlet  UIView          *v_wrongAnswer;
+
+@property (nonatomic, retain)           NSString        *word;
+@property                               BOOL            isViewHidden;
 
 + (CGRect)frameForAnswerView;
++ (Mime_meUIAnswerView*)createInstanceWithFrame:(CGRect)frame withTitle:(NSString *)title withWord:(NSString *)word;
 
 @end

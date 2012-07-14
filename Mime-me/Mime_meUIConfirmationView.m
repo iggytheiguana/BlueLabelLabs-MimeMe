@@ -191,8 +191,6 @@
 
 
 + (CGRect)frameForConfirmationView {
-    // The view will start off the screen and move up into view when loaded
-//    return CGRectMake(10, 140, 300, 180);
     return CGRectMake(0, 0, 320, 480);
 }
 

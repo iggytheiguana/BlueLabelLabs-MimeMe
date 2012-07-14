@@ -10,6 +10,7 @@
 #import "BaseViewController.h"
 #import "Mime_meUIAnswerView.h"
 #import "Mime_meUIConfirmationView.h"
+#import "ViewMimeCase.h"
 
 @interface Mime_meViewMimeViewController : BaseViewController < Mime_meUIConfirmationViewDelgate, Mime_meUIAnswerViewDelgate > {
     NSNumber        *m_mimeID;
@@ -46,6 +47,7 @@
 // answerContainer
 @property (nonatomic, retain)           Mime_meUIAnswerView         *v_answerView;
 
+- (IBAction) onBackButtonPressed:(id)sender;
 
 + (Mime_meViewMimeViewController*)createInstanceForCase:(int)viewMimeCase withMimeID:(NSNumber *)mimeID withMimeAnswerIDorNil:(NSNumber *)mimeAnswerID;
 

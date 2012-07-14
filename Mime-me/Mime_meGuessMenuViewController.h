@@ -24,7 +24,7 @@
     
 }
 
-@property (nonatomic, retain)           NSFetchedResultsController      *frc_mimes;
+@property (nonatomic, retain)           NSFetchedResultsController      *frc_mimeAnswers;
 
 @property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
 

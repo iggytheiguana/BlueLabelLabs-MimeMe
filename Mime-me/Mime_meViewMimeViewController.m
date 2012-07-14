@@ -54,8 +54,15 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    // Add drop shadow to the back button
+    [self.btn_back.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.btn_back.layer setShadowOpacity:0.7f];
+    [self.btn_back.layer setShadowRadius:2.0f];
+    [self.btn_back.layer setShadowOffset:CGSizeMake(0.0f, 0.0f)];
+    [self.btn_back.layer setMasksToBounds:NO];
+    
     // Create gesture recognizer for the photo image view to handle a single tap
-    UITapGestureRecognizer *oneFingerTap = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showContainer)] autorelease];
+    UITapGestureRecognizer *oneFingerTap = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showConfirmationView)] autorelease];
     
     // Set required taps and number of touches
     [oneFingerTap setNumberOfTapsRequired:1];
@@ -68,8 +75,18 @@
     [self.iv_photo setUserInteractionEnabled:YES];
     
     // Hide the background view and back button until we need them
-    self.v_background.hidden = YES;
-    self.btn_back.hidden = YES;
+    switch (self.viewMimeCase) {
+        case kSENTMIME:
+            self.v_background.hidden = YES;
+            self.btn_back.hidden = YES;
+            break;
+        default:
+            self.v_background.hidden = YES;
+            self.btn_back.hidden = NO;
+            break;
+    }
+    
+    
     
     // Setup notification for device orientation change
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -98,6 +115,7 @@
                 self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
             }
             self.iv_photo.image = image;
+            self.iv_photo.backgroundColor = [UIColor blackColor];
             
             [self.view setNeedsDisplay];
         }
@@ -128,6 +146,9 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+    
     switch (self.viewMimeCase) {
         case kSENTMIME:
             self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:@"Mime sent" withSubtitle:@"You earned 5 gems!"];
@@ -136,10 +157,12 @@
             self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             [self.view addSubview:self.v_confirmationView];
             
+            [self showConfirmationView];
+            
             break;
             
         case kANSWERMIME:
-            self.v_answerView = [[Mime_meUIAnswerView alloc] initWithFrame:[Mime_meUIAnswerView frameForAnswerView]];
+            self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withTitle:[NSString stringWithFormat:@"from %@", mime.creatorname] withWord:mime.word];
             self.v_answerView.delegate = self;
             [self.view addSubview:self.v_answerView];
             break;
@@ -153,8 +176,6 @@
         default:
             break;
     }
-    
-    [self showContainer];
     
     // Adjust layout based on orientation
 //    [self didRotate];
@@ -188,19 +209,24 @@
 //        
 //        if (self.v_confirmationView.hidden == YES) {
 //            // sentContainer not already visible, show it
-//            [self showContainer];
+//            [self showConfirmationView];
 //        }
 //        
 //    }
-//    [self showContainer];
+//    [self showConfirmationView];
 }
 
 #pragma mark - UI Event Handlers
-- (void)showContainer {
+- (void)showConfirmationView {
     [self.v_confirmationView show];
     
     [self.view bringSubviewToFront:self.iv_logo];
     [self.view bringSubviewToFront:self.btn_back];
+}
+
+#pragma mark UIButton Handlers
+- (IBAction) onBackButtonPressed:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark Mime_meUIConfirmationView Delegate Methods
@@ -209,18 +235,39 @@
 }
 
 - (IBAction) onOkButtonPressed:(id)sender {
-    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
-    
-    [UIView animateWithDuration:0.75
-                     animations:^{
-                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.navigationController.view cache:YES];
-                     }];
-    [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
+    if (self.viewMimeCase == kSENTMIME) {
+        Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+        
+        [UIView animateWithDuration:0.75
+                         animations:^{
+                             [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+                             [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.navigationController.view cache:YES];
+                         }];
+        [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
+    }
+    else if (self.viewMimeCase == kANSWERMIME) {
+        [self onBackButtonPressed:nil];
+    }
+    else if (self.viewMimeCase == kSCRAPBOOKMIME) {
+        [self onBackButtonPressed:nil];
+    }
 }
 
 #pragma mark Mime_meUIAnswerView Delegate Methods
-- (IBAction) onDismissButtonPressed:(id)sender {
+- (void) onSubmitAnswer {
+    [self.v_answerView removeFromSuperview];
+    [self.btn_back removeFromSuperview];
+    
+    self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:@"Congratulations!" withSubtitle:@"You guessed right and earned 5 gems"];
+    self.v_confirmationView.delegate = self;
+    self.v_confirmationView.hidden = YES;
+    self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.view addSubview:self.v_confirmationView];
+    
+    [self showConfirmationView];
+}
+
+- (IBAction) onSlideButtonPressed:(id)sender {
     
 }
 
@@ -239,7 +286,6 @@
         if ([mimeID isEqualToNumber:self.mimeID]) {
             //we only draw the image if this view hasnt been repurposed for another photo
             LOG_IMAGE(1,@"%@settings UIImage object equal to downloaded response",activityName);
-            [self.iv_photo performSelectorOnMainThread:@selector(setImage:) withObject:response.image waitUntilDone:NO];
             
             self.imageSize = response.image.size;
             
@@ -250,12 +296,15 @@
                 self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
             }
             
+            [self.iv_photo performSelectorOnMainThread:@selector(setImage:) withObject:response.image waitUntilDone:NO];
+            self.iv_photo.backgroundColor = [UIColor blackColor];
+            
             [self.view setNeedsDisplay];
         }
     }
     else {
         self.iv_photo.contentMode = UIViewContentModeCenter;
-        self.iv_photo.backgroundColor = [UIColor blackColor];
+        self.iv_photo.backgroundColor = [UIColor lightGrayColor];
         self.iv_photo.image = [UIImage imageNamed:@"logo-MimeMe.png"];
         LOG_IMAGE(1,@"%@Image failed to download",activityName);
     }

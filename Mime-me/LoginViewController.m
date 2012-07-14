@@ -342,7 +342,7 @@
             NSString* path = [imageManager saveImage:image withFileName:currentContext.facebookuserid];
             
             //save the path on the user object and commit            
-//            userObject.thumbnailurl = path;
+            userObject.thumbnailurl = path;
             [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
         }
     }

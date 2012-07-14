@@ -16,12 +16,14 @@
 #import "Attributes.h"
 #import "Macros.h"
 #import "Mime.h"
+#import "MimeAnswer.h"
 #import "ImageManager.h"
 #import "ImageDownloadResponse.h"
 #import "DateTimeHelper.h"
 #import "UIImage+UIImageCategory.h"
+#import "Mime_meViewMimeViewController.h"
 
-#define kMIMEID @"mimeid"
+#define kMIMEANSWERID @"mimeanswerid"
 #define kMAXROWS 3
 #define kMAXROWSFRIENDS 5
 
@@ -30,7 +32,7 @@
 @end
 
 @implementation Mime_meGuessMenuViewController
-@synthesize frc_mimes           = __frc_mimes;
+@synthesize frc_mimeAnswers           = __frc_mimeAnswers;
 
 @synthesize nv_navigationHeader = m_nv_navigationHeader;
 
@@ -44,16 +46,16 @@
 @synthesize staffPicksArray     = m_staffPicksArray;
 
 #pragma mark - Properties
-- (NSFetchedResultsController*)frc_mimes {
-    NSString* activityName = @"Mime_meGuessMenuViewController.frc_mimes:";
-    if (__frc_mimes != nil) {
-        return __frc_mimes;
+- (NSFetchedResultsController*)frc_mimeAnswers {
+    NSString* activityName = @"Mime_meGuessMenuViewController.frc_mimeAnswers:";
+    if (__frc_mimeAnswers != nil) {
+        return __frc_mimeAnswers;
     }
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     ResourceContext* resourceContext = [ResourceContext instance];
     Mime_meAppDelegate* app = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:MIME inManagedObjectContext:app.managedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:MIMEANSWER inManagedObjectContext:app.managedObjectContext];
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
@@ -65,7 +67,7 @@
     NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:resourceContext.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
     
     controller.delegate = self;
-    self.frc_mimes = controller;
+    self.frc_mimeAnswers = controller;
     
     NSError* error = nil;
     [controller performFetch:&error];
@@ -77,7 +79,7 @@
     [controller release];
     [fetchRequest release];
     [sortDescriptor release];
-    return __frc_mimes;
+    return __frc_mimeAnswers;
     
 }
 
@@ -167,7 +169,7 @@
     
     if (section == 0) {
         // From Friends section
-        count = [[self.frc_mimes fetchedObjects]count] + 2;     // Add 2 to the count to include 1. Header, and 2. More
+        count = [[self.frc_mimeAnswers fetchedObjects]count] + 2;     // Add 2 to the count to include 1. Header, and 2. More
         rows = MIN(count, kMAXROWSFRIENDS + 2);   // Maximize the number of rows per section
     }
     else if (section == 1) {
@@ -189,7 +191,7 @@
     if (indexPath.section == 0) {
         // From Friends section
         
-        NSInteger count = MIN([[self.frc_mimes fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
+        NSInteger count = MIN([[self.frc_mimeAnswers fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
         
         if (indexPath.row == 0) {
             // Set the header
@@ -225,15 +227,19 @@
                         
                     }
                     
-                    Mime *mime = [[self.frc_mimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+                    MimeAnswer *mimeAnswer = [[self.frc_mimeAnswers fetchedObjects] objectAtIndex:(indexPath.row - 1)];
                     
-                    cell.textLabel.text = mime.creatorname;
+                    // Get the Mime object associated with this MimeAnswer
+                    ResourceContext* resourceContext = [ResourceContext instance];
+                    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:mimeAnswer.mimeid]; 
                     
-                    NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
+                    cell.textLabel.text = mimeAnswer.creatorname;
+                    
+                    NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mimeAnswer.datecreated];
                     cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
                     
                     ImageManager* imageManager = [ImageManager instance];
-                    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:mime.objectid forKey:kMIMEID];
+                    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:mimeAnswer.objectid forKey:kMIMEANSWERID];
                     
                     if (mime.thumbnailurl != nil && ![mime.thumbnailurl isEqualToString:@""]) {
                         Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
@@ -501,7 +507,7 @@
     NSUInteger rows;
     
     if (indexPath.section == 0) {
-        count = [[self.frc_mimes fetchedObjects]count];
+        count = [[self.frc_mimeAnswers fetchedObjects]count];
         rows = MIN(count, kMAXROWSFRIENDS);
     }
     else if (indexPath.section == 1) {
@@ -534,10 +540,15 @@
     
     if (indexPath.section == 0) {
         // Friends mime selected
-        NSInteger count = MIN([[self.frc_mimes fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
+        NSInteger count = MIN([[self.frc_mimeAnswers fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
         
         if (indexPath.row > 0 && indexPath.row <= count) {
             
+            MimeAnswer *mimeAnswer = [[self.frc_mimeAnswers fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+            
+            // Show the Mime
+            Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mimeAnswer.mimeid withMimeAnswerIDorNil:mimeAnswer.objectid];
+            [self.navigationController pushViewController:shareViewController animated:YES];
         }
         else {
             Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstance];
@@ -613,7 +624,7 @@
        newIndexPath:(NSIndexPath *)newIndexPath {
     
     NSString* activityName = @"Mime_meGuessMenuViewController.controller.didChangeObject:";
-    if (controller == self.frc_mimes) {
+    if (controller == self.frc_mimeAnswers) {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
     }
     else {
@@ -625,7 +636,7 @@
 - (void)onImageDownloadComplete:(CallbackResult*)result {
 //    NSString* activityName = @"Mime_meGuessMenuMimeViewController.onImageDownloadComplete:";
 //    NSDictionary* userInfo = result.context;
-//    NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
+//    NSNumber* mimeID = [userInfo valueForKey:kMIMEANSWERID];
 //    ImageDownloadResponse* response = (ImageDownloadResponse*)result.response;
 //    
 //    if ([response.didSucceed boolValue] == YES) {
