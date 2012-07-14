@@ -10,10 +10,12 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Mime_meMenuViewController.h"
 #import "Mime.h"
+#import "MimeAnswer.h"
 #import "ImageManager.h"
 #import "ImageDownloadResponse.h"
 #import "Macros.h"
 #import "ViewMimeCase.h"
+#import "DateTimeHelper.h"
 
 #define kMIMEID @"mimeid"
 
@@ -47,6 +49,41 @@
         // Custom initialization
     }
     return self;
+}
+
+- (void)showMimePhoto {
+    // Set the Mime image on the image view
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+    
+    ImageManager* imageManager = [ImageManager instance];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:mime.objectid forKey:kMIMEID];
+    
+    if (mime.imageurl != nil && ![mime.imageurl isEqualToString:@""]) {
+        Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
+        callback.fireOnMainThread = YES;
+        UIImage* image = [imageManager downloadImage:mime.imageurl withUserInfo:nil atCallback:callback];
+        [callback release];
+        if (image != nil) {
+            self.imageSize = image.size;
+            
+            if (self.imageSize.height > self.imageSize.width) {
+                self.iv_photo.contentMode = UIViewContentModeScaleAspectFill;
+            }
+            else {
+                self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
+            }
+            self.iv_photo.image = image;
+            self.iv_photo.backgroundColor = [UIColor blackColor];
+            
+            [self.view setNeedsDisplay];
+        }
+        else {
+            self.iv_photo.contentMode = UIViewContentModeCenter;
+            self.iv_photo.backgroundColor = [UIColor lightGrayColor];
+            self.iv_photo.image = [UIImage imageNamed:@"logo-MimeMe.png"];
+        }
+    }
 }
 
 - (void)viewDidLoad
@@ -86,45 +123,13 @@
             break;
     }
     
-    
-    
     // Setup notification for device orientation change
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didRotate)
                                                  name:@"UIDeviceOrientationDidChangeNotification" object:nil];
     
-    // Set the Mime image on the image view
-    ResourceContext* resourceContext = [ResourceContext instance];
-    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
-    
-    ImageManager* imageManager = [ImageManager instance];
-    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:mime.objectid forKey:kMIMEID];
-    
-    if (mime.imageurl != nil && ![mime.imageurl isEqualToString:@""]) {
-        Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
-        callback.fireOnMainThread = YES;
-        UIImage* image = [imageManager downloadImage:mime.imageurl withUserInfo:nil atCallback:callback];
-        [callback release];
-        if (image != nil) {
-            self.imageSize = image.size;
-            
-            if (self.imageSize.height > self.imageSize.width) {
-                self.iv_photo.contentMode = UIViewContentModeScaleAspectFill;
-            }
-            else {
-                self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
-            }
-            self.iv_photo.image = image;
-            self.iv_photo.backgroundColor = [UIColor blackColor];
-            
-            [self.view setNeedsDisplay];
-        }
-        else {
-            self.iv_photo.contentMode = UIViewContentModeCenter;
-            self.iv_photo.backgroundColor = [UIColor lightGrayColor];
-            self.iv_photo.image = [UIImage imageNamed:@"logo-MimeMe.png"];
-        }
-    }
+    // Display the Mime photo onto the image view
+    [self showMimePhoto];
     
 }
 
@@ -148,33 +153,51 @@
     
     ResourceContext* resourceContext = [ResourceContext instance];
     Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+    MimeAnswer *mimeAnswer = (MimeAnswer*)[resourceContext resourceWithType:MIMEANSWER withID:self.mimeAnswerID];
     
-    switch (self.viewMimeCase) {
-        case kSENTMIME:
-            self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:@"Mime sent" withSubtitle:@"You earned 5 gems!"];
-            self.v_confirmationView.delegate = self;
-            self.v_confirmationView.hidden = YES;
-            self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            [self.view addSubview:self.v_confirmationView];
-            
-            [self showConfirmationView];
-            
-            break;
-            
-        case kANSWERMIME:
-            self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withTitle:[NSString stringWithFormat:@"from %@", mime.creatorname] withWord:mime.word];
-            self.v_answerView.delegate = self;
-            [self.view addSubview:self.v_answerView];
-            break;
-            
-        case kSCRAPBOOKMIME:
-            self.v_answerView = [[Mime_meUIAnswerView alloc] initWithFrame:[Mime_meUIAnswerView frameForAnswerView]];
-            self.v_answerView.delegate = self;
-            [self.view addSubview:self.v_answerView];
-            break;
-            
-        default:
-            break;
+    // Set up the view based on the case
+    if (self.viewMimeCase == kSENTMIME) {
+        NSString *title = @"Mime sent";
+        NSString *subtitle = [NSString stringWithFormat:@"You earned %d gems!", 5];
+        
+        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:title withSubtitle:subtitle];
+        self.v_confirmationView.delegate = self;
+        self.v_confirmationView.hidden = YES;
+        self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self.view addSubview:self.v_confirmationView];
+        
+        [self showConfirmationView];
+        
+    }
+    else if (self.viewMimeCase == kANSWERMIME) {
+        int pointsAwarded = [mimeAnswer.pointsawarded intValue];
+        NSString *title = @"Congratulations!";
+        NSString *subtitle = [NSString stringWithFormat:@"You guessed right and earned %d gems", pointsAwarded];
+        
+        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:title withSubtitle:subtitle];
+        self.v_confirmationView.delegate = self;
+        self.v_confirmationView.hidden = YES;
+        self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        NSString *from = [NSString stringWithFormat:@"from %@", mime.creatorname];
+        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withTitle:from withWord:mime.word];
+        self.v_answerView.delegate = self;
+        self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        [self.view addSubview:self.v_answerView];
+        
+    }
+    else if (self.viewMimeCase == kSCRAPBOOKMIME) {
+        
+        NSString *from = [NSString stringWithFormat:@"from %@", mime.creatorname];
+        NSDate  *dateCreated = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
+        NSString *dateCreatedStr = [DateTimeHelper formatMediumDate:dateCreated];
+        
+        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:from withSubtitle:dateCreatedStr];
+        self.v_confirmationView.delegate = self;
+        self.v_confirmationView.hidden = YES;
+        self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self.view addSubview:self.v_confirmationView];
+        
     }
     
     // Adjust layout based on orientation
@@ -192,28 +215,19 @@
 #pragma mark - Landscape Photo Rotation Event Handler
 - (void) didRotate {
 //    if (self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft || self.interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
-////        self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
-//        
-//        [self.iv_photo setUserInteractionEnabled:NO];
-//        [self onCloseButtonPressed:nil];
+//        self.iv_photo.frame = CGRectMake(0, 0, 480, 320);
+//        self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
 //    }
 //    else {
-////        if (self.imageSize.height > self.imageSize.width) {
-////            self.iv_photo.contentMode = UIViewContentModeScaleAspectFill;
-////        }
-////        else {
-////            self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
-////        }
-//        
-//        [self.iv_photo setUserInteractionEnabled:YES];
-//        
-//        if (self.v_confirmationView.hidden == YES) {
-//            // sentContainer not already visible, show it
-//            [self showConfirmationView];
+//        self.iv_photo.frame = CGRectMake(0, 0, 320, 480);
+//        if (self.imageSize.height > self.imageSize.width) {
+//            self.iv_photo.contentMode = UIViewContentModeScaleAspectFill;
 //        }
-//        
+//        else {
+//            self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
+//        }
 //    }
-//    [self showConfirmationView];
+//    [self.view setNeedsDisplay];
 }
 
 #pragma mark - UI Event Handlers
@@ -255,13 +269,13 @@
 
 #pragma mark Mime_meUIAnswerView Delegate Methods
 - (void) onSubmitAnswer {
+    // User guessed the correct word 
+    
+    // Remove the Answer view and back button
     [self.v_answerView removeFromSuperview];
     [self.btn_back removeFromSuperview];
     
-    self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:@"Congratulations!" withSubtitle:@"You guessed right and earned 5 gems"];
-    self.v_confirmationView.delegate = self;
-    self.v_confirmationView.hidden = YES;
-    self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    // Add the Confirmation view
     [self.view addSubview:self.v_confirmationView];
     
     [self showConfirmationView];

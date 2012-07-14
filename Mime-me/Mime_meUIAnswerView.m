@@ -99,6 +99,11 @@
         self.v_wrongAnswer.hidden = YES;
         [self.view addSubview:self.v_wrongAnswer];
         
+        // Setup notification for device orientation change
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(didRotate)
+                                                     name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+        
         [self addSubview:self.view];
         
     }
@@ -128,13 +133,49 @@
 }
 */
 
+#pragma mark - Landscape Photo Rotation Event Handler
+- (void) didRotate {
+    if ([self.tf_answer isFirstResponder] == YES) {
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+        UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
+        
+        CGFloat deltaY = kKEYBOARDHEIGHTPORTRAIT - kKEYBOARDHEIGHTLANDSCAPE;
+        if ((orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) && deviceOrientation != UIDeviceOrientationPortraitUpsideDown) {
+            if (self.center.y != (320 - kKEYBOARDHEIGHTLANDSCAPE - self.frame.size.height/2 + 8.0)) {
+                // Only move the center point if it is not already in position
+                self.center = CGPointMake(self.center.x, self.center.y + deltaY);
+            }
+        }
+        else if (orientation == UIInterfaceOrientationPortrait && deviceOrientation != UIDeviceOrientationPortraitUpsideDown) {
+            if (self.center.y != (480 - kKEYBOARDHEIGHTPORTRAIT - self.frame.size.height/2 + 8.0)) {
+                // Only move the center point if it is not already in position
+                self.center = CGPointMake(self.center.x, self.center.y - deltaY);
+            }
+        }
+    }
+}
+
+#pragma mark - Helper Methods
+- (float)deltaYForKeyboard {
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    
+    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+        return kKEYBOARDHEIGHTLANDSCAPE;
+    }
+    else {
+        return kKEYBOARDHEIGHTPORTRAIT;
+    }
+}
+
 #pragma mark - UIButton Handlers
 - (IBAction) onSlideButtonPressed:(id)sender {
     CGFloat deltaY = 0.0;
     
     if ([self.tf_answer isFirstResponder] == YES) {
         [self.tf_answer resignFirstResponder];
-        deltaY = kKEYBOARDHEIGHTPORTRAIT;
+        
+        // Slide the answer view down after the keyboard hides
+        deltaY = [self deltaYForKeyboard];
     }
     else if (self.isViewHidden == YES) {
         self.isViewHidden = NO;
@@ -152,7 +193,7 @@
                           delay:0.0
                         options:UIViewAnimationCurveEaseInOut
                      animations:^{
-                         self.center = CGPointMake(self.center.x, self.center.y+deltaY);
+                         self.center = CGPointMake(self.center.x, self.center.y + deltaY);
                      }
                      completion:^(BOOL finished){
                          if (self.isViewHidden == YES) {
@@ -189,11 +230,13 @@
     }
     
     // Slide the answer view up
+    CGFloat deltaY = [self deltaYForKeyboard];
+    
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:UIViewAnimationCurveEaseInOut
                      animations:^{
-                         self.center = CGPointMake(self.center.x, self.center.y-kKEYBOARDHEIGHTPORTRAIT);
+                         self.center = CGPointMake(self.center.x, self.center.y - deltaY);
                      }
                      completion:^(BOOL finished){
                          self.btn_slide.imageView.image = [UIImage imageNamed:@"icon-slideDown.png"];
@@ -244,7 +287,8 @@
         
         if ([self.tf_answer isFirstResponder] == YES) {
             [self.tf_answer resignFirstResponder];
-            deltaY = kKEYBOARDHEIGHTPORTRAIT;
+            
+            deltaY = [self deltaYForKeyboard];
         }
         else {
             deltaY = kANSWERVIEWHIDDEN;
@@ -255,7 +299,7 @@
                               delay:0.0
                             options:UIViewAnimationCurveEaseInOut
                          animations:^{
-                             self.center = CGPointMake(self.center.x, self.center.y+deltaY);
+                             self.center = CGPointMake(self.center.x, self.center.y + deltaY);
                          }
                          completion:^(BOOL finished){
                              

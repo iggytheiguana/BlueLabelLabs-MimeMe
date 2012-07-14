@@ -23,7 +23,9 @@
 #import "UIImage+UIImageCategory.h"
 #import "Mime_meViewMimeViewController.h"
 
+#define kMIMEFRC @"mimefrc"
 #define kMIMEANSWERID @"mimeanswerid"
+
 #define kMAXROWS 3
 #define kMAXROWSFRIENDS 5
 
@@ -239,7 +241,7 @@
                     cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
                     
                     ImageManager* imageManager = [ImageManager instance];
-                    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:mimeAnswer.objectid forKey:kMIMEANSWERID];
+                    NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_mimeAnswers, kMIMEFRC, mimeAnswer.objectid, kMIMEANSWERID, nil];
                     
                     if (mime.thumbnailurl != nil && ![mime.thumbnailurl isEqualToString:@""]) {
                         Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
@@ -249,13 +251,13 @@
                         if (image != nil) {
                             
                             cell.imageView.image = [image imageScaledToSize:CGSizeMake(50, 50)];
-                                                        
-                            [self.view setNeedsDisplay];
                         }
                         else {
                             cell.imageView.backgroundColor = [UIColor lightGrayColor];
                             cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(50, 50)];
                         }
+                        
+                        [self.view setNeedsDisplay];
                     }
                     
                     return cell;
@@ -634,34 +636,36 @@
 
 #pragma mark - ImageManager Delegate Methods
 - (void)onImageDownloadComplete:(CallbackResult*)result {
-//    NSString* activityName = @"Mime_meGuessMenuMimeViewController.onImageDownloadComplete:";
-//    NSDictionary* userInfo = result.context;
-//    NSNumber* mimeID = [userInfo valueForKey:kMIMEANSWERID];
-//    ImageDownloadResponse* response = (ImageDownloadResponse*)result.response;
-//    
-//    if ([response.didSucceed boolValue] == YES) {
-//        if ([mimeID isEqualToNumber:self.mimeID]) {
-//            //we only draw the image if this view hasnt been repurposed for another photo
-//            LOG_IMAGE(1,@"%@settings UIImage object equal to downloaded response",activityName);
-//            [self.iv_photo performSelectorOnMainThread:@selector(setImage:) withObject:response.image waitUntilDone:NO];
-//            
-//            self.imageSize = response.image.size;
-//            
-//            if (self.imageSize.height > self.imageSize.width) {
-//                self.iv_photo.contentMode = UIViewContentModeScaleAspectFill;
-//            }
-//            else {
-//                self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
-//            }
-//            
-//            [self.view setNeedsDisplay];
-//        }
-//    }
-//    else {
-//        self.iv_photo.backgroundColor = [UIColor blackColor];
-//        self.iv_photo.image = [UIImage imageNamed:@"logo-MimeMe.png"];
-//        LOG_IMAGE(1,@"%@Image failed to download",activityName);
-//    }    
+    NSString* activityName = @"Mime_meGuessMenuViewController.onImageDownloadComplete:";
+    NSDictionary* userInfo = result.context;
+    
+    NSFetchedResultsController *frc = (NSFetchedResultsController *)[userInfo valueForKey:kMIMEFRC];
+    NSNumber* mimeID = [userInfo valueForKey:kMIMEANSWERID];
+
+    ImageDownloadResponse* response = (ImageDownloadResponse*)result.response;
+    
+    if ([response.didSucceed boolValue] == YES) {
+        if (frc == self.frc_mimeAnswers) {
+            NSInteger count = MIN([[self.frc_mimeAnswers fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
+            for (int i = 0; i < count; i++) {
+                MimeAnswer *mimeAnswer = [[self.frc_mimeAnswers fetchedObjects] objectAtIndex:i];
+                if ([mimeAnswer.mimeid isEqualToNumber:mimeID]) {
+                    UITableViewCell *cell = [self.tbl_mimes cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:0]];
+                    
+                    //we only draw the image if this view hasnt been repurposed for another photo
+                    LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
+                    
+                    UIImage *image = [image imageScaledToSize:CGSizeMake(50, 50)];
+                    
+                    [cell.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
+                    
+                    [self.view setNeedsDisplay];
+                    
+                    break;
+                }
+            }
+        }
+    }    
 }
 
 #pragma mark - Static Initializers
