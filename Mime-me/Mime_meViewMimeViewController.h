@@ -12,7 +12,7 @@
 #import "Mime_meUIConfirmationView.h"
 #import "ViewMimeCase.h"
 
-@interface Mime_meViewMimeViewController : BaseViewController < Mime_meUIConfirmationViewDelgate, Mime_meUIAnswerViewDelgate > {
+@interface Mime_meViewMimeViewController : BaseViewController < Mime_meUIConfirmationViewDelgate, Mime_meUIAnswerViewDelgate, UIProgressHUDViewDelegate > {
     NSNumber        *m_mimeID;
     NSNumber        *m_mimeAnswerID;
     CGSize          m_imageSize;
@@ -28,6 +28,10 @@
     
     // answerContainer
     Mime_meUIAnswerView         *m_v_answerView;
+    
+    // HUDS
+    UIProgressHUDView           *m_sendAnswerHUD;
+    UIProgressHUDView           *m_cancelGuessHUD;
     
 }
 
@@ -46,6 +50,10 @@
 
 // answerContainer
 @property (nonatomic, retain)           Mime_meUIAnswerView         *v_answerView;
+
+// HUDS
+@property (nonatomic, retain)           UIProgressHUDView           *sendAnswerHUD;
+@property (nonatomic, retain)           UIProgressHUDView           *cancelGuessHUD;
 
 - (IBAction) onBackButtonPressed:(id)sender;
 

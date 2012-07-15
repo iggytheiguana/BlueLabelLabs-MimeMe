@@ -16,6 +16,7 @@
 #import "Macros.h"
 #import "ViewMimeCase.h"
 #import "DateTimeHelper.h"
+#import "Mime_meAppDelegate.h"
 
 #define kMIMEID @"mimeid"
 
@@ -39,6 +40,10 @@
 
 // answerContainer
 @synthesize v_answerView        = m_v_answerView;
+
+// HUDs
+@synthesize sendAnswerHUD       = m_sendAnswerHUD;
+@synthesize cancelGuessHUD      = m_cancelGuessHUD;
 
 
 #pragma mark - View Lifecycle
@@ -185,6 +190,10 @@
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.view addSubview:self.v_answerView];
         
+        // Update the view count on this Mime
+        NSUInteger numTimesViewed = [mime.numberoftimesviewed integerValue];
+        mime.numberoftimesviewed = [NSNumber numberWithInteger:(numTimesViewed + 1)];
+        
     }
     else if (self.viewMimeCase == kSCRAPBOOKMIME) {
         
@@ -239,8 +248,23 @@
 }
 
 #pragma mark UIButton Handlers
+- (void)showHUDForMimeGuessCancelled {
+    Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    self.cancelGuessHUD = appDelegate.progressView;
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+    self.cancelGuessHUD.delegate = self;
+    
+    // Indeterminate Progress bar
+    NSString* message = @"Loading...";
+    [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
+    
+    // Save
+    ResourceContext *resourceContext = [ResourceContext instance];
+    [resourceContext save:NO onFinishCallback:nil trackProgressWith:self.cancelGuessHUD];
+}
+
 - (IBAction) onBackButtonPressed:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self showHUDForMimeGuessCancelled];
 }
 
 #pragma mark Mime_meUIConfirmationView Delegate Methods
@@ -268,17 +292,51 @@
 }
 
 #pragma mark Mime_meUIAnswerView Delegate Methods
-- (void) onSubmitAnswer {
-    // User guessed the correct word 
+- (void)showHUDForSendAnswer {
+    Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    self.sendAnswerHUD = appDelegate.progressView;
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+    self.sendAnswerHUD.delegate = self;
     
-    // Remove the Answer view and back button
-    [self.v_answerView removeFromSuperview];
-    [self.btn_back removeFromSuperview];
+    // Determinate Progress bar
+    NSNumber* maxTimeToShowOnProgress = settings.http_timeout_seconds;
+    NSNumber* heartbeat = [NSNumber numberWithInt:5];
     
-    // Add the Confirmation view
-    [self.view addSubview:self.v_confirmationView];
+    //we need to construc the appropriate success, failure and progress messages for the submission
+    NSString* failureMessage = @"Oops, please try again.";
+    NSString* successMessage = @"Success!";
     
-    [self showConfirmationView];
+    NSMutableArray* progressMessage = [[[NSMutableArray alloc]init]autorelease];
+    [progressMessage addObject:@"Sending answer..."];
+    
+    [self showDeterminateProgressBarWithMaximumDisplayTime:maxTimeToShowOnProgress withHeartbeat:heartbeat onSuccessMessage:successMessage onFailureMessage:failureMessage inProgressMessages:progressMessage];
+    
+    // Save
+    ResourceContext *resourceContext = [ResourceContext instance];
+    [resourceContext save:NO onFinishCallback:nil trackProgressWith:self.sendAnswerHUD];
+    
+}
+
+- (void) onSubmittedCorrectAnswer:(BOOL)isCorrect {
+    // User submitted an answer
+    
+    ResourceContext *resourceContext = [ResourceContext instance];
+    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+    
+    if (isCorrect == YES) {
+        // submitted answer is correct, update answer count and save
+        
+        NSUInteger numTimesAnswered = [mime.numbertimesanswered integerValue];
+        mime.numbertimesanswered = [NSNumber numberWithInteger:(numTimesAnswered + 1)];
+        
+        [self showHUDForSendAnswer];
+    }
+    else {
+        // incorrect answer, update attempt count
+        
+        NSUInteger numAttempts = [mime.numberofattempts integerValue];
+        mime.numberofattempts = [NSNumber numberWithInteger:(numAttempts + 1)];
+    }
 }
 
 - (IBAction) onSlideButtonPressed:(id)sender {
@@ -287,6 +345,47 @@
 
 - (IBAction) onClueButtonPressed:(id)sender {
     
+}
+
+#pragma mark -  MBProgressHUD Delegate
+-(void)hudWasHidden:(MBProgressHUD *)hud {
+    NSString* activityName = @"Mime_meViewMimeViewController.hudWasHidden";
+    [self hideProgressBar];
+    
+    UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
+    
+    if (progressView == self.sendAnswerHUD) {
+        if (progressView.didSucceed) {
+            // Anseer sent sucessfully
+            LOG_REQUEST(0, @"%@ Mime and MimeAnswer creation request was successful", activityName);
+            
+            // Remove the Answer view and back button
+            [self.v_answerView removeFromSuperview];
+            [self.btn_back removeFromSuperview];
+            
+            // Add the Confirmation view
+            [self.view addSubview:self.v_confirmationView];
+            
+            [self showConfirmationView];
+        }
+        else {
+            // Send answer failed
+            LOG_REQUEST(1, @"%@ Mime and MimeAnswer creation request failure", activityName);
+            
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
+    else if (progressView == self.cancelGuessHUD) {
+        if (progressView.didSucceed) {
+            // Send updated Mime count data sucessfully
+            LOG_REQUEST(0, @"%@ Mime attempt count update request was successful", activityName);
+        }
+        else {
+            // Send updated Mime count data failed
+            LOG_REQUEST(1, @"%@ Mime attempt count update request failure", activityName);
+        }
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 #pragma mark - ImageManager Delegate Methods

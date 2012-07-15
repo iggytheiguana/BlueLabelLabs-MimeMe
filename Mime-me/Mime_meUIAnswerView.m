@@ -281,7 +281,9 @@
 // Handles keyboard Return button pressed while editing the textfield
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if ([self.word isEqualToString:self.tf_answer.text]) {
-        [self.delegate onSubmitAnswer];
+        // User submitted the correct answer
+        
+        [self.delegate onSubmittedCorrectAnswer:YES];
         
         CGFloat deltaY = 0.0;
         
@@ -307,6 +309,10 @@
          ];
     }
     else {
+        // User submitted an incorrect answer
+        
+        [self.delegate onSubmittedCorrectAnswer:NO];
+        
         // Hide the error view if it is visible
         if (self.v_wrongAnswer.hidden == YES) {
             self.v_wrongAnswer.alpha = 0.0;

@@ -13,7 +13,7 @@
 
 - (IBAction) onSlideButtonPressed:(id)sender;
 - (IBAction) onClueButtonPressed:(id)sender;
-- (void) onSubmitAnswer;
+- (void) onSubmittedCorrectAnswer:(BOOL)isCorrect;
 
 
 @end
@@ -46,7 +46,7 @@
 @property (nonatomic, retain) IBOutlet  UIView          *v_wrongAnswer;
 
 @property (nonatomic, retain)           NSString        *word;
-@property                               BOOL            isViewHidden;
+@property (nonatomic, assign)           BOOL            isViewHidden;
 
 + (CGRect)frameForAnswerView;
 + (Mime_meUIAnswerView*)createInstanceWithFrame:(CGRect)frame withTitle:(NSString *)title withWord:(NSString *)word;

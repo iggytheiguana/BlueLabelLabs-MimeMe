@@ -49,9 +49,9 @@
     retVal.imageurl = [imageManager saveImage:image forMimeWithID:retVal.objectid];
     retVal.thumbnailurl = [imageManager saveThumbnailImage:thumbnailImage forMimeWithID:retVal.objectid];
     
-    retVal.numberofattempts = [NSNumber numberWithInt:0];
-    retVal.numberoftimesviewed = [NSNumber numberWithInt:0];
-    retVal.numbertimesanswered = [NSNumber numberWithInt:0];
+    retVal.numberofattempts = [NSNumber numberWithInteger:0];
+    retVal.numberoftimesviewed = [NSNumber numberWithInteger:0];
+    retVal.numbertimesanswered = [NSNumber numberWithInteger:0];
     
     retVal.visibility = [NSNumber numberWithInt:0];
     

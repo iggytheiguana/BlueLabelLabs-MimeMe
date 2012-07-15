@@ -306,11 +306,11 @@
     NSMutableArray* progressMessage = [[[NSMutableArray alloc]init]autorelease];
     [progressMessage addObject:@"Sending mime..."];
     
+    [self showDeterminateProgressBarWithMaximumDisplayTime:maxTimeToShowOnProgress withHeartbeat:heartbeat onSuccessMessage:successMessage onFailureMessage:failureMessage inProgressMessages:progressMessage];
+    
     // Save
     ResourceContext *resourceContext = [ResourceContext instance];
-    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
-    
-    [self showDeterminateProgressBarWithMaximumDisplayTime:maxTimeToShowOnProgress withHeartbeat:heartbeat onSuccessMessage:successMessage onFailureMessage:failureMessage inProgressMessages:progressMessage];
+    [resourceContext save:NO onFinishCallback:nil trackProgressWith:progressView];
     
 //    [self performSelector:@selector(sendMimeWithProgressView:) withObject:progressView afterDelay:0.5];
     

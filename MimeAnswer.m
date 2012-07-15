@@ -9,6 +9,7 @@
 #import "MimeAnswer.h"
 #import "AuthenticationManager.h"
 #import "User.h"
+#import "Mime.h"
 
 @implementation MimeAnswer
 @dynamic answer;
@@ -58,7 +59,8 @@
     retVal.pointsawarded = [NSNumber numberWithInt:0];
     retVal.state = [NSNumber numberWithInt:0];
     
-    retVal.answer = nil;
+    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:mimeID];
+    retVal.answer = mime.word;
     
     return retVal;
 }

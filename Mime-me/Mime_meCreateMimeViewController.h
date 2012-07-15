@@ -49,7 +49,7 @@
 @property (nonatomic, retain) IBOutlet  UIButton                        *btn_makeWord;
 
 @property (nonatomic, retain)           NSArray                         *wordsArray;
-@property                               BOOL                            didMakeWord;
+@property (nonatomic, assign)           BOOL                            didMakeWord;
 @property (nonatomic, retain)           Word                            *chosenWord;
 @property (nonatomic, retain)           NSString                        *chosenWordStr;
 
