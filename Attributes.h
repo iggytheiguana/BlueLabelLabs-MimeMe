@@ -111,7 +111,6 @@ extern NSString* const FINISHEDWRITERID;
 extern NSString* const NUMBEROFUNREADCAPTIONS;
 extern NSString* const SHARINGLEVEL;
 extern NSString* const CONSEQUENTIALUPDATES;
-extern NSString* const TARGETUSERID;
 
 
 extern NSString* const DATECOMPLETED;
@@ -133,5 +132,13 @@ extern NSString* const NUMTIMESCOMPLETED;
 extern NSString* const NUMTIMESSTARTED;
 extern NSString* const LASTPOSITION;
 extern NSString* const TITLE;
+
+
+
+// Mime-Me Attributes
+extern NSString* const TARGETUSERID;
 extern NSString* const ISSENTBYFRIEND;
 extern NSString* const NUMBEROFTIMESUSED;
+extern NSString* const NUMBEROFATTEMPTS;
+extern NSString* const NUMBERTIMESANSWERED;
+extern NSString* const NUMBEROFTIMESVIEWED;

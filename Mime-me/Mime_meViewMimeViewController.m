@@ -41,10 +41,6 @@
 // answerContainer
 @synthesize v_answerView        = m_v_answerView;
 
-// HUDs
-@synthesize sendAnswerHUD       = m_sendAnswerHUD;
-@synthesize cancelGuessHUD      = m_cancelGuessHUD;
-
 
 #pragma mark - View Lifecycle
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -250,9 +246,9 @@
 #pragma mark UIButton Handlers
 - (void)showHUDForMimeGuessCancelled {
     Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
-    self.cancelGuessHUD = appDelegate.progressView;
+    UIProgressHUDView* progressView = appDelegate.progressView;
     ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
-    self.cancelGuessHUD.delegate = self;
+    progressView.delegate = self;
     
     // Indeterminate Progress bar
     NSString* message = @"Loading...";
@@ -260,7 +256,7 @@
     
     // Save
     ResourceContext *resourceContext = [ResourceContext instance];
-    [resourceContext save:NO onFinishCallback:nil trackProgressWith:self.cancelGuessHUD];
+    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
 }
 
 - (IBAction) onBackButtonPressed:(id)sender {
@@ -294,9 +290,9 @@
 #pragma mark Mime_meUIAnswerView Delegate Methods
 - (void)showHUDForSendAnswer {
     Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
-    self.sendAnswerHUD = appDelegate.progressView;
+    UIProgressHUDView* progressView = appDelegate.progressView;
     ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
-    self.sendAnswerHUD.delegate = self;
+    progressView.delegate = self;
     
     // Determinate Progress bar
     NSNumber* maxTimeToShowOnProgress = settings.http_timeout_seconds;
@@ -313,7 +309,7 @@
     
     // Save
     ResourceContext *resourceContext = [ResourceContext instance];
-    [resourceContext save:NO onFinishCallback:nil trackProgressWith:self.sendAnswerHUD];
+    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
     
 }
 
@@ -354,9 +350,15 @@
     
     UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
     
-    if (progressView == self.sendAnswerHUD) {
+    Request* request = [progressView.requests objectAtIndex:0];
+    //now we have the request
+    
+    NSArray* changedAttributes = request.changedAttributesList;
+    //list of all changed attributes
+    
+    if ([changedAttributes containsObject:NUMBERTIMESANSWERED]) {
         if (progressView.didSucceed) {
-            // Anseer sent sucessfully
+            // Answer sent sucessfully
             LOG_REQUEST(0, @"%@ Mime and MimeAnswer creation request was successful", activityName);
             
             // Remove the Answer view and back button
@@ -375,7 +377,7 @@
             [self.navigationController popViewControllerAnimated:YES];
         }
     }
-    else if (progressView == self.cancelGuessHUD) {
+    else {
         if (progressView.didSucceed) {
             // Send updated Mime count data sucessfully
             LOG_REQUEST(0, @"%@ Mime attempt count update request was successful", activityName);

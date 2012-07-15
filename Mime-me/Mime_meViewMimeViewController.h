@@ -29,10 +29,6 @@
     // answerContainer
     Mime_meUIAnswerView         *m_v_answerView;
     
-    // HUDS
-    UIProgressHUDView           *m_sendAnswerHUD;
-    UIProgressHUDView           *m_cancelGuessHUD;
-    
 }
 
 @property (nonatomic, retain)           NSNumber        *mimeID;
@@ -50,10 +46,6 @@
 
 // answerContainer
 @property (nonatomic, retain)           Mime_meUIAnswerView         *v_answerView;
-
-// HUDS
-@property (nonatomic, retain)           UIProgressHUDView           *sendAnswerHUD;
-@property (nonatomic, retain)           UIProgressHUDView           *cancelGuessHUD;
 
 - (IBAction) onBackButtonPressed:(id)sender;
 

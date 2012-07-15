@@ -124,7 +124,12 @@ NSString* const NUMTIMESCOMPLETED       =@"numtimescompleted";
 NSString* const NUMTIMESSTARTED         =@"numtimestarted";
 NSString* const LASTPOSITION            =@"lastposition";
 NSString* const TITLE                   =@"title";
-NSString* const ISSENTBYFRIEND          =@"issentbyfriend";
-NSString* const TARGETUSERID            =@"targetuserid";
 
+
+// Mime-Me Attributes
+NSString* const TARGETUSERID            =@"targetuserid";
+NSString* const ISSENTBYFRIEND          =@"issentbyfriend";
 NSString* const NUMBEROFTIMESUSED       =@"numberoftimesused";
+NSString* const NUMBEROFATTEMPTS        =@"numberofattempts";
+NSString* const NUMBERTIMESANSWERED     =@"numbertimesanswered";
+NSString* const NUMBEROFTIMESVIEWED     =@"numberoftimesviewed";
