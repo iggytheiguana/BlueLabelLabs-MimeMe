@@ -10,7 +10,7 @@
 #import "BaseViewController.h"
 #import "Mime_meUINavigationHeaderView.h"
 
-@interface Mime_meFriendsPickerViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate > {
+@interface Mime_meFriendsPickerViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, UIProgressHUDViewDelegate > {
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
     UIButton            *m_btn_go;
     

@@ -12,6 +12,8 @@
 #import "MimeAnswer.h"
 #import "Mime_meViewMimeViewController.h"
 #import "ViewMimeCase.h"
+#import "Macros.h"
+#import "Mime_meAppDelegate.h"
 
 @interface Mime_meFriendsPickerViewController ()
 
@@ -278,10 +280,49 @@
 }
 
 #pragma mark - UIButton Handlers
+//- (void)sendMimeWithProgressView:(UIProgressHUDView *)progressView {
+//    ResourceContext *resourceContext = [ResourceContext instance];
+//    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
+//}
+
+- (void)showHUDForMimeUpload {
+    Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    UIProgressHUDView* progressView = appDelegate.progressView;
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+    progressView.delegate = self;
+    
+//    // Indeterminate Progress bar
+//    NSString* message = @"Getting more words...";
+//    [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
+
+    // Determinate Progress bar
+    NSNumber* maxTimeToShowOnProgress = settings.http_timeout_seconds;
+    NSNumber* heartbeat = [NSNumber numberWithInt:5];
+    
+    //we need to construc the appropriate success, failure and progress messages for the submission
+    NSString* failureMessage = @"Oops, please try again.";
+    NSString* successMessage = @"Success!";
+    
+    NSMutableArray* progressMessage = [[[NSMutableArray alloc]init]autorelease];
+    [progressMessage addObject:@"Sending mime..."];
+    
+    // Save
+    ResourceContext *resourceContext = [ResourceContext instance];
+    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
+    
+    [self showDeterminateProgressBarWithMaximumDisplayTime:maxTimeToShowOnProgress withHeartbeat:heartbeat onSuccessMessage:successMessage onFailureMessage:failureMessage inProgressMessages:progressMessage];
+    
+//    [self performSelector:@selector(sendMimeWithProgressView:) withObject:progressView afterDelay:0.5];
+    
+//    ResourceContext *resourceContext = [ResourceContext instance];
+//    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
+    
+}
+
 - (IBAction) onGoButtonPressed:(id)sender {
     // Create MimeAnswer objects for each tableview row selected
     
-    ResourceContext *resourceContext = [ResourceContext instance];
+//    ResourceContext *resourceContext = [ResourceContext instance];
     
     // First check if "Public" has been seleced
     UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
@@ -309,12 +350,38 @@
     }
     
     // Save
-    [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
+    [self showHUDForMimeUpload];
     
-    // Now show the confirmation share screen
-    Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kSENTMIME withMimeID:self.mimeID withMimeAnswerIDorNil:nil];
-    [self.navigationController pushViewController:shareViewController animated:YES];
+//    // Save
+//    [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
+//    
+//    // Now show the confirmation share screen
+//    Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kSENTMIME withMimeID:self.mimeID withMimeAnswerIDorNil:nil];
+//    [self.navigationController pushViewController:shareViewController animated:YES];
+}
+
+#pragma mark -  MBProgressHUD Delegate
+-(void)hudWasHidden:(MBProgressHUD *)hud {
+    NSString* activityName = @"Mime_meCreateMimeViewController.hudWasHidden";
+    [self hideProgressBar];
     
+    UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
+    
+    if (progressView.didSucceed) {
+        //enumeration was sucessful
+        LOG_REQUEST(0, @"%@ Mime and MimeAnswer creation request was successful", activityName);
+        
+        // Now show the confirmation share screen
+        Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kSENTMIME withMimeID:self.mimeID withMimeAnswerIDorNil:nil];
+        [self.navigationController pushViewController:shareViewController animated:YES];
+
+        
+    }
+    else {
+        //enumeration failed
+        LOG_REQUEST(1, @"%@ Mime and MimeAnswer creation request failure", activityName);
+        
+    }
 }
 
 
