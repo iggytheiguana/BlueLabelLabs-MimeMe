@@ -114,8 +114,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    // Set background pattern
+//    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"background.png"]]];
+    
     // Add rounded corners to view
     [self.view.layer setCornerRadius:8.0f];
+    [self.view.layer setMasksToBounds:YES];
     
     // Add the navigation header
     Mime_meUINavigationHeaderView *navigationHeader = [[Mime_meUINavigationHeaderView alloc]initWithFrame:[Mime_meUINavigationHeaderView frameForNavigationHeader]];

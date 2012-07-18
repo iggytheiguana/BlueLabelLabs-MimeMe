@@ -45,8 +45,12 @@
         
         [self addSubview:self.view];
         
+        // Set background pattern
+//        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"background_header.png"]]];
+        
         // Add rounded corners to navigation header
         [self.view.layer setCornerRadius:8.0f];
+        [self.view.layer setMasksToBounds:YES];
         
         // Add drop shadow to navigation header
         [self.view.layer setShadowColor:[UIColor blackColor].CGColor];

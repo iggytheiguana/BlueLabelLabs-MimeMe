@@ -43,11 +43,10 @@
 						<string key="NSFrame">{{10, 125}, {300, 355}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
-						<object class="NSColor" key="IBUIBackgroundColor">
-							<int key="NSColorSpace">2</int>
-							<bytes key="NSRGB">MCAwLjY4MjM1Mjk2MDEgMC4zOTIxNTY4OTkAA</bytes>
+						<object class="NSColor" key="IBUIBackgroundColor" id="953928246">
+							<int key="NSColorSpace">3</int>
+							<bytes key="NSWhite">MCAwAA</bytes>
 						</object>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -77,7 +76,7 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUITableViewCell" id="232408393">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="77053311">
@@ -89,8 +88,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{20, 12}, {240, 25}}</string>
 								<reference key="NSSuperview" ref="77053311"/>
-								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -123,13 +120,9 @@
 						</array>
 						<string key="NSFrameSize">{280, 49}</string>
 						<reference key="NSSuperview" ref="232408393"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="942537905"/>
 						<string key="NSReuseIdentifierKey">_NS:11</string>
-						<object class="NSColor" key="IBUIBackgroundColor" id="953928246">
-							<int key="NSColorSpace">3</int>
-							<bytes key="NSWhite">MCAwAA</bytes>
-						</object>
+						<reference key="IBUIBackgroundColor" ref="953928246"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<int key="IBUIContentMode">4</int>
@@ -138,8 +131,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{280, 50}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="77053311"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
@@ -152,7 +143,7 @@
 				<real value="50" key="IBUIRowHeight"/>
 			</object>
 			<object class="IBUITableViewCell" id="491372656">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="131961489">
@@ -164,8 +155,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{20, 12}, {240, 25}}</string>
 								<reference key="NSSuperview" ref="131961489"/>
-								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -185,7 +174,6 @@
 						</array>
 						<string key="NSFrameSize">{280, 49}</string>
 						<reference key="NSSuperview" ref="491372656"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1018513160"/>
 						<string key="NSReuseIdentifierKey">_NS:11</string>
 						<reference key="IBUIBackgroundColor" ref="953928246"/>
@@ -197,8 +185,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{280, 50}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="131961489"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
@@ -211,7 +197,7 @@
 				<real value="50" key="IBUIRowHeight"/>
 			</object>
 			<object class="IBUITableViewCell" id="27386682">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="735117775">
@@ -223,8 +209,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{20, 12}, {240, 25}}</string>
 								<reference key="NSSuperview" ref="735117775"/>
-								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -244,7 +228,6 @@
 						</array>
 						<string key="NSFrameSize">{280, 49}</string>
 						<reference key="NSSuperview" ref="27386682"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="759297753"/>
 						<string key="NSReuseIdentifierKey">_NS:11</string>
 						<reference key="IBUIBackgroundColor" ref="953928246"/>
@@ -256,8 +239,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{280, 50}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="735117775"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
@@ -436,17 +417,12 @@
 					<string key="className">Mime_meGuessMenuViewController</string>
 					<string key="superclassName">BaseViewController</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="nv_navigationHeader">Mime_meUINavigationHeaderView</string>
 						<string key="tbl_mimes">UITableView</string>
 						<string key="tc_friendsHeader">UITableViewCell</string>
 						<string key="tc_recentHeader">UITableViewCell</string>
 						<string key="tc_staffPicksHeader">UITableViewCell</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="nv_navigationHeader">
-							<string key="name">nv_navigationHeader</string>
-							<string key="candidateClassName">Mime_meUINavigationHeaderView</string>
-						</object>
 						<object class="IBToOneOutletInfo" key="tbl_mimes">
 							<string key="name">tbl_mimes</string>
 							<string key="candidateClassName">UITableView</string>
@@ -467,53 +443,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/Mime_meGuessMenuViewController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">Mime_meUINavigationHeaderView</string>
-					<string key="superclassName">UIView</string>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="btn_back">UIButton</string>
-						<string key="btn_guess">UIButton</string>
-						<string key="btn_home">UIButton</string>
-						<string key="btn_mime">UIButton</string>
-						<string key="btn_scrapbook">UIButton</string>
-						<string key="btn_settings">UIButton</string>
-						<string key="view">UIView</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="btn_back">
-							<string key="name">btn_back</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="btn_guess">
-							<string key="name">btn_guess</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="btn_home">
-							<string key="name">btn_home</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="btn_mime">
-							<string key="name">btn_mime</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="btn_scrapbook">
-							<string key="name">btn_scrapbook</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="btn_settings">
-							<string key="name">btn_settings</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="view">
-							<string key="name">view</string>
-							<string key="candidateClassName">UIView</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/Mime_meUINavigationHeaderView.h</string>
 					</object>
 				</object>
 			</array>
