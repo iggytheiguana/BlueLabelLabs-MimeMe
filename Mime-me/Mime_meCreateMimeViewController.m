@@ -431,45 +431,6 @@
     
 }
 
-
-#pragma mark - Mime_meUINavigationHeader Delegate Methods
-- (IBAction) onHomeButtonPressed:(id)sender {
-    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
-    
-    [UIView animateWithDuration:0.75
-                     animations:^{
-                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.navigationController.view cache:YES];
-                     }];
-    [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
-}
-
-- (IBAction) onMimeButtonPressed:(id)sender {
-    
-}
-
-- (IBAction) onGuessButtonPressed:(id)sender {
-    Mime_meGuessMenuViewController *guessMenuViewController = [Mime_meGuessMenuViewController createInstance];
-    
-    [self.navigationController setViewControllers:[NSArray arrayWithObject:guessMenuViewController] animated:NO];
-}
-
-- (IBAction) onScrapbookButtonPressed:(id)sender {
-    
-}
-
-- (IBAction) onSettingsButtonPressed:(id)sender {
-    Mime_meSettingsViewController *settingsViewController = [Mime_meSettingsViewController createInstance];
-    
-    [UIView animateWithDuration:0.75
-                     animations:^{
-                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.navigationController.view cache:YES];
-                     }];
-    
-    [self.navigationController pushViewController:settingsViewController animated:NO];
-}
-
 #pragma mark - Mime_meUIMakeWordView Delegate Methods
 - (IBAction) onOkButtonPressed:(id)sender {
     // Store the new word locally for now

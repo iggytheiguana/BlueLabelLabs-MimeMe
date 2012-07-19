@@ -9,11 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @protocol Mime_meUINavigationHeaderViewDelgate <NSObject>
-@required
-
-- (IBAction) onHomeButtonPressed:(id)sender;
 
 @optional
+
+- (IBAction) onHomeButtonPressed:(id)sender;
 
 - (IBAction) onBackButtonPressed:(id)sender;
 - (IBAction) onSettingsButtonPressed:(id)sender;

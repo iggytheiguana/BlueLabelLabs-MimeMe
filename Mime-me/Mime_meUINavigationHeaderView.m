@@ -8,6 +8,11 @@
 
 #import "Mime_meUINavigationHeaderView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "Mime_meMenuViewController.h"
+#import "Mime_meCreateMimeViewController.h"
+#import "Mime_meGuessMenuViewController.h"
+#import "Mime_meScrapbookMenuViewController.h"
+#import "Mime_meSettingsViewController.h"
 
 @implementation Mime_meUINavigationHeaderView
 @synthesize view                = m_view;
@@ -88,27 +93,72 @@
 
 #pragma mark - UIButton Handlers
 - (IBAction) onHomeButtonPressed:(id)sender {
-    [self.delegate onHomeButtonPressed:sender];
+    UIViewController *parentViewController = (UIViewController *)self.delegate;
+    
+    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+    
+    [UIView animateWithDuration:0.75
+                     animations:^{
+                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:parentViewController.navigationController.view cache:YES];
+                     }];
+    [parentViewController.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
+    
+//    [self.delegate onHomeButtonPressed:sender];
 }
 
 - (IBAction) onMimeButtonPressed:(id)sender {
-    [self.delegate onMimeButtonPressed:sender];
+    UIViewController *parentViewController = (UIViewController *)self.delegate;
+    
+    Mime_meCreateMimeViewController *mimeViewController = [Mime_meCreateMimeViewController createInstance];
+    
+    [parentViewController.navigationController setViewControllers:[NSArray arrayWithObject:mimeViewController] animated:NO];
+    
+//    [self.delegate onMimeButtonPressed:sender];
 }
 
 - (IBAction) onGuessButtonPressed:(id)sender {
-    [self.delegate onGuessButtonPressed:sender];
+    UIViewController *parentViewController = (UIViewController *)self.delegate;
+    
+    Mime_meGuessMenuViewController *guessMenuViewController = [Mime_meGuessMenuViewController createInstance];
+    
+    [parentViewController.navigationController setViewControllers:[NSArray arrayWithObject:guessMenuViewController] animated:NO];
+    
+//    [self.delegate onGuessButtonPressed:sender];
 }
 
 - (IBAction) onScrapbookButtonPressed:(id)sender {
-    [self.delegate onScrapbookButtonPressed:sender];
+    UIViewController *parentViewController = (UIViewController *)self.delegate;
+    
+    Mime_meScrapbookMenuViewController *scrapbookMenuViewController = [Mime_meScrapbookMenuViewController createInstance];
+    
+    [parentViewController.navigationController setViewControllers:[NSArray arrayWithObject:scrapbookMenuViewController] animated:NO];
+    
+//    [self.delegate onScrapbookButtonPressed:sender];
 }
 
 - (IBAction) onSettingsButtonPressed:(id)sender {
-    [self.delegate onSettingsButtonPressed:sender];
+    UIViewController *parentViewController = (UIViewController *)self.delegate;
+    
+    Mime_meSettingsViewController *settingsViewController = [Mime_meSettingsViewController createInstance];
+    
+    [UIView animateWithDuration:0.75
+                     animations:^{
+                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:parentViewController.navigationController.view cache:YES];
+                     }];
+    
+    [parentViewController.navigationController pushViewController:settingsViewController animated:NO];
+    
+//    [self.delegate onSettingsButtonPressed:sender];
 }
 
 - (IBAction) onBackButtonPressed:(id)sender {
-    [self.delegate onBackButtonPressed:sender];
+    UIViewController *parentViewController = (UIViewController *)self.delegate;
+    
+    [parentViewController.navigationController popViewControllerAnimated:YES];
+    
+//    [self.delegate onBackButtonPressed:sender];
 }
 
 #pragma mark - Statics

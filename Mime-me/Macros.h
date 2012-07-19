@@ -59,6 +59,7 @@
 // Mime-Me spcecific logs
 #define LOG_MIME_MECREATEMIMEVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_mecreatemimeviewvontroller",level,__VA_ARGS__)
 #define LOG_MIME_MEGUESSMENUVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_meguessmenuviewvontroller",level,__VA_ARGS__)
+#define LOG_MIME_MESCRAPBOOKMENUVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_mescrapbookmenuviewvontroller",level,__VA_ARGS__)
 
 
 

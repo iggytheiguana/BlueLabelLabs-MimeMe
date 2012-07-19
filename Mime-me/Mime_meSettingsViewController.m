@@ -144,7 +144,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (indexPath.section == 0) {
-        // Scedule reminder section
         
         if (indexPath.row == 1) {
             //Logout
@@ -164,7 +163,6 @@
                                  [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.navigationController.view cache:YES];
                              }];
             
-//            [self.navigationController setViewControllers:[NSArray arrayWithObject:loginViewController] animated:NO];
             [self.navigationController pushViewController:loginViewController animated:NO];
         }
     }

@@ -59,6 +59,10 @@
 		52324D1215AE86D400D5DD91 /* UIImage+UIImageCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 52324D1115AE86D400D5DD91 /* UIImage+UIImageCategory.m */; };
 		523FCA5E15AFD070009DD963 /* Mime_meUIConfirmationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 523FCA5D15AFD070009DD963 /* Mime_meUIConfirmationView.m */; };
 		523FCA6115AFD07E009DD963 /* Mime_meUIConfirmationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 523FCA6015AFD07E009DD963 /* Mime_meUIConfirmationView.xib */; };
+		525C7CCE15B75D6100035802 /* Mime_meScrapbookMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 525C7CCC15B75D6100035802 /* Mime_meScrapbookMenuViewController.m */; };
+		525C7CCF15B75D6100035802 /* Mime_meScrapbookMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 525C7CCD15B75D6100035802 /* Mime_meScrapbookMenuViewController.xib */; };
+		525C7CD415B795AD00035802 /* Mime_meScrapbookFullTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 525C7CD215B795AC00035802 /* Mime_meScrapbookFullTableViewController.m */; };
+		525C7CD515B795AD00035802 /* Mime_meScrapbookFullTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 525C7CD315B795AC00035802 /* Mime_meScrapbookFullTableViewController.xib */; };
 		529BE9C915A2225D00B7346A /* logo-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C715A2225D00B7346A /* logo-MimeMe.png */; };
 		529BE9CA15A2225D00B7346A /* logo-MimeMe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */; };
 		529BE9CD15A22A1900B7346A /* logo_wName-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */; };
@@ -283,6 +287,12 @@
 		523FCA5D15AFD070009DD963 /* Mime_meUIConfirmationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meUIConfirmationView.m; sourceTree = "<group>"; };
 		523FCA6015AFD07E009DD963 /* Mime_meUIConfirmationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meUIConfirmationView.xib; sourceTree = "<group>"; };
 		523FCA6215AFDF1A009DD963 /* Mime_meCreateMimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meCreateMimeViewController.h; sourceTree = "<group>"; };
+		525C7CCB15B75D6100035802 /* Mime_meScrapbookMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meScrapbookMenuViewController.h; sourceTree = "<group>"; };
+		525C7CCC15B75D6100035802 /* Mime_meScrapbookMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meScrapbookMenuViewController.m; sourceTree = "<group>"; };
+		525C7CCD15B75D6100035802 /* Mime_meScrapbookMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meScrapbookMenuViewController.xib; sourceTree = "<group>"; };
+		525C7CD115B795AC00035802 /* Mime_meScrapbookFullTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meScrapbookFullTableViewController.h; sourceTree = "<group>"; };
+		525C7CD215B795AC00035802 /* Mime_meScrapbookFullTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meScrapbookFullTableViewController.m; sourceTree = "<group>"; };
+		525C7CD315B795AC00035802 /* Mime_meScrapbookFullTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meScrapbookFullTableViewController.xib; sourceTree = "<group>"; };
 		529BE9C715A2225D00B7346A /* logo-MimeMe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-MimeMe.png"; sourceTree = "<group>"; };
 		529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-MimeMe@2x.png"; sourceTree = "<group>"; };
 		529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo_wName-MimeMe.png"; sourceTree = "<group>"; };
@@ -1277,6 +1287,12 @@
 				52324CCB15ABA23100D5DD91 /* Mime_meSettingsViewController.h */,
 				52324CCC15ABA23100D5DD91 /* Mime_meSettingsViewController.m */,
 				52324CCD15ABA23100D5DD91 /* Mime_meSettingsViewController.xib */,
+				525C7CCB15B75D6100035802 /* Mime_meScrapbookMenuViewController.h */,
+				525C7CCC15B75D6100035802 /* Mime_meScrapbookMenuViewController.m */,
+				525C7CCD15B75D6100035802 /* Mime_meScrapbookMenuViewController.xib */,
+				525C7CD115B795AC00035802 /* Mime_meScrapbookFullTableViewController.h */,
+				525C7CD215B795AC00035802 /* Mime_meScrapbookFullTableViewController.m */,
+				525C7CD315B795AC00035802 /* Mime_meScrapbookFullTableViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1389,6 +1405,8 @@
 				522232D115B38ABB0065C6DC /* background@2x.png in Resources */,
 				522232D515B392220065C6DC /* background_header.png in Resources */,
 				522232D615B392220065C6DC /* background_header@2x.png in Resources */,
+				525C7CCF15B75D6100035802 /* Mime_meScrapbookMenuViewController.xib in Resources */,
+				525C7CD515B795AD00035802 /* Mime_meScrapbookFullTableViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1548,6 +1566,8 @@
 				52324D1215AE86D400D5DD91 /* UIImage+UIImageCategory.m in Sources */,
 				5226941115AF7D8100C7799D /* Mime_meUIAnswerView.m in Sources */,
 				523FCA5E15AFD070009DD963 /* Mime_meUIConfirmationView.m in Sources */,
+				525C7CCE15B75D6100035802 /* Mime_meScrapbookMenuViewController.m in Sources */,
+				525C7CD415B795AD00035802 /* Mime_meScrapbookFullTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

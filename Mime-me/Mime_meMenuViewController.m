@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Mime_meCreateMimeViewController.h"
 #import "Mime_meGuessMenuViewController.h"
+#import "Mime_meScrapbookMenuViewController.h"
 #import "Mime_meSettingsViewController.h"
 
 @interface Mime_meMenuViewController ()
@@ -79,7 +80,9 @@
 }
 
 - (IBAction) onScrapbookButtonPressed:(id)sender {
+    Mime_meScrapbookMenuViewController *scrapbookMenuViewController = [Mime_meScrapbookMenuViewController createInstance];
     
+    [self.navigationController setViewControllers:[NSArray arrayWithObject:scrapbookMenuViewController] animated:YES];
 }
 
 - (IBAction) onSettingsButtonPressed:(id)sender {

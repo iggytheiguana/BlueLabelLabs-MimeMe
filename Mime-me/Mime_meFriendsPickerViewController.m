@@ -267,18 +267,6 @@
     
 }
 
-#pragma mark - Mime_meUINavigationHeader Delegate Methods
-- (IBAction) onHomeButtonPressed:(id)sender {
-    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
-    
-    [UIView animateWithDuration:0.75
-                     animations:^{
-                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-                         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.navigationController.view cache:NO];
-                     }];
-    [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
-}
-
 #pragma mark - UIButton Handlers
 //- (void)sendMimeWithProgressView:(UIProgressHUDView *)progressView {
 //    ResourceContext *resourceContext = [ResourceContext instance];

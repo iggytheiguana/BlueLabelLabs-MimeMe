@@ -1,12 +1,12 @@
 //
-//  Mime_meGuessFullTableViewController.m
+//  Mime_meScrapbookFullTableViewController.m
 //  Mime-me
 //
 //  Created by Jordan Gurrieri on 7/5/12.
 //  Copyright (c) 2012 Blue Label Solutions LLC. All rights reserved.
 //
 
-#import "Mime_meGuessFullTableViewController.h"
+#import "Mime_meScrapbookFullTableViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Mime_meMenuViewController.h"
 #import "Mime_meCreateMimeViewController.h"
@@ -23,11 +23,11 @@
 #define kMIMEID @"mimeid"
 #define kMAXROWS 20
 
-@interface Mime_meGuessFullTableViewController ()
+@interface Mime_meScrapbookFullTableViewController ()
 
 @end
 
-@implementation Mime_meGuessFullTableViewController
+@implementation Mime_meScrapbookFullTableViewController
 @synthesize frc_mimes           = __frc_mimes;
 
 @synthesize nv_navigationHeader = m_nv_navigationHeader;
@@ -43,7 +43,7 @@
 
 #pragma mark - Properties
 - (NSFetchedResultsController*)frc_mimes {
-    NSString* activityName = @"Mime_meGuessMenuViewController.frc_mimes:";
+    NSString* activityName = @"Mime_meScrapbookFullTableViewController.frc_mimes:";
     if (__frc_mimes != nil) {
         return __frc_mimes;
     }
@@ -350,7 +350,7 @@
       forChangeType:(NSFetchedResultsChangeType)type 
        newIndexPath:(NSIndexPath *)newIndexPath {
     
-    NSString* activityName = @"Mime_meGuessMenuViewController.controller.didChangeObject:";
+    NSString* activityName = @"Mime_meScrapbookFullTableViewController.controller.didChangeObject:";
     if (controller == self.frc_mimes) {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
     }
@@ -392,8 +392,8 @@
 }
 
 #pragma mark - Static Initializers
-+ (Mime_meGuessFullTableViewController*)createInstance {
-    Mime_meGuessFullTableViewController* instance = [[Mime_meGuessFullTableViewController alloc]initWithNibName:@"Mime_meGuessFullTableViewController" bundle:nil];
++ (Mime_meScrapbookFullTableViewController*)createInstance {
+    Mime_meScrapbookFullTableViewController* instance = [[Mime_meScrapbookFullTableViewController alloc]initWithNibName:@"Mime_meScrapbookFullTableViewController" bundle:nil];
     [instance autorelease];
     return instance;
 }
