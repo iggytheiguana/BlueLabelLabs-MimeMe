@@ -44,4 +44,10 @@
 + (id) queryForFriends:(NSNumber*)userID;
 + (id) queryForWords;
 + (id) queryForSingleWorld:(NSString*)word;
++ (id) queryForMimeAnswersWithTarget:(NSNumber*)userid withState:(NSNumber*)state;
++ (id) queryForStaffPickedMimes; 
++ (id) queryForPublicMimes;
++ (id) queryForFavoriteMimes:(NSNumber*)userid;
++ (id) queryForMostRecentMimes;
++ (id) queryForSentMimeAnswers:(NSNumber*)creatorid;
 @end

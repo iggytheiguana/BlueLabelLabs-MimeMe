@@ -33,3 +33,5 @@ NSString* const FRIEND                      =@"Friend";
 NSString* const WORD                        =@"Word";
 NSString* const MIME                        =@"Mime";
 NSString* const MIMEANSWER                  =@"MimeAnswer";
+NSString* const COMMENT                     =@"Comment";
+NSString* const FAVORITE                    =@"Favorite";

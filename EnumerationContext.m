@@ -67,15 +67,15 @@
 }
 //
 //#pragma mark - Static constructors for known scenarios
-//+ (EnumerationContext*) contextForFeeds:(NSNumber *)userid {
-//    ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
-//    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
-//    enumerationContext.pageSize =settingsObject.pagesize;
-//    enumerationContext.maximumNumberOfResults = settingsObject.feed_maxnumtodownload;
-//    
-//    return enumerationContext;
-//
-//}
++ (EnumerationContext*) contextForFeeds:(NSNumber *)userid {
+    ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize =settingsObject.pagesize;
+    enumerationContext.maximumNumberOfResults = settingsObject.feed_maxnumtodownload;
+    
+    return enumerationContext;
+
+}
 //
 //+ (EnumerationContext*) contextForDrafts {
 //    ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
@@ -200,6 +200,70 @@
     enumerationContext.pageSize = [NSNumber numberWithInt:1];
     
     enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:1];  
+    return enumerationContext;
+}
+
++ (EnumerationContext*)contextForMimeAnswersWithTarget:(NSNumber *)userid withState:(NSNumber *)state
+{
+    
+    ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize = settingsObject.pagesize;
+    
+    enumerationContext.maximumNumberOfResults = settingsObject.feed_maxnumtodownload;   
+    return enumerationContext;
+
+}
+
++ (EnumerationContext*) contextForStaffPickMimes
+{
+    
+    ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize = settingsObject.pagesize;
+    
+    enumerationContext.maximumNumberOfResults = settingsObject.feed_maxnumtodownload;   
+    return enumerationContext;
+}
+
++ (EnumerationContext*) contextForPublicMimes
+{
+    
+    ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize = settingsObject.pagesize;
+    
+    enumerationContext.maximumNumberOfResults = settingsObject.feed_maxnumtodownload;   
+    return enumerationContext;
+}
+
++ (EnumerationContext*) contextForFavoriteMimes:(NSNumber *)userid
+{
+    ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize = settingsObject.pagesize;
+    
+    enumerationContext.maximumNumberOfResults = settingsObject.feed_maxnumtodownload;   
+    return enumerationContext;
+}
+
++ (EnumerationContext*) contextForMostRecentMimes
+{
+    ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize = settingsObject.pagesize;
+    
+    enumerationContext.maximumNumberOfResults = settingsObject.feed_maxnumtodownload;   
+    return enumerationContext;
+}
+
++ (EnumerationContext*) contextForSentMimeAnswer:(NSNumber *)creatorid
+{
+    ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize = settingsObject.pagesize;
+    
+    enumerationContext.maximumNumberOfResults = settingsObject.feed_maxnumtodownload;   
     return enumerationContext;
 }
 

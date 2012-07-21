@@ -142,3 +142,6 @@ extern NSString* const NUMBEROFTIMESUSED;
 extern NSString* const NUMBEROFATTEMPTS;
 extern NSString* const NUMBERTIMESANSWERED;
 extern NSString* const NUMBEROFTIMESVIEWED;
+extern NSString* const MIMEANSWERID;
+extern NSString* const ISSTAFFPICK;
+extern NSString* const ISPUBLIC;
