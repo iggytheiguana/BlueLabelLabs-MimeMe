@@ -44,6 +44,7 @@
         self.downloadSize = 0;
         self.sentBytes = 0;
         self.downloadSize = 0;
+        self.progress = 0.0f;
         self.downloadedBytes = 0;
         self.parentRequest = nil;
         self.consequentialUpdates = nil;
@@ -77,6 +78,7 @@ withChangedAttributes:(NSArray*)changedAttributes
     self.downloadSize = 0;
     self.downloadedBytes = 0;
     self.consequentialUpdates = nil;
+    self.progress = 0.0f;
     [self setChangedAttributesList:changedAttributes];
     
 //    NSMutableArray* cr = [[NSMutableArray alloc]init];

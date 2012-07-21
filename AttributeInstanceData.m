@@ -124,13 +124,15 @@ insertIntoResourceContext:(ResourceContext *)context
     
     //we mark numberofvotes attributes on Page and Photo objects local
     if ([type isEqualToString:PAGE] ||
-        [type isEqualToString:PHOTO]) {
+        [type isEqualToString:PHOTO] ||
+        [type isEqualToString:WORD]) {
         
         if ([lowerCaseName isEqualToString:NUMBEROFVOTES] ||
             [lowerCaseName isEqualToString:NUMBEROFPHOTOS] ||
             [lowerCaseName isEqualToString:NUMBEROFCAPTIONS] ||
             [lowerCaseName isEqualToString:NUMBEROFPUBLISHVOTES] ||
-            [lowerCaseName isEqualToString:NUMBEROFFLAGS]) {
+            [lowerCaseName isEqualToString:NUMBEROFFLAGS] ||
+            [lowerCaseName isEqualToString:NUMBEROFTIMESUSED]) {
             retVal.islocal = [NSNumber numberWithBool:YES];
         }
     }
