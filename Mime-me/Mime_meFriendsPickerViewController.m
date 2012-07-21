@@ -14,7 +14,8 @@
 #import "ViewMimeCase.h"
 #import "Macros.h"
 #import "Mime_meAppDelegate.h"
-
+#import "FacebookFriend.h"
+#import "JSONKit.h"
 @interface Mime_meFriendsPickerViewController ()
 
 @end
@@ -27,6 +28,7 @@
 @synthesize tc_addContactsHeader    = m_tc_addContactsHeader;
 @synthesize mimeID                  = m_mimeID;
 @synthesize friendsArray            = m_friendsArray;
+@synthesize facebookFriends         = m_facebookFriends;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -63,8 +65,14 @@
     // TEMP: Data arrays for tableview
     self.friendsArray = [NSArray arrayWithObjects:@"Laura", @"Julie", @"Matt", @"David", nil];
     
+   
+    
 }
-
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self enumerateFacebookFriends];
+}
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -370,6 +378,48 @@
         LOG_REQUEST(1, @"%@ Mime and MimeAnswer creation request failure", activityName);
         
     }
+}
+
+//this method will call the Facebook delegate to enumerate the user's friends
+- (void) enumerateFacebookFriends
+{
+    NSString* activityName = @"Mime_meFriendsPickerViewController.enumerateFacebookFriends:";
+    Mime_meAppDelegate* appDelegate = (Mime_meAppDelegate*)([UIApplication sharedApplication].delegate);
+    Facebook* facebook = appDelegate.facebook;
+    if (facebook.isSessionValid)
+    {
+        LOG_MIME_FRIENDPICKERVIEWCONTROLLER(0,@"%@ Beginning to enumerate Facebook friends for user",activityName);
+        [facebook requestWithGraphPath:@"me/friends" andDelegate:self];
+    }
+    else {
+        //error condition
+        LOG_MIME_FRIENDPICKERVIEWCONTROLLER(1,@"%@ Facebook session is not valid, need reauthentication",activityName);
+    }
+    
+}
+
+#pragma mark - Facebook Session Delegate methods
+- (void) request:(FBRequest *)request didLoad:(id)result
+{
+    NSString* activityName = @"Mime_meFriendsPickerViewController.request:didLoad:";
+    NSMutableArray* facebookFriendsList = [[NSMutableArray alloc]init];
+    //completion of request
+    if (result != nil)
+    {
+        NSArray* friendsList = [(NSDictionary*)result objectForKey:@"data"];
+        LOG_MIME_FRIENDPICKERVIEWCONTROLLER(0,@"%@ Enumerated %d Facebook friends for user",activityName,[friendsList count]);
+        
+        for (int i = 0; i < [friendsList count];i++)
+        {
+            NSDictionary* friendJSON = [friendsList objectAtIndex:i];
+          
+            FacebookFriend* facebookFriend = [FacebookFriend createInstanceFromJSON:friendJSON];
+            [facebookFriendsList addObject:facebookFriend];
+            [facebookFriend release];
+        }
+    }
+    self.facebookFriends = facebookFriendsList;
+    [facebookFriendsList release];
 }
 
 

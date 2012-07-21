@@ -239,48 +239,33 @@ withAuthenticationContext:(AuthenticationContext *)context
      isSavedLogin:(BOOL)isSavedLogin 
 {
     NSString* activityName = @"AuthenticationManager.loginUser:";
- //   ResourceContext* resourceContext = [ResourceContext instance];
-    
-//    PlatformAppDelegate* appDelegate = (PlatformAppDelegate*)[[UIApplication sharedApplication]delegate];
- //   Facebook* facebook = appDelegate.facebook;
-    //check to see if the passed in context has valid facebook access data, if so, initiate the facebook session
-//    if (context.facebookaccesstoken) {
-//        
-//        facebook.accessToken = context.facebookaccesstoken;
-//        facebook.expirationDate =[DateTimeHelper parseWebServiceDateDouble:context.facebookaccesstokenexpirydate];
-//        if (![facebook isSessionValid]) {            
-//            LOG_SECURITY(1, @"%@Facebook session is invalid with token %@",activityName,facebook.accessToken);
-//            //need to begin re-authentication procedure
-//            return NO;
-//        }
-//    }
-//    else {
-//        LOG_SECURITY(1, @"%@%@",activityName,@"No facebook token returned in authenticator");
-//        return NO;
-//    }
+    Mime_meAppDelegate* appDelegate = (Mime_meAppDelegate*)[UIApplication sharedApplication].delegate;
+    Facebook* facebook = appDelegate.facebook;
     //set the current user id
     self.m_LoggedInUserID = userID;
     
-    
-    //check to see if the profile picture is empty, if so, lets grab it from fb
-//    User* currentUser = (User*)[resourceContext resourceWithType:USER withID:m_LoggedInUserID]; 
-    
-//    if (currentUser == nil) {
-//        //if the user object isnt in the database, we need to fetch it from the web service
-//        CloudEnumerator* userEnumerator = [[CloudEnumeratorFactory instance]enumeratorForUser:m_LoggedInUserID];
-//        LOG_SECURITY(0,@"%@Downloading missing user object for user %@ from the cloud",activityName,m_LoggedInUserID);
-//        //execute the enumerator
-//        [userEnumerator enumerateUntilEnd];
-//    }
-//    
-//    if (currentUser != nil && (currentUser.thumbnailurl == nil ||
-//                               [currentUser.thumbnailurl isEqualToString:@""])) {
-//        
-//        
-//        //since we logged in successfully, now lets grab the profile photo                    
-//        self.fbPictureRequest = [facebook requestWithGraphPath:@"me/picture" andDelegate:self];
-//        LOG_SECURITY(0,@"%@User %@ doesnt have a profile picture, downloading from Facebook...",activityName,currentUser.objectid);
-//    }
+    //need to set the facebook session id
+    if (!facebook.isSessionValid)
+    {
+        //facebook needs to be populated with the access token
+        if (context.facebooktoken != nil &&
+            ![context.facebooktoken isEqualToString:@""])
+        {
+            //authenticsation context does has a facebook token stored within it
+            facebook.accessToken = context.facebooktoken;
+            double expiryDateDouble = [context.facebooktokenexpiry doubleValue];
+            facebook.expirationDate = [NSDate dateWithTimeIntervalSince1970:expiryDateDouble];
+            
+            if (!facebook.isSessionValid)
+            {
+                LOG_SECURITY(1,@"%@ Could not restablish valid Facebook session from stored credentials",activityName);   
+            }
+            else {
+                LOG_SECURITY(0,@"%@ Successfully restablished Facebook session from stored credentials",activityName);
+            
+            }
+        }
+    }
     
     //now we emit the system wide notification to tell people the user has logged in
     //we only emit this event if the user has pressed the "login" button rather than a saved context

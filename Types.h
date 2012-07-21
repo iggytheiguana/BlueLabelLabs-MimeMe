@@ -31,3 +31,4 @@ extern NSString* const FRIEND;
 extern NSString* const WORD;
 extern NSString* const MIME;
 extern NSString* const MIMEANSWER;
+extern NSString* const FACEBOOKFRIEND;

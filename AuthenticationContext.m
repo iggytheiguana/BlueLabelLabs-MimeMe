@@ -21,7 +21,8 @@
 @dynamic hasfacebook;
 @dynamic facebookuserid;
 @dynamic isfirsttime;
-
+@dynamic facebooktoken;
+@dynamic facebooktokenexpiry;
 
 #define kFACEBOOKMAXDATE    64092211200
 
