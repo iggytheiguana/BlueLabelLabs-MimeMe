@@ -39,7 +39,6 @@
 - (IBAction) onHomeButtonPressed:(id)sender;
 
 - (IBAction) onGoButtonPressed:(id)sender;
-- (void) enumerateFacebookFriends;
 
 + (Mime_meFriendsPickerViewController*)createInstanceWithMimeID:(NSNumber *)mimeID;
 

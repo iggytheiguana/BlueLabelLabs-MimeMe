@@ -14,8 +14,11 @@
 #import "ViewMimeCase.h"
 #import "Macros.h"
 #import "Mime_meAppDelegate.h"
+#import "Mime_meFriendsListTableViewController.h"
+
 #import "FacebookFriend.h"
 #import "JSONKit.h"
+
 @interface Mime_meFriendsPickerViewController ()
 
 @end
@@ -30,6 +33,27 @@
 @synthesize friendsArray            = m_friendsArray;
 @synthesize facebookFriends         = m_facebookFriends;
 
+
+#pragma mark - Enumerators
+- (void) enumerateFacebookFriends {
+    //this method will call the Facebook delegate to enumerate the user's friends
+    
+    NSString* activityName = @"Mime_meFriendsPickerViewController.enumerateFacebookFriends:";
+    Mime_meAppDelegate* appDelegate = (Mime_meAppDelegate*)([UIApplication sharedApplication].delegate);
+    Facebook* facebook = appDelegate.facebook;
+    if (facebook.isSessionValid)
+    {
+        LOG_MIME_FRIENDPICKERVIEWCONTROLLER(0,@"%@ Beginning to enumerate Facebook friends for user",activityName);
+        [facebook requestWithGraphPath:@"me/friends" andDelegate:self];
+    }
+    else {
+        //error condition
+        LOG_MIME_FRIENDPICKERVIEWCONTROLLER(1,@"%@ Facebook session is not valid, need reauthentication",activityName);
+    }
+    
+}
+
+#pragma mark - View Lifecycle
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -68,11 +92,7 @@
    
     
 }
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self enumerateFacebookFriends];
-}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -84,6 +104,13 @@
     self.tbl_friends = nil;
     self.tc_friendsHeader = nil;
     self.tc_addContactsHeader = nil;
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self enumerateFacebookFriends];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -266,6 +293,10 @@
         if (indexPath.row == 1) {
             // Launch Facebook Friends
             
+            Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
+            
+            [self.navigationController pushViewController:friendsListTableViewController animated:YES];
+            
         }
         else {
             // Launch Address Book
@@ -356,7 +387,7 @@
 //    [self.navigationController pushViewController:shareViewController animated:YES];
 }
 
-#pragma mark -  MBProgressHUD Delegate
+#pragma mark - MBProgressHUD Delegate
 -(void)hudWasHidden:(MBProgressHUD *)hud {
     NSString* activityName = @"Mime_meCreateMimeViewController.hudWasHidden";
     [self hideProgressBar];
@@ -380,23 +411,6 @@
     }
 }
 
-//this method will call the Facebook delegate to enumerate the user's friends
-- (void) enumerateFacebookFriends
-{
-    NSString* activityName = @"Mime_meFriendsPickerViewController.enumerateFacebookFriends:";
-    Mime_meAppDelegate* appDelegate = (Mime_meAppDelegate*)([UIApplication sharedApplication].delegate);
-    Facebook* facebook = appDelegate.facebook;
-    if (facebook.isSessionValid)
-    {
-        LOG_MIME_FRIENDPICKERVIEWCONTROLLER(0,@"%@ Beginning to enumerate Facebook friends for user",activityName);
-        [facebook requestWithGraphPath:@"me/friends" andDelegate:self];
-    }
-    else {
-        //error condition
-        LOG_MIME_FRIENDPICKERVIEWCONTROLLER(1,@"%@ Facebook session is not valid, need reauthentication",activityName);
-    }
-    
-}
 
 #pragma mark - Facebook Session Delegate methods
 - (void) request:(FBRequest *)request didLoad:(id)result
