@@ -59,6 +59,8 @@
 		52324D1215AE86D400D5DD91 /* UIImage+UIImageCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 52324D1115AE86D400D5DD91 /* UIImage+UIImageCategory.m */; };
 		523FCA5E15AFD070009DD963 /* Mime_meUIConfirmationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 523FCA5D15AFD070009DD963 /* Mime_meUIConfirmationView.m */; };
 		523FCA6115AFD07E009DD963 /* Mime_meUIConfirmationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 523FCA6015AFD07E009DD963 /* Mime_meUIConfirmationView.xib */; };
+		52564CF515BB648C00AABC8E /* Mime_meFriendsListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52564CF315BB648C00AABC8E /* Mime_meFriendsListTableViewController.m */; };
+		52564CF615BB648C00AABC8E /* Mime_meFriendsListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52564CF415BB648C00AABC8E /* Mime_meFriendsListTableViewController.xib */; };
 		525C7CCE15B75D6100035802 /* Mime_meScrapbookMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 525C7CCC15B75D6100035802 /* Mime_meScrapbookMenuViewController.m */; };
 		525C7CCF15B75D6100035802 /* Mime_meScrapbookMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 525C7CCD15B75D6100035802 /* Mime_meScrapbookMenuViewController.xib */; };
 		525C7CD415B795AD00035802 /* Mime_meScrapbookFullTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 525C7CD215B795AC00035802 /* Mime_meScrapbookFullTableViewController.m */; };
@@ -288,6 +290,9 @@
 		523FCA5D15AFD070009DD963 /* Mime_meUIConfirmationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meUIConfirmationView.m; sourceTree = "<group>"; };
 		523FCA6015AFD07E009DD963 /* Mime_meUIConfirmationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meUIConfirmationView.xib; sourceTree = "<group>"; };
 		523FCA6215AFDF1A009DD963 /* Mime_meCreateMimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meCreateMimeViewController.h; sourceTree = "<group>"; };
+		52564CF215BB648C00AABC8E /* Mime_meFriendsListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meFriendsListTableViewController.h; sourceTree = "<group>"; };
+		52564CF315BB648C00AABC8E /* Mime_meFriendsListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meFriendsListTableViewController.m; sourceTree = "<group>"; };
+		52564CF415BB648C00AABC8E /* Mime_meFriendsListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meFriendsListTableViewController.xib; sourceTree = "<group>"; };
 		525C7CCB15B75D6100035802 /* Mime_meScrapbookMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meScrapbookMenuViewController.h; sourceTree = "<group>"; };
 		525C7CCC15B75D6100035802 /* Mime_meScrapbookMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meScrapbookMenuViewController.m; sourceTree = "<group>"; };
 		525C7CCD15B75D6100035802 /* Mime_meScrapbookMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meScrapbookMenuViewController.xib; sourceTree = "<group>"; };
@@ -1300,6 +1305,9 @@
 				525C7CD115B795AC00035802 /* Mime_meScrapbookFullTableViewController.h */,
 				525C7CD215B795AC00035802 /* Mime_meScrapbookFullTableViewController.m */,
 				525C7CD315B795AC00035802 /* Mime_meScrapbookFullTableViewController.xib */,
+				52564CF215BB648C00AABC8E /* Mime_meFriendsListTableViewController.h */,
+				52564CF315BB648C00AABC8E /* Mime_meFriendsListTableViewController.m */,
+				52564CF415BB648C00AABC8E /* Mime_meFriendsListTableViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1414,6 +1422,7 @@
 				522232D615B392220065C6DC /* background_header@2x.png in Resources */,
 				525C7CCF15B75D6100035802 /* Mime_meScrapbookMenuViewController.xib in Resources */,
 				525C7CD515B795AD00035802 /* Mime_meScrapbookFullTableViewController.xib in Resources */,
+				52564CF615BB648C00AABC8E /* Mime_meFriendsListTableViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1576,6 +1585,7 @@
 				525C7CCE15B75D6100035802 /* Mime_meScrapbookMenuViewController.m in Sources */,
 				525C7CD415B795AD00035802 /* Mime_meScrapbookFullTableViewController.m in Sources */,
 				C541443715BA4A99008F397F /* FacebookFriend.m in Sources */,
+				52564CF515BB648C00AABC8E /* Mime_meFriendsListTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
