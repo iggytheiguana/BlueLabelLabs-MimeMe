@@ -298,7 +298,7 @@
     
     // Save
     ResourceContext *resourceContext = [ResourceContext instance];
-    [resourceContext save:NO onFinishCallback:nil trackProgressWith:progressView];
+    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
     
 //    [self performSelector:@selector(sendMimeWithProgressView:) withObject:progressView afterDelay:0.5];
     

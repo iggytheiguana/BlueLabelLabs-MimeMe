@@ -129,10 +129,11 @@
     //we get the progress from this request, and then we do a  average across all the requests
     //set for this progress indicator
     float denominator = [self.requests count];
-    float numerator = 0;
+    float numerator = 0.0f;
     
     for (Request* request in self.requests) {
-        numerator += request.progress;
+        float requestProgress = request.progress;
+        numerator = numerator + requestProgress;
     }
     
     float p = (numerator / denominator)*100;

@@ -12,6 +12,10 @@
 //this URL is to connect to BOBBY's development environment
 //NSString* const default_BASEURL = @"http://108.54.179.39/mimeme/rest";
 
+//this URL is to connect to JORDAN's development environment
+//NSString* const default_BASEURL = @"http://216.243.43.184/mimeme/rest";
+
+
 //this URL is to connect to the PRODUCTION MIMEME environment
 NSString* const default_BASEURL = @"http://www.mime-me.com/mimeme/rest";
 
