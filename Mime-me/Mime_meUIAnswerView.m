@@ -9,9 +9,12 @@
 #import "Mime_meUIAnswerView.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define kMAXWORDLENGTH 15
+#define kMAXWORDLENGTH 20
+#define kALLOWEDCHARACTERSET @"abcdefghijklmnopqrstuvwxyz0123456789 "
+
 #define kANSWERVIEWHEIGHT 84.0
 #define kANSWERVIEWHIDDEN 50.0
+
 #define kKEYBOARDHEIGHTPORTRAIT 216.0
 #define kKEYBOARDHEIGHTLANDSCAPE 162.0
 
@@ -244,20 +247,24 @@
      ];
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    // textfield editing has ended
-    
-}
+//- (void)textFieldDidEndEditing:(UITextField *)textField
+//{
+//    // textfield editing has ended
+//    
+//}
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)text {    
     // Prevent numbers, spaces, special characters and capitals in the word and limit to 15 letters
     
-    if ([text rangeOfCharacterFromSet:[[NSCharacterSet lowercaseLetterCharacterSet] invertedSet]].location != NSNotFound) {
-        // only lower case letters allowed
+//    if ([text rangeOfCharacterFromSet:[[NSCharacterSet lowercaseLetterCharacterSet] invertedSet]].location != NSNotFound) {
+//        // only lower case letters allowed
+//        return NO;
+//    }
+    if (([kALLOWEDCHARACTERSET rangeOfString:text].location == NSNotFound) && (range.length != 1)) {
+        // only lower case letters and numbers allowed allowed
         return NO;
     }
-    else if ([textField.text length] >= kMAXWORDLENGTH) {
+    else if (([textField.text length] >= kMAXWORDLENGTH) && (range.length != 1)) {
         return NO;
     }
     

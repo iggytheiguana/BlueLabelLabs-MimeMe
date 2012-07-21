@@ -9,7 +9,8 @@
 #import "Mime_meUIMakeWordView.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define kMAXWORDLENGTH 15
+#define kMAXWORDLENGTH 20
+#define kALLOWEDCHARACTERSET @"abcdefghijklmnopqrstuvwxyz0123456789 "
 
 @implementation Mime_meUIMakeWordView
 @synthesize view                = m_view;
@@ -137,10 +138,9 @@
     // Check to see that the newWord is not empty and does not contain any whitespace
     if (newWordStr == nil ||
         [newWordStr isEqualToString:@""] ||
-        [newWordStr isEqualToString:@" "] ||
-        [newWordStr rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]].location != NSNotFound) {
+        [newWordStr isEqualToString:@" "]) {
         
-        // there is no word or whitespace present
+        // there is no word present
         self.tf_newWord.placeholder = @"please enter a word";
     }
     else {
@@ -173,13 +173,17 @@
 //}
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)text {    
-    // Prevent numbers, spaces, special characters and capitals in the word and limit to 15 letters
+    // Prevent special characters and capitals in the word and limit to 15 letters
     
-    if ([text rangeOfCharacterFromSet:[[NSCharacterSet lowercaseLetterCharacterSet] invertedSet]].location != NSNotFound) {
-        // only lower case letters allowed
+//    if ([text rangeOfCharacterFromSet:[[NSCharacterSet lowercaseLetterCharacterSet] invertedSet]].location != NSNotFound) {
+//        // only lower case letters allowed
+//        return NO;
+//    }
+    if (([kALLOWEDCHARACTERSET rangeOfString:text].location == NSNotFound) && (range.length != 1)) {
+        // only lower case letters and numbers allowed allowed
         return NO;
     }
-    else if ([textField.text length] >= kMAXWORDLENGTH) {
+    else if (([textField.text length] >= kMAXWORDLENGTH) && (range.length != 1)) {
         return NO;
     }
     
