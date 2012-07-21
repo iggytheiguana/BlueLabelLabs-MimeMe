@@ -99,6 +99,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{20, 106}, {260, 37}}</string>
 								<reference key="NSSuperview" ref="191373211"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -169,7 +170,7 @@
 										<int key="IBUIContentMode">7</int>
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-										<string key="IBUIText">only lowercase letters are allowed</string>
+										<string key="IBUIText">up to 20 letters, numbers and spaces are allowed</string>
 										<reference key="IBUITextColor" ref="183831705"/>
 										<reference key="IBUIHighlightedColor" ref="183831705"/>
 										<reference key="IBUIShadowColor" ref="27661619"/>
