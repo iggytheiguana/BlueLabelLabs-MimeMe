@@ -26,6 +26,7 @@ NSString* const FOLLOW                      =@"follow";
 NSString* const ATTRIBUTECHANGE             =@"attributechange";
 NSString* const MEDITATION                  =@"meditation";
 NSString* const MEDITATIONINSTANCE          =@"meditationinstance";
+NSString* const FACEBOOKFRIEND              =@"FacebookFriend";
 
 
 NSString* const FRIEND                      =@"Friend";

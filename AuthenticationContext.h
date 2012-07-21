@@ -22,7 +22,8 @@
 @property (nonatomic, retain) NSNumber* hasfacebook;
 @property (nonatomic, retain) NSString* facebookuserid;
 @property (nonatomic, retain) NSNumber* isfirsttime;
-
+@property (nonatomic, retain) NSString* facebooktoken;
+@property (nonatomic, retain) NSNumber* facebooktokenexpiry;
 
 - (NSString*) toJSON;
 - (id) initFromJSONDictionary:(NSDictionary *)jsonDictionary;

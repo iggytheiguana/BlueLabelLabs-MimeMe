@@ -39,6 +39,8 @@
     <entity name="authenticationcontext" representedClassName="AuthenticationContext">
         <attribute name="authenticator" optional="YES" attributeType="Binary"/>
         <attribute name="expirydate" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="facebooktoken" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="facebooktokenexpiry" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="facebookuserid" optional="YES" attributeType="String"/>
         <attribute name="hasfacebook" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
         <attribute name="hastwitter" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
@@ -50,6 +52,10 @@
         <attribute name="creatorid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="creatorname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mimeid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="FacebookFriend" representedClassName="FacebookFriend" syncable="YES">
+        <attribute name="facebookid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Favorite" representedClassName="Favorite" parentEntity="resource" syncable="YES">
         <attribute name="mimeid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -76,6 +82,8 @@
         <attribute name="creatorid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="creatorname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imageurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ispublic" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="isstaffpick" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="numberofattempts" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="numberoftimesviewed" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="numbertimesanswered" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -95,6 +103,7 @@
         <attribute name="state" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="targetemail" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="targetfacebookid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="targetname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="targetuserid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="request" representedClassName="Request">
@@ -153,10 +162,11 @@
         <element name="AttributeInstanceData" positionX="-216" positionY="-141" width="128" height="150"/>
         <element name="authenticationcontext" positionX="-198" positionY="336" width="128" height="150"/>
         <element name="Comment" positionX="18" positionY="-189" width="128" height="105"/>
+        <element name="FacebookFriend" positionX="-207" positionY="576" width="128" height="75"/>
         <element name="Favorite" positionX="466" positionY="-270" width="128" height="75"/>
         <element name="feed" positionX="367" positionY="576" width="128" height="180"/>
         <element name="Friend" positionX="529" positionY="-96" width="128" height="105"/>
-        <element name="Mime" positionX="313" positionY="-153" width="128" height="195"/>
+        <element name="Mime" positionX="313" positionY="-153" width="128" height="225"/>
         <element name="MimeAnswer" positionX="81" positionY="9" width="128" height="210"/>
         <element name="request" positionX="340" positionY="90" width="128" height="165"/>
         <element name="resource" positionX="160" positionY="414" width="128" height="135"/>

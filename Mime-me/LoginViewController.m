@@ -389,13 +389,35 @@
 - (void) saveAuthenticatorResponse:(GetAuthenticatorResponse*)response {
     NSString* activityName = @"UILoginView.saveAuthenticatorResponse:";
     ResourceContext* resourceContext = [ResourceContext instance];
-    if ([response.didSucceed boolValue] == YES) {
+    if ([response.didSucceed boolValue] == YES) 
+    {
+        Mime_meAppDelegate* appDelegate = (Mime_meAppDelegate*)[UIApplication sharedApplication].delegate;
+        Facebook* facebook = appDelegate.facebook;
         AuthenticationManager* authenticationManager = [AuthenticationManager instance];
         
         AuthenticationContext* newContext = response.authenticationcontext;
         User* returnedUser = response.user;
         
         Resource* existingUser = [resourceContext resourceWithType:USER withID:returnedUser.objectid];
+        
+        //if the facebook session is invalid we set it to be the token returnd
+        if (!facebook.isSessionValid &&
+            (newContext.facebooktoken != nil &&
+             ![newContext.facebooktoken isEqualToString:@""]))
+        {
+            //need to update the facebook token
+            facebook.accessToken = newContext.facebooktoken;
+            double expiryDateDouble = [newContext.facebooktokenexpiry doubleValue];
+            facebook.expirationDate = [NSDate dateWithTimeIntervalSince1970:expiryDateDouble];
+            
+            if (!facebook.isSessionValid)
+            {
+                LOG_LOGINVIEWCONTROLLER(1,@"%@ Could not create valid Facebook session from returned token",activityName);
+            }
+            else {
+                LOG_LOGINVIEWCONTROLLER(0,@"%@ Successfully created valid Facebook session from returned token",activityName);
+            }
+        }
         
         //save the user object that is returned to us in the database
         if (existingUser != nil) {

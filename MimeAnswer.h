@@ -20,7 +20,7 @@
 @property (nonatomic,retain) NSString* targetfacebookid;
 @property (nonatomic,retain) NSString* targetuserid;
 @property (nonatomic,retain) NSNumber* issentbyfriend;
-
+@property (nonatomic,retain) NSNumber* targetname;
 + (MimeAnswer*)createMimeAnswerWithMimeID:(NSNumber *)mimeID
                          withTargetUserID:(NSNumber *)targetUserID
                                  isPublic:(BOOL)isPublic;

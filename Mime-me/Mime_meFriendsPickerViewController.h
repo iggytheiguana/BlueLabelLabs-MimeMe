@@ -10,7 +10,7 @@
 #import "BaseViewController.h"
 #import "Mime_meUINavigationHeaderView.h"
 
-@interface Mime_meFriendsPickerViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, UIProgressHUDViewDelegate > {
+@interface Mime_meFriendsPickerViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, UIProgressHUDViewDelegate, FBRequestDelegate > {
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
     UIButton            *m_btn_go;
     
@@ -21,6 +21,7 @@
     NSNumber            *m_mimeID;
     
     NSArray             *m_friendsArray;
+    NSArray             *m_facebookFriends;
 }
 
 @property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
@@ -33,10 +34,12 @@
 @property (nonatomic, retain)           NSNumber            *mimeID;
 
 @property (nonatomic, retain)           NSArray             *friendsArray;
+@property (nonatomic, retain)           NSArray             *facebookFriends;
 
 - (IBAction) onHomeButtonPressed:(id)sender;
 
 - (IBAction) onGoButtonPressed:(id)sender;
+- (void) enumerateFacebookFriends;
 
 + (Mime_meFriendsPickerViewController*)createInstanceWithMimeID:(NSNumber *)mimeID;
 

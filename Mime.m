@@ -23,7 +23,8 @@
 @dynamic visibility;
 @dynamic word;
 @dynamic wordid;
-
+@dynamic ispublic;
+@dynamic isstaffpick;
 #pragma mark - Static Initializers
 //creates a Mime object
 + (Mime*)createMimeWithWordID:(NSNumber *)wordID

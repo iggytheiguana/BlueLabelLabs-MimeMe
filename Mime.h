@@ -21,6 +21,8 @@
 @property (nonatomic,retain) NSNumber* visibility;
 @property (nonatomic,retain) NSString* word;
 @property (nonatomic,retain) NSNumber* wordid;
+@property (nonatomic,retain) NSNumber* ispublic;
+@property (nonatomic,retain) NSNumber* isstaffpick;
 
 + (Mime*)createMimeWithWordID:(NSNumber *)wordID
                     withImage:(UIImage *)image

@@ -23,6 +23,7 @@
 @dynamic targetfacebookid;
 @dynamic targetuserid;
 @dynamic issentbyfriend;
+@dynamic targetname;
 
 #pragma mark - Static Initializers
 //creates a Mime object
