@@ -279,7 +279,7 @@
             
             FacebookFriend* facebookFriend = [FacebookFriend createInstanceFromJSON:friendJSON];
             [facebookFriendsList addObject:facebookFriend];
-            [facebookFriend release];
+           
         }
     }
     self.facebookFriends = facebookFriendsList;

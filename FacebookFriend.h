@@ -11,8 +11,8 @@
 #import <CoreData/CoreData.h>
 @interface FacebookFriend : NSManagedObject <IJSONSerializable>
 
-@property (nonatomic,retain) NSNumber* facebookid;
-@property (nonatomic,retain) NSString* name;
+@property (nonatomic,copy) NSNumber* facebookid;
+@property (nonatomic,copy) NSString* name;
 
 - (id) initFromJSONDictionary:(NSDictionary*)jsonDictionary 
         withEntityDescription:(NSEntityDescription*)entity 

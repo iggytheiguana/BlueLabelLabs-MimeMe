@@ -24,9 +24,9 @@
     NSString* facebookid = [jsonDictionary objectForKey:@"id"];
     NSString* name = [jsonDictionary objectForKey:@"name"];
     
+    NSNumber* facebookIDNumber = [facebookid numberValue];
     
-    
-    self.facebookid = [facebookid numberValue];
+    self.facebookid = facebookIDNumber;
     self.name  = name;
 
 
