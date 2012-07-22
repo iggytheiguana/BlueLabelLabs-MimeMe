@@ -35,7 +35,7 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUIView" id="191373211">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIButton" id="927693218">
@@ -101,7 +101,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{320, 480}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="927693218"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">2</int>
@@ -110,7 +109,7 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUITableViewCell" id="127441746">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="884604739">
@@ -129,7 +128,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Friends</string>
+								<string key="IBUIText">Friends Selected</string>
 								<reference key="IBUITextColor" ref="834168739"/>
 								<reference key="IBUIHighlightedColor" ref="834168739"/>
 								<object class="NSColor" key="IBUIShadowColor" id="276418581">
@@ -160,7 +159,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Select who will guess your mime!</string>
+								<string key="IBUIText">Confirm who can answer your mime!</string>
 								<reference key="IBUITextColor" ref="834168739"/>
 								<reference key="IBUIHighlightedColor" ref="834168739"/>
 								<reference key="IBUIShadowColor" ref="276418581"/>
@@ -194,7 +193,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{300, 50}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="884604739"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
@@ -203,11 +201,11 @@
 				</object>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<reference key="IBUIContentView" ref="884604739"/>
-				<string key="IBUIReuseIdentifier">FriendsHeader</string>
+				<string key="IBUIReuseIdentifier">SelectedHeader</string>
 				<real value="50" key="IBUIRowHeight"/>
 			</object>
 			<object class="IBUITableViewCell" id="67192704">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="29817331">
@@ -271,7 +269,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{300, 50}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="29817331"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
@@ -304,14 +301,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">tc_friendsHeader</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="127441746"/>
-					</object>
-					<int key="connectionID">21</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">tc_addContactsHeader</string>
 						<reference key="source" ref="372490531"/>
 						<reference key="destination" ref="67192704"/>
@@ -325,6 +314,14 @@
 						<reference key="destination" ref="927693218"/>
 					</object>
 					<int key="connectionID">27</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">tc_selectedHeader</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="127441746"/>
+					</object>
+					<int key="connectionID">28</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -450,7 +447,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">27</int>
+			<int key="maxID">28</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>

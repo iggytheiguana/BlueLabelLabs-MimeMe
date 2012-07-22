@@ -13,6 +13,7 @@
 #import "Macros.h"
 #import "FacebookFriend.h"
 #import "JSONKit.h"
+#import "Mime_meFriendsPickerViewController.h"
 
 @interface Mime_meFriendsListTableViewController ()
 
@@ -243,7 +244,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSInteger count = 20;
+    NSInteger count = [self.facebookFriends count];
     
     if (indexPath.row > 0 && indexPath.row <= count) {
         // Mark row selected
@@ -258,6 +259,30 @@
 
 #pragma mark - UIButton Handlers
 - (IBAction) onBackButtonPressed:(id)sender {
+    
+    NSInteger count = [self.facebookFriends count];
+    
+    NSMutableArray *friendsSelected = [[NSMutableArray alloc] init];
+    
+    // Iterate through each row of friends and selected rows to the friends array
+    for (int i = 0; i < count; i++) {
+        UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        
+        if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
+            // add to selected friends array
+            NSLog([self.facebookFriends objectAtIndex:i]);
+            
+            [friendsSelected addObject:[self.facebookFriends objectAtIndex:i]];
+        }
+    }
+    
+    // Pass the array of selected friends back to the the FriendsPicker view controller
+    NSArray *viewControllers = [self.navigationController.viewControllers copy];
+    Mime_meFriendsPickerViewController *friendsPickerViewController = [viewControllers objectAtIndex:[viewControllers count] - 2];
+    friendsPickerViewController.selectedFriendsArray = friendsSelected;
+    [friendsSelected release];
+    
+    // Go back to friends picker
     [self.navigationController popViewControllerAnimated:YES];
     
 }
@@ -266,7 +291,7 @@
 - (void) request:(FBRequest *)request didLoad:(id)result
 {
     NSString* activityName = @"Mime_meFriendsPickerViewController.request:didLoad:";
-    NSMutableArray* facebookFriendsList = [[NSMutableArray alloc]init];
+    NSMutableArray* facebookFriendsList = [[NSMutableArray alloc] init];
     //completion of request
     if (result != nil)
     {

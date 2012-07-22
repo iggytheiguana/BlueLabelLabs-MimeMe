@@ -27,31 +27,11 @@
 @synthesize nv_navigationHeader     = m_nv_navigationHeader;
 @synthesize btn_go                  = m_btn_go;
 @synthesize tbl_friends             = m_tbl_friends;
-@synthesize tc_friendsHeader        = m_tc_friendsHeader;
+@synthesize tc_selectedHeader        = m_tc_selectedHeader;
 @synthesize tc_addContactsHeader    = m_tc_addContactsHeader;
 @synthesize mimeID                  = m_mimeID;
-@synthesize friendsArray            = m_friendsArray;
-@synthesize facebookFriends         = m_facebookFriends;
+@synthesize selectedFriendsArray            = m_selectedFriendsArray;
 
-
-#pragma mark - Enumerators
-- (void) enumerateFacebookFriends {
-    //this method will call the Facebook delegate to enumerate the user's friends
-    
-    NSString* activityName = @"Mime_meFriendsPickerViewController.enumerateFacebookFriends:";
-    Mime_meAppDelegate* appDelegate = (Mime_meAppDelegate*)([UIApplication sharedApplication].delegate);
-    Facebook* facebook = appDelegate.facebook;
-    if (facebook.isSessionValid)
-    {
-        LOG_MIME_FRIENDPICKERVIEWCONTROLLER(0,@"%@ Beginning to enumerate Facebook friends for user",activityName);
-        [facebook requestWithGraphPath:@"me/friends" andDelegate:self];
-    }
-    else {
-        //error condition
-        LOG_MIME_FRIENDPICKERVIEWCONTROLLER(1,@"%@ Facebook session is not valid, need reauthentication",activityName);
-    }
-    
-}
 
 #pragma mark - View Lifecycle
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -86,10 +66,8 @@
     // Add the Go button to the navigation header
     [self.nv_navigationHeader addSubview:self.btn_go];
     
-    // TEMP: Data arrays for tableview
-    self.friendsArray = [NSArray arrayWithObjects:@"Laura", @"Julie", @"Matt", @"David", nil];
-    
-   
+    // Initialize the array of selected friends
+    self.selectedFriendsArray = [[NSMutableArray alloc] init];
     
 }
 
@@ -102,7 +80,7 @@
     self.nv_navigationHeader = nil;
     self.btn_go = nil;
     self.tbl_friends = nil;
-    self.tc_friendsHeader = nil;
+    self.tc_selectedHeader = nil;
     self.tc_addContactsHeader = nil;
 }
 
@@ -110,7 +88,6 @@
 {
     [super viewWillAppear:animated];
     
-    [self enumerateFacebookFriends];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -129,10 +106,12 @@
     NSInteger count;
     
     if (section == 0) {
-        count = [self.friendsArray count] + 2;  // Add 2 to the count to include 1. Header, and 2. Public option
+        // Add friends section
+        count = 3;
     }
     else {
-        count = 3;
+        // Friends selected section
+        count = [self.selectedFriendsArray count] + 2;  // Add 2 to the count to include 1. Header, and 2. Public option
     }
     
     return count;
@@ -141,55 +120,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        if (indexPath.row == 0) {
-            // Set the header
-            static NSString *CellIdentifier = @"FriendsHeader";
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            
-            if (cell == nil) {
-                cell = self.tc_friendsHeader;
-                
-                // Cell properties
-                cell.userInteractionEnabled = NO;
-            }
-            
-            return cell;
-        }
-        else if (indexPath.row == 1) {
-            static NSString *CellIdentifier = @"Public";
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            
-            if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-                
-                // Cell title
-                cell.textLabel.text = @"Public";
-                
-                // Cell subtitle
-                cell.detailTextLabel.text = @"Share with everyone on MimeMe!";
-                
-                // Default to selected
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-                
-            }
-            
-            return cell;
-        }
-        else {
-            static NSString *CellIdentifier = @"Friends";
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            
-            if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-                
-                cell.textLabel.text = [self.friendsArray objectAtIndex:(indexPath.row - 2)];
-                
-            }
-            
-            return cell;
-        }
-    }
-    else {
+        // Add friends section
+        
         if (indexPath.row == 0) {
             // Set the header
             static NSString *CellIdentifier = @"AddContactsHeader";
@@ -226,6 +158,57 @@
                 
                 cell.textLabel.text = @"Phone Contacts";
                 cell.textLabel.textAlignment = UITextAlignmentCenter;
+            }
+            
+            return cell;
+        }
+    }
+    else {
+        // Friends selected section
+        
+        if (indexPath.row == 0) {
+            // Set the header
+            static NSString *CellIdentifier = @"SelectedHeader";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            if (cell == nil) {
+                cell = self.tc_selectedHeader;
+                
+                // Cell properties
+                cell.userInteractionEnabled = NO;
+            }
+            
+            return cell;
+        }
+        else if (indexPath.row == 1) {
+            static NSString *CellIdentifier = @"Public";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+                
+                // Cell title
+                cell.textLabel.text = @"Public";
+                
+                // Cell subtitle
+                cell.detailTextLabel.text = @"Share with everyone on MimeMe!";
+                
+                // Default to selected
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                
+            }
+            
+            return cell;
+        }
+        else {
+            static NSString *CellIdentifier = @"Friends";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                
+                cell.textLabel.text = [self.selectedFriendsArray objectAtIndex:(indexPath.row - 2)];
+                
             }
             
             return cell;
@@ -278,18 +261,8 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (indexPath.section == 0) {
-        NSInteger count = [self.friendsArray count] + 1;    // Add 1 to account for Public option
+        // Add friends section
         
-        if (indexPath.row > 0 && indexPath.row <= count) {
-            // Mark row selected
-            
-            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-            
-            cell.accessoryType = cell.accessoryType==UITableViewCellAccessoryCheckmark ? UITableViewCellAccessoryNone : UITableViewCellAccessoryCheckmark;
-            
-        }
-    }
-    else {
         if (indexPath.row == 1) {
             // Launch Facebook Friends
             
@@ -303,15 +276,24 @@
             
         }
     }
+    else {
+        // Friends selected section
+        
+        NSInteger count = [self.selectedFriendsArray count] + 1;    // Add 1 to account for Public option
+        
+        if (indexPath.row > 0 && indexPath.row <= count) {
+            // Mark row selected
+            
+            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            
+            cell.accessoryType = cell.accessoryType==UITableViewCellAccessoryCheckmark ? UITableViewCellAccessoryNone : UITableViewCellAccessoryCheckmark;
+            
+        }
+    }
     
 }
 
 #pragma mark - UIButton Handlers
-//- (void)sendMimeWithProgressView:(UIProgressHUDView *)progressView {
-//    ResourceContext *resourceContext = [ResourceContext instance];
-//    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
-//}
-
 - (void)showHUDForMimeUpload {
     Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
     UIProgressHUDView* progressView = appDelegate.progressView;
@@ -339,11 +321,6 @@
     ResourceContext *resourceContext = [ResourceContext instance];
     [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
     
-//    [self performSelector:@selector(sendMimeWithProgressView:) withObject:progressView afterDelay:0.5];
-    
-//    ResourceContext *resourceContext = [ResourceContext instance];
-//    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
-    
 }
 
 - (IBAction) onGoButtonPressed:(id)sender {
@@ -364,13 +341,13 @@
     
     NSInteger count = [self.tbl_friends numberOfRowsInSection:0];
     
-    // Now itterate through each row of friends and crate a MimeAnswer for each friend row selected
+    // Now iterate through each row of friends and create a MimeAnswer for each friend row selected
     for (int i = 2; i < count; i++) {
         UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         
         if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
             // Create a MimeAnswer for friend target
-            NSLog([self.friendsArray objectAtIndex:(i - 2)]);
+            NSLog([self.selectedFriendsArray objectAtIndex:(i - 2)]);
             
             [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetUserID:nil isPublic:NO];
         }
@@ -379,12 +356,6 @@
     // Save
     [self showHUDForMimeUpload];
     
-//    // Save
-//    [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
-//    
-//    // Now show the confirmation share screen
-//    Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kSENTMIME withMimeID:self.mimeID withMimeAnswerIDorNil:nil];
-//    [self.navigationController pushViewController:shareViewController animated:YES];
 }
 
 #pragma mark - MBProgressHUD Delegate
@@ -409,31 +380,6 @@
         LOG_REQUEST(1, @"%@ Mime and MimeAnswer creation request failure", activityName);
         
     }
-}
-
-
-#pragma mark - Facebook Session Delegate methods
-- (void) request:(FBRequest *)request didLoad:(id)result
-{
-    NSString* activityName = @"Mime_meFriendsPickerViewController.request:didLoad:";
-    NSMutableArray* facebookFriendsList = [[NSMutableArray alloc]init];
-    //completion of request
-    if (result != nil)
-    {
-        NSArray* friendsList = [(NSDictionary*)result objectForKey:@"data"];
-        LOG_MIME_FRIENDPICKERVIEWCONTROLLER(0,@"%@ Enumerated %d Facebook friends for user",activityName,[friendsList count]);
-        
-        for (int i = 0; i < [friendsList count];i++)
-        {
-            NSDictionary* friendJSON = [friendsList objectAtIndex:i];
-          
-            FacebookFriend* facebookFriend = [FacebookFriend createInstanceFromJSON:friendJSON];
-            [facebookFriendsList addObject:facebookFriend];
-            [facebookFriend release];
-        }
-    }
-    self.facebookFriends = facebookFriendsList;
-    [facebookFriendsList release];
 }
 
 
