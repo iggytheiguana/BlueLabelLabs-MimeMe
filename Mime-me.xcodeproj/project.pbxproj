@@ -905,10 +905,10 @@
 				C523A16D159F8B30004AA39C /* ApplicationSettings.m */,
 				C57AAEB215A1135D009FFCCF /* Mime.h */,
 				C57AAEB315A1135D009FFCCF /* Mime.m */,
+				C57AAEB615A11452009FFCCF /* MimeAnswer.h */,
 				C57AAEB715A11452009FFCCF /* MimeAnswer.m */,
 				C57AAEB915A114E1009FFCCF /* Word.h */,
 				C57AAEBA15A114E1009FFCCF /* Word.m */,
-				C57AAEB615A11452009FFCCF /* MimeAnswer.h */,
 				C57AAEBC15A1155A009FFCCF /* Friend.h */,
 				C57AAEBD15A1155A009FFCCF /* Friend.m */,
 				C57AAEBF15A115A8009FFCCF /* Favorite.h */,
@@ -1287,6 +1287,9 @@
 				520DD0C815A434DE00C58BF1 /* Mime_meFriendsPickerViewController.h */,
 				520DD0C915A434DE00C58BF1 /* Mime_meFriendsPickerViewController.m */,
 				520DD0CA15A434DE00C58BF1 /* Mime_meFriendsPickerViewController.xib */,
+				52564CF215BB648C00AABC8E /* Mime_meFriendsListTableViewController.h */,
+				52564CF315BB648C00AABC8E /* Mime_meFriendsListTableViewController.m */,
+				52564CF415BB648C00AABC8E /* Mime_meFriendsListTableViewController.xib */,
 				520DD0D615A6157800C58BF1 /* Mime_meGuessMenuViewController.h */,
 				520DD0D715A6157800C58BF1 /* Mime_meGuessMenuViewController.m */,
 				520DD0D815A6157800C58BF1 /* Mime_meGuessMenuViewController.xib */,
@@ -1305,9 +1308,6 @@
 				525C7CD115B795AC00035802 /* Mime_meScrapbookFullTableViewController.h */,
 				525C7CD215B795AC00035802 /* Mime_meScrapbookFullTableViewController.m */,
 				525C7CD315B795AC00035802 /* Mime_meScrapbookFullTableViewController.xib */,
-				52564CF215BB648C00AABC8E /* Mime_meFriendsListTableViewController.h */,
-				52564CF315BB648C00AABC8E /* Mime_meFriendsListTableViewController.m */,
-				52564CF415BB648C00AABC8E /* Mime_meFriendsListTableViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";

@@ -21,8 +21,12 @@
 @property (nonatomic,retain) NSString* targetuserid;
 @property (nonatomic,retain) NSNumber* issentbyfriend;
 @property (nonatomic,retain) NSNumber* targetname;
+
 + (MimeAnswer*)createMimeAnswerWithMimeID:(NSNumber *)mimeID
-                         withTargetUserID:(NSNumber *)targetUserID
-                                 isPublic:(BOOL)isPublic;
+                         withTargetUserID:(NSNumber *)targetUserID;
+
++ (MimeAnswer*)createMimeAnswerWithMimeID:(NSNumber *)mimeID
+                     withTargetFacebookID:(NSNumber *)targetFacebookID
+                          withTargetEmail:(NSString *)targetEmail;
 
 @end

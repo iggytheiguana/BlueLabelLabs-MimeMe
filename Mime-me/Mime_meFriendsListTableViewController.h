@@ -15,7 +15,8 @@
     UIButton            *m_btn_back;
     UIView              *m_v_headerContainer;
     
-    NSArray             *m_facebookFriends;
+    NSArray             *m_contacts;
+    NSMutableArray      *m_contactsSelected;
 }
 
 @property (nonatomic, retain) IBOutlet  UITableView         *tbl_friends;
@@ -23,7 +24,8 @@
 @property (nonatomic, retain) IBOutlet  UIButton            *btn_back;
 @property (nonatomic, retain) IBOutlet  UIView              *v_headerContainer;
 
-@property (nonatomic, retain)           NSArray             *facebookFriends;
+@property (nonatomic, retain)           NSArray             *contacts;
+@property (nonatomic, retain)           NSMutableArray      *contactsSelected;
 
 - (IBAction) onBackButtonPressed:(id)sender;
 

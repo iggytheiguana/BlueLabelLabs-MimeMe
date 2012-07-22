@@ -15,6 +15,8 @@
 #import "Macros.h"
 #import "Mime_meAppDelegate.h"
 #import "Mime_meFriendsListTableViewController.h"
+#import "Contact.h"
+#import "Mime.h"
 
 #import "Contact.h"
 #import "JSONKit.h"
@@ -207,7 +209,11 @@
             if (cell == nil) {
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                 
-                cell.textLabel.text = [self.selectedFriendsArray objectAtIndex:(indexPath.row - 2)];
+                Contact *friend = [self.selectedFriendsArray objectAtIndex:(indexPath.row - 2)];
+                
+                cell.textLabel.text = friend.name;
+                
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
                 
             }
             
@@ -332,11 +338,13 @@
     UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     
     if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
-        // Create a public MimeAnswer
         NSLog(@"Pubic");
         
-        // Create a Public MimeAnswer object
-        [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetUserID:nil isPublic:YES];
+        // Mark the Mime as public
+        ResourceContext* resourceContext = [ResourceContext instance];
+        Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+        
+        mime.ispublic = [NSNumber numberWithBool:YES];
     }
     
     NSInteger count = [self.tbl_friends numberOfRowsInSection:0];
@@ -347,9 +355,11 @@
         
         if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
             // Create a MimeAnswer for friend target
-            NSLog([self.selectedFriendsArray objectAtIndex:(i - 2)]);
+            Contact *friend = [self.selectedFriendsArray objectAtIndex:(i - 2)];
             
-            [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetUserID:nil isPublic:NO];
+            NSLog(friend.name);
+                   
+            [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetFacebookID:friend.facebookid withTargetEmail:friend.email];
         }
     }
     

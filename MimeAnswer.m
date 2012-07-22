@@ -26,10 +26,9 @@
 @dynamic targetname;
 
 #pragma mark - Static Initializers
-//creates a Mime object
+//creates a MimeAnswer object based on userIDs
 + (MimeAnswer*)createMimeAnswerWithMimeID:(NSNumber *)mimeID
-                         withTargetUserID:(NSNumber *)targetUserID
-                                 isPublic:(BOOL)isPublic {
+                         withTargetUserID:(NSNumber *)targetUserID {
     
     ResourceContext* resourceContext = [ResourceContext instance];
     MimeAnswer *retVal = (MimeAnswer*)[Resource createInstanceOfType:MIMEANSWER withResourceContext:resourceContext];
@@ -56,7 +55,40 @@
     }
     
     retVal.didusehint = [NSNumber numberWithBool:NO];
-    retVal.issentbyfriend = [NSNumber numberWithBool:!isPublic];
+    retVal.issentbyfriend = [NSNumber numberWithBool:YES];
+    retVal.pointsawarded = [NSNumber numberWithInt:0];
+    retVal.state = [NSNumber numberWithInt:0];
+    
+    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:mimeID];
+    retVal.answer = mime.word;
+    
+    return retVal;
+}
+
+//creates a MimeAnswer object based on facebookIDs or emails
++ (MimeAnswer*)createMimeAnswerWithMimeID:(NSNumber *)mimeID
+                     withTargetFacebookID:(NSNumber *)targetFacebookID
+                          withTargetEmail:(NSString *)targetEmail {
+    
+    ResourceContext* resourceContext = [ResourceContext instance];
+    MimeAnswer *retVal = (MimeAnswer*)[Resource createInstanceOfType:MIMEANSWER withResourceContext:resourceContext];
+    
+    AuthenticationManager* authenticationManager = [AuthenticationManager instance];
+    
+    User *user = (User*)[resourceContext resourceWithType:USER withID:authenticationManager.m_LoggedInUserID];
+    if (user != nil) {
+        retVal.creatorid = user.objectid;
+        retVal.creatorname = user.username;
+    }
+    
+    retVal.mimeid = mimeID;
+    retVal.targetuserid = nil;
+    
+    retVal.targetfacebookid = [targetFacebookID stringValue];
+    retVal.targetemail = targetEmail;
+    
+    retVal.didusehint = [NSNumber numberWithBool:NO];
+    retVal.issentbyfriend = [NSNumber numberWithBool:YES];
     retVal.pointsawarded = [NSNumber numberWithInt:0];
     retVal.state = [NSNumber numberWithInt:0];
     

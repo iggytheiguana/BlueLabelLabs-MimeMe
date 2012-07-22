@@ -23,7 +23,8 @@
 @synthesize tbl_friends         = m_tbl_friends;
 @synthesize btn_back            = m_btn_back;
 @synthesize v_headerContainer   = m_v_headerContainer;
-@synthesize facebookFriends     = m_facebookFriends;
+@synthesize contacts            = m_contacts;
+@synthesize contactsSelected    = m_contactsSelected;
 
 #pragma mark - Enumerators
 - (void) enumerateFacebookFriends {
@@ -75,6 +76,9 @@
     // Set the newly created shape layer as the mask for the view's layer
     self.v_headerContainer.layer.mask = maskLayer;
     [self.v_headerContainer.layer setOpaque:NO];
+    
+    // Initialize the array of selected contacts
+    self.contactsSelected = [[NSMutableArray alloc] init];
 }
 
 - (void)viewDidUnload
@@ -108,16 +112,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger count = [self.facebookFriends count];
+    NSInteger count = [self.contacts count];
     
     return count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger count = [self.facebookFriends count];
-    
-    NSInteger row = indexPath.row;
+    NSInteger count = [self.contacts count];
     
     if (indexPath.row >= 0 && indexPath.row < count) {
         // Set friend
@@ -135,13 +137,12 @@
             
         }
         
-        Contact *friend = [self.facebookFriends objectAtIndex:indexPath.row];
+        Contact *friend = [self.contacts objectAtIndex:indexPath.row];
         
-//        cell.textLabel.text = [NSString stringWithFormat:@"%d", row];
-        cell.textLabel.text = [friend.facebookid stringValue];
+        cell.textLabel.text = friend.name;
         
         cell.imageView.backgroundColor = [UIColor lightGrayColor];
-        cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(50, 50)];
+        cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(40, 40)];
         
 //        ImageManager* imageManager = [ImageManager instance];
 //        NSDictionary* userInfo = [NSDictionary dictionaryWithObject:mime.objectid forKey:kMIMEID];
@@ -244,15 +245,23 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSInteger count = [self.facebookFriends count];
+    NSInteger count = [self.contacts count];
     
     if (indexPath.row > 0 && indexPath.row <= count) {
         // Mark row selected
         
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         
+        // Toggle the checkmark accessory on the cell
         cell.accessoryType = cell.accessoryType==UITableViewCellAccessoryCheckmark ? UITableViewCellAccessoryNone : UITableViewCellAccessoryCheckmark;
         
+        // Add or remove the contact form the list of selected contacts
+        if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
+            [self.contactsSelected addObject:[self.contacts objectAtIndex:indexPath.row]];
+        }
+        else {
+            [self.contactsSelected removeObject:[self.contacts objectAtIndex:indexPath.row]];
+        }
     }
     
 }
@@ -260,27 +269,28 @@
 #pragma mark - UIButton Handlers
 - (IBAction) onBackButtonPressed:(id)sender {
     
-    NSInteger count = [self.facebookFriends count];
-    
-    NSMutableArray *friendsSelected = [[NSMutableArray alloc] init];
-    
-    // Iterate through each row of friends and selected rows to the friends array
-    for (int i = 0; i < count; i++) {
-        UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        
-        if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
-            // add to selected friends array
-            NSLog([self.facebookFriends objectAtIndex:i]);
-            
-            [friendsSelected addObject:[self.facebookFriends objectAtIndex:i]];
-        }
-    }
+//    NSInteger count = [self.contacts count];
+//    
+//    NSMutableArray *friendsSelected = [[NSMutableArray alloc] init];
+//    
+//    // Iterate through each row of friends and selected rows to the friends array
+//    for (int i = 0; i < count; i++) {
+//        UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+//        
+//        if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
+//            // add to selected friends array
+//            NSLog([self.contacts objectAtIndex:i]);
+//            
+//            [friendsSelected addObject:[self.contacts objectAtIndex:i]];
+//        }
+//    }
     
     // Pass the array of selected friends back to the the FriendsPicker view controller
     NSArray *viewControllers = [self.navigationController.viewControllers copy];
     Mime_meFriendsPickerViewController *friendsPickerViewController = [viewControllers objectAtIndex:[viewControllers count] - 2];
-    friendsPickerViewController.selectedFriendsArray = friendsSelected;
-    [friendsSelected release];
+    [friendsPickerViewController.selectedFriendsArray addObjectsFromArray:self.contactsSelected];
+    [friendsPickerViewController.tbl_friends reloadData];
+    [self.contactsSelected release];
     
     // Go back to friends picker
     [self.navigationController popViewControllerAnimated:YES];
@@ -307,7 +317,9 @@
            
         }
     }
-    self.facebookFriends = facebookFriendsList;
+    
+//    self.contacts = [facebookFriendsList sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    self.contacts = facebookFriendsList;
     [facebookFriendsList release];
     
     [self.tbl_friends reloadData];
