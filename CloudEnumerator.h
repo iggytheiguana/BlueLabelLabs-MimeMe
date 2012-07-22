@@ -70,20 +70,26 @@
 
 //static initializers
 + (CloudEnumerator*) enumeratorForFeeds:(NSNumber*)userid;
-+ (CloudEnumerator*) enumeratorForCaptions:(NSNumber*)photoid;
-+ (CloudEnumerator*) enumeratorForPhotos:(NSNumber*)themeid;
-+ (CloudEnumerator*) enumeratorForPages;
-+ (CloudEnumerator*) enumeratorForUser:(NSNumber*)userid;
-+ (CloudEnumerator*) enumeratorForDrafts;
-+ (CloudEnumerator*) enumeratorForFollowers:(NSNumber*)userid;
-+ (CloudEnumerator*) enumeratorForFollowing:(NSNumber*)userid;
-+ (CloudEnumerator*) enumeratorForIDs:(NSArray*)objectIDs 
-                            withTypes:(NSArray*)objectTypes;
+//+ (CloudEnumerator*) enumeratorForCaptions:(NSNumber*)photoid;
+//+ (CloudEnumerator*) enumeratorForPhotos:(NSNumber*)themeid;
+//+ (CloudEnumerator*) enumeratorForPages;
+//+ (CloudEnumerator*) enumeratorForUser:(NSNumber*)userid;
+//+ (CloudEnumerator*) enumeratorForDrafts;
+//+ (CloudEnumerator*) enumeratorForFollowers:(NSNumber*)userid;
+//+ (CloudEnumerator*) enumeratorForFollowing:(NSNumber*)userid;
+//+ (CloudEnumerator*) enumeratorForIDs:(NSArray*)objectIDs 
+//                            withTypes:(NSArray*)objectTypes;
 + (CloudEnumerator*) enumeratorForApplicationSettings:(NSNumber*)userid;
 
 //mime me enumerators
 + (CloudEnumerator*) enumeratorForFriends:(NSNumber*)userid;
 + (CloudEnumerator*) enumeratorForWords;
 + (CloudEnumerator*) enumeratorForSingleWord:(NSString*)word;
++ (CloudEnumerator*) enumeratorForMimeAnswersWithTarget:(NSNumber*)userid withState:(NSNumber*)state;
 
++ (CloudEnumerator*) enumeratorForStaffPickedMimes;
++ (CloudEnumerator*) enumeratorForPublicMimes;
++ (CloudEnumerator*) enumeratorForFavoriteMimes:(NSNumber*)userid;
++ (CloudEnumerator*) enumeratorForMostRecentMimes;
++ (CloudEnumerator*) enumeratorForSentMimeAnswers:(NSNumber*)creatorid;
 @end

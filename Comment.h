@@ -12,5 +12,5 @@
 @property (nonatomic,retain) NSString* comment1;
 @property (nonatomic,retain) NSString* creatorname;
 @property (nonatomic,retain) NSNumber* creatorid;
-@property (nonatomic,retain) NSNumber* mimeid;
+@property (nonatomic,retain) NSNumber* mimeanswerid;
 @end

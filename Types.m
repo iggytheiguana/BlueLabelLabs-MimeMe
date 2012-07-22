@@ -26,10 +26,12 @@ NSString* const FOLLOW                      =@"follow";
 NSString* const ATTRIBUTECHANGE             =@"attributechange";
 NSString* const MEDITATION                  =@"meditation";
 NSString* const MEDITATIONINSTANCE          =@"meditationinstance";
-NSString* const FACEBOOKFRIEND              =@"FacebookFriend";
+NSString* const FACEBOOKFRIEND              =@"Contact";
 
 
 NSString* const FRIEND                      =@"Friend";
 NSString* const WORD                        =@"Word";
 NSString* const MIME                        =@"Mime";
 NSString* const MIMEANSWER                  =@"MimeAnswer";
+NSString* const COMMENT                     =@"Comment";
+NSString* const FAVORITE                    =@"Favorite";

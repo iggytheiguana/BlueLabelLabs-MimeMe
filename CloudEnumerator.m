@@ -379,18 +379,17 @@ static NSLock* _lock; //lock used to synchronize the processing of enumeration r
 
 #pragma mark - Static initializers
 
-//+ (CloudEnumerator*) enumeratorForFeeds:(NSNumber *)userid {
-//    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
-//    Query* query = [Query queryFeedsForUser:userid];
-//    QueryOptions* queryOptions = [QueryOptions queryForFeedsForUser:userid];
-//    EnumerationContext* enumerationContext = [EnumerationContext contextForFeeds:userid];
-//    query.queryOptions = queryOptions;
-//    
-//    CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
-//    enumerator.identifier = [userid stringValue];
-//    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
-//    return enumerator;
-//}
++ (CloudEnumerator*) enumeratorForFeeds:(NSNumber *)userid {
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];    Query* query = [Query queryFeedsForUser:userid];
+    QueryOptions* queryOptions = [QueryOptions queryForFeedsForUser:userid];
+    EnumerationContext* enumerationContext = [EnumerationContext contextForFeeds:userid];
+   query.queryOptions = queryOptions;
+   
+    CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
+    enumerator.identifier = [userid stringValue];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
+   return enumerator;
+}
 //
 //+ (CloudEnumerator*) enumeratorForCaptions:(NSNumber*)photoid {
 //    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
@@ -538,6 +537,86 @@ static NSLock* _lock; //lock used to synchronize the processing of enumeration r
     CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
     enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
     return enumerator;
+}
+
++ (CloudEnumerator*) enumeratorForMimeAnswersWithTarget:(NSNumber*)userid withState:(NSNumber*)state
+{
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    Query* query = [Query queryForMimeAnswersWithTarget:userid withState:state];
+    QueryOptions* queryOptions = [QueryOptions queryForMimeAnswersWithTarget:userid withState:state];
+    EnumerationContext* enumerationContext = [EnumerationContext contextForMimeAnswersWithTarget:userid withState:state];
+    query.queryOptions = queryOptions;
+    
+    CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
+    return enumerator;
+
+}
+
++ (CloudEnumerator*) enumeratorForStaffPickedMimes
+{
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    Query* query = [Query queryForStaffPickedMimes];
+    QueryOptions* queryOptions = [QueryOptions queryForStaffPickMimes];
+    EnumerationContext* enumerationContext = [EnumerationContext contextForStaffPickMimes];
+    query.queryOptions = queryOptions;
+    
+    CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
+    return enumerator;
+}
+
++ (CloudEnumerator*) enumeratorForPublicMimes
+{
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    Query* query = [Query queryForPublicMimes];
+    QueryOptions* queryOptions = [QueryOptions queryForPublicMimes];
+    EnumerationContext* enumerationContext = [EnumerationContext contextForPublicMimes];
+    query.queryOptions = queryOptions;
+    
+    CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
+    return enumerator;
+}
+
++ (CloudEnumerator*) enumeratorForFavoriteMimes:(NSNumber *)userid
+{
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    Query* query = [Query queryForFavoriteMimes:userid];
+    QueryOptions* queryOptions = [QueryOptions queryForFavoriteMimes:userid];
+    EnumerationContext* enumerationContext = [EnumerationContext contextForFavoriteMimes:userid];
+    query.queryOptions = queryOptions;
+    
+    CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
+    return enumerator;
+}
+
++ (CloudEnumerator*) enumeratorForMostRecentMimes
+{
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    Query* query = [Query queryForMostRecentMimes];
+    QueryOptions* queryOptions = [QueryOptions queryForMostRecentMimes];
+    EnumerationContext* enumerationContext = [EnumerationContext contextForMostRecentMimes];
+    query.queryOptions = queryOptions;
+    
+    CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
+    return enumerator;
+}
+
++ (CloudEnumerator*) enumeratorForSentMimeAnswers:(NSNumber *)creatorid
+{
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    Query* query = [Query queryForSentMimeAnswers:creatorid];
+    QueryOptions* queryOptions = [QueryOptions queryForSentMimeAnswers:creatorid];
+    EnumerationContext* enumerationContext = [EnumerationContext contextForSentMimeAnswer:creatorid];
+    query.queryOptions = queryOptions;
+    
+    CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
+    return enumerator;
+
 }
 //
 //+ (CloudEnumerator*) enumeratorForFollowers:(NSNumber *)userid

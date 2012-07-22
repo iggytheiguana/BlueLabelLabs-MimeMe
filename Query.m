@@ -348,6 +348,94 @@
 
 }
 
++ (Query*) queryForMimeAnswersWithTarget:(NSNumber*)userid withState:(NSNumber *)state
+{
+    Query* query = [[[Query alloc]init ]autorelease];
+    query.filterObjectType = MIMEANSWER;
+    
+    QueryExpression* queryExpression = [[QueryExpression alloc]init];
+    queryExpression.attributeName = TARGETUSERID;
+    queryExpression.opCode = opcode_QUERYEQUALITY;
+    queryExpression.value = [userid stringValue];
+    
+    QueryExpression* queryExpression2 = [[QueryExpression alloc]init];
+    queryExpression2.attributeName = STATE;
+    queryExpression2.opCode = opcode_QUERYEQUALITY;
+    queryExpression2.value = [state stringValue];
+    
+    NSArray* expressions = [NSArray arrayWithObjects:queryExpression,queryExpression2,nil];
+    query.attributeExpressions = expressions;
+    
+    [queryExpression release];
+    [queryExpression2 release];
+    return query;
 
+}
 
++ (Query*) queryForStaffPickedMimes
+{
+    Query* query = [[[Query alloc]init ]autorelease];
+    query.filterObjectType = MIME;
+    
+    QueryExpression* queryExpression = [[QueryExpression alloc]init];
+    queryExpression.attributeName = ISSTAFFPICK;
+    queryExpression.opCode = opcode_QUERYEQUALITY;
+    queryExpression.value = [[NSNumber numberWithBool:YES]stringValue];
+    
+    [queryExpression release];
+    return query;
+}
+
++ (Query*) queryForPublicMimes
+{
+    Query* query = [[[Query alloc]init ]autorelease];
+    query.filterObjectType = MIME;
+    
+    QueryExpression* queryExpression = [[QueryExpression alloc]init];
+    queryExpression.attributeName = ISPUBLIC;
+    queryExpression.opCode = opcode_QUERYEQUALITY;
+    queryExpression.value = [[NSNumber numberWithBool:YES]stringValue];
+    
+    [queryExpression release];
+    return query;
+}
+
++ (Query*)queryForFavoriteMimes:(NSNumber*)userid
+{
+    Query* query = [[[Query alloc]init ]autorelease];
+    query.filterObjectType = FAVORITE;
+    
+    QueryExpression* queryExpression = [[QueryExpression alloc]init];
+    queryExpression.attributeName = USERID;
+    queryExpression.opCode = opcode_QUERYEQUALITY;
+    queryExpression.value = [userid stringValue];
+    
+    [queryExpression release];
+    return query;
+
+}
+
++ (Query*) queryForMostRecentMimes
+{
+    Query* query = [[[Query alloc]init ]autorelease];
+    query.filterObjectType = MIME;
+    
+    return query;
+}
+
++ (Query*) queryForSentMimeAnswers:(NSNumber*)creatorid
+{
+    Query* query = [[[Query alloc]init ]autorelease];
+    query.filterObjectType = MIMEANSWER;
+    
+    QueryExpression* queryExpression = [[QueryExpression alloc]init];
+    queryExpression.attributeName = CREATORID;
+    queryExpression.opCode = opcode_QUERYEQUALITY;
+    queryExpression.value = [creatorid stringValue];
+    
+    query.attributeExpressions = [NSArray arrayWithObject:queryExpression];
+    
+    [queryExpression release];
+    return query;
+}
 @end

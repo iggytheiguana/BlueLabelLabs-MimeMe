@@ -1,5 +1,5 @@
 //
-//  FacebookFriend.h
+//  Contact.h
 //  Mime-me
 //
 //  Created by Jasjeet Gill on 7/20/12.
@@ -9,10 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "IJSONSerializable.h"
 #import <CoreData/CoreData.h>
-@interface FacebookFriend : NSManagedObject <IJSONSerializable>
+@interface Contact : NSManagedObject <IJSONSerializable>
 
 @property (nonatomic,copy) NSNumber* facebookid;
 @property (nonatomic,copy) NSString* name;
+@property (nonatomic,copy) NSString* email;
 
 - (id) initFromJSONDictionary:(NSDictionary*)jsonDictionary 
         withEntityDescription:(NSEntityDescription*)entity 

@@ -133,3 +133,6 @@ NSString* const NUMBEROFTIMESUSED       =@"numberoftimesused";
 NSString* const NUMBEROFATTEMPTS        =@"numberofattempts";
 NSString* const NUMBERTIMESANSWERED     =@"numbertimesanswered";
 NSString* const NUMBEROFTIMESVIEWED     =@"numberoftimesviewed";
+NSString* const MIMEANSWERID            =@"mimeanswerid";
+NSString* const ISSTAFFPICK             =@"isstaffpick";
+NSString* const ISPUBLIC                =@"ispublic";

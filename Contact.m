@@ -1,22 +1,22 @@
 //
-//  FacebookFriend.m
+//  Contact.m
 //  Mime-me
 //
 //  Created by Jasjeet Gill on 7/20/12.
 //  Copyright (c) 2012 Blue Label Solutions LLC. All rights reserved.
 //
 
-#import "FacebookFriend.h"
+#import "Contact.h"
 #import "Attributes.h"
 #import "ResourceContext.h"
 #import "Types.h"
 #import "NSStringGUIDCategory.h"
 #import "Macros.h"
 
-@implementation FacebookFriend
+@implementation Contact
 @dynamic facebookid;
 @dynamic name;
-
+@dynamic email;
 
 - (void) readAttributesFromJSONDictionary:(NSDictionary*)jsonDictionary
 {
@@ -59,7 +59,7 @@
     ResourceContext* resourceContext = [ResourceContext instance];
     NSEntityDescription* entity = [NSEntityDescription entityForName:FACEBOOKFRIEND inManagedObjectContext:resourceContext.managedObjectContext];
     
-    FacebookFriend* facebookFriend = [[FacebookFriend alloc]initFromJSONDictionary:jsonDictionary withEntityDescription:entity insertIntoResourceContext:nil];
+    Contact* facebookFriend = [[Contact alloc]initFromJSONDictionary:jsonDictionary withEntityDescription:entity insertIntoResourceContext:nil];
     
     [facebookFriend autorelease];
     return facebookFriend;

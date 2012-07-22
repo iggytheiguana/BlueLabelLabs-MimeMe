@@ -54,4 +54,10 @@
 +(QueryOptions*)queryForFriends:(NSNumber*)userID;
 +(QueryOptions*)queryForWords;
 +(QueryOptions*)queryForSingleWord:(NSString*)word;
++(QueryOptions*)queryForMimeAnswersWithTarget:(NSNumber*)userid withState:(NSNumber*)state;
++(QueryOptions*)queryForStaffPickMimes;
++(QueryOptions*)queryForPublicMimes;
++(QueryOptions*)queryForFavoriteMimes:(NSNumber*)userid;
++(QueryOptions*) queryForMostRecentMimes;
++(QueryOptions*)queryForSentMimeAnswers:(NSNumber*)creatorid;
 @end

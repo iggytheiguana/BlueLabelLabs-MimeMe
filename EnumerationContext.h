@@ -27,7 +27,7 @@
 - (NSString*) toJSON;
 - (id) initFromJSONDictionary:(NSDictionary*)jsonDictionary;
 
-//+ (EnumerationContext*) contextForFeeds:        (NSNumber*)userid;
++ (EnumerationContext*) contextForFeeds:        (NSNumber*)userid;
 //+ (EnumerationContext*) contextForPhotosInTheme:(NSNumber*)themeid;
 //+ (EnumerationContext*) contextForPages;
 //+ (EnumerationContext*) contextForCaptions:     (NSNumber*)photoid;
@@ -42,6 +42,12 @@
 +(EnumerationContext*) contextForFriends:(NSNumber*)userid;
 +(EnumerationContext*) contextForWords;
 +(EnumerationContext*) contextForSingleWorld:(NSString*)word;
++(EnumerationContext*) contextForMimeAnswersWithTarget:(NSNumber*)userid withState:(NSNumber*)state;
++(EnumerationContext*) contextForStaffPickMimes;
++(EnumerationContext*) contextForPublicMimes;
++(EnumerationContext*) contextForFavoriteMimes:(NSNumber*)userid;
++(EnumerationContext*) contextForMostRecentMimes;
++(EnumerationContext*) contextForSentMimeAnswer:(NSNumber*)creatorid;
 - (id) init;
 - (NSString*) toJSON;
 @end

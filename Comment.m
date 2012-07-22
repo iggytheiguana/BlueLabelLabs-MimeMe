@@ -9,7 +9,7 @@
 #import "Comment.h"
 
 @implementation Comment
-@dynamic mimeid;
+@dynamic mimeanswerid;
 @dynamic comment1;
 @dynamic creatorname;
 @dynamic creatorid;
