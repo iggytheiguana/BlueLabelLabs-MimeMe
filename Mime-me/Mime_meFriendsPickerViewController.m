@@ -16,7 +16,7 @@
 #import "Mime_meAppDelegate.h"
 #import "Mime_meFriendsListTableViewController.h"
 
-#import "FacebookFriend.h"
+#import "Contact.h"
 #import "JSONKit.h"
 
 @interface Mime_meFriendsPickerViewController ()
@@ -427,7 +427,7 @@
         {
             NSDictionary* friendJSON = [friendsList objectAtIndex:i];
           
-            FacebookFriend* facebookFriend = [FacebookFriend createInstanceFromJSON:friendJSON];
+            Contact* facebookFriend = [Contact createInstanceFromJSON:friendJSON];
             [facebookFriendsList addObject:facebookFriend];
             [facebookFriend release];
         }

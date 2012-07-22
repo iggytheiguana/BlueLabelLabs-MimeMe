@@ -11,7 +11,7 @@
 #import "UIImage+UIImageCategory.h"
 #import "Mime_meAppDelegate.h"
 #import "Macros.h"
-#import "FacebookFriend.h"
+#import "Contact.h"
 #import "JSONKit.h"
 
 @interface Mime_meFriendsListTableViewController ()
@@ -134,7 +134,7 @@
             
         }
         
-        FacebookFriend *friend = [self.facebookFriends objectAtIndex:indexPath.row];
+        Contact *friend = [self.facebookFriends objectAtIndex:indexPath.row];
         
 //        cell.textLabel.text = [NSString stringWithFormat:@"%d", row];
         cell.textLabel.text = [friend.facebookid stringValue];
@@ -277,7 +277,7 @@
         {
             NSDictionary* friendJSON = [friendsList objectAtIndex:i];
             
-            FacebookFriend* facebookFriend = [FacebookFriend createInstanceFromJSON:friendJSON];
+            Contact* facebookFriend = [Contact createInstanceFromJSON:friendJSON];
             [facebookFriendsList addObject:facebookFriend];
            
         }
