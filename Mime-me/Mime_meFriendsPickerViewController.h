@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 #import "Mime_meUINavigationHeaderView.h"
+#import "Mime_meFriendsListTableViewController.h"
 
-@interface Mime_meFriendsPickerViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, UIProgressHUDViewDelegate > {
+
+@interface Mime_meFriendsPickerViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, UIProgressHUDViewDelegate, Mime_meFriendsListTableViewControllerDelegate, FBRequestDelegate > {
+    
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
     UIButton            *m_btn_go;
     
@@ -20,7 +23,11 @@
     
     NSNumber            *m_mimeID;
     
+    NSArray             *m_facebookFriendsArray;
+    NSArray             *m_phoneContactsArray;
     NSMutableArray      *m_selectedFriendsArray;
+    NSMutableArray      *m_selectedFriendsArrayCopy;
+    
 }
 
 @property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
@@ -32,7 +39,10 @@
 
 @property (nonatomic, retain)           NSNumber            *mimeID;
 
+@property (nonatomic, retain)           NSArray             *facebookFriendsArray;
+@property (nonatomic, retain)           NSArray             *phoneContactsArray;
 @property (nonatomic, retain)           NSMutableArray      *selectedFriendsArray;
+@property (nonatomic, retain)           NSMutableArray      *selectedFriendsArrayCopy;
 
 - (IBAction) onHomeButtonPressed:(id)sender;
 

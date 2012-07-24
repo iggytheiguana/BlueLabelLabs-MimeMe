@@ -14,7 +14,6 @@
 #import "ViewMimeCase.h"
 #import "Macros.h"
 #import "Mime_meAppDelegate.h"
-#import "Mime_meFriendsListTableViewController.h"
 #import "Contact.h"
 #import "Mime.h"
 
@@ -29,11 +28,76 @@
 @synthesize nv_navigationHeader     = m_nv_navigationHeader;
 @synthesize btn_go                  = m_btn_go;
 @synthesize tbl_friends             = m_tbl_friends;
-@synthesize tc_selectedHeader        = m_tc_selectedHeader;
+@synthesize tc_selectedHeader       = m_tc_selectedHeader;
 @synthesize tc_addContactsHeader    = m_tc_addContactsHeader;
 @synthesize mimeID                  = m_mimeID;
-@synthesize selectedFriendsArray            = m_selectedFriendsArray;
+@synthesize facebookFriendsArray    = m_facebookFriendsArray;
+@synthesize phoneContactsArray      = m_phoneContactsArray;
+@synthesize selectedFriendsArray    = m_selectedFriendsArray;
+@synthesize selectedFriendsArrayCopy = m_selectedFriendsArrayCopy;
 
+
+#pragma mark - Enumerators
+- (void)showHUDForFacebookFriendsEnumerator {
+    Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    UIProgressHUDView* progressView = appDelegate.progressView;
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+    progressView.delegate = self;
+    
+    NSString* message = @"Getting Facebook Friends...";
+    [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
+    
+}
+
+- (void) enumerateFacebookFriends {
+    //this method will call the Facebook delegate to enumerate the user's friends
+    
+    NSString* activityName = @"Mime_meListTableViewController.enumerateFacebookFriends:";
+    Mime_meAppDelegate* appDelegate = (Mime_meAppDelegate*)([UIApplication sharedApplication].delegate);
+    Facebook* facebook = appDelegate.facebook;
+    if (facebook.isSessionValid)
+    {
+        LOG_MIME_FRIENDLISTTABLEVIEWCONTROLLER(0,@"%@ Beginning to enumerate Facebook friends for user",activityName);
+        [facebook requestWithGraphPath:@"me/friends" andDelegate:self];
+    }
+    else {
+        //error condition
+        LOG_MIME_FRIENDLISTTABLEVIEWCONTROLLER(1,@"%@ Facebook session is not valid, need reauthentication",activityName);
+    }
+    
+    [self showHUDForFacebookFriendsEnumerator];
+}
+
+#pragma mark - Helpers
+-(NSArray *)partitionContacts:(NSArray *)array collationStringSelector:(SEL)selector {
+    UILocalizedIndexedCollation *collation = [UILocalizedIndexedCollation currentCollation];
+    
+    NSInteger sectionCount = [[collation sectionTitles] count]; //section count is take from sectionTitles and not sectionIndexTitles
+    NSMutableArray *unsortedSections = [NSMutableArray arrayWithCapacity:sectionCount];
+    
+    //create an array to hold the data for each section
+    for(int i = 0; i < sectionCount; i++)
+    {
+        [unsortedSections addObject:[NSMutableArray array]];
+    }
+    
+    //put each object into a section
+    for (id object in array)
+    {
+        NSInteger index = [collation sectionForObject:object collationStringSelector:selector];
+        [[unsortedSections objectAtIndex:index] addObject:object];
+    }
+    
+    NSMutableArray *sections = [NSMutableArray arrayWithCapacity:sectionCount];
+    
+    //sort each section
+    for (NSMutableArray *section in unsortedSections)
+    {
+        [sections addObject:[collation sortedArrayFromArray:section collationStringSelector:selector]];
+    }
+    
+    return sections;
+}
 
 #pragma mark - View Lifecycle
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -68,9 +132,6 @@
     // Add the Go button to the navigation header
     [self.nv_navigationHeader addSubview:self.btn_go];
     
-    // Initialize the array of selected friends
-    self.selectedFriendsArray = [[NSMutableArray alloc] init];
-    
 }
 
 - (void)viewDidUnload
@@ -89,6 +150,19 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    // If we've already selected friends, make sure the list is sorted alphabetically and make a copy
+    if (self.selectedFriendsArray != nil) {
+        NSSortDescriptor *contactNameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+        NSArray *sortDescriptors = [NSArray arrayWithObject:contactNameDescriptor];
+        NSMutableArray *sortedSelectedFriendsArray = [NSMutableArray arrayWithArray:[self.selectedFriendsArray sortedArrayUsingDescriptors:sortDescriptors]];
+        
+        self.selectedFriendsArray = sortedSelectedFriendsArray;
+        
+        self.selectedFriendsArrayCopy = [self.selectedFriendsArray mutableCopy];
+    }
+    
+    [self.tbl_friends reloadData];
     
 }
 
@@ -209,12 +283,18 @@
             if (cell == nil) {
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                 
-                Contact *friend = [self.selectedFriendsArray objectAtIndex:(indexPath.row - 2)];
-                
-                cell.textLabel.text = friend.name;
-                
+            }
+            
+            Contact *friend = [self.selectedFriendsArray objectAtIndex:(indexPath.row - 2)];
+            
+            cell.textLabel.text = friend.name;
+            
+            // Mark the row as selected if this friend is already in our list selected contacts
+            if ([self.selectedFriendsArrayCopy indexOfObject:friend] != NSNotFound) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
-                
+            }
+            else {
+                cell.accessoryType = UITableViewCellAccessoryNone;
             }
             
             return cell;
@@ -272,9 +352,25 @@
         if (indexPath.row == 1) {
             // Launch Facebook Friends
             
-            Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
-            
-            [self.navigationController pushViewController:friendsListTableViewController animated:YES];
+            if (self.facebookFriendsArray == nil) {
+                // Initialize the array of selected friends
+                self.selectedFriendsArray = [[NSMutableArray alloc] init];
+                
+                [self enumerateFacebookFriends];
+                
+            }
+            else {
+                // Replace the selected friedns array with the copy that has any deselected friends removed
+                self.selectedFriendsArray = self.selectedFriendsArrayCopy;
+                
+                // Launch the friends list with the Facebook friends list loaded
+                Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
+                friendsListTableViewController.delegate = self;
+//                friendsListTableViewController.contacts = self.facebookFriendsArray;
+                friendsListTableViewController.contacts = [self partitionContacts:self.facebookFriendsArray collationStringSelector:@selector(name)];
+                
+                [self.navigationController pushViewController:friendsListTableViewController animated:YES];
+            }
             
         }
         else {
@@ -283,17 +379,31 @@
         }
     }
     else {
-        // Friends selected section
+        // Friends selected section, mark row selected or deselected
         
-        NSInteger count = [self.selectedFriendsArray count] + 1;    // Add 1 to account for Public option
+        NSInteger count = [self.selectedFriendsArray count] + 2;    // Add 2 to account for Header and Public option
         
-        if (indexPath.row > 0 && indexPath.row <= count) {
-            // Mark row selected
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        
+        // Toggle the checkmark accessory on the cell
+        cell.accessoryType = cell.accessoryType==UITableViewCellAccessoryCheckmark ? UITableViewCellAccessoryNone : UITableViewCellAccessoryCheckmark;
+        
+        if (indexPath.row == 1) {
+            // Public row
             
-            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        }
+        else if (indexPath.row > 1 && indexPath.row <= count) {
+            // Friend row
             
-            cell.accessoryType = cell.accessoryType==UITableViewCellAccessoryCheckmark ? UITableViewCellAccessoryNone : UITableViewCellAccessoryCheckmark;
+            Contact *friend = [self.selectedFriendsArray objectAtIndex:(indexPath.row - 2)];    // Subtract 2 to account for Header and Public option
             
+            // Add or remove the friend from the list of selected contacts
+            if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
+                [self.selectedFriendsArrayCopy addObject:friend];
+            }
+            else {                
+                [self.selectedFriendsArrayCopy removeObject:friend];
+            }
         }
     }
     
@@ -332,10 +442,8 @@
 - (IBAction) onGoButtonPressed:(id)sender {
     // Create MimeAnswer objects for each tableview row selected
     
-//    ResourceContext *resourceContext = [ResourceContext instance];
-    
     // First check if "Public" has been seleced
-    UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+    UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
     
     if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
         NSLog(@"Pubic");
@@ -351,13 +459,11 @@
     
     // Now iterate through each row of friends and create a MimeAnswer for each friend row selected
     for (int i = 2; i < count; i++) {
-        UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]];
         
         if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
             // Create a MimeAnswer for friend target
             Contact *friend = [self.selectedFriendsArray objectAtIndex:(i - 2)];
-            
-            NSLog(friend.name);
                    
             [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetFacebookID:friend.facebookid withTargetEmail:friend.email];
         }
@@ -375,6 +481,13 @@
     
     UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
     
+    Request* request = [progressView.requests objectAtIndex:0];
+    //now we have the request
+    NSArray* changedAttributes = request.changedAttributesList;
+    //list of all changed attributes
+    //we take the first one and base our messaging off that
+    NSString* attributeName = [changedAttributes objectAtIndex:0];
+    
     if (progressView.didSucceed) {
         //enumeration was sucessful
         LOG_REQUEST(0, @"%@ Mime and MimeAnswer creation request was successful", activityName);
@@ -390,6 +503,47 @@
         LOG_REQUEST(1, @"%@ Mime and MimeAnswer creation request failure", activityName);
         
     }
+}
+
+#pragma mark - Facebook Session Delegate methods
+- (void) request:(FBRequest *)request didLoad:(id)result
+{
+    NSString* activityName = @"Mime_meFriendsPickerViewController.request:didLoad:";
+    NSMutableArray* facebookFriendsList = [[NSMutableArray alloc] init];
+    //completion of request
+    if (result != nil)
+    {
+        NSArray* friendsList = [(NSDictionary*)result objectForKey:@"data"];
+        LOG_MIME_FRIENDPICKERVIEWCONTROLLER(0,@"%@ Enumerated %d Facebook friends for user",activityName,[friendsList count]);
+        
+        for (int i = 0; i < [friendsList count];i++)
+        {
+            NSDictionary* friendJSON = [friendsList objectAtIndex:i];
+            
+            Contact* facebookFriend = [Contact createInstanceFromJSON:friendJSON];
+            [facebookFriendsList addObject:facebookFriend];
+            
+        }
+    }
+    
+    NSSortDescriptor *contactNameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:contactNameDescriptor];
+    NSMutableArray *sortedFacebookFriendsList = [NSMutableArray arrayWithArray:[facebookFriendsList sortedArrayUsingDescriptors:sortDescriptors]];
+    
+    self.facebookFriendsArray = sortedFacebookFriendsList;
+    
+//    [sortedFacebookFriendsList release];
+//    [facebookFriendsList release];
+    
+    // Hide the progress bar and move to the frields list view controller
+    [self hideProgressBar];
+    
+    Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
+    friendsListTableViewController.delegate = self;
+//    friendsListTableViewController.contacts = self.facebookFriendsArray;
+    friendsListTableViewController.contacts = [self partitionContacts:self.facebookFriendsArray collationStringSelector:@selector(name)];
+    
+    [self.navigationController pushViewController:friendsListTableViewController animated:YES];
 }
 
 #pragma mark - Static Initializers
