@@ -16,9 +16,9 @@
 #import "Mime_meAppDelegate.h"
 #import "Contact.h"
 #import "Mime.h"
-
 #import "Contact.h"
 #import "JSONKit.h"
+#import <AddressBook/AddressBook.h>
 
 @interface Mime_meFriendsPickerViewController ()
 
@@ -99,6 +99,84 @@
     return sections;
 }
 
+- (void)showFacebookFriends {
+    if (self.facebookFriendsArray == nil) {
+        // We don't yet have the facebook friends, enumerate
+        [self enumerateFacebookFriends];
+        
+    }
+    else {
+        // Replace the selected friedns array with the copy that has any deselected friends removed
+        self.selectedFriendsArray = self.selectedFriendsArrayCopy;
+        
+        // Launch the friends list with the Facebook friends list loaded
+        Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
+        friendsListTableViewController.delegate = self;
+        //                friendsListTableViewController.contacts = self.facebookFriendsArray;
+        friendsListTableViewController.contacts = [self partitionContacts:self.facebookFriendsArray collationStringSelector:@selector(name)];
+        
+        [self.navigationController pushViewController:friendsListTableViewController animated:YES];
+    }
+}
+
+- (void)showPhoneContacts {
+    if (self.phoneContactsArray == nil) {
+        // Build the array of contacts form the address book
+        ABAddressBookRef addressBook = ABAddressBookCreate();
+        CFArrayRef addressBookData = ABAddressBookCopyArrayOfAllPeople(addressBook);
+        CFIndex nPeople = ABAddressBookGetPersonCount(addressBook);
+        
+        NSMutableArray* contactsList = [NSMutableArray arrayWithCapacity:nPeople];
+        
+        for (CFIndex i = 0; i < nPeople; i++) {
+            ABRecordRef aRecord = CFArrayGetValueAtIndex(addressBookData, i);
+            
+            // Get contact name
+            NSString *firstName = [(NSString *)ABRecordCopyValue(aRecord, kABPersonFirstNameProperty) stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            if (!firstName)
+                firstName = @" ";
+            
+            NSString *lastName = [(NSString *)ABRecordCopyValue(aRecord, kABPersonLastNameProperty) stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            if (!lastName)
+                lastName = @" ";
+            
+            NSString *name = [[NSString stringWithFormat:@"%@ %@", firstName, lastName] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            
+            // Get contact email
+            NSString *email = nil;
+            CFStringRef defaultEmail;
+            ABMultiValueRef emails = ABRecordCopyValue(aRecord, kABPersonEmailProperty);
+            
+            if (ABMultiValueGetCount(emails) > 0) {
+                defaultEmail = ABMultiValueCopyValueAtIndex(emails, 0);
+                email = [(NSString *)defaultEmail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            }
+            
+            if (name && email) {
+                // If we have a name and email, create the contact and add it to the contact array
+                Contact* contact = [Contact createContactWithName:name withEmail:email];
+                [contactsList addObject:contact];
+                
+                NSLog([NSString stringWithFormat:@"%@ %@", name, email]);
+            }
+        }
+        
+        CFRelease(addressBookData);
+        CFRelease(addressBook);
+        
+        self.phoneContactsArray = contactsList;
+        
+    }
+    
+    // Launch the friends list with the Facebook friends list loaded
+    Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
+    friendsListTableViewController.delegate = self;
+    friendsListTableViewController.contacts = [self partitionContacts:self.phoneContactsArray collationStringSelector:@selector(name)];
+    
+    [self.navigationController pushViewController:friendsListTableViewController animated:YES];
+    
+}
+
 #pragma mark - View Lifecycle
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -131,6 +209,9 @@
     
     // Add the Go button to the navigation header
     [self.nv_navigationHeader addSubview:self.btn_go];
+    
+    // Initialize the array of selected friends
+    self.selectedFriendsArray = [[NSMutableArray alloc] init];
     
 }
 
@@ -352,29 +433,13 @@
         if (indexPath.row == 1) {
             // Launch Facebook Friends
             
-            if (self.facebookFriendsArray == nil) {
-                // Initialize the array of selected friends
-                self.selectedFriendsArray = [[NSMutableArray alloc] init];
-                
-                [self enumerateFacebookFriends];
-                
-            }
-            else {
-                // Replace the selected friedns array with the copy that has any deselected friends removed
-                self.selectedFriendsArray = self.selectedFriendsArrayCopy;
-                
-                // Launch the friends list with the Facebook friends list loaded
-                Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
-                friendsListTableViewController.delegate = self;
-//                friendsListTableViewController.contacts = self.facebookFriendsArray;
-                friendsListTableViewController.contacts = [self partitionContacts:self.facebookFriendsArray collationStringSelector:@selector(name)];
-                
-                [self.navigationController pushViewController:friendsListTableViewController animated:YES];
-            }
+            [self showFacebookFriends];
             
         }
         else {
             // Launch Address Book
+            
+            [self showPhoneContacts];
             
         }
     }
@@ -481,12 +546,12 @@
     
     UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
     
-    Request* request = [progressView.requests objectAtIndex:0];
-    //now we have the request
-    NSArray* changedAttributes = request.changedAttributesList;
-    //list of all changed attributes
-    //we take the first one and base our messaging off that
-    NSString* attributeName = [changedAttributes objectAtIndex:0];
+//    Request* request = [progressView.requests objectAtIndex:0];
+//    //now we have the request
+//    NSArray* changedAttributes = request.changedAttributesList;
+//    //list of all changed attributes
+//    //we take the first one and base our messaging off that
+//    NSString* attributeName = [changedAttributes objectAtIndex:0];
     
     if (progressView.didSucceed) {
         //enumeration was sucessful
@@ -526,11 +591,13 @@
         }
     }
     
-    NSSortDescriptor *contactNameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-    NSArray *sortDescriptors = [NSArray arrayWithObject:contactNameDescriptor];
-    NSMutableArray *sortedFacebookFriendsList = [NSMutableArray arrayWithArray:[facebookFriendsList sortedArrayUsingDescriptors:sortDescriptors]];
+//    NSSortDescriptor *contactNameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+//    NSArray *sortDescriptors = [NSArray arrayWithObject:contactNameDescriptor];
+//    NSMutableArray *sortedFacebookFriendsList = [NSMutableArray arrayWithArray:[facebookFriendsList sortedArrayUsingDescriptors:sortDescriptors]];
+//    
+//    self.facebookFriendsArray = sortedFacebookFriendsList;
     
-    self.facebookFriendsArray = sortedFacebookFriendsList;
+     self.facebookFriendsArray = facebookFriendsList;
     
 //    [sortedFacebookFriendsList release];
 //    [facebookFriendsList release];

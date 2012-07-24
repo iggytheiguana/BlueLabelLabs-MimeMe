@@ -14,35 +14,30 @@
 
 @end
 
-@interface Mime_meFriendsListTableViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, FBRequestDelegate > {
+@interface Mime_meFriendsListTableViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, FBRequestDelegate, UISearchDisplayDelegate, UISearchBarDelegate > {
     id<Mime_meFriendsListTableViewControllerDelegate> m_delegate;
     
-    UITableView         *m_tbl_friends;
+    UITableView                 *m_tbl_friends;
     
-    UIButton            *m_btn_back;
-    UIView              *m_v_headerContainer;
+    UIButton                    *m_btn_back;
+    UIView                      *m_v_headerContainer;
+    UISearchDisplayController   *m_searchDisplayController;
     
-    NSArray             *m_contacts;
+    NSArray                     *m_contacts;            // Master list of contacts
+    NSMutableArray              *m_filteredContacts;    // Used for search control
     
-    NSDictionary*           m_allContacts;
-    NSMutableDictionary*    m_contactSearch;
-    NSMutableArray*         m_letters;
-    NSMutableArray*         m_lettersDeepCopy;
 }
 
 @property (nonatomic, assign) id<Mime_meFriendsListTableViewControllerDelegate>  delegate;
 
-@property (nonatomic, retain) IBOutlet  UITableView         *tbl_friends;
+@property (nonatomic, retain) IBOutlet  UITableView                 *tbl_friends;
 
-@property (nonatomic, retain) IBOutlet  UIButton            *btn_back;
-@property (nonatomic, retain) IBOutlet  UIView              *v_headerContainer;
+@property (nonatomic, retain) IBOutlet  UIButton                    *btn_back;
+@property (nonatomic, retain) IBOutlet  UIView                      *v_headerContainer;
+@property (nonatomic, retain) IBOutlet  UISearchDisplayController   *searchDisplayController;
 
-@property (nonatomic, retain)           NSArray             *contacts;
-
-@property (nonatomic, retain)           NSDictionary            *allContacts;
-@property (nonatomic, retain)           NSMutableDictionary     *contactSearch;
-@property (nonatomic, retain)           NSMutableArray          *letters;
-@property (nonatomic, retain)           NSMutableArray          *lettersDeepCopy;
+@property (nonatomic, retain)           NSArray                     *contacts;
+@property (nonatomic, retain)           NSMutableArray              *filteredContacts;
 
 - (IBAction) onBackButtonPressed:(id)sender;
 

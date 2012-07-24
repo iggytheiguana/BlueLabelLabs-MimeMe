@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "IJSONSerializable.h"
 #import <CoreData/CoreData.h>
+
 @interface Contact : NSManagedObject <IJSONSerializable>
 
 @property (nonatomic,copy) NSNumber* facebookid;
@@ -19,5 +20,8 @@
         withEntityDescription:(NSEntityDescription*)entity 
     insertIntoResourceContext:(ResourceContext*)resourceContext;
 + (id)          createInstanceFromJSON:(NSDictionary*)jsonDictionary;
+
++ (Contact *)createContactWithName:(NSString *)name
+                         withEmail:(NSString *)email;
 
 @end

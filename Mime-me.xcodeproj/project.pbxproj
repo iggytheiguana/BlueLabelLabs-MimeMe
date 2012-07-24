@@ -87,6 +87,7 @@
 		52B8763E15B0E355001C9EF8 /* icon-slideDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52B8763A15B0E355001C9EF8 /* icon-slideDown@2x.png */; };
 		52B8763F15B0E355001C9EF8 /* icon-slideUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 52B8763B15B0E355001C9EF8 /* icon-slideUp.png */; };
 		52B8764015B0E355001C9EF8 /* icon-slideUp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52B8763C15B0E355001C9EF8 /* icon-slideUp@2x.png */; };
+		52DBBC2015BF566A0076A27C /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52DBBC1F15BF566A0076A27C /* AddressBook.framework */; };
 		C523A010159F7CE7004AA39C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A00F159F7CE7004AA39C /* UIKit.framework */; };
 		C523A012159F7CE7004AA39C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A011159F7CE7004AA39C /* Foundation.framework */; };
 		C523A014159F7CE7004AA39C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A013159F7CE7004AA39C /* CoreGraphics.framework */; };
@@ -328,6 +329,7 @@
 		52B8763B15B0E355001C9EF8 /* icon-slideUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-slideUp.png"; sourceTree = "<group>"; };
 		52B8763C15B0E355001C9EF8 /* icon-slideUp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-slideUp@2x.png"; sourceTree = "<group>"; };
 		52B8764115B0F21A001C9EF8 /* ColorPalette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPalette.h; sourceTree = "<group>"; };
+		52DBBC1F15BF566A0076A27C /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		C523A00B159F7CE7004AA39C /* Mime-me.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mime-me.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C523A00F159F7CE7004AA39C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C523A011159F7CE7004AA39C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -624,6 +626,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52DBBC2015BF566A0076A27C /* AddressBook.framework in Frameworks */,
 				C523A11A159F88E8004AA39C /* libOAuth.a in Frameworks */,
 				C523A117159F88B9004AA39C /* libz.1.1.3.dylib in Frameworks */,
 				C523A118159F88B9004AA39C /* libz.1.2.5.dylib in Frameworks */,
@@ -714,6 +717,7 @@
 				C523A116159F88B9004AA39C /* libz.dylib */,
 				C523A112159F88A8004AA39C /* libxml2.dylib */,
 				C523A110159F889D004AA39C /* libxml2.2.dylib */,
+				52DBBC1F15BF566A0076A27C /* AddressBook.framework */,
 				C523A10E159F887C004AA39C /* SystemConfiguration.framework */,
 				C523A10C159F8870004AA39C /* MobileCoreServices.framework */,
 				C523A10A159F8863004AA39C /* CFNetwork.framework */,

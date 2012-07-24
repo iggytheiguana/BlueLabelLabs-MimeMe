@@ -8,6 +8,7 @@
 
 #import "Contact.h"
 #import "Attributes.h"
+#import "Resource.h"
 #import "ResourceContext.h"
 #import "Types.h"
 #import "NSStringGUIDCategory.h"
@@ -45,15 +46,13 @@
     
     if (self)  {
         
-        [self readAttributesFromJSONDictionary:jsonDictionary];     
-        
-        
-        
+        [self readAttributesFromJSONDictionary:jsonDictionary];
         
     }
     return self;
 
 }
+
 + (id) createInstanceFromJSON:(NSDictionary *)jsonDictionary
 {
     ResourceContext* resourceContext = [ResourceContext instance];
@@ -65,4 +64,18 @@
     return facebookFriend;
 
 }
+
++ (Contact *)createContactWithName:(NSString *)name
+                          withEmail:(NSString *)email
+{
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Contact *retVal = (Contact *)[Resource createInstanceOfType:FACEBOOKFRIEND withResourceContext:resourceContext];
+    
+    retVal.name = name;
+    retVal.email = email;
+    
+    return retVal;
+    
+}
+
 @end

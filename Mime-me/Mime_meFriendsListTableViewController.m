@@ -20,14 +20,12 @@
 @end
 
 @implementation Mime_meFriendsListTableViewController
-@synthesize tbl_friends         = m_tbl_friends;
-@synthesize btn_back            = m_btn_back;
-@synthesize v_headerContainer   = m_v_headerContainer;
-@synthesize contacts            = m_contacts;
-@synthesize allContacts         = m_allContacts;
-@synthesize contactSearch       = m_contactSearch;
-@synthesize letters             = m_letters;
-@synthesize lettersDeepCopy     = m_lettersDeepCopy;
+@synthesize tbl_friends             = m_tbl_friends;
+@synthesize btn_back                = m_btn_back;
+@synthesize v_headerContainer       = m_v_headerContainer;
+@synthesize contacts                = m_contacts;
+@synthesize filteredContacts        = m_filteredContacts;
+@synthesize searchDisplayController = m_searchDisplayController;
 
 
 #pragma mark - Properties
@@ -72,6 +70,9 @@
     self.v_headerContainer.layer.mask = maskLayer;
     [self.v_headerContainer.layer setOpaque:NO];
     
+    // Initializt the array of filtered contacts for the search controller
+	self.filteredContacts = [[NSMutableArray alloc] init];
+    
 }
 
 - (void)viewDidUnload
@@ -83,6 +84,7 @@
     self.tbl_friends = nil;
     self.btn_back = nil;
     self.v_headerContainer = nil;
+    self.searchDisplayController = nil;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -99,22 +101,52 @@
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [[[UILocalizedIndexedCollation currentCollation] sectionTitles] count];
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+	{
+        return 1;
+    }
+	else
+	{
+        return [[[UILocalizedIndexedCollation currentCollation] sectionTitles] count];
+    }
+    
+//    return [[[UILocalizedIndexedCollation currentCollation] sectionTitles] count];
 //    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[self.contacts objectAtIndex:section] count];
+//    NSArray *sectionArray = [self.contacts objectAtIndex:section];
+//    
+//    NSInteger count = [sectionArray count];
+    
+//    return [[self.contacts objectAtIndex:section] count];
     
 //    NSInteger count = [self.contacts count];
 //    
 //    return count;
+    
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+	{
+        return [self.filteredContacts count];
+    }
+	else
+	{
+        return [[self.contacts objectAtIndex:section] count];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger count = [self.contacts count];
+    NSInteger count = 0;
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        count = [self.filteredContacts count];
+    }
+    else
+    {
+        count = [[self.contacts objectAtIndex:indexPath.section] count];
+    }
     
     if (indexPath.row < count) {
         // Set friend
@@ -130,10 +162,21 @@
             cell.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
             cell.imageView.layer.borderWidth = 1.0;
             
+            cell.imageView.backgroundColor = [UIColor lightGrayColor];
+            //        cell.imageView.image = [UIImage imageNamed:@"logo-MimeMe.png"];
+            cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(40, 40)];
+            
         }
         
-//        Contact *friend = [self.contacts objectAtIndex:indexPath.row];
-        Contact *friend = [[self.contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        Contact *friend = nil;
+        if (tableView == self.searchDisplayController.searchResultsTableView)
+        {
+            friend = [self.filteredContacts objectAtIndex:indexPath.row];
+        }
+        else
+        {
+            friend = [[self.contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        }
         
         // Mark the row as selected if this friend is already in our list selected contacts
         Mime_meFriendsPickerViewController *friendsPickerViewController = (Mime_meFriendsPickerViewController *)self.delegate;
@@ -145,10 +188,6 @@
         }
         
         cell.textLabel.text = friend.name;
-        
-        cell.imageView.backgroundColor = [UIColor lightGrayColor];
-        cell.imageView.image = [UIImage imageNamed:@"logo-MimeMe.png"];
-//        cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(40, 40)];
         
 //        ImageManager* imageManager = [ImageManager instance];
 //        NSDictionary* userInfo = [NSDictionary dictionaryWithObject:mime.objectid forKey:kMIMEID];
@@ -173,7 +212,7 @@
         return cell;
     }
     else {
-        // Set Invite Friends rows
+        // Default row
         static NSString *CellIdentifier = @"Default";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
@@ -193,20 +232,38 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    BOOL showSection = [[self.contacts objectAtIndex:section] count] != 0;
-    
-    //only show the section title if there are rows in the section
-    return (showSection) ? [[[UILocalizedIndexedCollation currentCollation] sectionTitles] objectAtIndex:section] : nil;
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        // Search controller tableview will not show sections
+        return nil;
+    }
+    else {
+        BOOL showSection = [[self.contacts objectAtIndex:section] count] != 0;
+        
+        //only show the section title if there are rows in the section
+        return (showSection) ? [[[UILocalizedIndexedCollation currentCollation] sectionTitles] objectAtIndex:section] : nil;
+    }
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
-    return [[UILocalizedIndexedCollation currentCollation] sectionIndexTitles];
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        // Search controller tableview will not show sections
+        return nil;
+    }
+    else {
+        return [[UILocalizedIndexedCollation currentCollation] sectionIndexTitles];
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
-    return [[UILocalizedIndexedCollation currentCollation] sectionForSectionIndexTitleAtIndex:index];
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        // Search controller tableview will not show sections
+        
+    }
+    else {
+        return [[UILocalizedIndexedCollation currentCollation] sectionForSectionIndexTitleAtIndex:index];
+    }
 }
 
 /*
@@ -257,7 +314,15 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSInteger count = [self.contacts count];
+    NSInteger count = 0;
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        count = [self.filteredContacts count];
+    }
+    else
+    {
+        count = [[self.contacts objectAtIndex:indexPath.section] count];
+    }
     
     if (indexPath.row < count) {
         // Mark row selected
@@ -267,7 +332,15 @@
         // Toggle the checkmark accessory on the cell
         cell.accessoryType = cell.accessoryType==UITableViewCellAccessoryCheckmark ? UITableViewCellAccessoryNone : UITableViewCellAccessoryCheckmark;
         
-        Contact *friend = [[self.contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        Contact *friend = nil;
+        if (tableView == self.searchDisplayController.searchResultsTableView)
+        {
+            friend = [self.filteredContacts objectAtIndex:indexPath.row];
+        }
+        else
+        {
+            friend = [[self.contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        }
         
         // Add or remove the contact from the list of selected contacts
         Mime_meFriendsPickerViewController *friendsPickerViewController = (Mime_meFriendsPickerViewController *)self.delegate;
@@ -277,15 +350,6 @@
         else {
             [friendsPickerViewController.selectedFriendsArray removeObject:friend];
         }
-        
-//        // Add or remove the contact from the list of selected contacts
-//        Mime_meFriendsPickerViewController *friendsPickerViewController = (Mime_meFriendsPickerViewController *)self.delegate;
-//        if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
-//            [friendsPickerViewController.selectedFriendsArray addObject:[self.contacts objectAtIndex:indexPath.row]];
-//        }
-//        else {
-//            [friendsPickerViewController.selectedFriendsArray removeObject:[self.contacts objectAtIndex:indexPath.row]];
-//        }
     }
     
 }
@@ -300,85 +364,42 @@
     
 }
 
-//#pragma mark - Custom Search Methods
-//- (void)resetSearch {
-//    UILocalizedIndexedCollation
-//    NSMutableDictionary* allPagesCopy = [self.allPages mutableDeepCopy];
-//    self.pagesSearch = allPagesCopy;
-//    
-//    NSMutableArray* monthKeyArray = [[NSMutableArray alloc] init];
-//    [monthKeyArray addObjectsFromArray:self.monthsDeepCopy];
-//    self.months = monthKeyArray;
-//    [monthKeyArray release];
-//}
-//
-//- (void)handleSearchForTerm:(NSString *)searchTerm {
-//    NSMutableArray* sectionsToRemove = [[NSMutableArray alloc] init];
-//    [self resetSearch];
-//    
-//    NSString* pageTitle = nil;
-//    
-//    for (NSString* key in self.months) {
-//        NSMutableArray* array = [self.pagesSearch valueForKey:key];
-//        NSMutableArray* toRemove = [[NSMutableArray alloc] init];
-//        
-//        for (Page* page in array) {
-//            pageTitle = page.displayname;
-//            if ([pageTitle rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location == NSNotFound)
-//                [toRemove addObject:page];
-//        }
-//        
-//        if ([array count] == [toRemove count])
-//            [sectionsToRemove addObject:key];
-//        
-//        [array removeObjectsInArray:toRemove];
-//        [toRemove release];
-//    }
-//    
-//    
-//    [self.months removeObjectsInArray:sectionsToRemove];
-//    [sectionsToRemove release];
-//    [self.tbl_tOCTableView reloadData];
-//}
-//
-//#pragma mark - Search Bar Delegate Methods
-//- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-//    NSString *searchTerm = [searchBar text];
-//    
-//    [self.sb_searchBar setShowsCancelButton:NO animated:YES];
-//    [self.btn_backgroundButton setEnabled:NO];
-//    [self.sb_searchBar resignFirstResponder];
-//    //self.tbl_tOCTableView.allowsSelection = YES;
-//    //self.tbl_tOCTableView.scrollEnabled = YES;
-//    [self handleSearchForTerm:searchTerm];
-//}
-//
-//- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchTerm {
-//    if ([searchTerm length] == 0) {
-//        [self resetSearch];
-//        [self.tbl_tOCTableView reloadData];
-//        return;
-//    }
-//    [self handleSearchForTerm:searchTerm];
-//}
-//
-//- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-//    [self.sb_searchBar setShowsCancelButton:YES animated:YES];
-//    [self.btn_backgroundButton setEnabled:YES];
-//    //self.tbl_tOCTableView.allowsSelection = NO;
-//    //self.tbl_tOCTableView.scrollEnabled = NO;
-//}
-//
-//- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-//    [self.sb_searchBar setShowsCancelButton:NO animated:YES];
-//    [self.btn_backgroundButton setEnabled:NO];
-//    self.sb_searchBar.text = @"";
-//    [self resetSearch];
-//    [self.tbl_tOCTableView reloadData];
-//    [self.sb_searchBar resignFirstResponder];
-//    //self.tbl_tOCTableView.allowsSelection = YES;
-//    //self.tbl_tOCTableView.scrollEnabled = YES;
-//}
+#pragma mark - Search Methods
+- (void)filterContentForSearchText:(NSString*)searchText
+{
+	/*
+	 Update the filtered array based on the search text.
+	 */
+	
+	[self.filteredContacts removeAllObjects]; // First clear the filtered array.
+	
+	/*
+	 Search the main list for contacts whose name matches searchText; add items that match to the filtered array.
+	 */
+	for (NSArray *section in self.contacts) {
+        for (Contact *contact in section) {
+            if ([contact.name rangeOfString:searchText options:(NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch)].location != NSNotFound) {
+                // Match found
+                [self.filteredContacts addObject:contact];
+            }
+        }
+    }
+}
+
+#pragma mark UISearchDisplayController Delegate Methods
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    [self filterContentForSearchText:searchString];
+    
+    // Return YES to cause the search result table view to be reloaded.
+    return YES;
+}
+
+#pragma mark UISearchBar Delegate Methods
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [self.tbl_friends reloadData];
+}
 
 #pragma mark - Static Initializers
 + (Mime_meFriendsListTableViewController*)createInstance {
