@@ -74,7 +74,7 @@
     
     retVal.name = name;
     retVal.email = email;
-    
+    [retVal autorelease];
     return retVal;
     
 }
