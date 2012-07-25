@@ -128,6 +128,8 @@ NSString* const TITLE                   =@"title";
 
 // Mime-Me Attributes
 NSString* const TARGETUSERID            =@"targetuserid";
+NSString* const TARGETEMAIL             =@"targetemail";
+NSString* const TARGETFACEBOOKID        =@"targetfacebookid";
 NSString* const ISSENTBYFRIEND          =@"issentbyfriend";
 NSString* const NUMBEROFTIMESUSED       =@"numberoftimesused";
 NSString* const NUMBEROFATTEMPTS        =@"numberofattempts";

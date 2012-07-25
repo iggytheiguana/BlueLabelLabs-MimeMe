@@ -372,15 +372,11 @@
 #pragma mark - Search Methods
 - (void)filterContentForSearchText:(NSString*)searchText
 {
-	/*
-	 Update the filtered array based on the search text.
-	 */
-	
+	// Update the filtered array based on the search text.
+    
 	[self.filteredContacts removeAllObjects]; // First clear the filtered array.
 	
-	/*
-	 Search the main list for contacts whose name matches searchText; add items that match to the filtered array.
-	 */
+	// Search the main list for contacts whose name matches searchText; add items that match to the filtered array.
 	for (NSArray *section in self.contacts) {
         for (Contact *contact in section) {
             if ([contact.name rangeOfString:searchText options:(NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch)].location != NSNotFound) {

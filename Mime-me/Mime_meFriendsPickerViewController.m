@@ -500,7 +500,7 @@
             
             Contact *friend = [self.selectedFriendsArray objectAtIndex:(indexPath.row - 2)];    // Subtract 2 to account for Header and Public option
             
-            // Add or remove the friend from the list of selected contacts
+            // Add or remove the friend from the copied list of selected contacts
             if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
                 [self.selectedFriendsArrayCopy addObject:friend];
             }
@@ -558,18 +558,15 @@
         mime.ispublic = [NSNumber numberWithBool:YES];
     }
     
-    NSInteger count = [self.tbl_friends numberOfRowsInSection:0];
+    // Now create a MimeAnswer object for each contact in the copy of the selected friends array.
+    // We use the copy since the user may have deselected a particular contact in the list, and
+    // the copy holds the most recent truth.
     
-    // Now iterate through each row of friends and create a MimeAnswer for each friend row selected
-    for (int i = 2; i < count; i++) {
-        UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]];
+    for (Contact *contact in self.selectedFriendsArrayCopy) {
+        NSLog(contact.name);
         
-        if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
-            // Create a MimeAnswer for friend target
-            Contact *friend = [self.selectedFriendsArray objectAtIndex:(i - 2)];
-                   
-            [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetFacebookID:friend.facebookid withTargetEmail:friend.email withTargetName:friend.name];
-        }
+        // Create a MimeAnswer for friend target
+        [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetFacebookID:contact.facebookid withTargetEmail:contact.email withTargetName:contact.name];
     }
     
     // Save

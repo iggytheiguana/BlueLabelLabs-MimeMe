@@ -10,7 +10,7 @@
 #import "BaseViewController.h"
 #import "Mime_meUINavigationHeaderView.h"
 
-@interface Mime_meGuessMenuViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate > {
+@interface Mime_meGuessMenuViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate > {
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
     
     UITableView         *m_tbl_mimes;
@@ -22,9 +22,11 @@
     NSArray             *m_recentArray;
     NSArray             *m_staffPicksArray;
     
+    CloudEnumerator     *m_mimeAnswersCloudEnumerator;
 }
 
 @property (nonatomic, retain)           NSFetchedResultsController      *frc_mimeAnswers;
+@property (nonatomic, retain)           CloudEnumerator                 *mimeAnswersCloudEnumerator;
 
 @property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
 

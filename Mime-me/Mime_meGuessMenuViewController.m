@@ -22,6 +22,7 @@
 #import "DateTimeHelper.h"
 #import "UIImage+UIImageCategory.h"
 #import "Mime_meViewMimeViewController.h"
+#import "MimeAnswerState.h"
 
 #define kMIMEFRC @"mimefrc"
 #define kMIMEANSWERID @"mimeanswerid"
@@ -35,6 +36,7 @@
 
 @implementation Mime_meGuessMenuViewController
 @synthesize frc_mimeAnswers           = __frc_mimeAnswers;
+@synthesize mimeAnswersCloudEnumerator = m_mimeAnswersCloudEnumerator;
 
 @synthesize nv_navigationHeader = m_nv_navigationHeader;
 
@@ -61,6 +63,9 @@
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K=%@ OR %K=%@ OR %K=%@", TARGETUSERID, self.loggedInUser.objectid, TARGETEMAIL, self.loggedInUser.email, TARGETFACEBOOKID, self.loggedInUser.fb_user_id];
+    
+    [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     [fetchRequest setEntity:entityDescription];
     
@@ -97,6 +102,22 @@
     }
     
     return [NSString stringWithFormat:@"%@ ago",timeSinceCreated];
+}
+
+#pragma mark - Enumerators
+- (void) enumerateMimeAnswers {    
+    if (self.mimeAnswersCloudEnumerator != nil) {
+        [self.mimeAnswersCloudEnumerator enumerateUntilEnd:nil];
+    }
+    else 
+    {
+        self.mimeAnswersCloudEnumerator = nil;
+        self.mimeAnswersCloudEnumerator = [CloudEnumerator enumeratorForMimeAnswersWithTarget:self.loggedInUser.objectid withState:kUNANSWERED];
+        self.mimeAnswersCloudEnumerator.delegate = self;
+        [self.mimeAnswersCloudEnumerator enumerateUntilEnd:nil];
+    }
+    
+//    [self showHUDForMimeAnswerDownload];
 }
 
 #pragma mark - View Lifecycle
@@ -154,6 +175,9 @@
     
     [self.nv_navigationHeader.btn_guess setHighlighted:YES];
     [self.nv_navigationHeader.btn_guess setUserInteractionEnabled:NO];
+    
+    // Enumerate for Mime Answers
+    [self enumerateMimeAnswers];
     
 }
 
@@ -595,6 +619,18 @@
     }
     else {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController that isnt mine. %p", activityName, &controller);
+    }
+}
+
+#pragma mark - CloudEnumeratorDelegate
+- (void) onEnumerateComplete:(CloudEnumerator*)enumerator 
+                 withResults:(NSArray *)results 
+                withUserInfo:(NSDictionary *)userInfo
+{
+    if (enumerator == self.mimeAnswersCloudEnumerator) {
+//        [self hideProgressBar];
+//        [self makeWordsArray];
+        [self.tbl_mimes reloadData];
     }
 }
 

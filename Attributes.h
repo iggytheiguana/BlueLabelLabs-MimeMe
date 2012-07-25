@@ -137,6 +137,8 @@ extern NSString* const TITLE;
 
 // Mime-Me Attributes
 extern NSString* const TARGETUSERID;
+extern NSString* const TARGETEMAIL;
+extern NSString* const TARGETFACEBOOKID;
 extern NSString* const ISSENTBYFRIEND;
 extern NSString* const NUMBEROFTIMESUSED;
 extern NSString* const NUMBEROFATTEMPTS;
