@@ -230,6 +230,31 @@ static ResourceContext* sharedInstance;
     }
 }
 
+//returns a boolean indicating whether a specified Resource is in the passed in array, denoting that it
+//is been marked for creation on the web service, and hence should not be part of anyupdate processing since
+//the create to the web service will handle it
+- (BOOL) isUpdatedResource:(Resource*)resource inResourcesToCreate:(NSArray*)resourcesToCreate
+{
+    NSString* activityName = @"ResourceContext.isUpdatedResourceInResourcesToCreate:";
+    BOOL retVal = NO;
+    
+    if (resourcesToCreate != nil)
+    {
+        for (int i = 0; i < [resourcesToCreate count]; i++)
+        {
+            Resource* currentResource = [resourcesToCreate objectAtIndex:i];
+            if ([currentResource.objectid isEqualToNumber:resource.objectid])
+            {
+                //yes this object is in the array
+                LOG_RESOURCECONTEXT(0,@"%@Found Resource with objectid %@ in the create array, returning true",activityName,resource.objectid);
+                retVal = YES;
+                break;
+            }
+        }
+    }
+    return retVal;
+}
+
 //saves all pending changes to the local persistence store
 //and then attempts to push all appropriate changes up to the cloud
 - (NSArray*) save:(BOOL)saveToCloud 
@@ -320,49 +345,56 @@ static ResourceContext* sharedInstance;
             
             Resource* resource = [updatedObjectsArray objectAtIndex:i];
             
-            if ([resource isKindOfClass:[Resource class]]) {
-                if ([resource shouldResourceBeSynchronizedToCloud]) {
-                    //get a list of attributes that are changed on the object
-                    NSArray* changedAttributes = [resource changedAttributesToSynchronizeToCloud];
-                    Request* request = nil;
-                    if ([changedAttributes count] > 0) 
+            if ([resource isKindOfClass:[Resource class]]) 
+            {
+                //we ensure we don't try to double process a create and update on the same object
+                if (![self isUpdatedResource:resource inResourcesToCreate:resourcesToCreateInCloud])
+                {
+                    //resource is not marked for creation, continue update processing
+                    if ([resource shouldResourceBeSynchronizedToCloud]) 
                     {
-                        
-                        
-                        request = [self requestFor:resource forOperation:kMODIFY withChangedAttributes:changedAttributes onFinishCallback:callback
-                                 trackProgressWith:progressDelegate];
-                        [resource markAsDirty:changedAttributes];
-                        if (request != nil) {
-                            //we append the changed attribute names to the request
-                            //[request setChangedAttributesList:changedAttributes];
+                        //get a list of attributes that are changed on the object
+                        NSArray* changedAttributes = [resource changedAttributesToSynchronizeToCloud];
+                        Request* request = nil;
+                        if ([changedAttributes count] > 0) 
+                        {
                             
-                            AuthenticationContext* authenticationContext = [[AuthenticationManager instance] contextForLoggedInUser];
                             
-                            //we need to calculate the url for the request
-                            if (request.operationcode ==[NSNumber numberWithInt:kMODIFY]) {
-                                NSDictionary* attributeOperations = [request putAttributeOperations];
-                                NSArray* attributeNames = [attributeOperations allKeys];
-                                NSMutableArray* attributeValues = [[NSMutableArray alloc]initWithCapacity:[attributeNames count]];
-                                NSMutableArray* attributeOperationCodes = [[NSMutableArray alloc]initWithCapacity:[attributeNames count]];
+                            request = [self requestFor:resource forOperation:kMODIFY withChangedAttributes:changedAttributes onFinishCallback:callback
+                                     trackProgressWith:progressDelegate];
+                            [resource markAsDirty:changedAttributes];
+                            if (request != nil) {
+                                //we append the changed attribute names to the request
+                                //[request setChangedAttributesList:changedAttributes];
                                 
-                                for (NSString* attributeName in attributeNames) {
-                                    PutAttributeOperation* putOperation = [attributeOperations valueForKey:attributeName];
-                                    [attributeValues addObject:putOperation.value];
-                                    [attributeOperationCodes addObject:[NSNumber numberWithInt:putOperation.operationCode]];
+                                AuthenticationContext* authenticationContext = [[AuthenticationManager instance] contextForLoggedInUser];
+                                
+                                //we need to calculate the url for the request
+                                if (request.operationcode ==[NSNumber numberWithInt:kMODIFY]) {
+                                    NSDictionary* attributeOperations = [request putAttributeOperations];
+                                    NSArray* attributeNames = [attributeOperations allKeys];
+                                    NSMutableArray* attributeValues = [[NSMutableArray alloc]initWithCapacity:[attributeNames count]];
+                                    NSMutableArray* attributeOperationCodes = [[NSMutableArray alloc]initWithCapacity:[attributeNames count]];
+                                    
+                                    for (NSString* attributeName in attributeNames) {
+                                        PutAttributeOperation* putOperation = [attributeOperations valueForKey:attributeName];
+                                        [attributeValues addObject:putOperation.value];
+                                        [attributeOperationCodes addObject:[NSNumber numberWithInt:putOperation.operationCode]];
+                                    }
+                                    
+                                    //now all of our arrays are populated we can generate the url
+                                    request.url = [[UrlManager urlForPutObject:request.targetresourceid withObjectType:request.targetresourcetype withAttributes:attributeNames withAttributeValues:attributeValues withOperationCodes:attributeOperationCodes withAuthenticationContext:authenticationContext]absoluteString];
+                                    
+                                    [attributeValues release];
+                                    [attributeOperationCodes release];
                                 }
-                                
-                                //now all of our arrays are populated we can generate the url
-                                request.url = [[UrlManager urlForPutObject:request.targetresourceid withObjectType:request.targetresourcetype withAttributes:attributeNames withAttributeValues:attributeValues withOperationCodes:attributeOperationCodes withAuthenticationContext:authenticationContext]absoluteString];
-                                
-                                [attributeValues release];
-                                [attributeOperationCodes release];
+                                [retVal addObject:request];
+                                [putRequests addObject:request];
                             }
-                            [retVal addObject:request];
-                            [putRequests addObject:request];
                         }
+                        
                     }
-                    
-                } 
+                }
             }
             
             
