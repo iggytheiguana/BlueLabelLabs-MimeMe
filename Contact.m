@@ -18,18 +18,24 @@
 @dynamic facebookid;
 @dynamic name;
 @dynamic email;
+@dynamic imageurl;
 
 - (void) readAttributesFromJSONDictionary:(NSDictionary*)jsonDictionary
 {
   
     NSString* facebookid = [jsonDictionary objectForKey:@"id"];
     NSString* name = [jsonDictionary objectForKey:@"name"];
+    NSString* imageurl = [jsonDictionary objectForKey:@"picture"];
     
     NSNumber* facebookIDNumber = [facebookid numberValue];
     
     self.facebookid = facebookIDNumber;
     self.name  = name;
-
+    
+    if (imageurl != nil)
+    {
+        self.imageurl = imageurl;
+    }
 
 }
 
@@ -67,6 +73,7 @@
 
 + (Contact *)createContactWithName:(NSString *)name
                           withEmail:(NSString *)email
+                          withImageURL:(NSString *)imageurl
 {
     ResourceContext* resourceContext = [ResourceContext instance];
     NSEntityDescription* entity = [NSEntityDescription entityForName:FACEBOOKFRIEND inManagedObjectContext:resourceContext.managedObjectContext];
@@ -74,6 +81,11 @@
     
     retVal.name = name;
     retVal.email = email;
+    
+    if (imageurl != nil)
+    {
+        retVal.imageurl = imageurl;
+    }
     [retVal autorelease];
     return retVal;
     

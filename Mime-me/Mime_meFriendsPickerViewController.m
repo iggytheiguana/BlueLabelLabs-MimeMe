@@ -58,7 +58,7 @@
     if (facebook.isSessionValid)
     {
         LOG_MIME_FRIENDLISTTABLEVIEWCONTROLLER(0,@"%@ Beginning to enumerate Facebook friends for user",activityName);
-        [facebook requestWithGraphPath:@"me/friends" andDelegate:self];
+        [facebook requestWithGraphPath:@"me/friends?fields=picture,name" andDelegate:self];
     }
     else {
         //error condition
@@ -154,7 +154,7 @@
             
             if (name && email) {
                 // If we have a name and email, create the contact and add it to the contact array
-                Contact* contact = [Contact createContactWithName:name withEmail:email];
+                Contact* contact = [Contact createContactWithName:name withEmail:email withImageURL:nil];
                 [contactsList addObject:contact];
                 
              

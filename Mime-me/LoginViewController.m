@@ -285,7 +285,7 @@
 -(void) beginFacebookAuthentication {
     //  NSString* activityName = @"UILoginView.beginFacebookAuthentication:";
     //now we need to grab their facebook authentication data, and then log them into our app    
-    NSArray *permissions = [NSArray arrayWithObjects:@"offline_access",@"email", @"publish_actions",@"publish_stream",@"user_about_me", nil];
+    NSArray *permissions = [NSArray arrayWithObjects:@"offline_access",@"email", @"publish_actions",@"publish_stream",@"user_about_me",@"friends_about_me", nil];
     Mime_meAppDelegate* appDelegate = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
     Facebook* facebook = appDelegate.facebook;
     

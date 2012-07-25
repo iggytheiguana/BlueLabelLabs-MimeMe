@@ -15,6 +15,7 @@
 @property (nonatomic,copy) NSNumber* facebookid;
 @property (nonatomic,copy) NSString* name;
 @property (nonatomic,copy) NSString* email;
+@property (nonatomic,copy) NSString* imageurl;
 
 - (id) initFromJSONDictionary:(NSDictionary*)jsonDictionary 
         withEntityDescription:(NSEntityDescription*)entity 
@@ -22,6 +23,7 @@
 + (id)          createInstanceFromJSON:(NSDictionary*)jsonDictionary;
 
 + (Contact *)createContactWithName:(NSString *)name
-                         withEmail:(NSString *)email;
+                         withEmail:(NSString *)email
+                    withImageURL:(NSString*)imageurl;
 
 @end
