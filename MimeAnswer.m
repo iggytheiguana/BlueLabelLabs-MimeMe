@@ -68,7 +68,9 @@
 //creates a MimeAnswer object based on facebookIDs or emails
 + (MimeAnswer*)createMimeAnswerWithMimeID:(NSNumber *)mimeID
                      withTargetFacebookID:(NSNumber *)targetFacebookID
-                          withTargetEmail:(NSString *)targetEmail {
+                          withTargetEmail:(NSString *)targetEmail 
+                        withTargetName:(NSString *)targetName
+{
     
     ResourceContext* resourceContext = [ResourceContext instance];
     MimeAnswer *retVal = (MimeAnswer*)[Resource createInstanceOfType:MIMEANSWER withResourceContext:resourceContext];
@@ -86,7 +88,7 @@
     
     retVal.targetfacebookid = [targetFacebookID stringValue];
     retVal.targetemail = targetEmail;
-    
+    retVal.targetname = targetName;
     retVal.didusehint = [NSNumber numberWithBool:NO];
     retVal.issentbyfriend = [NSNumber numberWithBool:YES];
     retVal.pointsawarded = [NSNumber numberWithInt:0];

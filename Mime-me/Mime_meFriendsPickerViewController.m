@@ -157,7 +157,7 @@
                 Contact* contact = [Contact createContactWithName:name withEmail:email];
                 [contactsList addObject:contact];
                 
-                NSLog([NSString stringWithFormat:@"%@ %@", name, email]);
+             
             }
         }
         
@@ -530,7 +530,7 @@
             // Create a MimeAnswer for friend target
             Contact *friend = [self.selectedFriendsArray objectAtIndex:(i - 2)];
                    
-            [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetFacebookID:friend.facebookid withTargetEmail:friend.email];
+            [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetFacebookID:friend.facebookid withTargetEmail:friend.email withTargetName:friend.name];
         }
     }
     

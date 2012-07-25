@@ -20,13 +20,14 @@
 @property (nonatomic,retain) NSString* targetfacebookid;
 @property (nonatomic,retain) NSString* targetuserid;
 @property (nonatomic,retain) NSNumber* issentbyfriend;
-@property (nonatomic,retain) NSNumber* targetname;
+@property (nonatomic,retain) NSString* targetname;
 
 + (MimeAnswer*)createMimeAnswerWithMimeID:(NSNumber *)mimeID
                          withTargetUserID:(NSNumber *)targetUserID;
 
 + (MimeAnswer*)createMimeAnswerWithMimeID:(NSNumber *)mimeID
                      withTargetFacebookID:(NSNumber *)targetFacebookID
-                          withTargetEmail:(NSString *)targetEmail;
+                          withTargetEmail:(NSString *)targetEmail
+                           withTargetName:(NSString*)targetName;
 
 @end

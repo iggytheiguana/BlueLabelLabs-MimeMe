@@ -69,7 +69,8 @@
                           withEmail:(NSString *)email
 {
     ResourceContext* resourceContext = [ResourceContext instance];
-    Contact *retVal = (Contact *)[Resource createInstanceOfType:FACEBOOKFRIEND withResourceContext:resourceContext];
+    NSEntityDescription* entity = [NSEntityDescription entityForName:FACEBOOKFRIEND inManagedObjectContext:resourceContext.managedObjectContext];
+    Contact *retVal = [[Contact alloc]initWithEntity:entity insertIntoManagedObjectContext:resourceContext.managedObjectContext];
     
     retVal.name = name;
     retVal.email = email;
