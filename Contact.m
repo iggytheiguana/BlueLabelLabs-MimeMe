@@ -13,6 +13,7 @@
 #import "Types.h"
 #import "NSStringGUIDCategory.h"
 #import "Macros.h"
+#import "ImageManager.h"
 
 @implementation Contact
 @dynamic facebookid;
@@ -20,6 +21,8 @@
 @dynamic email;
 @dynamic imageurl;
 @dynamic hasinstalled;
+
+
 - (void) readAttributesFromJSONDictionary:(NSDictionary*)jsonDictionary
 {
   
@@ -72,7 +75,7 @@
 + (id) createInstanceFromJSON:(NSDictionary *)jsonDictionary
 {
     ResourceContext* resourceContext = [ResourceContext instance];
-    NSEntityDescription* entity = [NSEntityDescription entityForName:FACEBOOKFRIEND inManagedObjectContext:resourceContext.managedObjectContext];
+    NSEntityDescription* entity = [NSEntityDescription entityForName:CONTACT inManagedObjectContext:resourceContext.managedObjectContext];
     
     Contact* facebookFriend = [[Contact alloc]initFromJSONDictionary:jsonDictionary withEntityDescription:entity insertIntoResourceContext:nil];
     
@@ -82,20 +85,20 @@
 }
 
 + (Contact *)createContactWithName:(NSString *)name
-                          withEmail:(NSString *)email
-                          withImageURL:(NSString *)imageurl
+                         withEmail:(NSString *)email
+                         withImage:(UIImage *)image
 {
     ResourceContext* resourceContext = [ResourceContext instance];
-    NSEntityDescription* entity = [NSEntityDescription entityForName:FACEBOOKFRIEND inManagedObjectContext:resourceContext.managedObjectContext];
+    NSEntityDescription* entity = [NSEntityDescription entityForName:CONTACT inManagedObjectContext:resourceContext.managedObjectContext];
     Contact *retVal = [[Contact alloc]initWithEntity:entity insertIntoManagedObjectContext:resourceContext.managedObjectContext];
     
     retVal.name = name;
     retVal.email = email;
     retVal.hasinstalled = [NSNumber numberWithBool:NO];
-    if (imageurl != nil)
-    {
-        retVal.imageurl = imageurl;
-    }
+    
+    ImageManager* imageManager = [ImageManager instance];
+    retVal.imageurl = [imageManager saveImage:image forContactWithManagedObjectID:retVal.objectID];
+    
     [retVal autorelease];
     return retVal;
     

@@ -356,5 +356,14 @@ static inline double radians (double degrees) {
     return path;
 }
 
+- (NSString*)saveImage:(UIImage *)image forContactWithManagedObjectID:(NSManagedObjectID *)contactID {
+    
+    NSString* fileNameWithoutExtension = [NSString stringWithFormat:@"%@-imageurl",contactID];
+    
+    NSString* path = [self fullPathForPhotoWithName:fileNameWithoutExtension];
+    [UIImageJPEGRepresentation(image, .5) writeToFile:path atomically:YES];
+    return path;
+}
+
 
 @end

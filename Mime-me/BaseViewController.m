@@ -321,12 +321,14 @@
 {
     LoginViewController* loginViewController = [LoginViewController createAuthenticationInstance:getFaceobook shouldGetTwitter:getTwitter onSuccessCallback:successCallback onFailureCallback:failCallback];
    
-    UINavigationController* navigationController = [[UINavigationController alloc]initWithRootViewController:loginViewController];
-    navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    [navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+//    UINavigationController* navigationController = [[UINavigationController alloc]initWithRootViewController:loginViewController];
+//    navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//    [navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+    [self.navigationController hidesBottomBarWhenPushed];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    [self presentModalViewController:navigationController animated:YES];
-    [navigationController release];
+    [self.navigationController setViewControllers:[NSArray arrayWithObject:loginViewController] animated:NO];
+//    [navigationController release];
     
 }
 

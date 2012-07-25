@@ -31,6 +31,6 @@ extern NSString* const FRIEND;
 extern NSString* const WORD;
 extern NSString* const MIME;
 extern NSString* const MIMEANSWER;
-extern NSString* const FACEBOOKFRIEND;
 extern NSString* const COMMENT;
 extern NSString* const FAVORITE;
+extern NSString* const CONTACT;

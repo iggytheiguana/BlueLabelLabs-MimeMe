@@ -8,12 +8,17 @@
 
 #import "Mime_meFriendsListTableViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "UIImage+UIImageCategory.h"
 #import "Mime_meAppDelegate.h"
 #import "Macros.h"
 #import "Contact.h"
 #import "JSONKit.h"
 #import "Mime_meFriendsPickerViewController.h"
+#import "ImageManager.h"
+#import "ImageDownloadResponse.h"
+#import "UIImage+UIImageCategory.h"
+
+#define kCONTACTID @"contactid"
+#define kTABLEVIEW @"tableview"
 
 @interface Mime_meFriendsListTableViewController ()
 
@@ -149,8 +154,8 @@
     }
     
     if (indexPath.row < count) {
-        // Set friend
-        static NSString *CellIdentifier = @"Friend";
+        // Set contact
+        static NSString *CellIdentifier = @"Contact";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
         if (cell == nil) {
@@ -163,51 +168,51 @@
             cell.imageView.layer.borderWidth = 1.0;
             
             cell.imageView.backgroundColor = [UIColor lightGrayColor];
-            //        cell.imageView.image = [UIImage imageNamed:@"logo-MimeMe.png"];
             cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(40, 40)];
             
         }
         
-        Contact *friend = nil;
+        Contact *contact = nil;
         if (tableView == self.searchDisplayController.searchResultsTableView)
         {
-            friend = [self.filteredContacts objectAtIndex:indexPath.row];
+            contact = [self.filteredContacts objectAtIndex:indexPath.row];
         }
         else
         {
-            friend = [[self.contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+            contact = [[self.contacts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
         }
         
         // Mark the row as selected if this friend is already in our list selected contacts
         Mime_meFriendsPickerViewController *friendsPickerViewController = (Mime_meFriendsPickerViewController *)self.delegate;
-        if ([friendsPickerViewController.selectedFriendsArray indexOfObject:friend] != NSNotFound) {
+        if ([friendsPickerViewController.selectedFriendsArray indexOfObject:contact] != NSNotFound) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         else {
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
         
-        cell.textLabel.text = friend.name;
+        cell.textLabel.text = contact.name;
         
-//        ImageManager* imageManager = [ImageManager instance];
-//        NSDictionary* userInfo = [NSDictionary dictionaryWithObject:mime.objectid forKey:kMIMEID];
-//        
-//        if (mime.thumbnailurl != nil && ![mime.thumbnailurl isEqualToString:@""]) {
-//            Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
-//            callback.fireOnMainThread = YES;
-//            UIImage* image = [imageManager downloadImage:mime.thumbnailurl withUserInfo:nil atCallback:callback];
-//            [callback release];
-//            if (image != nil) {
-//                
-//                cell.imageView.image = [image imageScaledToSize:CGSizeMake(50, 50)];
-//                
-//                [self.view setNeedsDisplay];
-//            }
-//            else {
-//                cell.imageView.backgroundColor = [UIColor lightGrayColor];
-//                cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(50, 50)];
-//            }
-//        }
+        // Display contact image
+        ImageManager* imageManager = [ImageManager instance];
+        NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:contact.objectID, kCONTACTID, tableView, kTABLEVIEW, nil];
+        
+        if (contact.imageurl != nil && ![contact.imageurl isEqualToString:@""]) {
+            Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
+            callback.fireOnMainThread = YES;
+            UIImage* image = [imageManager downloadImage:contact.imageurl withUserInfo:nil atCallback:callback];
+            [callback release];
+            if (image != nil) {
+                
+                cell.imageView.image = [image imageScaledToSize:CGSizeMake(40, 40)];
+                
+                [self.view setNeedsDisplay];
+            }
+            else {
+                cell.imageView.backgroundColor = [UIColor lightGrayColor];
+                cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(40, 40)];
+            }
+        }
         
         return cell;
     }
@@ -259,7 +264,7 @@
 {
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         // Search controller tableview will not show sections
-        
+        return NAN;
     }
     else {
         return [[UILocalizedIndexedCollation currentCollation] sectionForSectionIndexTitleAtIndex:index];
@@ -399,6 +404,57 @@
 #pragma mark UISearchBar Delegate Methods
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     [self.tbl_friends reloadData];
+}
+
+#pragma mark - ImageManager Delegate Methods
+- (void)onImageDownloadComplete:(CallbackResult*)result {
+    NSString* activityName = @"Mime_meFriendsListTableViewController.onImageDownloadComplete:";
+    NSDictionary* userInfo = result.context;
+    
+    NSManagedObjectID *contactID = [userInfo valueForKey:kCONTACTID];
+    UITableView *tableView = [userInfo valueForKey:kTABLEVIEW];
+    
+    ImageDownloadResponse* response = (ImageDownloadResponse*)result.response;
+    
+    if ([response.didSucceed boolValue] == YES) {
+        NSArray *array = [[NSArray alloc] init];
+        
+        if (tableView == self.searchDisplayController.searchResultsTableView)
+        {
+            array = self.filteredContacts;
+        }
+        else
+        {
+            array = self.contacts;
+        }
+        
+        NSInteger sectionIndex = 0;
+        for (NSArray *section in array) {
+            
+            NSInteger contactIndex = 0;
+            for (Contact *contact in section) {
+                
+                if ([contact.objectID isEqual:contactID]) {
+                    UITableViewCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:contactIndex inSection:sectionIndex]];
+                    
+                    //we only draw the image if this view hasnt been repurposed for another photo
+                    LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
+                    
+                    UIImage *image = [response.image imageScaledToSize:CGSizeMake(40, 40)];
+                    
+                    [cell.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
+                    
+                    [self.view setNeedsDisplay];
+                    
+                    break;
+                }
+                
+                contactIndex++;
+            }
+            
+            sectionIndex++;
+        }
+    }    
 }
 
 #pragma mark - Static Initializers

@@ -19,6 +19,11 @@
 #import "Contact.h"
 #import "JSONKit.h"
 #import <AddressBook/AddressBook.h>
+#import "ImageManager.h"
+#import "ImageDownloadResponse.h"
+#import "UIImage+UIImageCategory.h"
+
+#define kCONTACTID @"contactid"
 
 @interface Mime_meFriendsPickerViewController ()
 
@@ -112,8 +117,8 @@
         // Launch the friends list with the Facebook friends list loaded
         Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
         friendsListTableViewController.delegate = self;
-        //                friendsListTableViewController.contacts = self.facebookFriendsArray;
-        friendsListTableViewController.contacts = [self partitionContacts:self.facebookFriendsArray collationStringSelector:@selector(name)];
+        friendsListTableViewController.contacts = self.facebookFriendsArray;
+        self.selectedFriendsArray = self.selectedFriendsArrayCopy;
         
         [self.navigationController pushViewController:friendsListTableViewController animated:YES];
     }
@@ -152,26 +157,29 @@
                 email = [(NSString *)defaultEmail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             }
             
+            // Get contact image
+            NSData  *imgData = (NSData *)ABPersonCopyImageDataWithFormat(aRecord, kABPersonImageFormatThumbnail);
+            UIImage *image = [UIImage imageWithData:imgData];
+            
             if (name && email) {
                 // If we have a name and email, create the contact and add it to the contact array
-                Contact* contact = [Contact createContactWithName:name withEmail:email withImageURL:nil];
+                Contact* contact = [Contact createContactWithName:name withEmail:email withImage:image];
                 [contactsList addObject:contact];
-                
-             
             }
         }
         
         CFRelease(addressBookData);
         CFRelease(addressBook);
         
-        self.phoneContactsArray = contactsList;
+        self.phoneContactsArray = [self partitionContacts:contactsList collationStringSelector:@selector(name)];
         
     }
     
     // Launch the friends list with the Facebook friends list loaded
     Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
     friendsListTableViewController.delegate = self;
-    friendsListTableViewController.contacts = [self partitionContacts:self.phoneContactsArray collationStringSelector:@selector(name)];
+    friendsListTableViewController.contacts = self.phoneContactsArray;
+    self.selectedFriendsArray = self.selectedFriendsArrayCopy;
     
     [self.navigationController pushViewController:friendsListTableViewController animated:YES];
     
@@ -358,20 +366,50 @@
             return cell;
         }
         else {
-            static NSString *CellIdentifier = @"Friends";
+            static NSString *CellIdentifier = @"Friend";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
             if (cell == nil) {
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                 
+                cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+                cell.imageView.layer.masksToBounds = YES;
+                cell.imageView.layer.cornerRadius = 8.0;
+                cell.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+                cell.imageView.layer.borderWidth = 1.0;
+                
+                cell.imageView.backgroundColor = [UIColor lightGrayColor];
+                cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(40, 40)];
+                
             }
             
-            Contact *friend = [self.selectedFriendsArray objectAtIndex:(indexPath.row - 2)];
+            Contact *contact = [self.selectedFriendsArray objectAtIndex:(indexPath.row - 2)];
             
-            cell.textLabel.text = friend.name;
+            cell.textLabel.text = contact.name;
+            
+            // Display contact image
+            ImageManager* imageManager = [ImageManager instance];
+            NSDictionary* userInfo = [NSDictionary dictionaryWithObject:contact.objectID forKey:kCONTACTID];
+            
+            if (contact.imageurl != nil && ![contact.imageurl isEqualToString:@""]) {
+                Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
+                callback.fireOnMainThread = YES;
+                UIImage* image = [imageManager downloadImage:contact.imageurl withUserInfo:nil atCallback:callback];
+                [callback release];
+                if (image != nil) {
+                    
+                    cell.imageView.image = [image imageScaledToSize:CGSizeMake(40, 40)];
+                    
+                    [self.view setNeedsDisplay];
+                }
+                else {
+                    cell.imageView.backgroundColor = [UIColor lightGrayColor];
+                    cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(40, 40)];
+                }
+            }
             
             // Mark the row as selected if this friend is already in our list selected contacts
-            if ([self.selectedFriendsArrayCopy indexOfObject:friend] != NSNotFound) {
+            if ([self.selectedFriendsArrayCopy indexOfObject:contact] != NSNotFound) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }
             else {
@@ -591,13 +629,7 @@
         }
     }
     
-//    NSSortDescriptor *contactNameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-//    NSArray *sortDescriptors = [NSArray arrayWithObject:contactNameDescriptor];
-//    NSMutableArray *sortedFacebookFriendsList = [NSMutableArray arrayWithArray:[facebookFriendsList sortedArrayUsingDescriptors:sortDescriptors]];
-//    
-//    self.facebookFriendsArray = sortedFacebookFriendsList;
-    
-     self.facebookFriendsArray = facebookFriendsList;
+     self.facebookFriendsArray = [self partitionContacts:facebookFriendsList collationStringSelector:@selector(name)];
     
 //    [sortedFacebookFriendsList release];
 //    [facebookFriendsList release];
@@ -607,11 +639,47 @@
     
     Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
     friendsListTableViewController.delegate = self;
-//    friendsListTableViewController.contacts = self.facebookFriendsArray;
-    friendsListTableViewController.contacts = [self partitionContacts:self.facebookFriendsArray collationStringSelector:@selector(name)];
+    friendsListTableViewController.contacts = self.facebookFriendsArray;
+    self.selectedFriendsArray = self.selectedFriendsArrayCopy;
     
     [self.navigationController pushViewController:friendsListTableViewController animated:YES];
 }
+
+#pragma mark - ImageManager Delegate Methods
+- (void)onImageDownloadComplete:(CallbackResult*)result {
+    NSString* activityName = @"Mime_meFriendsPickerViewController.onImageDownloadComplete:";
+    NSDictionary* userInfo = result.context;
+    
+    NSManagedObjectID *contactID = [userInfo valueForKey:kCONTACTID];
+    
+    ImageDownloadResponse* response = (ImageDownloadResponse*)result.response;
+    
+    if ([response.didSucceed boolValue] == YES) {
+        NSArray *array = self.selectedFriendsArray;
+    
+        NSInteger contactIndex = 0;
+        for (Contact *contact in array) {
+            
+            if ([contact.objectID isEqual:contactID]) {
+                UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(contactIndex + 1) inSection:1]];
+                
+                //we only draw the image if this view hasnt been repurposed for another photo
+                LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
+                
+                UIImage *image = [response.image imageScaledToSize:CGSizeMake(40, 40)];
+                
+                [cell.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
+                
+                [self.view setNeedsDisplay];
+                
+                break;
+            }
+            
+            contactIndex++;
+        }
+    }    
+}
+
 
 #pragma mark - Static Initializers
 + (Mime_meFriendsPickerViewController*)createInstanceWithMimeID:(NSNumber *)mimeID {

@@ -352,13 +352,8 @@
     
     if (progressView.didSucceed)
     {
-        [self dismissModalViewControllerAnimated:YES];
+//        [self dismissModalViewControllerAnimated:YES];
     }
-}
-
-- (void) hudWasHidden
-{
-    
 }
 
 
@@ -376,10 +371,14 @@
         if (didLoginSuccessfully)
         {
             //user has been successfully logged in
-            //[self dismissModalViewControllerAnimated:YES];
+            [self dismissModalViewControllerAnimated:YES];
         }
         else {
             //unknown error condition
+            //username is not unique
+            self.lbl_intro.hidden = YES;
+            self.lbl_error.hidden = NO;
+            self.lbl_error.text = @"Sorry, something went wrong, please try again.";
         }
     }
     else 

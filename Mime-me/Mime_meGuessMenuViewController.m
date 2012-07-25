@@ -294,8 +294,12 @@
                 if (cell == nil) {
                     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     
-                    cell.textLabel.text = @"Invite more friends to play!";
+                    cell.textLabel.text = @"Invite friends to play!";
                     cell.textLabel.textAlignment = UITextAlignmentCenter;
+                    cell.textLabel.shadowColor = [UIColor whiteColor];
+                    cell.textLabel.shadowOffset = CGSizeMake(0.0, 1.0);
+                    cell.textLabel.textColor = [UIColor lightGrayColor];
+                    
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 }
                 
@@ -615,7 +619,7 @@
                     //we only draw the image if this view hasnt been repurposed for another photo
                     LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
                     
-                    UIImage *image = [image imageScaledToSize:CGSizeMake(50, 50)];
+                    UIImage *image = [response.image imageScaledToSize:CGSizeMake(50, 50)];
                     
                     [cell.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
                     

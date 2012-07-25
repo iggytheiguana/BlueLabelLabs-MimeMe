@@ -21,10 +21,11 @@
 - (id) initFromJSONDictionary:(NSDictionary*)jsonDictionary 
         withEntityDescription:(NSEntityDescription*)entity 
     insertIntoResourceContext:(ResourceContext*)resourceContext;
+
 + (id)          createInstanceFromJSON:(NSDictionary*)jsonDictionary;
 
 + (Contact *)createContactWithName:(NSString *)name
                          withEmail:(NSString *)email
-                    withImageURL:(NSString*)imageurl;
+                         withImage:(UIImage *)image;
 
 @end

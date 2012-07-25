@@ -48,6 +48,7 @@
 // Mime-Me Methods
 - (NSString*)saveImage:(UIImage *)image forMimeWithID:(NSNumber *)mimeID;
 - (NSString*)saveThumbnailImage:(UIImage *)image forMimeWithID:(NSNumber *)mimeID;
+- (NSString*)saveImage:(UIImage *)image forContactWithManagedObjectID:(NSManagedObjectID *)contactID;
 
 
 @end
