@@ -19,15 +19,17 @@
 @dynamic name;
 @dynamic email;
 @dynamic imageurl;
-
+@dynamic hasinstalled;
 - (void) readAttributesFromJSONDictionary:(NSDictionary*)jsonDictionary
 {
   
     NSString* facebookid = [jsonDictionary objectForKey:@"id"];
     NSString* name = [jsonDictionary objectForKey:@"name"];
     NSString* imageurl = [jsonDictionary objectForKey:@"picture"];
+    NSNumber* hasinstalled = [jsonDictionary objectForKey:@"installed"];
     
     NSNumber* facebookIDNumber = [facebookid numberValue];
+    
     
     self.facebookid = facebookIDNumber;
     self.name  = name;
@@ -35,6 +37,14 @@
     if (imageurl != nil)
     {
         self.imageurl = imageurl;
+    }
+    
+    if (hasinstalled != nil)
+    {
+        self.hasinstalled = hasinstalled;
+    }
+    else {
+        self.hasinstalled = [NSNumber numberWithBool:NO];
     }
 
 }
@@ -81,7 +91,7 @@
     
     retVal.name = name;
     retVal.email = email;
-    
+    retVal.hasinstalled = [NSNumber numberWithBool:NO];
     if (imageurl != nil)
     {
         retVal.imageurl = imageurl;

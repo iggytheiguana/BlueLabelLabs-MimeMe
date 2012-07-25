@@ -16,6 +16,7 @@
 @property (nonatomic,copy) NSString* name;
 @property (nonatomic,copy) NSString* email;
 @property (nonatomic,copy) NSString* imageurl;
+@property (nonatomic,copy) NSNumber* hasinstalled;
 
 - (id) initFromJSONDictionary:(NSDictionary*)jsonDictionary 
         withEntityDescription:(NSEntityDescription*)entity 

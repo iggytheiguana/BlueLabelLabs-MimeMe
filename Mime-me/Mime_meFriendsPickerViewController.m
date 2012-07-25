@@ -58,7 +58,7 @@
     if (facebook.isSessionValid)
     {
         LOG_MIME_FRIENDLISTTABLEVIEWCONTROLLER(0,@"%@ Beginning to enumerate Facebook friends for user",activityName);
-        [facebook requestWithGraphPath:@"me/friends?fields=picture,name" andDelegate:self];
+        [facebook requestWithGraphPath:@"me/friends?fields=picture,name,installed" andDelegate:self];
     }
     else {
         //error condition
