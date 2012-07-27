@@ -114,23 +114,10 @@
 	{
         return [[[UILocalizedIndexedCollation currentCollation] sectionTitles] count];
     }
-    
-//    return [[[UILocalizedIndexedCollation currentCollation] sectionTitles] count];
-//    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-//    NSArray *sectionArray = [self.contacts objectAtIndex:section];
-//    
-//    NSInteger count = [sectionArray count];
-    
-//    return [[self.contacts objectAtIndex:section] count];
-    
-//    NSInteger count = [self.contacts count];
-//    
-//    return count;
-    
+{    
     if (tableView == self.searchDisplayController.searchResultsTableView)
 	{
         return [self.filteredContacts count];
@@ -413,25 +400,14 @@
     ImageDownloadResponse* response = (ImageDownloadResponse*)result.response;
     
     if ([response.didSucceed boolValue] == YES) {
-        NSArray *array = [[NSArray alloc] init];
-        
         if (tableView == self.searchDisplayController.searchResultsTableView)
         {
-            array = self.filteredContacts;
-        }
-        else
-        {
-            array = self.contacts;
-        }
-        
-        NSInteger sectionIndex = 0;
-        for (NSArray *section in array) {
-            
+            // We need to find the right image view for the contact from the filtered list of contacts
             NSInteger contactIndex = 0;
-            for (Contact *contact in section) {
+            for (Contact *contact in self.filteredContacts) {
                 
                 if ([contact.objectID isEqual:contactID]) {
-                    UITableViewCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:contactIndex inSection:sectionIndex]];
+                    UITableViewCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:contactIndex inSection:0]];
                     
                     //we only draw the image if this view hasnt been repurposed for another photo
                     LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
@@ -447,10 +423,38 @@
                 
                 contactIndex++;
             }
-            
-            sectionIndex++;
         }
-    }    
+        else
+        {
+            // We need to find the right image view for the contact from the full list of contacts
+            NSInteger sectionIndex = 0;
+            for (NSArray *section in self.contacts) {
+                
+                NSInteger contactIndex = 0;
+                for (Contact *contact in section) {
+                    
+                    if ([contact.objectID isEqual:contactID]) {
+                        UITableViewCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:contactIndex inSection:sectionIndex]];
+                        
+                        //we only draw the image if this view hasnt been repurposed for another photo
+                        LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
+                        
+                        UIImage *image = [response.image imageScaledToSize:CGSizeMake(40, 40)];
+                        
+                        [cell.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
+                        
+                        [self.view setNeedsDisplay];
+                        
+                        break;
+                    }
+                    
+                    contactIndex++;
+                }
+                
+                sectionIndex++;
+            }
+        }
+    }
 }
 
 #pragma mark - Static Initializers

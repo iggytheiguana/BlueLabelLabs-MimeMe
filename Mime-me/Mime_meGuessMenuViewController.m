@@ -63,7 +63,8 @@
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K=%@ OR %K=%@ OR %K=%@", TARGETUSERID, self.loggedInUser.objectid, TARGETEMAIL, self.loggedInUser.email, TARGETFACEBOOKID, self.loggedInUser.fb_user_id];
+//    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K=%@ OR %K=%@ OR %K=%@", TARGETUSERID, self.loggedInUser.objectid, TARGETEMAIL, self.loggedInUser.email, TARGETFACEBOOKID, self.loggedInUser.fb_user_id];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K=%@", TARGETUSERID, self.loggedInUser.objectid];
     
     [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -75,6 +76,9 @@
     
     controller.delegate = self;
     self.frc_mimeAnswers = controller;
+    
+    NSNumber *lodggedInUserID = self.loggedInUser.objectid;
+    int count = [[self.frc_mimeAnswers fetchedObjects] count];
     
     NSError* error = nil;
     [controller performFetch:&error];
@@ -615,7 +619,7 @@
     
     NSString* activityName = @"Mime_meGuessMenuViewController.controller.didChangeObject:";
     if (controller == self.frc_mimeAnswers) {
-        LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
+        LOG_MIME_MEGUESSMENUVIEWCONTROLLER(0, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
     }
     else {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController that isnt mine. %p", activityName, &controller);
@@ -629,7 +633,6 @@
 {
     if (enumerator == self.mimeAnswersCloudEnumerator) {
 //        [self hideProgressBar];
-//        [self makeWordsArray];
         [self.tbl_mimes reloadData];
     }
 }
