@@ -116,7 +116,8 @@
     else 
     {
         self.mimeAnswersCloudEnumerator = nil;
-        self.mimeAnswersCloudEnumerator = [CloudEnumerator enumeratorForMimeAnswersWithTarget:self.loggedInUser.objectid withState:kUNANSWERED];
+        NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
+        self.mimeAnswersCloudEnumerator = [CloudEnumerator enumeratorForMimeAnswersWithTarget:self.loggedInUser.objectid withState:unansweredStateObj];
         self.mimeAnswersCloudEnumerator.delegate = self;
         [self.mimeAnswersCloudEnumerator enumerateUntilEnd:nil];
     }
