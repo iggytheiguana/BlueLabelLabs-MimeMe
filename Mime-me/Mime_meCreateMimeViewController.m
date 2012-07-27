@@ -267,6 +267,12 @@
     return 4;
 }
 
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    Word *word = [self.wordsArray objectAtIndex:(indexPath.row - 1)];
+    
+    cell.textLabel.text = word.word1;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Configure the cell...
@@ -298,9 +304,7 @@
                 
             }
             
-            Word *word = [self.wordsArray objectAtIndex:(indexPath.row - 1)];
-            
-            cell.textLabel.text = word.word1;
+            [self configureCell:cell atIndexPath:indexPath];
             
             return cell;
         }
@@ -499,8 +503,10 @@
        newIndexPath:(NSIndexPath *)newIndexPath {
     
     NSString* activityName = @"Mime_meCreateMimeViewController.controller.didChangeObject:";
+    
     if (controller == self.frc_words) {
         LOG_MIME_MECREATEMIMEVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
+        
     }
     else {
         LOG_MIME_MECREATEMIMEVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController that isnt mine. %p", activityName, &controller);

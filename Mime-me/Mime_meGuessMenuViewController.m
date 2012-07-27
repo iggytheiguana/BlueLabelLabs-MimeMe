@@ -63,8 +63,8 @@
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
-//    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K=%@ OR %K=%@ OR %K=%@", TARGETUSERID, self.loggedInUser.objectid, TARGETEMAIL, self.loggedInUser.email, TARGETFACEBOOKID, self.loggedInUser.fb_user_id];
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K=%@", TARGETUSERID, self.loggedInUser.objectid];
+    NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K=%@ AND %K=%@", TARGETUSERID, self.loggedInUser.objectid, STATE, unansweredStateObj];
     
     [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -77,9 +77,6 @@
     controller.delegate = self;
     self.frc_mimeAnswers = controller;
     
-    NSNumber *lodggedInUserID = self.loggedInUser.objectid;
-    int count = [[self.frc_mimeAnswers fetchedObjects] count];
-    
     NSError* error = nil;
     [controller performFetch:&error];
   	if (error != nil)
@@ -90,6 +87,7 @@
     [controller release];
     [fetchRequest release];
     [sortDescriptor release];
+    [predicate release];
     return __frc_mimeAnswers;
     
 }
@@ -156,9 +154,9 @@
     [navigationHeader release];
     
     // TEMP: Data arrays for tableview
-    self.friendsArray = [NSArray arrayWithObjects:@"Laura", @"Julie", @"Matt", @"David", @"Walter", @"John", nil];
-    self.recentArray = [NSArray arrayWithObjects:@"Timmy", nil];
-    self.staffPicksArray = [NSArray arrayWithObjects:@"Julie", @"Bobby", @"Jordan", nil];
+//    self.friendsArray = [NSArray arrayWithObjects:@"Laura", @"Julie", @"Matt", @"David", @"Walter", @"John", nil];
+//    self.recentArray = [NSArray arrayWithObjects:@"Timmy", nil];
+//    self.staffPicksArray = [NSArray arrayWithObjects:@"Julie", @"Bobby", @"Jordan", nil];
 }
 
 - (void)viewDidUnload
@@ -221,6 +219,39 @@
     return rows;
 }
 
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    MimeAnswer *mimeAnswer = [[self.frc_mimeAnswers fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+    
+    // Get the Mime object associated with this MimeAnswer
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:mimeAnswer.mimeid]; 
+    
+    cell.textLabel.text = mimeAnswer.creatorname;
+    
+    NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mimeAnswer.datecreated];
+    cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
+    
+    ImageManager* imageManager = [ImageManager instance];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_mimeAnswers, kMIMEFRC, mimeAnswer.objectid, kMIMEANSWERID, nil];
+    
+    if (mime.thumbnailurl != nil && ![mime.thumbnailurl isEqualToString:@""]) {
+        Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
+        callback.fireOnMainThread = YES;
+        UIImage* image = [imageManager downloadImage:mime.thumbnailurl withUserInfo:nil atCallback:callback];
+        [callback release];
+        if (image != nil) {
+            
+            cell.imageView.image = [image imageScaledToSize:CGSizeMake(50, 50)];
+        }
+        else {
+            cell.imageView.backgroundColor = [UIColor lightGrayColor];
+            cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(50, 50)];
+        }
+        
+        [self.view setNeedsDisplay];
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
@@ -261,36 +292,7 @@
                         
                     }
                     
-                    MimeAnswer *mimeAnswer = [[self.frc_mimeAnswers fetchedObjects] objectAtIndex:(indexPath.row - 1)];
-                    
-                    // Get the Mime object associated with this MimeAnswer
-                    ResourceContext* resourceContext = [ResourceContext instance];
-                    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:mimeAnswer.mimeid]; 
-                    
-                    cell.textLabel.text = mimeAnswer.creatorname;
-                    
-                    NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mimeAnswer.datecreated];
-                    cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
-                    
-                    ImageManager* imageManager = [ImageManager instance];
-                    NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_mimeAnswers, kMIMEFRC, mimeAnswer.objectid, kMIMEANSWERID, nil];
-                    
-                    if (mime.thumbnailurl != nil && ![mime.thumbnailurl isEqualToString:@""]) {
-                        Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
-                        callback.fireOnMainThread = YES;
-                        UIImage* image = [imageManager downloadImage:mime.thumbnailurl withUserInfo:nil atCallback:callback];
-                        [callback release];
-                        if (image != nil) {
-                            
-                            cell.imageView.image = [image imageScaledToSize:CGSizeMake(50, 50)];
-                        }
-                        else {
-                            cell.imageView.backgroundColor = [UIColor lightGrayColor];
-                            cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(50, 50)];
-                        }
-                        
-                        [self.view setNeedsDisplay];
-                    }
+                    [self configureCell:cell atIndexPath:indexPath];
                     
                     return cell;
                 }
@@ -613,14 +615,53 @@
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate methods
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tbl_mimes beginUpdates];
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tbl_mimes endUpdates];
+}
+
 - (void) controller:(NSFetchedResultsController *)controller 
     didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath 
       forChangeType:(NSFetchedResultsChangeType)type 
        newIndexPath:(NSIndexPath *)newIndexPath {
     
     NSString* activityName = @"Mime_meGuessMenuViewController.controller.didChangeObject:";
+    
+    UITableView *tableView = self.tbl_mimes;
+    
     if (controller == self.frc_mimeAnswers) {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(0, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
+        
+        switch(type) {
+                
+            case NSFetchedResultsChangeInsert:
+                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:newIndexPath.section]]
+                                 withRowAnimation:UITableViewRowAnimationFade];
+                break;
+                
+            case NSFetchedResultsChangeDelete:
+                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:indexPath.section]]
+                                 withRowAnimation:UITableViewRowAnimationFade];
+                break;
+                
+            case NSFetchedResultsChangeUpdate:
+                [self configureCell:[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:indexPath.section]]
+                        atIndexPath:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:indexPath.section]];
+                break;
+                
+            case NSFetchedResultsChangeMove:
+                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:indexPath.section]]
+                                 withRowAnimation:UITableViewRowAnimationFade];
+                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:newIndexPath.section]]
+                                 withRowAnimation:UITableViewRowAnimationFade];
+                break;
+        }
+        
     }
     else {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController that isnt mine. %p", activityName, &controller);
@@ -634,7 +675,7 @@
 {
     if (enumerator == self.mimeAnswersCloudEnumerator) {
 //        [self hideProgressBar];
-        [self.tbl_mimes reloadData];
+        
     }
 }
 
