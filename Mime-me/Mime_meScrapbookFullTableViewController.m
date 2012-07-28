@@ -37,10 +37,6 @@
 @synthesize tc_recentHeader     = m_tc_recentHeader;
 @synthesize tc_staffPicksHeader = m_tc_staffPicksHeader;
 
-@synthesize friendsArray        = m_friendsArray;
-@synthesize recentArray         = m_recentArray;
-@synthesize staffPicksArray     = m_staffPicksArray;
-
 #pragma mark - Properties
 - (NSFetchedResultsController*)frc_mimes {
     NSString* activityName = @"Mime_meScrapbookFullTableViewController.frc_mimes:";
@@ -119,10 +115,6 @@
     [self.view addSubview:self.nv_navigationHeader];
     [navigationHeader release];
     
-    // TEMP: Data arrays for tableview
-    self.friendsArray = [NSArray arrayWithObjects:@"Laura", @"Julie", @"Matt", @"David", @"Walter", @"John", nil];
-    self.recentArray = [NSArray arrayWithObjects:@"Timmy", nil];
-    self.staffPicksArray = [NSArray arrayWithObjects:@"Julie", @"Bobby", @"Jordan", nil];
 }
 
 - (void)viewDidUnload
@@ -143,8 +135,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.nv_navigationHeader.btn_guess setHighlighted:YES];
-    [self.nv_navigationHeader.btn_guess setUserInteractionEnabled:NO];
+    [self.nv_navigationHeader.btn_scrapbook setHighlighted:YES];
+    [self.nv_navigationHeader.btn_scrapbook setUserInteractionEnabled:NO];
     
 }
 

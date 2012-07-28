@@ -18,10 +18,6 @@
     UITableViewCell     *m_tc_recentHeader;
     UITableViewCell     *m_tc_staffPicksHeader;
     
-    NSArray             *m_friendsArray;
-    NSArray             *m_recentArray;
-    NSArray             *m_staffPicksArray;
-    
     CloudEnumerator     *m_mimeAnswersCloudEnumerator;
     CloudEnumerator     *m_recentMimesCloudEnumerator;
     CloudEnumerator     *m_staffPickedMimesCloudEnumerator;
@@ -41,10 +37,6 @@
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_friendsHeader;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_recentHeader;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_staffPicksHeader;
-
-@property (nonatomic, retain)           NSArray             *friendsArray;
-@property (nonatomic, retain)           NSArray             *recentArray;
-@property (nonatomic, retain)           NSArray             *staffPicksArray;
 
 + (Mime_meGuessMenuViewController*)createInstance;
 
