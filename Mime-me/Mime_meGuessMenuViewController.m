@@ -26,6 +26,7 @@
 
 #define kMIMEFRC @"mimefrc"
 #define kMIMEANSWERID @"mimeanswerid"
+#define kMIMEID @"mimeid"
 
 #define kMAXROWS 3
 #define kMAXROWSFRIENDS 5
@@ -35,8 +36,11 @@
 @end
 
 @implementation Mime_meGuessMenuViewController
-@synthesize frc_mimeAnswers           = __frc_mimeAnswers;
-@synthesize mimeAnswersCloudEnumerator = m_mimeAnswersCloudEnumerator;
+@synthesize frc_mimeAnswersFromFriends  = __frc_mimeAnswersFromFriends;
+@synthesize frc_recentMimes             = __frc_recentMimes;
+
+@synthesize mimeAnswersCloudEnumerator  = m_mimeAnswersCloudEnumerator;
+@synthesize recentMimesCloudEnumerator  = m_recentMimesCloudEnumerator;
 
 @synthesize nv_navigationHeader = m_nv_navigationHeader;
 
@@ -49,11 +53,11 @@
 @synthesize recentArray         = m_recentArray;
 @synthesize staffPicksArray     = m_staffPicksArray;
 
-#pragma mark - Properties
-- (NSFetchedResultsController*)frc_mimeAnswers {
-    NSString* activityName = @"Mime_meGuessMenuViewController.frc_mimeAnswers:";
-    if (__frc_mimeAnswers != nil) {
-        return __frc_mimeAnswers;
+#pragma mark - FRCs
+- (NSFetchedResultsController*)frc_mimeAnswersFromFriends {
+    NSString* activityName = @"Mime_meGuessMenuViewController.frc_mimeAnswersFromFriends:";
+    if (__frc_mimeAnswersFromFriends != nil) {
+        return __frc_mimeAnswersFromFriends;
     }
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -75,7 +79,7 @@
     NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:resourceContext.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
     
     controller.delegate = self;
-    self.frc_mimeAnswers = controller;
+    self.frc_mimeAnswersFromFriends = controller;
     
     NSError* error = nil;
     [controller performFetch:&error];
@@ -88,23 +92,52 @@
     [fetchRequest release];
     [sortDescriptor release];
     [predicate release];
-    return __frc_mimeAnswers;
+    return __frc_mimeAnswersFromFriends;
     
 }
 
-- (NSString*) getDateStringForMimeDate:(NSDate*)date {
-    NSDate* now = [NSDate date];
-    NSTimeInterval intervalSinceCreated = [now timeIntervalSinceDate:date];
-    NSString* timeSinceCreated = nil;
-    if (intervalSinceCreated < 1 ) {
-        timeSinceCreated = @"a moment";
-    }
-    else {
-        timeSinceCreated = [DateTimeHelper formatTimeInterval:intervalSinceCreated];
+- (NSFetchedResultsController*)frc_recentMimes {
+    NSString* activityName = @"Mime_meGuessMenuViewController.frc_recentMimes:";
+    if (__frc_recentMimes != nil) {
+        return __frc_recentMimes;
     }
     
-    return [NSString stringWithFormat:@"%@ ago",timeSinceCreated];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime_meAppDelegate* app = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:MIME inManagedObjectContext:app.managedObjectContext];
+    
+    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
+    
+    NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, STATE, unansweredStateObj];
+    
+    [fetchRequest setPredicate:predicate];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    [fetchRequest setEntity:entityDescription];
+    
+    [fetchRequest setFetchBatchSize:(kMAXROWS + 1)];    // We add 1 to find out if the "more" button should be shown
+    
+    NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:resourceContext.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+    
+    controller.delegate = self;
+    self.frc_recentMimes = controller;
+    
+    NSError* error = nil;
+    [controller performFetch:&error];
+  	if (error != nil)
+    {
+        LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Could not create instance of NSFetchedResultsController due to %@", activityName, [error userInfo]);
+    }
+    
+    [controller release];
+    [fetchRequest release];
+    [sortDescriptor release];
+    [predicate release];
+    return __frc_recentMimes;
+    
 }
+
 
 #pragma mark - Enumerators
 - (void) enumerateMimeAnswers {    
@@ -120,7 +153,37 @@
         [self.mimeAnswersCloudEnumerator enumerateUntilEnd:nil];
     }
     
-//    [self showHUDForMimeAnswerDownload];
+    //    [self showHUDForMimeAnswerDownload];
+}
+
+- (void) enumerateRecentMimes {    
+    if (self.recentMimesCloudEnumerator != nil) {
+        [self.recentMimesCloudEnumerator enumerateUntilEnd:nil];
+    }
+    else 
+    {
+        self.recentMimesCloudEnumerator = nil;
+        self.recentMimesCloudEnumerator = [CloudEnumerator enumeratorForMostRecentMimes];
+        self.recentMimesCloudEnumerator.delegate = self;
+        [self.recentMimesCloudEnumerator enumerateUntilEnd:nil];
+    }
+    
+    //    [self showHUDForMimeAnswerDownload];
+}
+
+#pragma mark - Helper Methods
+- (NSString*) getDateStringForMimeDate:(NSDate*)date {
+    NSDate* now = [NSDate date];
+    NSTimeInterval intervalSinceCreated = [now timeIntervalSinceDate:date];
+    NSString* timeSinceCreated = nil;
+    if (intervalSinceCreated < 1 ) {
+        timeSinceCreated = @"a moment";
+    }
+    else {
+        timeSinceCreated = [DateTimeHelper formatTimeInterval:intervalSinceCreated];
+    }
+    
+    return [NSString stringWithFormat:@"%@ ago",timeSinceCreated];
 }
 
 #pragma mark - View Lifecycle
@@ -179,8 +242,9 @@
     [self.nv_navigationHeader.btn_guess setHighlighted:YES];
     [self.nv_navigationHeader.btn_guess setUserInteractionEnabled:NO];
     
-    // Enumerate for Mime Answers
+    // Enumerate for Mimes from friends, recent and staff pick Mimes
     [self enumerateMimeAnswers];
+    [self enumerateRecentMimes];
     
 }
 
@@ -202,7 +266,7 @@
     
     if (section == 0) {
         // From Friends section
-        count = [[self.frc_mimeAnswers fetchedObjects]count] + 2;     // Add 2 to the count to include 1. Header, and 2. More
+        count = [[self.frc_mimeAnswersFromFriends fetchedObjects]count] + 2;     // Add 2 to the count to include 1. Header, and 2. More
         rows = MIN(count, kMAXROWSFRIENDS + 2);   // Maximize the number of rows per section
     }
     else if (section == 1) {
@@ -220,20 +284,40 @@
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-    MimeAnswer *mimeAnswer = [[self.frc_mimeAnswers fetchedObjects] objectAtIndex:(indexPath.row - 1)];
     
-    // Get the Mime object associated with this MimeAnswer
     ResourceContext* resourceContext = [ResourceContext instance];
-    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:mimeAnswer.mimeid]; 
-    
-    cell.textLabel.text = mimeAnswer.creatorname;
-    
-    NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mimeAnswer.datecreated];
-    cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
+    Mime *mime;
     
     ImageManager* imageManager = [ImageManager instance];
-    NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_mimeAnswers, kMIMEFRC, mimeAnswer.objectid, kMIMEANSWERID, nil];
+    NSDictionary* userInfo;
     
+    if (indexPath.section == 0) {
+        // From Friends section
+        MimeAnswer *mimeAnswer = [[self.frc_mimeAnswersFromFriends fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+        
+        // Get the Mime object associated with this MimeAnswer
+        mime = (Mime*)[resourceContext resourceWithType:MIME withID:mimeAnswer.mimeid]; 
+        
+        cell.textLabel.text = mimeAnswer.creatorname;
+        
+        NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mimeAnswer.datecreated];
+        cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
+        
+        userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_mimeAnswersFromFriends, kMIMEFRC, mimeAnswer.objectid, kMIMEANSWERID, nil];
+    }
+    else if (indexPath.section == 1) {
+        // Recent Mimes section
+        Mime *mime = [[self.frc_recentMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+        
+        cell.textLabel.text = mime.creatorname;
+        
+        NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
+        cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
+        
+        userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_recentMimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
+    }
+    
+    // Set the mime image
     if (mime.thumbnailurl != nil && ![mime.thumbnailurl isEqualToString:@""]) {
         Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
         callback.fireOnMainThread = YES;
@@ -257,7 +341,7 @@
     if (indexPath.section == 0) {
         // From Friends section
         
-        NSInteger count = MIN([[self.frc_mimeAnswers fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
+        NSInteger count = MIN([[self.frc_mimeAnswersFromFriends fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
         
         if (indexPath.row == 0) {
             // Set the header
@@ -372,6 +456,8 @@
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         
                     }
+                    
+                    [self configureCell:cell atIndexPath:indexPath];
                     
                     return cell;
                 }
@@ -542,7 +628,7 @@
     NSUInteger rows;
     
     if (indexPath.section == 0) {
-        count = [[self.frc_mimeAnswers fetchedObjects]count];
+        count = [[self.frc_mimeAnswersFromFriends fetchedObjects]count];
         rows = MIN(count, kMAXROWSFRIENDS);
     }
     else if (indexPath.section == 1) {
@@ -575,11 +661,11 @@
     
     if (indexPath.section == 0) {
         // Friends mime selected
-        NSInteger count = MIN([[self.frc_mimeAnswers fetchedObjects]count], kMAXROWSFRIENDS);
+        NSInteger count = MIN([[self.frc_mimeAnswersFromFriends fetchedObjects]count], kMAXROWSFRIENDS);
         
         if (indexPath.row > 0 && indexPath.row <= count) {
             
-            MimeAnswer *mimeAnswer = [[self.frc_mimeAnswers fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+            MimeAnswer *mimeAnswer = [[self.frc_mimeAnswersFromFriends fetchedObjects] objectAtIndex:(indexPath.row - 1)];
             
             // Show the Mime
             Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mimeAnswer.mimeid withMimeAnswerIDorNil:mimeAnswer.objectid];
@@ -634,34 +720,41 @@
     
     UITableView *tableView = self.tbl_mimes;
     
-    if (controller == self.frc_mimeAnswers) {
+    NSInteger section;
+    if (controller == self.frc_mimeAnswersFromFriends) {
+        section = 0;
+    }
+    else if (controller == self.frc_recentMimes) {
+        section = 1;
+    }
+    
+    if (controller == self.frc_mimeAnswersFromFriends || controller == self.frc_recentMimes) {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(0, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
         
         switch(type) {
                 
             case NSFetchedResultsChangeInsert:
-                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:newIndexPath.section]]
+                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:section]]
                                  withRowAnimation:UITableViewRowAnimationFade];
                 break;
                 
             case NSFetchedResultsChangeDelete:
-                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:indexPath.section]]
+                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
                                  withRowAnimation:UITableViewRowAnimationFade];
                 break;
                 
             case NSFetchedResultsChangeUpdate:
-                [self configureCell:[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:indexPath.section]]
-                        atIndexPath:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:indexPath.section]];
+                [self configureCell:[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
+                        atIndexPath:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]];
                 break;
                 
             case NSFetchedResultsChangeMove:
-                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:indexPath.section]]
+                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
                                  withRowAnimation:UITableViewRowAnimationFade];
-                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:newIndexPath.section]]
+                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:section]]
                                  withRowAnimation:UITableViewRowAnimationFade];
                 break;
         }
-        
     }
     else {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController that isnt mine. %p", activityName, &controller);
@@ -673,10 +766,16 @@
                  withResults:(NSArray *)results 
                 withUserInfo:(NSDictionary *)userInfo
 {
+    
+//    [self hideProgressBar];
+    
     if (enumerator == self.mimeAnswersCloudEnumerator) {
-//        [self hideProgressBar];
         
     }
+    else if (enumerator == self.recentMimesCloudEnumerator) {
+        
+    }
+
 }
 
 #pragma mark - ImageManager Delegate Methods
@@ -685,31 +784,59 @@
     NSDictionary* userInfo = result.context;
     
     NSFetchedResultsController *frc = (NSFetchedResultsController *)[userInfo valueForKey:kMIMEFRC];
-    NSNumber* mimeID = [userInfo valueForKey:kMIMEANSWERID];
 
     ImageDownloadResponse* response = (ImageDownloadResponse*)result.response;
     
     if ([response.didSucceed boolValue] == YES) {
-        if (frc == self.frc_mimeAnswers) {
-            NSInteger count = MIN([[self.frc_mimeAnswers fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
+        
+        UITableViewCell *cell;
+        
+        if (frc == self.frc_mimeAnswersFromFriends) {
+            
+            NSNumber* mimeAnswerID = [userInfo valueForKey:kMIMEANSWERID];
+            
+            NSInteger count = MIN([[self.frc_mimeAnswersFromFriends fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends mimes to show
             for (int i = 0; i < count; i++) {
-                MimeAnswer *mimeAnswer = [[self.frc_mimeAnswers fetchedObjects] objectAtIndex:i];
-                if ([mimeAnswer.mimeid isEqualToNumber:mimeID]) {
-                    UITableViewCell *cell = [self.tbl_mimes cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:0]];
+                MimeAnswer *mimeAnswer = [[self.frc_mimeAnswersFromFriends fetchedObjects] objectAtIndex:i];
+                if ([mimeAnswer.objectid isEqualToNumber:mimeAnswerID]) {
+                    cell = [self.tbl_mimes cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:0]];
                     
-                    //we only draw the image if this view hasnt been repurposed for another photo
-                    LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
-                    
-                    UIImage *image = [response.image imageScaledToSize:CGSizeMake(50, 50)];
-                    
-                    [cell.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
-                    
-                    [self.view setNeedsDisplay];
+//                    //we only draw the image if this view hasnt been repurposed for another photo
+//                    LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
+//                    
+//                    UIImage *image = [response.image imageScaledToSize:CGSizeMake(50, 50)];
+//                    
+//                    [cell.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
+//                    
+//                    [self.view setNeedsDisplay];
                     
                     break;
                 }
             }
         }
+        else if (frc == self.frc_recentMimes) {
+            
+            NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
+            
+            NSInteger count = MIN([[self.frc_recentMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of recent mimes to show
+            for (int i = 0; i < count; i++) {
+                Mime *mime = [[self.frc_recentMimes fetchedObjects] objectAtIndex:i];
+                if ([mime.objectid isEqualToNumber:mimeID]) {
+                    cell = [self.tbl_mimes cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:1]];
+                    
+                    break;
+                }
+            }
+        }
+        
+        //we only draw the image if this view hasnt been repurposed for another photo
+        LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
+        
+        UIImage *image = [response.image imageScaledToSize:CGSizeMake(50, 50)];
+        
+        [cell.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
+        
+        [self.view setNeedsDisplay];
     }    
 }
 
