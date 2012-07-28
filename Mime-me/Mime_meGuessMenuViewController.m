@@ -38,9 +38,11 @@
 @implementation Mime_meGuessMenuViewController
 @synthesize frc_mimeAnswersFromFriends  = __frc_mimeAnswersFromFriends;
 @synthesize frc_recentMimes             = __frc_recentMimes;
+@synthesize frc_staffPickedMimes        = __frc_staffPickedMimes;
 
 @synthesize mimeAnswersCloudEnumerator  = m_mimeAnswersCloudEnumerator;
 @synthesize recentMimesCloudEnumerator  = m_recentMimesCloudEnumerator;
+@synthesize staffPickedMimesCloudEnumerator = m_staffPickedMimesCloudEnumerator;
 
 @synthesize nv_navigationHeader = m_nv_navigationHeader;
 
@@ -109,8 +111,9 @@
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
-    NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, STATE, unansweredStateObj];
+//    NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
+//    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, STATE, unansweredStateObj];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@", CREATORID, self.loggedInUser.objectid];
     
     [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -135,6 +138,49 @@
     [sortDescriptor release];
     [predicate release];
     return __frc_recentMimes;
+    
+}
+
+- (NSFetchedResultsController*)frc_staffPickedMimes {
+    NSString* activityName = @"Mime_meGuessMenuViewController.frc_staffPickedMimes:";
+    if (__frc_staffPickedMimes != nil) {
+        return __frc_staffPickedMimes;
+    }
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime_meAppDelegate* app = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:MIME inManagedObjectContext:app.managedObjectContext];
+    
+    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
+    
+//    NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
+//    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, STATE, unansweredStateObj];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@", CREATORID, self.loggedInUser.objectid];
+    
+    [fetchRequest setPredicate:predicate];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    [fetchRequest setEntity:entityDescription];
+    
+    [fetchRequest setFetchBatchSize:(kMAXROWS + 1)];    // We add 1 to find out if the "more" button should be shown
+    
+    NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:resourceContext.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+    
+    controller.delegate = self;
+    self.frc_staffPickedMimes = controller;
+    
+    NSError* error = nil;
+    [controller performFetch:&error];
+  	if (error != nil)
+    {
+        LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Could not create instance of NSFetchedResultsController due to %@", activityName, [error userInfo]);
+    }
+    
+    [controller release];
+    [fetchRequest release];
+    [sortDescriptor release];
+    [predicate release];
+    return __frc_staffPickedMimes;
     
 }
 
@@ -166,6 +212,21 @@
         self.recentMimesCloudEnumerator = [CloudEnumerator enumeratorForMostRecentMimes];
         self.recentMimesCloudEnumerator.delegate = self;
         [self.recentMimesCloudEnumerator enumerateUntilEnd:nil];
+    }
+    
+    //    [self showHUDForMimeAnswerDownload];
+}
+
+- (void) enumerateStaffPickedMimes {    
+    if (self.staffPickedMimesCloudEnumerator != nil) {
+        [self.staffPickedMimesCloudEnumerator enumerateUntilEnd:nil];
+    }
+    else 
+    {
+        self.staffPickedMimesCloudEnumerator = nil;
+        self.staffPickedMimesCloudEnumerator = [CloudEnumerator enumeratorForStaffPickedMimes];
+        self.staffPickedMimesCloudEnumerator.delegate = self;
+        [self.staffPickedMimesCloudEnumerator enumerateUntilEnd:nil];
     }
     
     //    [self showHUDForMimeAnswerDownload];
@@ -245,6 +306,7 @@
     // Enumerate for Mimes from friends, recent and staff pick Mimes
     [self enumerateMimeAnswers];
     [self enumerateRecentMimes];
+    [self enumerateStaffPickedMimes];
     
 }
 
@@ -271,12 +333,12 @@
     }
     else if (section == 1) {
         // Recent section
-        count = [self.recentArray count] + 2;  // Add 2 to the count to include 1. Header, and 2. More
+        count = [[self.frc_recentMimes fetchedObjects]count] + 2;  // Add 2 to the count to include 1. Header, and 2. More
         rows = MIN(count, kMAXROWS + 2);   // Maximize the number of rows per section
     }
     else {
         // Staff Picks section
-        count = [self.staffPicksArray count] + 2;  // Add 2 to the count to include 1. Header, and 2. More
+        count = [[self.frc_staffPickedMimes fetchedObjects]count] + 2;  // Add 2 to the count to include 1. Header, and 2. More
         rows = MIN(count, kMAXROWS + 2);   // Maximize the number of rows per section
     }
     
@@ -307,7 +369,7 @@
     }
     else if (indexPath.section == 1) {
         // Recent Mimes section
-        Mime *mime = [[self.frc_recentMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+        mime = [[self.frc_recentMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
         
         cell.textLabel.text = mime.creatorname;
         
@@ -315,6 +377,17 @@
         cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
         
         userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_recentMimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
+    }
+    else if (indexPath.section == 2) {
+        // Staff Picked Mimes section
+        mime = [[self.frc_staffPickedMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+        
+        cell.textLabel.text = mime.creatorname;
+        
+        NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
+        cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
+        
+        userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_staffPickedMimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
     }
     
     // Set the mime image
@@ -423,9 +496,9 @@
         }
     }
     if (indexPath.section == 1) {
-        // Recent section
+        // Recent Mimes section
         
-        NSInteger count = MIN([self.recentArray count], kMAXROWS);    // Maximize the number of recent mimes to show to 3
+        NSInteger count = MIN([[self.frc_recentMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of recent mimes to show to 3
         
         if (indexPath.row == 0) {
             // Set the header
@@ -504,9 +577,9 @@
         }
     }
     else {
-        // Staff Picks section
+        // Staff Picked Mimes section
         
-        NSInteger count = MIN([self.staffPicksArray count], kMAXROWS);    // Maximize the number of staff pick mimes to show to 3
+        NSInteger count = MIN([[self.frc_staffPickedMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of staff pick mimes to show to 3
         
         if (indexPath.row == 0) {
             // Set the header
@@ -536,6 +609,8 @@
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         
                     }
+                    
+                    [self configureCell:cell atIndexPath:indexPath];
                     
                     return cell;
                 }
@@ -633,12 +708,12 @@
     }
     else if (indexPath.section == 1) {
         // Recent section
-        count = [self.recentArray count];
+        count = [[self.frc_recentMimes fetchedObjects]count];
         rows = MIN(count, kMAXROWS);
     }
     else {
-        // Staff Picks section
-        count = [self.staffPicksArray count];
+        // Staff Picked section
+        count = [[self.frc_staffPickedMimes fetchedObjects]count];
         rows = MIN(count, kMAXROWS);
     }
     
@@ -679,7 +754,7 @@
     }
     else if (indexPath.section == 1) {
         // Recent mime selected
-        NSInteger count = [self.recentArray count];
+        NSInteger count = MIN([[self.frc_recentMimes fetchedObjects]count], kMAXROWS);
         
         if (indexPath.row > 0 && indexPath.row <= count) {
             Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstance];
@@ -689,7 +764,7 @@
     }
     else {
         // Staff Pick mime selected
-        NSInteger count = [self.staffPicksArray count];
+        NSInteger count = MIN([[self.frc_staffPickedMimes fetchedObjects]count], kMAXROWS);
         
         if (indexPath.row > 0 && indexPath.row <= count) {
             Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstance];
@@ -727,8 +802,11 @@
     else if (controller == self.frc_recentMimes) {
         section = 1;
     }
+    else if (controller == self.frc_staffPickedMimes) {
+        section = 2;
+    }
     
-    if (controller == self.frc_mimeAnswersFromFriends || controller == self.frc_recentMimes) {
+    if (controller == self.frc_mimeAnswersFromFriends || controller == self.frc_recentMimes || controller == self.frc_staffPickedMimes) {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(0, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
         
         switch(type) {
@@ -775,6 +853,9 @@
     else if (enumerator == self.recentMimesCloudEnumerator) {
         
     }
+    else if (enumerator == self.staffPickedMimesCloudEnumerator) {
+        
+    }
 
 }
 
@@ -801,15 +882,6 @@
                 if ([mimeAnswer.objectid isEqualToNumber:mimeAnswerID]) {
                     cell = [self.tbl_mimes cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:0]];
                     
-//                    //we only draw the image if this view hasnt been repurposed for another photo
-//                    LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
-//                    
-//                    UIImage *image = [response.image imageScaledToSize:CGSizeMake(50, 50)];
-//                    
-//                    [cell.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
-//                    
-//                    [self.view setNeedsDisplay];
-                    
                     break;
                 }
             }
@@ -823,6 +895,20 @@
                 Mime *mime = [[self.frc_recentMimes fetchedObjects] objectAtIndex:i];
                 if ([mime.objectid isEqualToNumber:mimeID]) {
                     cell = [self.tbl_mimes cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:1]];
+                    
+                    break;
+                }
+            }
+        }
+        else if (frc == self.frc_staffPickedMimes) {
+            
+            NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
+            
+            NSInteger count = MIN([[self.frc_staffPickedMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of recent mimes to show
+            for (int i = 0; i < count; i++) {
+                Mime *mime = [[self.frc_staffPickedMimes fetchedObjects] objectAtIndex:i];
+                if ([mime.objectid isEqualToNumber:mimeID]) {
+                    cell = [self.tbl_mimes cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:2]];
                     
                     break;
                 }

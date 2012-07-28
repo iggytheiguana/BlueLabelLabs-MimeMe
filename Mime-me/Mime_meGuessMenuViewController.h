@@ -24,13 +24,16 @@
     
     CloudEnumerator     *m_mimeAnswersCloudEnumerator;
     CloudEnumerator     *m_recentMimesCloudEnumerator;
+    CloudEnumerator     *m_staffPickedMimesCloudEnumerator;
 }
 
 @property (nonatomic, retain)           NSFetchedResultsController      *frc_mimeAnswersFromFriends;
 @property (nonatomic, retain)           NSFetchedResultsController      *frc_recentMimes;
+@property (nonatomic, retain)           NSFetchedResultsController      *frc_staffPickedMimes;
 
 @property (nonatomic, retain)           CloudEnumerator                 *mimeAnswersCloudEnumerator;
 @property (nonatomic, retain)           CloudEnumerator                 *recentMimesCloudEnumerator;
+@property (nonatomic, retain)           CloudEnumerator                 *staffPickedMimesCloudEnumerator;
 
 @property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
 
