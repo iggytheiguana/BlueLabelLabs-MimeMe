@@ -13,4 +13,5 @@
 @dynamic comment1;
 @dynamic creatorname;
 @dynamic creatorid;
+@dynamic mimeid;
 @end

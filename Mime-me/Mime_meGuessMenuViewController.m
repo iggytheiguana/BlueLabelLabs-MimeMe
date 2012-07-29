@@ -85,9 +85,13 @@
     
     NSError* error = nil;
     [controller performFetch:&error];
+    
   	if (error != nil)
     {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Could not create instance of NSFetchedResultsController due to %@", activityName, [error userInfo]);
+    }
+    else {
+        LOG_MIME_MEGUESSMENUVIEWCONTROLLER(0,@"%@ Successfully created NSFetchedResultsController with %d items found",activityName,[[controller fetchedObjects]count]);
     }
     
     [controller release];
@@ -794,6 +798,13 @@
     NSString* activityName = @"Mime_meGuessMenuViewController.controller.didChangeObject:";
     
     UITableView *tableView = self.tbl_mimes;
+    
+    if (type == NSFetchedResultsChangeDelete)
+    {
+        LOG_MIME_MEGUESSMENUVIEWCONTROLLER(0,@"%@ Received NSFetechedResultsChangeDelete notification",activityName);
+    }
+    
+    
     
     NSInteger section;
     if (controller == self.frc_mimeAnswersFromFriends) {

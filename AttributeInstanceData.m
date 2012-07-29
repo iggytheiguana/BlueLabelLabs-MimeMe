@@ -125,14 +125,16 @@ insertIntoResourceContext:(ResourceContext *)context
     //we mark numberofvotes attributes on Page and Photo objects local
     if ([type isEqualToString:PAGE] ||
         [type isEqualToString:PHOTO] ||
-        [type isEqualToString:WORD]) {
+        [type isEqualToString:WORD] ||
+        [type isEqualToString:MIME]) {
         
         if ([lowerCaseName isEqualToString:NUMBEROFVOTES] ||
             [lowerCaseName isEqualToString:NUMBEROFPHOTOS] ||
             [lowerCaseName isEqualToString:NUMBEROFCAPTIONS] ||
             [lowerCaseName isEqualToString:NUMBEROFPUBLISHVOTES] ||
             [lowerCaseName isEqualToString:NUMBEROFFLAGS] ||
-            [lowerCaseName isEqualToString:NUMBEROFTIMESUSED]) {
+            [lowerCaseName isEqualToString:NUMBEROFTIMESUSED] ||
+            [lowerCaseName isEqualToString:NUMBERTIMESANSWERED]) {
             retVal.islocal = [NSNumber numberWithBool:YES];
         }
     }
@@ -158,7 +160,9 @@ insertIntoResourceContext:(ResourceContext *)context
         [lowerCaseName isEqualToString:NUMPEOPLE] ||
         [lowerCaseName isEqualToString:NUMTIMESCOMPLETED] ||
         [lowerCaseName isEqualToString:NUMTIMESSTARTED] ||
-        [lowerCaseName isEqualToString:NUMBEROFTIMESUSED]) {
+        [lowerCaseName isEqualToString:NUMBEROFTIMESUSED] ||
+        [lowerCaseName isEqualToString:NUMBEROFATTEMPTS] ||
+        [lowerCaseName isEqualToString:NUMBEROFTIMESVIEWED]) {
         //these are all counter variables
         retVal.iscounter = [NSNumber numberWithBool:YES];
     }
