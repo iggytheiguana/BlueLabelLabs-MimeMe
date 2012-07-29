@@ -298,7 +298,7 @@
     NSNumber* maxTimeToShowOnProgress = settings.http_timeout_seconds;
     NSNumber* heartbeat = [NSNumber numberWithInt:5];
     
-    //we need to construc the appropriate success, failure and progress messages for the submission
+    //we need to construct the appropriate success, failure and progress messages for the submission
     NSString* failureMessage = @"Oops, please try again.";
     NSString* successMessage = @"Success!";
     
@@ -309,7 +309,7 @@
     
     // Save
     ResourceContext *resourceContext = [ResourceContext instance];
-    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
+    [resourceContext save:NO onFinishCallback:nil trackProgressWith:progressView];
     
 }
 

@@ -51,10 +51,6 @@
 @synthesize tc_recentHeader     = m_tc_recentHeader;
 @synthesize tc_staffPicksHeader = m_tc_staffPicksHeader;
 
-@synthesize friendsArray        = m_friendsArray;
-@synthesize recentArray         = m_recentArray;
-@synthesize staffPicksArray     = m_staffPicksArray;
-
 #pragma mark - FRCs
 - (NSFetchedResultsController*)frc_mimeAnswersFromFriends {
     NSString* activityName = @"Mime_meGuessMenuViewController.frc_mimeAnswersFromFriends:";
@@ -115,8 +111,6 @@
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
-//    NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
-//    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, STATE, unansweredStateObj];
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@", CREATORID, self.loggedInUser.objectid];
     
     [fetchRequest setPredicate:predicate];
@@ -158,9 +152,8 @@
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
-//    NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
-//    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, STATE, unansweredStateObj];
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@", CREATORID, self.loggedInUser.objectid];
+    NSNumber* isStaffPickObj = [NSNumber numberWithBool:YES];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, ISSTAFFPICK, isStaffPickObj];
     
     [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -281,10 +274,6 @@
     [self.view addSubview:self.nv_navigationHeader];
     [navigationHeader release];
     
-    // TEMP: Data arrays for tableview
-//    self.friendsArray = [NSArray arrayWithObjects:@"Laura", @"Julie", @"Matt", @"David", @"Walter", @"John", nil];
-//    self.recentArray = [NSArray arrayWithObjects:@"Timmy", nil];
-//    self.staffPicksArray = [NSArray arrayWithObjects:@"Julie", @"Bobby", @"Jordan", nil];
 }
 
 - (void)viewDidUnload
@@ -415,6 +404,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSString *CellIdentifier;
+    
     if (indexPath.section == 0) {
         // From Friends section
         
@@ -422,7 +413,7 @@
         
         if (indexPath.row == 0) {
             // Set the header
-            static NSString *CellIdentifier = @"FriendsHeader";
+            CellIdentifier = @"FriendsHeader";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
             if (cell == nil) {
@@ -437,7 +428,7 @@
             if (count > 0) {
                 if (indexPath.row > 0 && indexPath.row <= count) {
                     // Set Friend's mime
-                    static NSString *CellIdentifier = @"FriendsMime";
+                    CellIdentifier = @"FriendsMime";
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     if (cell == nil) {
@@ -459,7 +450,7 @@
                 }
                 else {
                     // Set More row
-                    static NSString *CellIdentifier = @"MoreFromFriends";
+                    CellIdentifier = @"MoreFromFriends";
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     if (cell == nil) {
@@ -480,7 +471,7 @@
             }
             else {
                 // Set Invite Friends rows
-                static NSString *CellIdentifier = @"InviteFriends";
+                CellIdentifier = @"InviteFriends";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 
                 if (cell == nil) {
@@ -506,7 +497,7 @@
         
         if (indexPath.row == 0) {
             // Set the header
-            static NSString *CellIdentifier = @"RecentHeader";
+            CellIdentifier = @"RecentHeader";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
             if (cell == nil) {
@@ -522,13 +513,17 @@
             if (count > 0) {
                 if (indexPath.row > 0 && indexPath.row <= count) {
                     // Set Recent mime
-                    static NSString *CellIdentifier = @"RecentMime";
+                    CellIdentifier = @"RecentMime";
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     if (cell == nil) {
-                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
                         
-                        cell.textLabel.text = [self.recentArray objectAtIndex:(indexPath.row - 1)];
+                        cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+                        cell.imageView.layer.masksToBounds = YES;
+                        cell.imageView.layer.cornerRadius = 8.0;
+                        cell.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+                        cell.imageView.layer.borderWidth = 1.0;
                         
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         
@@ -540,7 +535,7 @@
                 }
                 else {
                     // Set More row
-                    static NSString *CellIdentifier = @"MoreFromRecent";
+                    CellIdentifier = @"MoreFromRecent";
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     if (cell == nil) {
@@ -561,7 +556,7 @@
             }
             else {
                 // Set None row
-                static NSString *CellIdentifier = @"NoneRecent";
+                CellIdentifier = @"NoneRecent";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 
                 if (cell == nil) {
@@ -587,7 +582,7 @@
         
         if (indexPath.row == 0) {
             // Set the header
-            static NSString *CellIdentifier = @"StaffPicksHeader";
+            CellIdentifier = @"StaffPicksHeader";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
             if (cell == nil) {
@@ -602,13 +597,17 @@
             if (count > 0) {
                 if (indexPath.row > 0 && indexPath.row <= count) {
                     // Set Staff Picked mime
-                    static NSString *CellIdentifier = @"StaffPickMime";
+                    CellIdentifier = @"StaffPickMime";
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     if (cell == nil) {
-                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
                         
-                        cell.textLabel.text = [self.staffPicksArray objectAtIndex:(indexPath.row - 1)];
+                        cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+                        cell.imageView.layer.masksToBounds = YES;
+                        cell.imageView.layer.cornerRadius = 8.0;
+                        cell.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+                        cell.imageView.layer.borderWidth = 1.0;
                         
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         
@@ -620,7 +619,7 @@
                 }
                 else {
                     // Set More row
-                    static NSString *CellIdentifier = @"MoreFromStaffPicks";
+                    CellIdentifier = @"MoreFromStaffPicks";
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     if (cell == nil) {
@@ -641,7 +640,7 @@
             }
             else {
                 // Set None row
-                static NSString *CellIdentifier = @"NoneStaffPicks";
+                CellIdentifier = @"NoneStaffPicks";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 
                 if (cell == nil) {
@@ -761,6 +760,14 @@
         NSInteger count = MIN([[self.frc_recentMimes fetchedObjects]count], kMAXROWS);
         
         if (indexPath.row > 0 && indexPath.row <= count) {
+            
+            Mime *mime = [[self.frc_recentMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+            
+            // Show the Mime
+            Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            [self.navigationController pushViewController:shareViewController animated:YES];
+        }
+        else {
             Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstance];
             
             [self.navigationController pushViewController:fullTableViewController animated:YES];
@@ -771,6 +778,14 @@
         NSInteger count = MIN([[self.frc_staffPickedMimes fetchedObjects]count], kMAXROWS);
         
         if (indexPath.row > 0 && indexPath.row <= count) {
+            
+            Mime *mime = [[self.frc_staffPickedMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+            
+            // Show the Mime
+            Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            [self.navigationController pushViewController:shareViewController animated:YES];
+        }
+        else {
             Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstance];
             
             [self.navigationController pushViewController:fullTableViewController animated:YES];
@@ -791,7 +806,8 @@
 }
 
 - (void) controller:(NSFetchedResultsController *)controller 
-    didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath 
+    didChangeObject:(id)anObject
+        atIndexPath:(NSIndexPath *)indexPath 
       forChangeType:(NSFetchedResultsChangeType)type 
        newIndexPath:(NSIndexPath *)newIndexPath {
     
@@ -844,6 +860,8 @@
                                  withRowAnimation:UITableViewRowAnimationFade];
                 break;
         }
+        
+//        [self.tbl_mimes reloadData];
     }
     else {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController that isnt mine. %p", activityName, &controller);
