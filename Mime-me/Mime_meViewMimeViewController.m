@@ -309,7 +309,7 @@
     
     // Save
     ResourceContext *resourceContext = [ResourceContext instance];
-    [resourceContext save:NO onFinishCallback:nil trackProgressWith:progressView];
+    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
     
 }
 
