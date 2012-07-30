@@ -11,6 +11,7 @@
 #import "Mime_meMenuViewController.h"
 #import "Mime.h"
 #import "MimeAnswer.h"
+#import "MimeAnswerState.h"
 #import "ImageManager.h"
 #import "ImageDownloadResponse.h"
 #import "Macros.h"
@@ -40,6 +41,8 @@
 
 // answerContainer
 @synthesize v_answerView        = m_v_answerView;
+
+@synthesize didUseHint          = m_didUseHint;
 
 
 #pragma mark - View Lifecycle
@@ -244,23 +247,29 @@
 }
 
 #pragma mark UIButton Handlers
-- (void)showHUDForMimeGuessCancelled {
-    Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
-    UIProgressHUDView* progressView = appDelegate.progressView;
-    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
-    progressView.delegate = self;
-    
-    // Indeterminate Progress bar
-    NSString* message = @"Loading...";
-    [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
-    
-    // Save
-    ResourceContext *resourceContext = [ResourceContext instance];
-    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
-}
+//- (void)showHUDForMimeGuessCancelled {
+//    Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+//    UIProgressHUDView* progressView = appDelegate.progressView;
+//    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+//    progressView.delegate = self;
+//    
+//    // Indeterminate Progress bar
+//    NSString* message = @"Loading...";
+//    [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
+//    
+//    // Save
+//    ResourceContext *resourceContext = [ResourceContext instance];
+//    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
+//}
 
 - (IBAction) onBackButtonPressed:(id)sender {
-    [self showHUDForMimeGuessCancelled];
+//    [self showHUDForMimeGuessCancelled];
+    
+    // Save and updated counts
+    ResourceContext *resourceContext = [ResourceContext instance];
+    [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark Mime_meUIConfirmationView Delegate Methods
@@ -320,11 +329,28 @@
     Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
     
     if (isCorrect == YES) {
-        // submitted answer is correct, update answer count and save
+        // submitted answer is correct, update attempt and answer count properties on the mime object
+        
+        NSUInteger numAttempts = [mime.numberofattempts integerValue];
+        mime.numberofattempts = [NSNumber numberWithInteger:(numAttempts + 1)];
         
         NSUInteger numTimesAnswered = [mime.numbertimesanswered integerValue];
         mime.numbertimesanswered = [NSNumber numberWithInteger:(numTimesAnswered + 1)];
         
+        if (self.mimeAnswerID == nil) {
+            // We need to create a MimeAnswer object if this mime was loaded from the recent mimes or staff picked sections
+            MimeAnswer *newMimeAnswer = [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetFacebookID:self.loggedInUser.fb_user_id withTargetEmail:self.loggedInUser.email withTargetName:self.loggedInUser.username];
+            
+            self.mimeAnswerID = newMimeAnswer.objectid;
+        }
+        
+        // Update the MimeAnswer properties
+        MimeAnswer *mimeAnswer = (MimeAnswer*)[resourceContext resourceWithType:MIMEANSWER withID:self.mimeAnswerID];
+        
+        mimeAnswer.state = [NSNumber numberWithInt:kANSWERED];
+        mimeAnswer.didusehint = [NSNumber numberWithBool:self.didUseHint];
+        
+        // Show the hud and save
         [self showHUDForSendAnswer];
     }
     else {
@@ -340,7 +366,9 @@
 }
 
 - (IBAction) onClueButtonPressed:(id)sender {
-    
+    // Flag that the user did use a hint.
+    // We will update the didUseHint property on the MimeAnswer object at save
+    self.didUseHint = YES;
 }
 
 #pragma mark -  MBProgressHUD Delegate
@@ -350,42 +378,62 @@
     
     UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
     
-    Request* request = [progressView.requests objectAtIndex:0];
-    //now we have the request
+//    Request* request = [progressView.requests objectAtIndex:0];
+//    //now we have the request
+//    
+//    NSArray* changedAttributes = request.changedAttributesList;
+//    //list of all changed attributes
     
-    NSArray* changedAttributes = request.changedAttributesList;
-    //list of all changed attributes
+//    if ([changedAttributes containsObject:NUMBERTIMESANSWERED]) {
+//        if (progressView.didSucceed) {
+//            // Answer sent sucessfully
+//            LOG_REQUEST(0, @"%@ Mime answer sent successful", activityName);
+//            
+//            // Remove the Answer view and back button
+//            [self.v_answerView removeFromSuperview];
+//            [self.btn_back removeFromSuperview];
+//            
+//            // Add the Confirmation view
+//            [self.view addSubview:self.v_confirmationView];
+//            
+//            [self showConfirmationView];
+//        }
+//        else {
+//            // Send answer failed
+//            LOG_REQUEST(1, @"%@ Mime answer sent failure", activityName);
+//            
+//            [self.navigationController popViewControllerAnimated:YES];
+//        }
+//    }
+//    else {
+//        if (progressView.didSucceed) {
+//            // Send updated Mime count data sucessfully
+//            LOG_REQUEST(0, @"%@ Mime attempt count update request was successful", activityName);
+//        }
+//        else {
+//            // Send updated Mime count data failed
+//            LOG_REQUEST(1, @"%@ Mime attempt count update request failure", activityName);
+//        }
+//        [self.navigationController popViewControllerAnimated:YES];
+//    }
     
-    if ([changedAttributes containsObject:NUMBERTIMESANSWERED]) {
-        if (progressView.didSucceed) {
-            // Answer sent sucessfully
-            LOG_REQUEST(0, @"%@ Mime and MimeAnswer creation request was successful", activityName);
-            
-            // Remove the Answer view and back button
-            [self.v_answerView removeFromSuperview];
-            [self.btn_back removeFromSuperview];
-            
-            // Add the Confirmation view
-            [self.view addSubview:self.v_confirmationView];
-            
-            [self showConfirmationView];
-        }
-        else {
-            // Send answer failed
-            LOG_REQUEST(1, @"%@ Mime and MimeAnswer creation request failure", activityName);
-            
-            [self.navigationController popViewControllerAnimated:YES];
-        }
+    if (progressView.didSucceed) {
+        // Answer sent sucessfully
+        LOG_REQUEST(0, @"%@ Mime answer sent successful", activityName);
+        
+        // Remove the Answer view and back button
+        [self.v_answerView removeFromSuperview];
+        [self.btn_back removeFromSuperview];
+        
+        // Add the Confirmation view
+        [self.view addSubview:self.v_confirmationView];
+        
+        [self showConfirmationView];
     }
     else {
-        if (progressView.didSucceed) {
-            // Send updated Mime count data sucessfully
-            LOG_REQUEST(0, @"%@ Mime attempt count update request was successful", activityName);
-        }
-        else {
-            // Send updated Mime count data failed
-            LOG_REQUEST(1, @"%@ Mime attempt count update request failure", activityName);
-        }
+        // Send answer failed
+        LOG_REQUEST(1, @"%@ Mime answer sent failure", activityName);
+        
         [self.navigationController popViewControllerAnimated:YES];
     }
 }

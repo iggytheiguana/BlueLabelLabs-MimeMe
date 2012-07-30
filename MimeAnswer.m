@@ -10,6 +10,7 @@
 #import "AuthenticationManager.h"
 #import "User.h"
 #import "Mime.h"
+#import "MimeAnswerState.h"
 
 @implementation MimeAnswer
 @dynamic answer;
@@ -57,7 +58,7 @@
     retVal.didusehint = [NSNumber numberWithBool:NO];
     retVal.issentbyfriend = [NSNumber numberWithBool:YES];
     retVal.pointsawarded = [NSNumber numberWithInt:0];
-    retVal.state = [NSNumber numberWithInt:0];
+    retVal.state = [NSNumber numberWithInt:kUNANSWERED];
     
     Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:mimeID];
     retVal.answer = mime.word;
@@ -92,7 +93,7 @@
     retVal.didusehint = [NSNumber numberWithBool:NO];
     retVal.issentbyfriend = [NSNumber numberWithBool:YES];
     retVal.pointsawarded = [NSNumber numberWithInt:0];
-    retVal.state = [NSNumber numberWithInt:0];
+    retVal.state = [NSNumber numberWithInt:kUNANSWERED];
     
     Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:mimeID];
     retVal.answer = mime.word;

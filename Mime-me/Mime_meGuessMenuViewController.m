@@ -297,9 +297,9 @@
     [self.nv_navigationHeader.btn_guess setUserInteractionEnabled:NO];
     
     // Enumerate for Mimes from friends, recent and staff pick Mimes
-    [self enumerateMimeAnswers];
-    [self enumerateRecentMimes];
-    [self enumerateStaffPickedMimes];
+//    [self enumerateMimeAnswers];
+//    [self enumerateRecentMimes];
+//    [self enumerateStaffPickedMimes];
     
 }
 
@@ -353,7 +353,8 @@
         // Get the Mime object associated with this MimeAnswer
         mime = (Mime*)[resourceContext resourceWithType:MIME withID:mimeAnswer.mimeid]; 
         
-        cell.textLabel.text = mimeAnswer.creatorname;
+        NSString *creatorName = mimeAnswer.creatorname;
+        cell.textLabel.text = creatorName;
         
         NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mimeAnswer.datecreated];
         cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];

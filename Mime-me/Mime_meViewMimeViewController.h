@@ -29,6 +29,8 @@
     // answerContainer
     Mime_meUIAnswerView         *m_v_answerView;
     
+    BOOL                        m_didUseHint;
+    
 }
 
 @property (nonatomic, retain)           NSNumber        *mimeID;
@@ -46,6 +48,8 @@
 
 // answerContainer
 @property (nonatomic, retain)           Mime_meUIAnswerView         *v_answerView;
+
+@property (nonatomic, assign)           BOOL                        didUseHint;
 
 - (IBAction) onBackButtonPressed:(id)sender;
 
