@@ -23,6 +23,7 @@
 #import "UIImage+UIImageCategory.h"
 #import "Mime_meViewMimeViewController.h"
 #import "MimeAnswerState.h"
+#import "MimeType.h"
 
 #define kMIMEFRC @"mimefrc"
 #define kMIMEANSWERID @"mimeanswerid"
@@ -111,6 +112,7 @@
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
+//    NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@", CREATORID, self.loggedInUser.objectid];
     
     [fetchRequest setPredicate:predicate];
@@ -152,6 +154,7 @@
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
+//    NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
     NSNumber* isStaffPickObj = [NSNumber numberWithBool:YES];
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, ISSTAFFPICK, isStaffPickObj];
     
@@ -471,20 +474,20 @@
                 }
             }
             else {
-                // Set Invite Friends rows
-                CellIdentifier = @"InviteFriends";
+                // Set None row
+                CellIdentifier = @"NoneFromFirends";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 
                 if (cell == nil) {
                     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     
-                    cell.textLabel.text = @"Invite friends to play!";
+                    cell.textLabel.text = @"No mimes from friends!";
                     cell.textLabel.textAlignment = UITextAlignmentCenter;
                     cell.textLabel.shadowColor = [UIColor whiteColor];
                     cell.textLabel.shadowOffset = CGSizeMake(0.0, 1.0);
                     cell.textLabel.textColor = [UIColor lightGrayColor];
                     
-                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    cell.userInteractionEnabled = NO;
                 }
                 
                 return cell;
@@ -751,7 +754,7 @@
             [self.navigationController pushViewController:shareViewController animated:YES];
         }
         else {
-            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstance];
+            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kFROMFRIEND];
             
             [self.navigationController pushViewController:fullTableViewController animated:YES];
         }
@@ -769,7 +772,7 @@
             [self.navigationController pushViewController:shareViewController animated:YES];
         }
         else {
-            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstance];
+            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kRECENTMIME];
             
             [self.navigationController pushViewController:fullTableViewController animated:YES];
         }
@@ -787,7 +790,7 @@
             [self.navigationController pushViewController:shareViewController animated:YES];
         }
         else {
-            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstance];
+            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kSTAFFPICK];
             
             [self.navigationController pushViewController:fullTableViewController animated:YES];
         }

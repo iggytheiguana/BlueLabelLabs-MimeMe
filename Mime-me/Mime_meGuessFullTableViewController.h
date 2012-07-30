@@ -10,7 +10,7 @@
 #import "BaseViewController.h"
 #import "Mime_meUINavigationHeaderView.h"
 
-@interface Mime_meGuessFullTableViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate > {
+@interface Mime_meGuessFullTableViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate > {
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
     
     UITableView         *m_tbl_mimes;
@@ -18,13 +18,15 @@
     UITableViewCell     *m_tc_recentHeader;
     UITableViewCell     *m_tc_staffPicksHeader;
     
-    NSArray             *m_friendsArray;
-    NSArray             *m_recentArray;
-    NSArray             *m_staffPicksArray;
+    NSInteger           m_mimeType;
+    
+    CloudEnumerator     *m_mimeCloudEnumerator;
     
 }
 
 @property (nonatomic, retain)           NSFetchedResultsController      *frc_mimes;
+
+@property (nonatomic, retain)           CloudEnumerator                 *mimeCloudEnumerator;
 
 @property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
 
@@ -33,9 +35,8 @@
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_recentHeader;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_staffPicksHeader;
 
-@property (nonatomic, retain)           NSArray             *friendsArray;
-@property (nonatomic, retain)           NSArray             *recentArray;
-@property (nonatomic, retain)           NSArray             *staffPicksArray;
+@property (nonatomic, assign)           NSInteger           mimeType;
+
 
 
 - (IBAction) onHomeButtonPressed:(id)sender;
@@ -47,7 +48,7 @@
 - (IBAction) onSettingsButtonPressed:(id)sender;
 - (IBAction) onBackButtonPressed:(id)sender;
 
-+ (Mime_meGuessFullTableViewController*)createInstance;
++ (Mime_meGuessFullTableViewController*)createInstanceForMimeType:(NSInteger)mimeType;
 
 
 @end
