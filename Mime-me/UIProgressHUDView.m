@@ -126,14 +126,22 @@
 //Returns a % indicating the Requests which have completed
 - (float) percentageComplete 
 {
-    //we get the progress from this request, and then we do a  average across all the requests
+    //we get the progress from this request, and then we do a  average across all the requestspo reques
     //set for this progress indicator
     float denominator = [self.requests count];
     float numerator = 0.0f;
     
-    for (Request* request in self.requests) {
-        float requestProgress = request.progress;
-        numerator = numerator + requestProgress;
+    for (Request* request in self.requests) 
+    {
+        int requestStatus = [request.statuscode intValue];
+        if (requestStatus != kPENDING)
+        {
+            numerator = numerator + 1;
+
+        }
+        
+        
+      //  float requestProgress = request.progress;
     }
     
     float p = (numerator / denominator)*100;
@@ -180,75 +188,79 @@
 }
 
 #pragma RequestProcessDelegate
-- (void) request:(Request *)request setProgress:(float)progress {
+- (void) request:(Request *)request setProgress:(float)newProgress {
     NSString* activityName = @"UIProgressHUDView.setProgress:";
 
-    BOOL shouldCloseProgressBar = NO;
-
-    
-    float p = [self percentageComplete];
-    self.requestProgress = [NSNumber numberWithFloat:p];
-    
-    LOG_PROGRESSVIEW(0, @"%@ Outstanding submission is %f % complete",activityName,p);
-    
-    
-    if (p >= 100 && 
-        [request.statuscode intValue] != kFAILED)
+    @synchronized(self) 
     {
-        //request succeeded and we are now complete according ot our Request array
-        if ([self.delegate respondsToSelector:@selector(progressViewShouldFinishOnSuccess:)]) 
+        request.progress = newProgress;
+        BOOL shouldCloseProgressBar = NO;
+        
+        
+        float p = [self percentageComplete];
+        self.requestProgress = [NSNumber numberWithFloat:p];
+        
+        LOG_PROGRESSVIEW(0, @"%@ Outstanding submission with %d requests is %f % complete",activityName,[self.requests count], p);
+        
+        
+        if (p >= 100 && 
+            [request.statuscode intValue] != kFAILED)
         {
-            //we call the delegate
-            shouldCloseProgressBar = [self.delegate progressViewShouldFinishOnSuccess:self];
+            //request succeeded and we are now complete according ot our Request array
+            if ([self.delegate respondsToSelector:@selector(progressViewShouldFinishOnSuccess:)]) 
+            {
+                //we call the delegate
+                shouldCloseProgressBar = [self.delegate progressViewShouldFinishOnSuccess:self];
+            }
+            else 
+            {
+                //default behavior is to close on success
+                shouldCloseProgressBar = YES;
+            }
+            
+            LOG_PROGRESSVIEW(0, @"%@Detected all Requests are complete, shouldCloseProgressBar=%d",activityName,shouldCloseProgressBar);
         }
-        else 
+        else if ([request.statuscode intValue] == kFAILED)
         {
-            //default behavior is to close on success
-            shouldCloseProgressBar = YES;
+            //request failed
+            if ([self.delegate respondsToSelector:@selector(progressViewShouldFinishOnFailure:didFailOnRequest:)]) 
+            {
+                //we call the delegate
+                shouldCloseProgressBar = [self.delegate progressViewShouldFinishOnFailure:self didFailOnRequest:request];
+            }
+            else {
+                shouldCloseProgressBar = YES;
+            }
+            LOG_PROGRESSVIEW(1, @"%@Last request failed, shouldCloseProgressBar=%d",activityName,shouldCloseProgressBar);
         }
         
-        LOG_PROGRESSVIEW(0, @"%@Detected all Requests are complete, shouldCloseProgressBar=%d",activityName,shouldCloseProgressBar);
-    }
-    else if ([request.statuscode intValue] == kFAILED)
-    {
-       //request failed
-        if ([self.delegate respondsToSelector:@selector(progressViewShouldFinishOnFailure:didFailOnRequest:)]) 
+        //now we check to see if we should close the progress view
+        if (shouldCloseProgressBar) 
         {
-            //we call the delegate
-            shouldCloseProgressBar = [self.delegate progressViewShouldFinishOnFailure:self didFailOnRequest:request];
+            //yes we should begin the shutdown procedure
+            //stop the maximum display timer as we will exit
+            [self.timer invalidate];
+            self.timer = nil;
+            [self.animationTimer invalidate];
+            self.animationTimer = nil;
+            
+            
+            
+            //now we need to animate the filling of the rest of the pie
+            if ([request.statuscode intValue] != kFAILED)
+            {
+                //we know we are closing on success, so let us animate the rest of the pie
+                self.progress = 1;
+            }
+            
+            
+            
+            //[self.customView removeFromSuperview];
+            [self renderComplete];
+            [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(onTimerExpireHide) userInfo:nil repeats:NO];
+            
+            
         }
-        else {
-            shouldCloseProgressBar = YES;
-        }
-        LOG_PROGRESSVIEW(0, @"%@Last request failed, shouldCloseProgressBar=%d",activityName,shouldCloseProgressBar);
-    }
-    
-    //now we check to see if we should close the progress view
-    if (shouldCloseProgressBar) 
-    {
-        //yes we should begin the shutdown procedure
-        //stop the maximum display timer as we will exit
-        [self.timer invalidate];
-        self.timer = nil;
-        [self.animationTimer invalidate];
-        self.animationTimer = nil;
-        
-        
-        
-        //now we need to animate the filling of the rest of the pie
-        if ([request.statuscode intValue] != kFAILED)
-        {
-            //we know we are closing on success, so let us animate the rest of the pie
-            self.progress = 1;
-        }
-        
-        
-        
-        //[self.customView removeFromSuperview];
-        [self renderComplete];
-        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(onTimerExpireHide) userInfo:nil repeats:NO];
-
-
     }
 
 }

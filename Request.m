@@ -147,8 +147,10 @@ withChangedAttributes:(NSArray*)changedAttributes
 }
 
 - (void) dealloc {
+    
     self.childRequests = nil;
     self.parentRequest = nil;
+    [super dealloc];
 }
 
 - (int) numberOfChildRequestsCompleted {
@@ -172,27 +174,27 @@ withChangedAttributes:(NSArray*)changedAttributes
         progressNumerator++;
     }
     
-    if ([self.childRequests count] > 0) {
-        //has child requests
-        
-        //we need to set the progress float to being a proportion of the number
-        //of child requests still pending
-        progressNumerator += [self numberOfChildRequestsCompleted];
-        progressDenominator += [self.childRequests count];
-        
-        
-    }
+//    if ([self.childRequests count] > 0) {
+//        //has child requests
+//        
+//        //we need to set the progress float to being a proportion of the number
+//        //of child requests still pending
+//        progressNumerator += [self numberOfChildRequestsCompleted];
+//        progressDenominator += [self.childRequests count];
+//        
+//        
+//    }
     
     //now we update our progress float
-    self.progress = progressNumerator / progressDenominator;
-    LOG_REQUEST(0, @"%@Updating Request %@ progress indicator to be %f (%f/%f)",activityName,self.objectid,self.progress,progressNumerator,progressDenominator);
+    //self.progress = progressNumerator / progressDenominator;
+    LOG_REQUEST(0, @"%@Updating Request %@ progress indicator to be %f (%f/%f)",activityName,self.objectid,(progressNumerator / progressDenominator),progressNumerator,progressDenominator);
     //we also need to update the Parent's request progres indicator
-    if (self.parentRequest != nil) {
-        [self.parentRequest updateRequestProgressIndicator];
-    }
+//    if (self.parentRequest != nil) {
+//        [self.parentRequest updateRequestProgressIndicator];
+//    }
     
         //we report back to the delegate about the request's progress change
-        [self.delegate request:self setProgress:self.progress];
+        [self.delegate request:self setProgress:(progressNumerator / progressDenominator)];
     
 
 }
