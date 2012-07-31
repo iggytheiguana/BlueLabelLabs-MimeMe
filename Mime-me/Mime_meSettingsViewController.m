@@ -10,6 +10,14 @@
 #import "LoginViewController.h"
 #import "Macros.h"
 #import "Mime_meMenuViewController.h"
+#import "UIPromptAlertView.h"
+#import "Attributes.h"
+#import "ApplicationSettings.h"
+#import "ApplicationSettingsManager.h"
+#import "Mime_meAppDelegate.h"
+
+#define kMAXUSERNAMELENGTH 15
+#define kMAXPASSWORDLENGTH 20
 
 @interface Mime_meSettingsViewController ()
 
@@ -65,15 +73,18 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 2;   // Add 1 to account for header
+    return 5;   // Add 1 to account for header
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Configure the cell...
+    
+    NSString *CellIdentifier;
+    
     if (indexPath.row == 0) {
         // Set the header
-        static NSString *CellIdentifier = @"SettingsHeader";
+        CellIdentifier = @"SettingsHeader";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
         if (cell == nil) {
@@ -84,8 +95,58 @@
         
         return cell;
     }
+    else if (indexPath.row == 1) {
+        CellIdentifier = @"GemBalance";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
+            
+            cell.textLabel.text = @"Gem Balance";
+            
+            cell.userInteractionEnabled = NO;
+            
+        }
+        
+        // TODO: Replace string with user gem balance property
+        cell.detailTextLabel.text = @"100 gems";
+        
+        return cell;
+        
+    }
+    else if (indexPath.row == 2) {
+        CellIdentifier = @"ChangeUserName";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
+            
+            cell.textLabel.text = @"Change Username";
+            
+        }
+        
+        cell.detailTextLabel.text = self.loggedInUser.username;
+        
+        return cell;
+        
+    }
+    else if (indexPath.row == 3) {
+        CellIdentifier = @"ChangePassword";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
+            
+            cell.textLabel.text = @"Change Password";
+            cell.detailTextLabel.text = @"••••••••";
+            
+        }
+        
+        return cell;
+        
+    }
     else {
-        static NSString *CellIdentifier = @"Logout";
+        CellIdentifier = @"Logout";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
         if (cell == nil) {
@@ -144,9 +205,24 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (indexPath.section == 0) {
-        
-        if (indexPath.row == 1) {
-            //Logout
+        if (indexPath.row == 2) {
+            // Change username
+            UIPromptAlertView* alert = [[UIPromptAlertView alloc]
+                                        initWithTitle:@"Change Username"
+                                        message:@"\n\nPlease enter your preferred username."
+                                        delegate:self
+                                        cancelButtonTitle:@"Cancel"
+                                        otherButtonTitles:@"Change", nil];
+            [alert setMaxTextLength:kMAXUSERNAMELENGTH];
+            [alert show];
+            [alert release];
+        }
+        else if (indexPath.row == 3) {
+            // Change Password
+            
+        }
+        else if (indexPath.row == 4) {
+            // Logout
             if ([self.authenticationManager isUserAuthenticated]) {
                 [self.authenticationManager logoff];
             }
@@ -205,6 +281,101 @@
     [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
     
 }
+
+#pragma mark - UIAlertView Delegate
+- (void)alertView:(UIPromptAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        NSString* enteredText = [alertView enteredText];
+        
+        // Change the current logged in user's username
+        self.loggedInUser.username = enteredText;
+        
+        ResourceContext* resourceContext = [ResourceContext instance];
+        //we start a new undo group here
+        [resourceContext.managedObjectContext.undoManager beginUndoGrouping];
+        
+        //after this point, the platforms should automatically begin syncing the data back to the cloud
+        //we now show a progress bar to monitor this background activity
+        ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+        Mime_meAppDelegate* delegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+        UIProgressHUDView* progressView = delegate.progressView;
+        progressView.delegate = self;
+        
+        [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
+        
+        NSString* progressIndicatorMessage = [NSString stringWithFormat:@"Checking availability..."];
+        
+        [self showProgressBar:progressIndicatorMessage withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
+    }
+}
+
+#pragma mark -  MBProgressHUD Delegate
+-(void)hudWasHidden:(MBProgressHUD *)hud {
+    NSString* activityName = @"Mime_meSettingsViewController.hudWasHidden";
+    [self hideProgressBar];
+    
+    UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
+    
+    Request* request = [progressView.requests objectAtIndex:0];
+    //now we have the request
+    NSArray* changedAttributes = request.changedAttributesList;
+    //list of all changed attributes
+    //we take the first one and base our messaging off that
+    NSString* attributeName = [changedAttributes objectAtIndex:0];
+    
+    if (progressView.didSucceed) {
+        //we need to determine what operation succeeded
+        if ([progressView.requests count] > 0) 
+        {
+            if ([attributeName isEqualToString:USERNAME]) {
+                // Username change was successful
+                LOG_REQUEST(0, @"%@ Username change successful", activityName);
+                
+                [self.tbl_settings reloadData];
+                
+            }
+        }
+    }
+    else {
+        NSString* duplicateUsername = self.loggedInUser.username;
+        
+        //we need to undo the operation that was last performed
+        LOG_REQUEST(1, @"%@ Rolling back actions due to request failure", activityName);
+        ResourceContext* resourceContext = [ResourceContext instance];
+        [resourceContext.managedObjectContext.undoManager undo];
+        
+        NSError* error = nil;
+        [resourceContext.managedObjectContext save:&error];
+        
+        NSString* title = nil;
+        NSString* message = nil;
+        
+        //we need to determine what operation failed
+        if ([progressView.requests count] > 0) 
+        {
+            if ([attributeName isEqualToString:USERNAME]) 
+            {
+                // Username change failed
+                LOG_REQUEST(1, @"%@ Username change successful", activityName);
+                
+                title = @"Change Username";
+                message = [NSString stringWithFormat:@"\n\n\"%@\" is not available. Please try another username.",duplicateUsername];
+                
+                // Show the Change Username alert view again
+                UIPromptAlertView* alert = [[UIPromptAlertView alloc]
+                                            initWithTitle:title
+                                            message:[NSString stringWithFormat:message]
+                                            delegate:self
+                                            cancelButtonTitle:@"Cancel"
+                                            otherButtonTitles:@"Change", nil];
+                [alert setMaxTextLength:kMAXUSERNAMELENGTH];
+                [alert show];
+                [alert release];
+            }
+        }
+    }    
+}
+
 
 #pragma mark - Static Initializers
 + (Mime_meSettingsViewController*)createInstance {

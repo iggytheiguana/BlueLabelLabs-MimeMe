@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 
-@interface Mime_meSettingsViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate > {
+@interface Mime_meSettingsViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, UIProgressHUDViewDelegate > {
     UITableView         *m_tbl_settings;
     UITableViewCell     *m_tc_settingHeader;
     
