@@ -111,6 +111,17 @@
 }
 
 #pragma mark - Enumerators
+- (void)showHUDForMimeEnumerators {
+    Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    UIProgressHUDView* progressView = appDelegate.progressView;
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+    progressView.delegate = self;
+    
+    NSString* message = @"Updating...";
+    [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
+    
+}
+
 - (void) enumerateMimes {    
     if (self.mimeCloudEnumerator != nil) {
         [self.mimeCloudEnumerator enumerateUntilEnd:nil];
@@ -134,7 +145,7 @@
         [self.mimeCloudEnumerator enumerateUntilEnd:nil];
     }
     
-//    [self showHUDForMimeDownload];
+    [self showHUDForMimeEnumerators];
 }
 
 - (NSString*) getDateStringForMimeDate:(NSDate*)date {
@@ -608,6 +619,32 @@
     //    [self hideProgressBar];
     
     if (enumerator == self.mimeCloudEnumerator) {
+        
+    }
+}
+
+#pragma mark - MBProgressHUD Delegate
+-(void)hudWasHidden:(MBProgressHUD *)hud {
+    NSString* activityName = @"Mime_meGuessFullTableViewController.hudWasHidden";
+    [self hideProgressBar];
+    
+    UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
+    
+    //    Request* request = [progressView.requests objectAtIndex:0];
+    //    //now we have the request
+    //    NSArray* changedAttributes = request.changedAttributesList;
+    //    //list of all changed attributes
+    //    //we take the first one and base our messaging off that
+    //    NSString* attributeName = [changedAttributes objectAtIndex:0];
+    
+    if (progressView.didSucceed) {
+        //enumeration was sucessful
+        LOG_REQUEST(0, @"%@ Mime and MimeAnswer enumeration was successful", activityName);
+        
+    }
+    else {
+        //enumeration failed
+        LOG_REQUEST(1, @"%@ Mime and MimeAnswer enumeration failure", activityName);
         
     }
 }

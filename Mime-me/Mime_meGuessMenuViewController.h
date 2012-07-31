@@ -10,7 +10,7 @@
 #import "BaseViewController.h"
 #import "Mime_meUINavigationHeaderView.h"
 
-@interface Mime_meGuessMenuViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate > {
+@interface Mime_meGuessMenuViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate, UIProgressHUDViewDelegate > {
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
     
     UITableView         *m_tbl_mimes;

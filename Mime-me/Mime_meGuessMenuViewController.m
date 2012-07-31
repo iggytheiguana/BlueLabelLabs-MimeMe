@@ -186,7 +186,18 @@
 
 
 #pragma mark - Enumerators
-- (void) enumerateMimeAnswers {    
+- (void)showHUDForMimeEnumerators {
+    Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    UIProgressHUDView* progressView = appDelegate.progressView;
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+    progressView.delegate = self;
+    
+    NSString* message = @"Updating...";
+    [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
+    
+}
+
+- (void) enumerateMimeAnswersFromFriends {    
     if (self.mimeAnswersCloudEnumerator != nil) {
         [self.mimeAnswersCloudEnumerator enumerateUntilEnd:nil];
     }
@@ -198,8 +209,6 @@
         self.mimeAnswersCloudEnumerator.delegate = self;
         [self.mimeAnswersCloudEnumerator enumerateUntilEnd:nil];
     }
-    
-    //    [self showHUDForMimeAnswerDownload];
 }
 
 - (void) enumerateRecentMimes {    
@@ -213,8 +222,6 @@
         self.recentMimesCloudEnumerator.delegate = self;
         [self.recentMimesCloudEnumerator enumerateUntilEnd:nil];
     }
-    
-    //    [self showHUDForMimeAnswerDownload];
 }
 
 - (void) enumerateStaffPickedMimes {    
@@ -228,8 +235,6 @@
         self.staffPickedMimesCloudEnumerator.delegate = self;
         [self.staffPickedMimesCloudEnumerator enumerateUntilEnd:nil];
     }
-    
-    //    [self showHUDForMimeAnswerDownload];
 }
 
 #pragma mark - Helper Methods
@@ -300,9 +305,11 @@
     [self.nv_navigationHeader.btn_guess setUserInteractionEnabled:NO];
     
     // Enumerate for Mimes from friends, recent and staff pick Mimes
-//    [self enumerateMimeAnswers];
+//    [self enumerateMimeAnswersFromFriends];
     [self enumerateRecentMimes];
-//    [self enumerateStaffPickedMimes];
+    [self enumerateStaffPickedMimes];
+    
+    [self showHUDForMimeEnumerators];
     
 }
 
@@ -890,6 +897,32 @@
         
     }
 
+}
+
+#pragma mark - MBProgressHUD Delegate
+-(void)hudWasHidden:(MBProgressHUD *)hud {
+    NSString* activityName = @"Mime_meGuessMenuViewController.hudWasHidden";
+    [self hideProgressBar];
+    
+    UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
+    
+    //    Request* request = [progressView.requests objectAtIndex:0];
+    //    //now we have the request
+    //    NSArray* changedAttributes = request.changedAttributesList;
+    //    //list of all changed attributes
+    //    //we take the first one and base our messaging off that
+    //    NSString* attributeName = [changedAttributes objectAtIndex:0];
+    
+    if (progressView.didSucceed) {
+        //enumeration was sucessful
+        LOG_REQUEST(0, @"%@ Mime and MimeAnswer enumeration was successful", activityName);
+        
+    }
+    else {
+        //enumeration failed
+        LOG_REQUEST(1, @"%@ Mime and MimeAnswer enumeration failure", activityName);
+        
+    }
 }
 
 #pragma mark - ImageManager Delegate Methods
