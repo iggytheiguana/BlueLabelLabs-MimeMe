@@ -22,13 +22,13 @@
 #import "UIImage+UIImageCategory.h"
 #import "Mime_meViewMimeViewController.h"
 #import "Mime_meScrapbookFullTableViewController.h"
+#import "Favorite.h"
 
 
-#define kSENTMIMESFRC @"sentmimesfrc"
-#define kFAVORITEMIMESFRC @"favoritemimesfrc"
-#define kGUESSEDMIMESFRC @"guessedmimesfrc"
+#define kMIMEFRC @"mimefrc"
+
 #define kMIMEID @"mimeid"
-#define kMIMEANSWERID @"mimeanswerid"
+#define kFAVORITEID @"mimeid"
 
 #define kMAXROWS 3
 
@@ -86,6 +86,81 @@
     
 }
 
+- (NSFetchedResultsController*)frc_favoriteMimes {
+    NSString* activityName = @"Mime_meScrapbookMenuViewController.frc_favoriteMimes:";
+    if (__frc_favoriteMimes != nil) {
+        return __frc_favoriteMimes;
+    }
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime_meAppDelegate* app = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:FAVORITE inManagedObjectContext:app.managedObjectContext];
+    
+    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
+    
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    [fetchRequest setEntity:entityDescription];
+    
+    [fetchRequest setFetchBatchSize:(kMAXROWS + 1)];    // We add 1 to find out if the "more" button should be shown
+    
+    NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:resourceContext.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+    
+    controller.delegate = self;
+    self.frc_favoriteMimes = controller;
+    
+    NSError* error = nil;
+    [controller performFetch:&error];
+  	if (error != nil)
+    {
+        LOG_MIME_MESCRAPBOOKMENUVIEWCONTROLLER(1, @"%@Could not create instance of NSFetchedResultsController due to %@", activityName, [error userInfo]);
+    }
+    
+    [controller release];
+    [fetchRequest release];
+    [sortDescriptor release];
+    return __frc_favoriteMimes;
+    
+}
+
+- (NSFetchedResultsController*)frc_guessedMimes {
+    NSString* activityName = @"Mime_meScrapbookMenuViewController.frc_guessedMimes:";
+    if (__frc_guessedMimes != nil) {
+        return __frc_guessedMimes;
+    }
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime_meAppDelegate* app = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:MIME inManagedObjectContext:app.managedObjectContext];
+    
+    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
+    
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    [fetchRequest setEntity:entityDescription];
+    
+    [fetchRequest setFetchBatchSize:(kMAXROWS + 1)];    // We add 1 to find out if the "more" button should be shown
+    
+    NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:resourceContext.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+    
+    controller.delegate = self;
+    self.frc_guessedMimes = controller;
+    
+    NSError* error = nil;
+    [controller performFetch:&error];
+  	if (error != nil)
+    {
+        LOG_MIME_MESCRAPBOOKMENUVIEWCONTROLLER(1, @"%@Could not create instance of NSFetchedResultsController due to %@", activityName, [error userInfo]);
+    }
+    
+    [controller release];
+    [fetchRequest release];
+    [sortDescriptor release];
+    return __frc_guessedMimes;
+    
+}
+
+#pragma mark - Helper Methods
 - (NSString*) getDateStringForMimeDate:(NSDate*)date {
     NSDate* now = [NSDate date];
     NSTimeInterval intervalSinceCreated = [now timeIntervalSinceDate:date];
@@ -172,20 +247,87 @@
     }
     else if (section == 1) {
         // Favorites section
-        count = 0 + 2;  // Add 2 to the count to include 1. Header, and 2. More
+        count = [[self.frc_favoriteMimes fetchedObjects]count] + 2;     // Add 2 to the count to include 1. Header, and 2. More
         rows = MIN(count, kMAXROWS + 2);   // Maximize the number of rows per section
     }
     else {
         // Guessed section
-        count = 0 + 2;  // Add 2 to the count to include 1. Header, and 2. More
+        count = [[self.frc_guessedMimes fetchedObjects]count] + 2;     // Add 2 to the count to include 1. Header, and 2. More
         rows = MIN(count, kMAXROWS + 2);   // Maximize the number of rows per section
     }
     
     return rows;
 }
 
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime *mime;
+    
+    ImageManager* imageManager = [ImageManager instance];
+    NSDictionary* userInfo;
+    
+    if (indexPath.section == 0) {
+        // Sent Mimes section
+        mime = [[self.frc_sentMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+        
+        NSString *wordStr = mime.word;
+        cell.textLabel.text = wordStr;
+        
+        NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
+        cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
+        
+        userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_sentMimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
+    }
+    else if (indexPath.section == 1) {
+        // Favorite Mimes section
+        Favorite *favorite = [[self.frc_favoriteMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+        
+        // Get the Mime object associated with this Favorite
+        mime = (Mime*)[resourceContext resourceWithType:MIME withID:favorite.mimeid];
+        
+        cell.textLabel.text = mime.word;
+        
+        NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
+        cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
+        
+        userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_favoriteMimes, kMIMEFRC, mime.objectid, kFAVORITEID, nil];
+    }
+    else if (indexPath.section == 2) {
+        // Guessed Mimes section
+        mime = [[self.frc_guessedMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+        
+        cell.textLabel.text = mime.word;
+        
+        NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
+        cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
+        
+        userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_guessedMimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
+    }
+    
+    // Set the mime image
+    if (mime.thumbnailurl != nil && ![mime.thumbnailurl isEqualToString:@""]) {
+        Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
+        callback.fireOnMainThread = YES;
+        UIImage* image = [imageManager downloadImage:mime.thumbnailurl withUserInfo:nil atCallback:callback];
+        [callback release];
+        if (image != nil) {
+            
+            cell.imageView.image = [image imageScaledToSize:CGSizeMake(50, 50)];
+        }
+        else {
+            cell.imageView.backgroundColor = [UIColor lightGrayColor];
+            cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(50, 50)];
+        }
+        
+        [self.view setNeedsDisplay];
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSString *CellIdentifier;
+    
     if (indexPath.section == 0) {
         // From Friends section
         
@@ -193,7 +335,7 @@
         
         if (indexPath.row == 0) {
             // Set the header
-            static NSString *CellIdentifier = @"SentHeader";
+            CellIdentifier = @"SentHeader";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
             if (cell == nil) {
@@ -208,7 +350,7 @@
             if (count > 0) {
                 if (indexPath.row > 0 && indexPath.row <= count) {
                     // Set sent mime
-                    static NSString *CellIdentifier = @"SentMime";
+                    CellIdentifier = @"SentMime";
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     if (cell == nil) {
@@ -224,38 +366,13 @@
                         
                     }
                     
-                    Mime *mime = [[self.frc_sentMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
-                    
-                    cell.textLabel.text = mime.word;
-                    
-                    NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
-                    cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
-                    
-                    ImageManager* imageManager = [ImageManager instance];
-                    NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_sentMimes, kSENTMIMESFRC, mime.objectid, kMIMEID, nil];
-                    
-                    if (mime.thumbnailurl != nil && ![mime.thumbnailurl isEqualToString:@""]) {
-                        Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
-                        callback.fireOnMainThread = YES;
-                        UIImage* image = [imageManager downloadImage:mime.thumbnailurl withUserInfo:nil atCallback:callback];
-                        [callback release];
-                        if (image != nil) {
-                            
-                            cell.imageView.image = [image imageScaledToSize:CGSizeMake(50, 50)];
-                        }
-                        else {
-                            cell.imageView.backgroundColor = [UIColor lightGrayColor];
-                            cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(50, 50)];
-                        }
-                        
-                        [self.view setNeedsDisplay];
-                    }
+                    [self configureCell:cell atIndexPath:indexPath];
                     
                     return cell;
                 }
                 else {
                     // Set More row
-                    static NSString *CellIdentifier = @"MoreSentMimes";
+                    CellIdentifier = @"MoreSentMimes";
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     if (cell == nil) {
@@ -276,7 +393,7 @@
             }
             else {
                 // Set no sent mimes row
-                static NSString *CellIdentifier = @"NoSentMimes";
+                CellIdentifier = @"NoSentMimes";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 
                 if (cell == nil) {
@@ -298,12 +415,11 @@
     if (indexPath.section == 1) {
         // Favorite Mimes section
         
-//        NSInteger count = MIN([self.recentArray count], kMAXROWS);    // Maximize the number of mimes to show to 3
-        NSInteger count = 0;
+        NSInteger count = MIN([[self.frc_favoriteMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of mimes to show
         
         if (indexPath.row == 0) {
             // Set the header
-            static NSString *CellIdentifier = @"FavoritesHeader";
+            CellIdentifier = @"FavoritesHeader";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
             if (cell == nil) {
@@ -318,24 +434,29 @@
             if (count > 0) {
                 if (indexPath.row > 0 && indexPath.row <= count) {
                     // Set Favorite mime
-                    static NSString *CellIdentifier = @"FavoriteMime";
+                    CellIdentifier = @"FavoriteMime";
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     if (cell == nil) {
-                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
                         
-//                        cell.textLabel.text = [self.recentArray objectAtIndex:(indexPath.row - 1)];
-                        cell.textLabel.text = @"Favorite Mime";
+                        cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+                        cell.imageView.layer.masksToBounds = YES;
+                        cell.imageView.layer.cornerRadius = 8.0;
+                        cell.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+                        cell.imageView.layer.borderWidth = 1.0;
                         
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         
                     }
                     
+                    [self configureCell:cell atIndexPath:indexPath];
+                    
                     return cell;
                 }
                 else {
                     // Set More row
-                    static NSString *CellIdentifier = @"MoreFavorites";
+                    CellIdentifier = @"MoreFavorites";
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     if (cell == nil) {
@@ -356,7 +477,7 @@
             }
             else {
                 // Set no favorite mimes row
-                static NSString *CellIdentifier = @"NoFavoriteMimes";
+                CellIdentifier = @"NoFavoriteMimes";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 
                 if (cell == nil) {
@@ -376,14 +497,13 @@
         }
     }
     else {
-        // Staff Picks section
+        // Guessed Mimes section
         
-//        NSInteger count = MIN([self.staffPicksArray count], kMAXROWS);    // Maximize the number of mimes to show to 3
-        NSInteger count = 0;
+        NSInteger count = MIN([[self.frc_guessedMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of mimes to show
         
         if (indexPath.row == 0) {
             // Set the header
-            static NSString *CellIdentifier = @"GuessedHeader";
+            CellIdentifier = @"GuessedHeader";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
             if (cell == nil) {
@@ -398,24 +518,29 @@
             if (count > 0) {
                 if (indexPath.row > 0 && indexPath.row <= count) {
                     // Set Guessed mime
-                    static NSString *CellIdentifier = @"GuessedMime";
+                    CellIdentifier = @"GuessedMime";
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     if (cell == nil) {
-                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
                         
-//                        cell.textLabel.text = [self.staffPicksArray objectAtIndex:(indexPath.row - 1)];
-                        cell.textLabel.text = @"Guessed Mime";
+                        cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+                        cell.imageView.layer.masksToBounds = YES;
+                        cell.imageView.layer.cornerRadius = 8.0;
+                        cell.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+                        cell.imageView.layer.borderWidth = 1.0;
                         
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         
                     }
                     
+                    [self configureCell:cell atIndexPath:indexPath];
+                    
                     return cell;
                 }
                 else {
                     // Set More row
-                    static NSString *CellIdentifier = @"MoreGuessedMimes";
+                    CellIdentifier = @"MoreGuessedMimes";
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     
                     if (cell == nil) {
@@ -436,7 +561,7 @@
             }
             else {
                 // Set no guessed mimes row
-                static NSString *CellIdentifier = @"NoGuessedMimes";
+                CellIdentifier = @"NoGuessedMimes";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 
                 if (cell == nil) {
@@ -509,12 +634,12 @@
     }
     else if (indexPath.section == 1) {
         // Favorites section
-        count = 0;
+        count = [[self.frc_favoriteMimes fetchedObjects]count];
         rows = MIN(count, kMAXROWS);
     }
     else {
         // Guessed section
-        count = 0;
+        count = [[self.frc_guessedMimes fetchedObjects]count];
         rows = MIN(count, kMAXROWS);
     }
     
@@ -553,26 +678,47 @@
             [self.navigationController pushViewController:fullTableViewController animated:YES];
         }
     }
-//    else if (indexPath.section == 1) {
-//        // Recent mime selected
-//        NSInteger count = [self.recentArray count];
-//        
-//        if (indexPath.row > 0 && indexPath.row <= count) {
-//            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstance];
-//            
-//            [self.navigationController pushViewController:fullTableViewController animated:YES];
-//        }
-//    }
-//    else {
-//        // Staff Pick mime selected
-//        NSInteger count = [self.staffPicksArray count];
-//        
-//        if (indexPath.row > 0 && indexPath.row <= count) {
-//            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstance];
-//            
-//            [self.navigationController pushViewController:fullTableViewController animated:YES];
-//        }
-//    }
+    else if (indexPath.section == 1) {
+        // Favorite mimes selected
+        NSInteger count = MIN([[self.frc_favoriteMimes fetchedObjects]count], kMAXROWS);
+        
+        if (indexPath.row > 0 && indexPath.row <= count) {
+            
+            Favorite *favorite = [[self.frc_favoriteMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+            
+            // Get the Mime object associated with this Favorite
+            ResourceContext* resourceContext = [ResourceContext instance];
+            Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:favorite.mimeid];
+            
+            // Show the Mime
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            [self.navigationController pushViewController:viewMimeViewController animated:YES];
+        }
+        else {
+            Mime_meScrapbookFullTableViewController *fullTableViewController = [Mime_meScrapbookFullTableViewController createInstance];
+            
+            [self.navigationController pushViewController:fullTableViewController animated:YES];
+        }
+    }
+    else if (indexPath.section == 2) {
+        // Guessed mines selected
+        NSInteger count = MIN([[self.frc_sentMimes fetchedObjects]count], kMAXROWS);
+        
+        if (indexPath.row > 0 && indexPath.row <= count) {
+            
+            Mime *mime = [[self.frc_sentMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+            
+            // Show the Mime
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            [self.navigationController pushViewController:viewMimeViewController animated:YES];
+        }
+        else {
+            Mime_meScrapbookFullTableViewController *fullTableViewController = [Mime_meScrapbookFullTableViewController createInstance];
+            
+            [self.navigationController pushViewController:fullTableViewController animated:YES];
+        }
+    }
+
     
 }
 
@@ -596,32 +742,65 @@
     NSString* activityName = @"Mime_meGuessMenuViewController.onImageDownloadComplete:";
     NSDictionary* userInfo = result.context;
     
-    NSFetchedResultsController *frc = (NSFetchedResultsController *)[userInfo valueForKey:kSENTMIMESFRC];
-    NSNumber* mimeID = [userInfo valueForKey:kMIMEANSWERID];
+    NSFetchedResultsController *frc = (NSFetchedResultsController *)[userInfo valueForKey:kMIMEFRC];
     
     ImageDownloadResponse* response = (ImageDownloadResponse*)result.response;
     
     if ([response.didSucceed boolValue] == YES) {
+        
+        UITableViewCell *cell;
+        
         if (frc == self.frc_sentMimes) {
-            NSInteger count = MIN([[self.frc_sentMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of friends to show
+            
+            NSNumber* mimeAnswerID = [userInfo valueForKey:kMIMEID];
+            
+            NSInteger count = MIN([[self.frc_sentMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of friends mimes to show
             for (int i = 0; i < count; i++) {
-                Mime *mime = [[self.frc_sentMimes fetchedObjects] objectAtIndex:i];
-                if ([mime.objectid isEqualToNumber:mimeID]) {
-                    UITableViewCell *cell = [self.tbl_scrapbook cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:0]];
-                    
-                    //we only draw the image if this view hasnt been repurposed for another photo
-                    LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
-                    
-                    UIImage *image = [image imageScaledToSize:CGSizeMake(50, 50)];
-                    
-                    [cell.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
-                    
-                    [self.view setNeedsDisplay];
+                MimeAnswer *mimeAnswer = [[self.frc_sentMimes fetchedObjects] objectAtIndex:i];
+                if ([mimeAnswer.objectid isEqualToNumber:mimeAnswerID]) {
+                    cell = [self.tbl_scrapbook cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:0]];
                     
                     break;
                 }
             }
         }
+        else if (frc == self.frc_favoriteMimes) {
+            
+            NSNumber* favoriteID = [userInfo valueForKey:kFAVORITEID];
+            
+            NSInteger count = MIN([[self.frc_favoriteMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of recent mimes to show
+            for (int i = 0; i < count; i++) {
+                Favorite *favorite = [[self.frc_favoriteMimes fetchedObjects] objectAtIndex:i];
+                if ([favorite.objectid isEqualToNumber:favoriteID]) {
+                    cell = [self.tbl_scrapbook cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:1]];
+                    
+                    break;
+                }
+            }
+        }
+        else if (frc == self.frc_guessedMimes) {
+            
+            NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
+            
+            NSInteger count = MIN([[self.frc_guessedMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of recent mimes to show
+            for (int i = 0; i < count; i++) {
+                Mime *mime = [[self.frc_guessedMimes fetchedObjects] objectAtIndex:i];
+                if ([mime.objectid isEqualToNumber:mimeID]) {
+                    cell = [self.tbl_scrapbook cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:2]];
+                    
+                    break;
+                }
+            }
+        }
+        
+        //we only draw the image if this view hasnt been repurposed for another photo
+        LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
+        
+        UIImage *image = [response.image imageScaledToSize:CGSizeMake(50, 50)];
+        
+        [cell.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
+        
+        [self.view setNeedsDisplay];
     }    
 }
 

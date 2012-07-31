@@ -26,6 +26,7 @@
 #import "MimeType.h"
 
 #define kMIMEFRC @"mimefrc"
+
 #define kMIMEANSWERID @"mimeanswerid"
 #define kMIMEID @"mimeid"
 

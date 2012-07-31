@@ -9,6 +9,10 @@
 #import "Resource.h"
 
 @interface Favorite : Resource
+
 @property (nonatomic,retain) NSNumber* userid;
 @property (nonatomic,retain) NSNumber* mimeid;
+
++ (Favorite*)createFavoriteWithMimeID:(NSNumber *)mimeID;
+
 @end

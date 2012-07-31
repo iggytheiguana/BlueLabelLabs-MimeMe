@@ -18,6 +18,7 @@
 #import "ViewMimeCase.h"
 #import "DateTimeHelper.h"
 #import "Mime_meAppDelegate.h"
+#import "Favorite.h"
 
 #define kMIMEID @"mimeid"
 
@@ -150,6 +151,12 @@
     self.v_confirmationView = nil;
     self.v_answerView = nil;
 
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [[UIDevice currentDevice] setOrientation:UIInterfaceOrientationPortrait];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -294,6 +301,12 @@
     else if (self.viewMimeCase == kSCRAPBOOKMIME) {
         [self onBackButtonPressed:nil];
     }
+}
+
+- (IBAction) onFavoriteButtonPressed:(id)sender {
+    // Create  new Favorite object for this mime
+    
+    [Favorite createFavoriteWithMimeID:self.mimeID];
 }
 
 #pragma mark Mime_meUIAnswerView Delegate Methods

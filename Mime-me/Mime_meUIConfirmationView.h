@@ -13,6 +13,7 @@
 
 - (IBAction) onCloseButtonPressed:(id)sender;
 - (IBAction) onOkButtonPressed:(id)sender;
+- (IBAction) onFavoriteButtonPressed:(id)sender;
 
 @end
 
@@ -31,7 +32,7 @@
     UIButton        *m_btn_facebook;
     UIButton        *m_btn_twitter;
     UIButton        *m_btn_email;
-    UIButton        *m_btn_scrapbook;
+    UIButton        *m_btn_favorite;
     
 }
 
@@ -49,7 +50,7 @@
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_facebook;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_twitter;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_email;
-@property (nonatomic, retain) IBOutlet  UIButton        *btn_scrapbook;
+@property (nonatomic, retain) IBOutlet  UIButton        *btn_favorite;
 
 - (void)show;
 

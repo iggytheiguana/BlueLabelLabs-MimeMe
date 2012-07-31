@@ -21,7 +21,7 @@
 @synthesize btn_facebook        = m_btn_facebook;
 @synthesize btn_twitter         = m_btn_twitter;
 @synthesize btn_email           = m_btn_email;
-@synthesize btn_scrapbook       = m_btn_scrapbook;
+@synthesize btn_favorite       = m_btn_favorite;
 
 #pragma mark - Properties
 - (id)delegate {
@@ -84,9 +84,9 @@
         [self.btn_email.layer setCornerRadius:3.0f];
         [self.btn_email.layer setOpaque:NO];
         [self.btn_email.layer setMasksToBounds:YES];
-        [self.btn_scrapbook.layer setCornerRadius:3.0f];
-        [self.btn_scrapbook.layer setOpaque:NO];
-        [self.btn_scrapbook.layer setMasksToBounds:YES];
+        [self.btn_favorite.layer setCornerRadius:3.0f];
+        [self.btn_favorite.layer setOpaque:NO];
+        [self.btn_favorite.layer setMasksToBounds:YES];
         
         [self addSubview:self.view];
         
@@ -108,7 +108,7 @@
     self.btn_facebook = nil;
     self.btn_twitter = nil;
     self.btn_email = nil;
-    self.btn_scrapbook = nil;
+    self.btn_favorite = nil;
     
     [super dealloc];
 }
@@ -175,6 +175,12 @@
 
 - (IBAction) onOkButtonPressed:(id)sender {
     [self.delegate onOkButtonPressed:sender];
+}
+
+- (IBAction) onFavoriteButtonPressed:(id)sender {
+    [self.btn_favorite setSelected:YES];
+    
+    [self.delegate onFavoriteButtonPressed:sender];
 }
 
 #pragma mark - Statics
