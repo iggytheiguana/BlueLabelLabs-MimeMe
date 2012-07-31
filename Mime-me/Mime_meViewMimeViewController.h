@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
 #import "BaseViewController.h"
 #import "Mime_meUIAnswerView.h"
 #import "Mime_meUIConfirmationView.h"
 #import "ViewMimeCase.h"
 
-@interface Mime_meViewMimeViewController : BaseViewController < Mime_meUIConfirmationViewDelgate, Mime_meUIAnswerViewDelgate, UIProgressHUDViewDelegate > {
+@interface Mime_meViewMimeViewController : BaseViewController < Mime_meUIConfirmationViewDelgate, Mime_meUIAnswerViewDelgate, UIProgressHUDViewDelegate, MFMailComposeViewControllerDelegate > {
     NSNumber        *m_mimeID;
     NSNumber        *m_mimeAnswerID;
     CGSize          m_imageSize;

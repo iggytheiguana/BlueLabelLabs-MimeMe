@@ -14,6 +14,7 @@
 - (IBAction) onCloseButtonPressed:(id)sender;
 - (IBAction) onOkButtonPressed:(id)sender;
 - (IBAction) onFavoriteButtonPressed:(id)sender;
+- (IBAction) onEmailButtonPressed:(id)sender;
 
 @end
 

@@ -183,6 +183,10 @@
     [self.delegate onFavoriteButtonPressed:sender];
 }
 
+- (IBAction) onEmailButtonPressed:(id)sender {
+    [self.delegate onEmailButtonPressed:sender];
+}
+
 #pragma mark - Statics
 + (Mime_meUIConfirmationView*)createInstanceWithFrame:(CGRect)frame withTitle:(NSString *)title withSubtitle:(NSString *)subtitle {
     Mime_meUIConfirmationView* instance = [[Mime_meUIConfirmationView alloc]initWithFrame:(CGRect)frame];

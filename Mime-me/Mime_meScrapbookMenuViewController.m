@@ -669,7 +669,7 @@
             Mime *mime = [[self.frc_sentMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
             
             // Show the Mime
-            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kSCRAPBOOKMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
             [self.navigationController pushViewController:viewMimeViewController animated:YES];
         }
         else {
@@ -691,7 +691,7 @@
             Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:favorite.mimeid];
             
             // Show the Mime
-            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kSCRAPBOOKMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
             [self.navigationController pushViewController:viewMimeViewController animated:YES];
         }
         else {
@@ -709,7 +709,7 @@
             Mime *mime = [[self.frc_sentMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
             
             // Show the Mime
-            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kSCRAPBOOKMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
             [self.navigationController pushViewController:viewMimeViewController animated:YES];
         }
         else {

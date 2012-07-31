@@ -136,37 +136,12 @@
     // Display the Mime photo onto the image view
     [self showMimePhoto];
     
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
     
-    self.iv_photo = nil;
-    self.iv_logo = nil;
-    self.btn_back = nil;
-    self.v_background = nil;
-    self.v_confirmationView = nil;
-    self.v_answerView = nil;
-
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [[UIDevice currentDevice] setOrientation:UIInterfaceOrientationPortrait];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
+    // Set up the view based on the case
     ResourceContext* resourceContext = [ResourceContext instance];
     Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
     MimeAnswer *mimeAnswer = (MimeAnswer*)[resourceContext resourceWithType:MIMEANSWER withID:self.mimeAnswerID];
     
-    // Set up the view based on the case
     if (self.viewMimeCase == kSENTMIME) {
         NSString *title = @"Mime sent";
         NSString *subtitle = [NSString stringWithFormat:@"You earned %d gems!", 5];
@@ -176,8 +151,6 @@
         self.v_confirmationView.hidden = YES;
         self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self.view addSubview:self.v_confirmationView];
-        
-        [self showConfirmationView];
         
     }
     else if (self.viewMimeCase == kANSWERMIME) {
@@ -213,7 +186,106 @@
         self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self.view addSubview:self.v_confirmationView];
         
+        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withTitle:from withWord:mime.word];
+        self.v_answerView.delegate = self;
+        self.v_answerView.tf_answer.text = mime.word;
+        self.v_answerView.tf_answer.enabled = NO;
+        self.v_answerView.btn_clue.enabled = NO;
+        self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        [self.view addSubview:self.v_answerView];
+        
     }
+    
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+    
+    self.iv_photo = nil;
+    self.iv_logo = nil;
+    self.btn_back = nil;
+    self.v_background = nil;
+    self.v_confirmationView = nil;
+    self.v_answerView = nil;
+
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [[UIDevice currentDevice] setOrientation:UIInterfaceOrientationPortrait];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+//    ResourceContext* resourceContext = [ResourceContext instance];
+//    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+//    MimeAnswer *mimeAnswer = (MimeAnswer*)[resourceContext resourceWithType:MIMEANSWER withID:self.mimeAnswerID];
+    
+    // Set up the view based on the case
+    if (self.viewMimeCase == kSENTMIME) {
+        
+        [self showConfirmationView];
+        
+    }
+    else if (self.viewMimeCase == kANSWERMIME) {
+        
+    }
+    else if (self.viewMimeCase == kSCRAPBOOKMIME) {
+        
+    }
+    
+//    if (self.viewMimeCase == kSENTMIME && self.v_confirmationView) {
+//        NSString *title = @"Mime sent";
+//        NSString *subtitle = [NSString stringWithFormat:@"You earned %d gems!", 5];
+//        
+//        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:title withSubtitle:subtitle];
+//        self.v_confirmationView.delegate = self;
+//        self.v_confirmationView.hidden = YES;
+//        self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//        [self.view addSubview:self.v_confirmationView];
+//        
+//        [self showConfirmationView];
+//        
+//    }
+//    else if (self.viewMimeCase == kANSWERMIME) {
+//        int pointsAwarded = [mimeAnswer.pointsawarded intValue];
+//        NSString *title = @"Congratulations!";
+//        NSString *subtitle = [NSString stringWithFormat:@"You guessed right and earned %d gems", pointsAwarded];
+//        
+//        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:title withSubtitle:subtitle];
+//        self.v_confirmationView.delegate = self;
+//        self.v_confirmationView.hidden = YES;
+//        self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//        
+//        NSString *from = [NSString stringWithFormat:@"from %@", mime.creatorname];
+//        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withTitle:from withWord:mime.word];
+//        self.v_answerView.delegate = self;
+//        self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+//        [self.view addSubview:self.v_answerView];
+//        
+//        // Update the view count on this Mime
+//        NSUInteger numTimesViewed = [mime.numberoftimesviewed integerValue];
+//        mime.numberoftimesviewed = [NSNumber numberWithInteger:(numTimesViewed + 1)];
+//        
+//    }
+//    else if (self.viewMimeCase == kSCRAPBOOKMIME) {
+//        
+//        NSString *from = [NSString stringWithFormat:@"from %@", mime.creatorname];
+//        NSDate  *dateCreated = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
+//        NSString *dateCreatedStr = [DateTimeHelper formatMediumDate:dateCreated];
+//        
+//        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:from withSubtitle:dateCreatedStr];
+//        self.v_confirmationView.delegate = self;
+//        self.v_confirmationView.hidden = YES;
+//        self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//        [self.view addSubview:self.v_confirmationView];
+//        
+//    }
     
     // Adjust layout based on orientation
 //    [self didRotate];
@@ -304,9 +376,32 @@
 }
 
 - (IBAction) onFavoriteButtonPressed:(id)sender {
-    // Create  new Favorite object for this mime
+    // Create new Favorite object for this mime
     
     [Favorite createFavoriteWithMimeID:self.mimeID];
+}
+
+- (void)composeShareEmail {
+    // Get version information about the app and phone to prepopulate in the email
+    NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSString* appName = [infoDict objectForKey:@"CFBundleDisplayName"];
+    
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+    picker.mailComposeDelegate = self;
+    
+    // Set the email subject
+    [picker setSubject:[NSString stringWithFormat:@"Check out my mime on %@!", appName]];
+    
+    NSString *messageHeader = [NSString stringWithFormat:@"I'm playing this new game, %@, on my iPhone. Its so much fun. Check out my mime and try to guess the right answer!<br><br>My username is %@.", appName, self.loggedInUser.username];
+    [picker setMessageBody:messageHeader isHTML:YES];
+    
+    // Present the mail composition interface
+    [self presentModalViewController:picker animated:YES];
+    [picker release]; // Can safely release the controller now.
+}
+
+- (IBAction) onEmailButtonPressed:(id)sender {
+    [self composeShareEmail];
 }
 
 #pragma mark Mime_meUIAnswerView Delegate Methods
@@ -382,6 +477,15 @@
     // Flag that the user did use a hint.
     // We will update the didUseHint property on the MimeAnswer object at save
     self.didUseHint = YES;
+}
+
+#pragma mark - MailComposeController Delegate
+// The mail compose view controller delegate method
+- (void)mailComposeController:(MFMailComposeViewController *)controller
+          didFinishWithResult:(MFMailComposeResult)result
+                        error:(NSError *)error
+{
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark -  MBProgressHUD Delegate

@@ -205,7 +205,6 @@
 								<string key="NSFrame">{{20, 131}, {260, 37}}</string>
 								<reference key="NSSuperview" ref="191373211"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -364,11 +363,11 @@
 									<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
 								</object>
 								<reference key="IBUINormalTitleShadowColor" ref="443830625"/>
-								<object class="NSCustomResource" key="IBUIHighlightedImage" id="308579509">
+								<object class="NSCustomResource" key="IBUIHighlightedImage" id="735267953">
 									<string key="NSClassName">NSImage</string>
 									<string key="NSResourceName">icon-favorite-yellow.png</string>
 								</object>
-								<reference key="IBUISelectedImage" ref="308579509"/>
+								<reference key="IBUISelectedImage" ref="735267953"/>
 								<object class="NSCustomResource" key="IBUINormalImage">
 									<string key="NSClassName">NSImage</string>
 									<string key="NSResourceName">icon-favorite.png</string>
@@ -515,6 +514,15 @@
 						<int key="IBEventType">7</int>
 					</object>
 					<int key="connectionID">23</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">onEmailButtonPressed:</string>
+						<reference key="source" ref="149791589"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">35</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
@@ -669,7 +677,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">34</int>
+			<int key="maxID">35</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
