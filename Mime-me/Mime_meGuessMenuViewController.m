@@ -885,7 +885,7 @@
                 withUserInfo:(NSDictionary *)userInfo
 {
     
-//    [self hideProgressBar];
+    [self hideProgressBar];
     
     if (enumerator == self.mimeAnswersCloudEnumerator) {
         
