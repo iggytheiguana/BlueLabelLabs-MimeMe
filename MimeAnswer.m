@@ -43,7 +43,7 @@
     }
     
     retVal.mimeid = mimeID;
-    retVal.targetuserid = [targetUserID stringValue];
+    retVal.targetuserid = targetUserID;
     
     User *targetUser = (User*)[resourceContext resourceWithType:USER withID:targetUserID];
     if (targetUser != nil) {

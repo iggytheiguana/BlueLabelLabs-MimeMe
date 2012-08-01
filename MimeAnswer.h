@@ -18,7 +18,7 @@
 @property (nonatomic,retain) NSNumber* state;
 @property (nonatomic,retain) NSString* targetemail;
 @property (nonatomic,retain) NSString* targetfacebookid;
-@property (nonatomic,retain) NSString* targetuserid;
+@property (nonatomic,retain) NSNumber* targetuserid;
 @property (nonatomic,retain) NSNumber* issentbyfriend;
 @property (nonatomic,retain) NSString* targetname;
 

@@ -306,7 +306,7 @@
     [self.nv_navigationHeader.btn_guess setUserInteractionEnabled:NO];
     
     // Enumerate for Mimes from friends, recent and staff pick Mimes
-//    [self enumerateMimeAnswersFromFriends];
+   [self enumerateMimeAnswersFromFriends];
     [self enumerateRecentMimes];
     [self enumerateStaffPickedMimes];
     
