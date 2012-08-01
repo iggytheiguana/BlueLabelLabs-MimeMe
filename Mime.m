@@ -25,6 +25,8 @@
 @dynamic wordid;
 @dynamic ispublic;
 @dynamic isstaffpick;
+@dynamic hasanswered;
+@dynamic isfavorite;
 
 #pragma mark - Static Initializers
 //creates a Mime object

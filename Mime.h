@@ -23,6 +23,8 @@
 @property (nonatomic,retain) NSNumber* wordid;
 @property (nonatomic,retain) NSNumber* ispublic;
 @property (nonatomic,retain) NSNumber* isstaffpick;
+@property (nonatomic,retain) NSNumber* isfavorite;
+@property (nonatomic,retain) NSNumber* hasanswered;
 
 + (Mime*)createMimeWithWordID:(NSNumber *)wordID
                     withImage:(UIImage *)image

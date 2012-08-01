@@ -107,7 +107,9 @@ insertIntoResourceContext:(ResourceContext *)context
     
     //we mark hasopened, hasvoted,as local only attributes
     if (
-        [lowerCaseName isEqualToString:HASVOTED] ) {
+        [lowerCaseName isEqualToString:HASVOTED] ||
+        [lowerCaseName isEqualToString:ISFAVORITE] ||
+        [lowerCaseName isEqualToString:HASANSWERED]) {
         retVal.islocal = [NSNumber numberWithBool:YES];
         retVal.islocked = [NSNumber numberWithBool:YES];
     }

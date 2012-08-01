@@ -138,3 +138,5 @@ NSString* const NUMBEROFTIMESVIEWED     =@"numberoftimesviewed";
 NSString* const MIMEANSWERID            =@"mimeanswerid";
 NSString* const ISSTAFFPICK             =@"isstaffpick";
 NSString* const ISPUBLIC                =@"ispublic";
+NSString* const ISFAVORITE              =@"isfavorite";
+NSString* const HASANSWERED             =@"hasanswered";

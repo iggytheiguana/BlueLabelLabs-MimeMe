@@ -147,3 +147,5 @@ extern NSString* const NUMBEROFTIMESVIEWED;
 extern NSString* const MIMEANSWERID;
 extern NSString* const ISSTAFFPICK;
 extern NSString* const ISPUBLIC;
+extern NSString* const ISFAVORITE;
+extern NSString* const HASANSWERED;
