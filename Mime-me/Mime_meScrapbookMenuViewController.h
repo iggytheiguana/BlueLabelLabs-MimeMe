@@ -10,7 +10,7 @@
 #import "BaseViewController.h"
 #import "Mime_meUINavigationHeaderView.h"
 
-@interface Mime_meScrapbookMenuViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate > {
+@interface Mime_meScrapbookMenuViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate, UIProgressHUDViewDelegate > {
     
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
     
@@ -19,12 +19,19 @@
     UITableViewCell     *m_tc_favoritesHeader;
     UITableViewCell     *m_tc_guessedHeader;
     
+    CloudEnumerator     *m_sentMimesCloudEnumerator;
+    CloudEnumerator     *m_favoriteMimesCloudEnumerator;
+    CloudEnumerator     *m_guessedMimeAnswersCloudEnumerator;
     
 }
 
 @property (nonatomic, retain)           NSFetchedResultsController      *frc_sentMimes;
 @property (nonatomic, retain)           NSFetchedResultsController      *frc_favoriteMimes;
-@property (nonatomic, retain)           NSFetchedResultsController      *frc_guessedMimes;
+@property (nonatomic, retain)           NSFetchedResultsController      *frc_guessedMimeAnswers;
+
+@property (nonatomic, retain)           CloudEnumerator                 *sentMimesCloudEnumerator;
+@property (nonatomic, retain)           CloudEnumerator                 *favoriteMimesCloudEnumerator;
+@property (nonatomic, retain)           CloudEnumerator                 *guessedMimeAnswersCloudEnumerator;
 
 @property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
 

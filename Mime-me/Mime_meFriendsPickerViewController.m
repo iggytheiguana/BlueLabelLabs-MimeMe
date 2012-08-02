@@ -62,12 +62,12 @@
     Facebook* facebook = appDelegate.facebook;
     if (facebook.isSessionValid)
     {
-        LOG_MIME_FRIENDLISTTABLEVIEWCONTROLLER(0,@"%@ Beginning to enumerate Facebook friends for user",activityName);
+        LOG_MIME_MEFRIENDLISTTABLEVIEWCONTROLLER(0,@"%@ Beginning to enumerate Facebook friends for user",activityName);
         [facebook requestWithGraphPath:@"me/friends?fields=picture,name,installed" andDelegate:self];
     }
     else {
         //error condition
-        LOG_MIME_FRIENDLISTTABLEVIEWCONTROLLER(1,@"%@ Facebook session is not valid, need reauthentication",activityName);
+        LOG_MIME_MEFRIENDLISTTABLEVIEWCONTROLLER(1,@"%@ Facebook session is not valid, need reauthentication",activityName);
     }
     
     [self showHUDForFacebookFriendsEnumerator];
@@ -563,7 +563,7 @@
     // the copy holds the most recent truth.
     
     for (Contact *contact in self.selectedFriendsArrayCopy) {
-        NSLog(contact.name);
+//        NSLog(contact.name);
         
         // Create a MimeAnswer for friend target
         [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetFacebookID:contact.facebookid withTargetEmail:contact.email withTargetName:contact.name];
@@ -593,7 +593,7 @@
         LOG_REQUEST(0, @"%@ Mime and MimeAnswer creation request was successful", activityName);
         
         // Now show the confirmation share screen
-        Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kSENTMIME withMimeID:self.mimeID withMimeAnswerIDorNil:nil];
+        Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWSENTMIME withMimeID:self.mimeID withMimeAnswerIDorNil:nil];
         [self.navigationController pushViewController:shareViewController animated:YES];
 
         
@@ -614,7 +614,7 @@
     if (result != nil)
     {
         NSArray* friendsList = [(NSDictionary*)result objectForKey:@"data"];
-        LOG_MIME_FRIENDPICKERVIEWCONTROLLER(0,@"%@ Enumerated %d Facebook friends for user",activityName,[friendsList count]);
+        LOG_MIME_MEFRIENDPICKERVIEWCONTROLLER(0,@"%@ Enumerated %d Facebook friends for user",activityName,[friendsList count]);
         
         for (int i = 0; i < [friendsList count];i++)
         {

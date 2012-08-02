@@ -59,6 +59,11 @@
     
     retVal.visibility = [NSNumber numberWithInt:0];
     
+    retVal.ispublic = [NSNumber numberWithBool:NO];
+    retVal.isstaffpick = [NSNumber numberWithBool:NO];
+    retVal.hasanswered = [NSNumber numberWithBool:NO];
+    retVal.isfavorite = [NSNumber numberWithBool:NO];
+    
     return retVal;
 }
 

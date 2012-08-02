@@ -26,6 +26,7 @@
 
 
 #define kMIMEFRC @"mimefrc"
+
 #define kMIMEANSWERID @"mimeanswerid"
 #define kMIMEID @"mimeid"
 
@@ -63,7 +64,7 @@
     NSEntityDescription *entityDescription;
     NSPredicate* predicate;
     
-    if (self.mimeType == kFROMFRIEND) {
+    if (self.mimeType == kFROMFRIENDMIME) {
         entityDescription = [NSEntityDescription entityForName:MIMEANSWER inManagedObjectContext:app.managedObjectContext];
         
         NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
@@ -72,15 +73,15 @@
     else if (self.mimeType == kRECENTMIME) {
         entityDescription = [NSEntityDescription entityForName:MIME inManagedObjectContext:app.managedObjectContext];
         
-//        NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
-        predicate = [NSPredicate predicateWithFormat:@"%K!=%@", CREATORID, self.loggedInUser.objectid];
+        NSNumber* hasAnsweredObj = [NSNumber numberWithBool:NO];
+        predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, HASANSWERED, hasAnsweredObj];
     }
-    else if (self.mimeType == kSTAFFPICK) {
+    else if (self.mimeType == kSTAFFPICKEDMIME) {
         entityDescription = [NSEntityDescription entityForName:MIME inManagedObjectContext:app.managedObjectContext];
         
-//        NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
+        NSNumber* hasAnsweredObj = [NSNumber numberWithBool:NO];
         NSNumber* isStaffPickObj = [NSNumber numberWithBool:YES];
-        predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, ISSTAFFPICK, isStaffPickObj];
+        predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, ISSTAFFPICK, isStaffPickObj, HASANSWERED, hasAnsweredObj];
     }
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
@@ -129,15 +130,15 @@
     else 
     {
         self.mimeCloudEnumerator = nil;
-        NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
         
-        if (self.mimeType == kFROMFRIEND) {
+        if (self.mimeType == kFROMFRIENDMIME) {
+            NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
             self.mimeCloudEnumerator = [CloudEnumerator enumeratorForMimeAnswersWithTarget:self.loggedInUser.objectid withState:unansweredStateObj];
         }
         else if (self.mimeType == kRECENTMIME) {
             self.mimeCloudEnumerator = [CloudEnumerator enumeratorForMostRecentMimes];
         }
-        else if (self.mimeType == kSTAFFPICK) {
+        else if (self.mimeType == kSTAFFPICKEDMIME) {
             self.mimeCloudEnumerator = [CloudEnumerator enumeratorForStaffPickedMimes];
         }
         
@@ -148,6 +149,7 @@
     [self showHUDForMimeEnumerators];
 }
 
+#pragma mark - Helper Methods
 - (NSString*) getDateStringForMimeDate:(NSDate*)date {
     NSDate* now = [NSDate date];
     NSTimeInterval intervalSinceCreated = [now timeIntervalSinceDate:date];
@@ -244,7 +246,7 @@
     ImageManager* imageManager = [ImageManager instance];
     NSDictionary* userInfo;
     
-    if (self.mimeType == kFROMFRIEND) {
+    if (self.mimeType == kFROMFRIENDMIME) {
         // From Friends section
         MimeAnswer *mimeAnswer = [[self.frc_mimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
         
@@ -270,7 +272,7 @@
         
         userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_mimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
     }
-    else if (self.mimeType == kSTAFFPICK) {
+    else if (self.mimeType == kSTAFFPICKEDMIME) {
         // Staff Picked Mimes section
         mime = [[self.frc_mimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
         
@@ -303,17 +305,19 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSString *CellIdentifier;
+    
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             // Set the header
-            NSString *CellIdentifier;
-            if (self.mimeType == kFROMFRIEND) {
+            
+            if (self.mimeType == kFROMFRIENDMIME) {
                 CellIdentifier = @"FromFriends";
             }
             else if (self.mimeType == kRECENTMIME) {
                 CellIdentifier = @"MostRecent";
             }
-            else if (self.mimeType == kSTAFFPICK) {
+            else if (self.mimeType == kSTAFFPICKEDMIME) {
                 CellIdentifier = @"StaffPicks";
             }
             
@@ -321,13 +325,13 @@
             
             if (cell == nil) {
                 
-                if (self.mimeType == kFROMFRIEND) {
+                if (self.mimeType == kFROMFRIENDMIME) {
                     cell = self.tc_friendsHeader;
                 }
                 else if (self.mimeType == kRECENTMIME) {
                     cell = self.tc_recentHeader;
                 }
-                else if (self.mimeType == kSTAFFPICK) {
+                else if (self.mimeType == kSTAFFPICKEDMIME) {
                     cell = self.tc_staffPicksHeader;
                 }
                 
@@ -344,7 +348,7 @@
             
             if (indexPath.row > 0 && indexPath.row <= count) {
                 // Set mime
-                NSString *CellIdentifier = @"Mime";
+                CellIdentifier = @"Mime";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 
                 if (cell == nil) {
@@ -366,19 +370,19 @@
             }
             else {
                 // Set None row
-                NSString *CellIdentifier = @"NoMimes";
+                CellIdentifier = @"NoMimes";
                 UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                 
                 if (cell == nil) {
                     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     
-                    if (self.mimeType == kFROMFRIEND) {
+                    if (self.mimeType == kFROMFRIENDMIME) {
                         cell.textLabel.text = @"No mimes from friends!";
                     }
                     else if (self.mimeType == kRECENTMIME) {
-                        cell.textLabel.text = @"No recent Mimes!";
+                        cell.textLabel.text = @"No recent mimes!";
                     }
-                    else if (self.mimeType == kSTAFFPICK) {
+                    else if (self.mimeType == kSTAFFPICKEDMIME) {
                         cell.textLabel.text = @"No staff picks!";
                     }
                     else {
@@ -399,19 +403,19 @@
     }
     else {
         // Set None row
-        NSString *CellIdentifier = @"NoMimes";
+        CellIdentifier = @"NoMimes";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
             
-            if (self.mimeType == kFROMFRIEND) {
+            if (self.mimeType == kFROMFRIENDMIME) {
                 cell.textLabel.text = @"No mimes from friends!";
             }
             else if (self.mimeType == kRECENTMIME) {
                 cell.textLabel.text = @"No recent Mimes!";
             }
-            else if (self.mimeType == kSTAFFPICK) {
+            else if (self.mimeType == kSTAFFPICKEDMIME) {
                 cell.textLabel.text = @"No staff picks!";
             }
             else {
@@ -490,7 +494,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (self.mimeType == kFROMFRIEND) {
+    if (self.mimeType == kFROMFRIENDMIME) {
         // Friends mime selected
         NSInteger count = [[self.frc_mimes fetchedObjects] count];
         
@@ -499,13 +503,8 @@
             MimeAnswer *mimeAnswer = [[self.frc_mimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
             
             // Show the Mime
-            Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mimeAnswer.mimeid withMimeAnswerIDorNil:mimeAnswer.objectid];
-            [self.navigationController pushViewController:shareViewController animated:YES];
-        }
-        else {
-            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kFROMFRIEND];
-            
-            [self.navigationController pushViewController:fullTableViewController animated:YES];
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWANSWERMIME withMimeID:mimeAnswer.mimeid withMimeAnswerIDorNil:mimeAnswer.objectid];
+            [self.navigationController pushViewController:viewMimeViewController animated:YES];
         }
     }
     else if (self.mimeType == kRECENTMIME) {
@@ -517,16 +516,11 @@
             Mime *mime = [[self.frc_mimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
             
             // Show the Mime
-            Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
-            [self.navigationController pushViewController:shareViewController animated:YES];
-        }
-        else {
-            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kRECENTMIME];
-            
-            [self.navigationController pushViewController:fullTableViewController animated:YES];
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            [self.navigationController pushViewController:viewMimeViewController animated:YES];
         }
     }
-    else if (self.mimeType == kSTAFFPICK) {
+    else if (self.mimeType == kSTAFFPICKEDMIME) {
         // Staff Pick mime selected
         NSInteger count = [[self.frc_mimes fetchedObjects] count];
         
@@ -535,28 +529,22 @@
             Mime *mime = [[self.frc_mimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
             
             // Show the Mime
-            Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
-            [self.navigationController pushViewController:shareViewController animated:YES];
-        }
-        else {
-            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kSTAFFPICK];
-            
-            [self.navigationController pushViewController:fullTableViewController animated:YES];
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            [self.navigationController pushViewController:viewMimeViewController animated:YES];
         }
     }
-    
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate methods
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
-{
-    [self.tbl_mimes beginUpdates];
-}
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    [self.tbl_mimes endUpdates];
-}
+//- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+//{
+//    [self.tbl_mimes beginUpdates];
+//}
+//
+//- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+//{
+//    [self.tbl_mimes endUpdates];
+//}
 
 - (void) controller:(NSFetchedResultsController *)controller 
     didChangeObject:(id)anObject
@@ -566,44 +554,46 @@
     
     NSString* activityName = @"Mime_meGuessFullTableViewController.controller.didChangeObject:";
     
-    UITableView *tableView = self.tbl_mimes;
+//    UITableView *tableView = self.tbl_mimes;
     
     if (type == NSFetchedResultsChangeDelete)
     {
         LOG_MIME_MEGUESSFULLTABLEVIEWCONTROLLER(0,@"%@ Received NSFetechedResultsChangeDelete notification",activityName);
     }
     
-    NSInteger section = 0;
+//    NSInteger section = 0;
     
     if (controller == self.frc_mimes) {
         LOG_MIME_MEGUESSFULLTABLEVIEWCONTROLLER(0, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
         
-        switch(type) {
-                
-            case NSFetchedResultsChangeInsert:
-                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:section]]
-                                 withRowAnimation:UITableViewRowAnimationFade];
-                break;
-                
-            case NSFetchedResultsChangeDelete:
-                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
-                                 withRowAnimation:UITableViewRowAnimationFade];
-                break;
-                
-            case NSFetchedResultsChangeUpdate:
-                [self configureCell:[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
-                        atIndexPath:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]];
-                break;
-                
-            case NSFetchedResultsChangeMove:
-                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
-                                 withRowAnimation:UITableViewRowAnimationFade];
-                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:section]]
-                                 withRowAnimation:UITableViewRowAnimationFade];
-                break;
+        if (indexPath.row < kMAXROWS) {
+//            switch(type) {
+//                    
+//                case NSFetchedResultsChangeInsert:
+//                    [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:section]]
+//                                     withRowAnimation:UITableViewRowAnimationFade];
+//                    break;
+//                    
+//                case NSFetchedResultsChangeDelete:
+//                    [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
+//                                     withRowAnimation:UITableViewRowAnimationFade];
+//                    break;
+//                    
+//                case NSFetchedResultsChangeUpdate:
+//                    [self configureCell:[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
+//                            atIndexPath:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]];
+//                    break;
+//                    
+//                case NSFetchedResultsChangeMove:
+//                    [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
+//                                     withRowAnimation:UITableViewRowAnimationFade];
+//                    [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:section]]
+//                                     withRowAnimation:UITableViewRowAnimationFade];
+//                    break;
+//            }
+            
+            [self.tbl_mimes reloadData];
         }
-        
-//        [self.tbl_mimes reloadData];
     }
     else {
         LOG_MIME_MEGUESSFULLTABLEVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController that isnt mine. %p", activityName, &controller);
@@ -662,7 +652,7 @@
         
         UITableViewCell *cell;
         
-        if (self.mimeType == kFROMFRIEND) {
+        if (self.mimeType == kFROMFRIENDMIME) {
             
             NSNumber* mimeAnswerID = [userInfo valueForKey:kMIMEANSWERID];
             
@@ -690,7 +680,7 @@
                 }
             }
         }
-        else if (self.mimeType == kSTAFFPICK) {
+        else if (self.mimeType == kSTAFFPICKEDMIME) {
             
             NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
             

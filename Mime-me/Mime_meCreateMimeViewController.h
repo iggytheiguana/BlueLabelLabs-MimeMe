@@ -55,13 +55,6 @@
 
 @property (nonatomic, retain)           UICameraActionSheet             *cameraActionSheet;
 
-- (IBAction) onHomeButtonPressed:(id)sender;
-
-- (IBAction) onMimeButtonPressed:(id)sender;
-- (IBAction) onGuessButtonPressed:(id)sender;
-- (IBAction) onScrapbookButtonPressed:(id)sender;
-- (IBAction) onSettingsButtonPressed:(id)sender;
-
 - (IBAction) onMoreWordsButtonPressed:(id)sender;
 - (IBAction) onMakeWordButtonPressed:(id)sender;
 

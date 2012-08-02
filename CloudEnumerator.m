@@ -618,6 +618,7 @@ static NSLock* _lock; //lock used to synchronize the processing of enumeration r
     return enumerator;
 
 }
+
 //
 //+ (CloudEnumerator*) enumeratorForFollowers:(NSNumber *)userid
 //{

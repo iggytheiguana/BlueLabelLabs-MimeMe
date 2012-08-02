@@ -61,8 +61,9 @@
 #define LOG_MIME_MEGUESSMENUVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_meguessmenuviewvontroller",level,__VA_ARGS__)
 #define LOG_MIME_MEGUESSFULLTABLEVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_meguessfulltableviewvontroller",level,__VA_ARGS__)
 #define LOG_MIME_MESCRAPBOOKMENUVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_mescrapbookmenuviewvontroller",level,__VA_ARGS__)
-#define LOG_MIME_FRIENDPICKERVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_friendpickerviewvontroller",level,__VA_ARGS__)
-#define LOG_MIME_FRIENDLISTTABLEVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_friendlisttableviewvontroller",level,__VA_ARGS__)
+#define LOG_MIME_MEFRIENDPICKERVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_mefriendpickerviewvontroller",level,__VA_ARGS__)
+#define LOG_MIME_MEFRIENDLISTTABLEVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_friendlisttableviewvontroller",level,__VA_ARGS__)
+#define LOG_MIME_MESCRAPBOOKFULLTABLEVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_scrapbookfulltableviewvontroller",level,__VA_ARGS__)
 
 
 

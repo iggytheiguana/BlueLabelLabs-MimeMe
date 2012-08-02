@@ -37,17 +37,6 @@
 
 @property (nonatomic, assign)           NSInteger           mimeType;
 
-
-
-- (IBAction) onHomeButtonPressed:(id)sender;
-
-- (IBAction) onMimeButtonPressed:(id)sender;
-- (IBAction) onGuessButtonPressed:(id)sender;
-- (IBAction) onScrapbookButtonPressed:(id)sender;
-
-- (IBAction) onSettingsButtonPressed:(id)sender;
-- (IBAction) onBackButtonPressed:(id)sender;
-
 + (Mime_meGuessFullTableViewController*)createInstanceForMimeType:(NSInteger)mimeType;
 
 

@@ -15,6 +15,7 @@
 #import "Attributes.h"
 #import "Macros.h"
 #import "Mime.h"
+#import "MimeType.h"
 #import "MimeAnswer.h"
 #import "ImageManager.h"
 #import "ImageDownloadResponse.h"
@@ -23,12 +24,14 @@
 #import "Mime_meViewMimeViewController.h"
 #import "Mime_meScrapbookFullTableViewController.h"
 #import "Favorite.h"
+#import "MimeAnswerState.h"
 
 
 #define kMIMEFRC @"mimefrc"
 
 #define kMIMEID @"mimeid"
-#define kFAVORITEID @"mimeid"
+#define kMIMEANSWERID @"mimeanswerid"
+#define kFAVORITEID @"favoriteid"
 
 #define kMAXROWS 3
 
@@ -39,7 +42,11 @@
 @implementation Mime_meScrapbookMenuViewController
 @synthesize frc_sentMimes           = __frc_sentMimes;
 @synthesize frc_favoriteMimes       = __frc_favoriteMimes;
-@synthesize frc_guessedMimes        = __frc_guessedMimes;
+@synthesize frc_guessedMimeAnswers  = __frc_guessedMimeAnswers;
+
+@synthesize sentMimesCloudEnumerator            = m_sentMimesCloudEnumerator;
+@synthesize favoriteMimesCloudEnumerator        = m_favoriteMimesCloudEnumerator;
+@synthesize guessedMimeAnswersCloudEnumerator   = m_guessedMimeAnswersCloudEnumerator;
 
 @synthesize nv_navigationHeader     = m_nv_navigationHeader;
 @synthesize tbl_scrapbook           = m_tbl_scrapbook;
@@ -62,6 +69,9 @@
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K=%@", CREATORID, self.loggedInUser.objectid];
+    
+    [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     [fetchRequest setEntity:entityDescription];
     
@@ -99,6 +109,9 @@
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K=%@", USERID, self.loggedInUser.objectid];
+    
+    [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     [fetchRequest setEntity:entityDescription];
     
@@ -123,19 +136,23 @@
     
 }
 
-- (NSFetchedResultsController*)frc_guessedMimes {
+- (NSFetchedResultsController*)frc_guessedMimeAnswers {
     NSString* activityName = @"Mime_meScrapbookMenuViewController.frc_guessedMimes:";
-    if (__frc_guessedMimes != nil) {
-        return __frc_guessedMimes;
+    if (__frc_guessedMimeAnswers != nil) {
+        return __frc_guessedMimeAnswers;
     }
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     ResourceContext* resourceContext = [ResourceContext instance];
     Mime_meAppDelegate* app = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:MIME inManagedObjectContext:app.managedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:MIMEANSWER inManagedObjectContext:app.managedObjectContext];
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
+    NSNumber* answeredStateObj = [NSNumber numberWithInt:kANSWERED];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K=%@ AND %K=%@", TARGETUSERID, self.loggedInUser.objectid, STATE, answeredStateObj];
+    
+    [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     [fetchRequest setEntity:entityDescription];
     
@@ -144,7 +161,7 @@
     NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:resourceContext.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
     
     controller.delegate = self;
-    self.frc_guessedMimes = controller;
+    self.frc_guessedMimeAnswers = controller;
     
     NSError* error = nil;
     [controller performFetch:&error];
@@ -156,8 +173,61 @@
     [controller release];
     [fetchRequest release];
     [sortDescriptor release];
-    return __frc_guessedMimes;
+    return __frc_guessedMimeAnswers;
     
+}
+
+#pragma mark - Enumerators
+- (void)showHUDForMimeEnumerators {
+    Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    UIProgressHUDView* progressView = appDelegate.progressView;
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+    progressView.delegate = self;
+    
+    NSString* message = @"Updating...";
+    [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
+    
+}
+
+- (void) enumerateSentMimes {    
+    if (self.sentMimesCloudEnumerator != nil) {
+        [self.sentMimesCloudEnumerator enumerateUntilEnd:nil];
+    }
+    else 
+    {
+        self.sentMimesCloudEnumerator = nil;
+        // TODO: Change enumerator to enumerator for sent mimes
+        self.sentMimesCloudEnumerator = [CloudEnumerator enumeratorForMostRecentMimes];
+        self.sentMimesCloudEnumerator.delegate = self;
+        [self.sentMimesCloudEnumerator enumerateUntilEnd:nil];
+    }
+}
+
+- (void) enumerateFavoriteMimes {    
+    if (self.favoriteMimesCloudEnumerator != nil) {
+        [self.favoriteMimesCloudEnumerator enumerateUntilEnd:nil];
+    }
+    else 
+    {
+        self.favoriteMimesCloudEnumerator = nil;
+        self.favoriteMimesCloudEnumerator = [CloudEnumerator enumeratorForFavoriteMimes:self.loggedInUser.objectid];
+        self.favoriteMimesCloudEnumerator.delegate = self;
+        [self.favoriteMimesCloudEnumerator enumerateUntilEnd:nil];
+    }
+}
+
+- (void) enumerateGuessedMimes {    
+    if (self.guessedMimeAnswersCloudEnumerator != nil) {
+        [self.guessedMimeAnswersCloudEnumerator enumerateUntilEnd:nil];
+    }
+    else 
+    {
+        self.guessedMimeAnswersCloudEnumerator = nil;
+        NSNumber* answeredStateObj = [NSNumber numberWithInt:kANSWERED];
+        self.guessedMimeAnswersCloudEnumerator = [CloudEnumerator enumeratorForMimeAnswersWithTarget:self.loggedInUser.objectid withState:answeredStateObj];
+        self.guessedMimeAnswersCloudEnumerator.delegate = self;
+        [self.guessedMimeAnswersCloudEnumerator enumerateUntilEnd:nil];
+    }
 }
 
 #pragma mark - Helper Methods
@@ -222,6 +292,12 @@
     [self.nv_navigationHeader.btn_scrapbook setHighlighted:YES];
     [self.nv_navigationHeader.btn_scrapbook setUserInteractionEnabled:NO];
     
+    // Enumerate for Mimes from friends, recent and staff pick Mimes
+    [self enumerateSentMimes];
+    [self enumerateFavoriteMimes];
+    [self enumerateGuessedMimes];
+    
+    [self showHUDForMimeEnumerators];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -252,7 +328,7 @@
     }
     else {
         // Guessed section
-        count = [[self.frc_guessedMimes fetchedObjects]count] + 2;     // Add 2 to the count to include 1. Header, and 2. More
+        count = [[self.frc_guessedMimeAnswers fetchedObjects]count] + 2;     // Add 2 to the count to include 1. Header, and 2. More
         rows = MIN(count, kMAXROWS + 2);   // Maximize the number of rows per section
     }
     
@@ -295,14 +371,17 @@
     }
     else if (indexPath.section == 2) {
         // Guessed Mimes section
-        mime = [[self.frc_guessedMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+        MimeAnswer *mimeAnswer = [[self.frc_guessedMimeAnswers fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+        
+        // Get the Mime object associated with this MimeAnswer
+        mime = (Mime*)[resourceContext resourceWithType:MIME withID:mimeAnswer.mimeid];
         
         cell.textLabel.text = mime.word;
         
         NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
         cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
         
-        userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_guessedMimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
+        userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_guessedMimeAnswers, kMIMEFRC, mimeAnswer.objectid, kMIMEANSWERID, nil];
     }
     
     // Set the mime image
@@ -499,7 +578,7 @@
     else {
         // Guessed Mimes section
         
-        NSInteger count = MIN([[self.frc_guessedMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of mimes to show
+        NSInteger count = MIN([[self.frc_guessedMimeAnswers fetchedObjects]count], kMAXROWS);    // Maximize the number of mimes to show
         
         if (indexPath.row == 0) {
             // Set the header
@@ -639,7 +718,7 @@
     }
     else {
         // Guessed section
-        count = [[self.frc_guessedMimes fetchedObjects]count];
+        count = [[self.frc_guessedMimeAnswers fetchedObjects]count];
         rows = MIN(count, kMAXROWS);
     }
     
@@ -669,11 +748,11 @@
             Mime *mime = [[self.frc_sentMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
             
             // Show the Mime
-            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kSCRAPBOOKMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWSCRAPBOOKMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
             [self.navigationController pushViewController:viewMimeViewController animated:YES];
         }
         else {
-            Mime_meScrapbookFullTableViewController *fullTableViewController = [Mime_meScrapbookFullTableViewController createInstance];
+            Mime_meScrapbookFullTableViewController *fullTableViewController = [Mime_meScrapbookFullTableViewController createInstanceForMimeType:kSENTMIME];
             
             [self.navigationController pushViewController:fullTableViewController animated:YES];
         }
@@ -686,16 +765,12 @@
             
             Favorite *favorite = [[self.frc_favoriteMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
             
-            // Get the Mime object associated with this Favorite
-            ResourceContext* resourceContext = [ResourceContext instance];
-            Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:favorite.mimeid];
-            
             // Show the Mime
-            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kSCRAPBOOKMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWSCRAPBOOKMIME withMimeID:favorite.mimeid withMimeAnswerIDorNil:nil];
             [self.navigationController pushViewController:viewMimeViewController animated:YES];
         }
         else {
-            Mime_meScrapbookFullTableViewController *fullTableViewController = [Mime_meScrapbookFullTableViewController createInstance];
+            Mime_meScrapbookFullTableViewController *fullTableViewController = [Mime_meScrapbookFullTableViewController createInstanceForMimeType:kFAVORITEMIME];
             
             [self.navigationController pushViewController:fullTableViewController animated:YES];
         }
@@ -706,14 +781,14 @@
         
         if (indexPath.row > 0 && indexPath.row <= count) {
             
-            Mime *mime = [[self.frc_sentMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+            MimeAnswer *mimeAnswer = [[self.frc_guessedMimeAnswers fetchedObjects] objectAtIndex:(indexPath.row - 1)];
             
             // Show the Mime
-            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kSCRAPBOOKMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWSCRAPBOOKMIME withMimeID:mimeAnswer.mimeid withMimeAnswerIDorNil:mimeAnswer.objectid];
             [self.navigationController pushViewController:viewMimeViewController animated:YES];
         }
         else {
-            Mime_meScrapbookFullTableViewController *fullTableViewController = [Mime_meScrapbookFullTableViewController createInstance];
+            Mime_meScrapbookFullTableViewController *fullTableViewController = [Mime_meScrapbookFullTableViewController createInstanceForMimeType:kGUESSEDMIME];
             
             [self.navigationController pushViewController:fullTableViewController animated:YES];
         }
@@ -731,10 +806,35 @@
     NSString* activityName = @"Mime_meGuessMenuViewController.controller.didChangeObject:";
     if (controller == self.frc_sentMimes) {
         LOG_MIME_MESCRAPBOOKMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
+        
+        if (indexPath.row < kMAXROWS) {
+            
+            [self.tbl_scrapbook reloadData];
+        }
     }
     else {
         LOG_MIME_MESCRAPBOOKMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController that isnt mine. %p", activityName, &controller);
     }
+}
+
+#pragma mark - CloudEnumeratorDelegate
+- (void) onEnumerateComplete:(CloudEnumerator*)enumerator 
+                 withResults:(NSArray *)results 
+                withUserInfo:(NSDictionary *)userInfo
+{
+    
+    [self hideProgressBar];
+    
+//    if (enumerator == self.sentMimesCloudEnumerator) {
+//        
+//    }
+//    else if (enumerator == self.favoriteMimesCloudEnumerator) {
+//        
+//    }
+//    else if (enumerator == self.guessedMimesCloudEnumerator) {
+//        
+//    }
+    
 }
 
 #pragma mark - ImageManager Delegate Methods
@@ -752,12 +852,12 @@
         
         if (frc == self.frc_sentMimes) {
             
-            NSNumber* mimeAnswerID = [userInfo valueForKey:kMIMEID];
+            NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
             
             NSInteger count = MIN([[self.frc_sentMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of friends mimes to show
             for (int i = 0; i < count; i++) {
                 MimeAnswer *mimeAnswer = [[self.frc_sentMimes fetchedObjects] objectAtIndex:i];
-                if ([mimeAnswer.objectid isEqualToNumber:mimeAnswerID]) {
+                if ([mimeAnswer.objectid isEqualToNumber:mimeID]) {
                     cell = [self.tbl_scrapbook cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:0]];
                     
                     break;
@@ -778,14 +878,14 @@
                 }
             }
         }
-        else if (frc == self.frc_guessedMimes) {
+        else if (frc == self.frc_guessedMimeAnswers) {
             
-            NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
+            NSNumber* mimeAnswerID = [userInfo valueForKey:kMIMEANSWERID];
             
-            NSInteger count = MIN([[self.frc_guessedMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of recent mimes to show
+            NSInteger count = MIN([[self.frc_guessedMimeAnswers fetchedObjects]count], kMAXROWS);    // Maximize the number of recent mimes to show
             for (int i = 0; i < count; i++) {
-                Mime *mime = [[self.frc_guessedMimes fetchedObjects] objectAtIndex:i];
-                if ([mime.objectid isEqualToNumber:mimeID]) {
+                MimeAnswer *mimeAnswer = [[self.frc_guessedMimeAnswers fetchedObjects] objectAtIndex:i];
+                if ([mimeAnswer.objectid isEqualToNumber:mimeAnswerID]) {
                     cell = [self.tbl_scrapbook cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:2]];
                     
                     break;

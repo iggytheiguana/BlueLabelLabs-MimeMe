@@ -10,7 +10,10 @@
 
 
 typedef enum {
-    kFROMFRIEND,
+    kFROMFRIENDMIME,
     kRECENTMIME,
-    kSTAFFPICK
+    kSTAFFPICKEDMIME,
+    kSENTMIME,
+    kFAVORITEMIME,
+    kGUESSEDMIME
 } MimeType;

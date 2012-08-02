@@ -113,8 +113,8 @@
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
-//    NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@", CREATORID, self.loggedInUser.objectid];
+    NSNumber* hasAnsweredObj = [NSNumber numberWithBool:NO];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, HASANSWERED, hasAnsweredObj];
     
     [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -155,9 +155,9 @@
     
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
-//    NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
+    NSNumber* hasAnsweredObj = [NSNumber numberWithBool:NO];
     NSNumber* isStaffPickObj = [NSNumber numberWithBool:YES];
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, ISSTAFFPICK, isStaffPickObj];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, ISSTAFFPICK, isStaffPickObj, HASANSWERED, hasAnsweredObj];
     
     [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -184,7 +184,6 @@
     return __frc_staffPickedMimes;
     
 }
-
 
 #pragma mark - Enumerators
 - (void)showHUDForMimeEnumerators {
@@ -306,7 +305,7 @@
     [self.nv_navigationHeader.btn_guess setUserInteractionEnabled:NO];
     
     // Enumerate for Mimes from friends, recent and staff pick Mimes
-   [self enumerateMimeAnswersFromFriends];
+    [self enumerateMimeAnswersFromFriends];
     [self enumerateRecentMimes];
     [self enumerateStaffPickedMimes];
     
@@ -758,11 +757,11 @@
             MimeAnswer *mimeAnswer = [[self.frc_mimeAnswersFromFriends fetchedObjects] objectAtIndex:(indexPath.row - 1)];
             
             // Show the Mime
-            Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mimeAnswer.mimeid withMimeAnswerIDorNil:mimeAnswer.objectid];
-            [self.navigationController pushViewController:shareViewController animated:YES];
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWANSWERMIME withMimeID:mimeAnswer.mimeid withMimeAnswerIDorNil:mimeAnswer.objectid];
+            [self.navigationController pushViewController:viewMimeViewController animated:YES];
         }
         else {
-            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kFROMFRIEND];
+            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kFROMFRIENDMIME];
             
             [self.navigationController pushViewController:fullTableViewController animated:YES];
         }
@@ -776,8 +775,8 @@
             Mime *mime = [[self.frc_recentMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
             
             // Show the Mime
-            Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
-            [self.navigationController pushViewController:shareViewController animated:YES];
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            [self.navigationController pushViewController:viewMimeViewController animated:YES];
         }
         else {
             Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kRECENTMIME];
@@ -794,11 +793,11 @@
             Mime *mime = [[self.frc_staffPickedMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
             
             // Show the Mime
-            Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
-            [self.navigationController pushViewController:shareViewController animated:YES];
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            [self.navigationController pushViewController:viewMimeViewController animated:YES];
         }
         else {
-            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kSTAFFPICK];
+            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kSTAFFPICKEDMIME];
             
             [self.navigationController pushViewController:fullTableViewController animated:YES];
         }
@@ -807,15 +806,15 @@
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate methods
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
-{
-    [self.tbl_mimes beginUpdates];
-}
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    [self.tbl_mimes endUpdates];
-}
+//- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+//{
+//    [self.tbl_mimes beginUpdates];
+//}
+//
+//- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+//{
+//    [self.tbl_mimes endUpdates];
+//}
 
 - (void) controller:(NSFetchedResultsController *)controller 
     didChangeObject:(id)anObject
@@ -825,55 +824,59 @@
     
     NSString* activityName = @"Mime_meGuessMenuViewController.controller.didChangeObject:";
     
-    UITableView *tableView = self.tbl_mimes;
+//    UITableView *tableView = self.tbl_mimes;
     
     if (type == NSFetchedResultsChangeDelete)
     {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(0,@"%@ Received NSFetechedResultsChangeDelete notification",activityName);
     }
     
-    
-    
-    NSInteger section;
+//    NSInteger section;
+    NSInteger maxNumRows;
     if (controller == self.frc_mimeAnswersFromFriends) {
-        section = 0;
+//        section = 0;
+        maxNumRows = kMAXROWSFRIENDS;
     }
     else if (controller == self.frc_recentMimes) {
-        section = 1;
+//        section = 1;
+        maxNumRows = kMAXROWS;
     }
     else if (controller == self.frc_staffPickedMimes) {
-        section = 2;
+//        section = 2;
+        maxNumRows = kMAXROWS;
     }
     
     if (controller == self.frc_mimeAnswersFromFriends || controller == self.frc_recentMimes || controller == self.frc_staffPickedMimes) {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(0, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
         
-        switch(type) {
-                
-            case NSFetchedResultsChangeInsert:
-                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:section]]
-                                 withRowAnimation:UITableViewRowAnimationFade];
-                break;
-                
-            case NSFetchedResultsChangeDelete:
-                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
-                                 withRowAnimation:UITableViewRowAnimationFade];
-                break;
-                
-            case NSFetchedResultsChangeUpdate:
-                [self configureCell:[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
-                        atIndexPath:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]];
-                break;
-                
-            case NSFetchedResultsChangeMove:
-                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
-                                 withRowAnimation:UITableViewRowAnimationFade];
-                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:section]]
-                                 withRowAnimation:UITableViewRowAnimationFade];
-                break;
+        if (indexPath.row < maxNumRows) {
+//            switch(type) {
+//                    
+//                case NSFetchedResultsChangeInsert:
+//                    [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:section]]
+//                                     withRowAnimation:UITableViewRowAnimationFade];
+//                    break;
+//                    
+//                case NSFetchedResultsChangeDelete:
+//                    [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
+//                                     withRowAnimation:UITableViewRowAnimationFade];
+//                    break;
+//                    
+//                case NSFetchedResultsChangeUpdate:
+//                    [self configureCell:[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
+//                            atIndexPath:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]];
+//                    break;
+//                    
+//                case NSFetchedResultsChangeMove:
+//                    [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:section]]
+//                                     withRowAnimation:UITableViewRowAnimationFade];
+//                    [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:section]]
+//                                     withRowAnimation:UITableViewRowAnimationFade];
+//                    break;
+//            }
+            
+            [self.tbl_mimes reloadData];
         }
-        
-//        [self.tbl_mimes reloadData];
     }
     else {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController that isnt mine. %p", activityName, &controller);
@@ -888,15 +891,15 @@
     
     [self hideProgressBar];
     
-    if (enumerator == self.mimeAnswersCloudEnumerator) {
-        
-    }
-    else if (enumerator == self.recentMimesCloudEnumerator) {
-        
-    }
-    else if (enumerator == self.staffPickedMimesCloudEnumerator) {
-        
-    }
+//    if (enumerator == self.mimeAnswersCloudEnumerator) {
+//        
+//    }
+//    else if (enumerator == self.recentMimesCloudEnumerator) {
+//        
+//    }
+//    else if (enumerator == self.staffPickedMimesCloudEnumerator) {
+//        
+//    }
 
 }
 

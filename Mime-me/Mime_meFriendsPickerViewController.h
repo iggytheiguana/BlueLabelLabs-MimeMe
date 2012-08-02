@@ -44,8 +44,6 @@
 @property (nonatomic, retain)           NSMutableArray      *selectedFriendsArray;
 @property (nonatomic, retain)           NSMutableArray      *selectedFriendsArrayCopy;
 
-- (IBAction) onHomeButtonPressed:(id)sender;
-
 - (IBAction) onGoButtonPressed:(id)sender;
 
 + (Mime_meFriendsPickerViewController*)createInstanceWithMimeID:(NSNumber *)mimeID;

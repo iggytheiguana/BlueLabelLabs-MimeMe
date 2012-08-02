@@ -118,7 +118,7 @@
     
     // Hide the background view and back button until we need them
     switch (self.viewMimeCase) {
-        case kSENTMIME:
+        case kVIEWSENTMIME:
             self.v_background.hidden = YES;
             self.btn_back.hidden = YES;
             break;
@@ -142,7 +142,7 @@
     Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
     MimeAnswer *mimeAnswer = (MimeAnswer*)[resourceContext resourceWithType:MIMEANSWER withID:self.mimeAnswerID];
     
-    if (self.viewMimeCase == kSENTMIME) {
+    if (self.viewMimeCase == kVIEWSENTMIME) {
         NSString *title = @"Mime sent";
         NSString *subtitle = [NSString stringWithFormat:@"You earned %d gems!", 5];
         
@@ -153,7 +153,7 @@
         [self.view addSubview:self.v_confirmationView];
         
     }
-    else if (self.viewMimeCase == kANSWERMIME) {
+    else if (self.viewMimeCase == kVIEWANSWERMIME) {
         int pointsAwarded = [mimeAnswer.pointsawarded intValue];
         NSString *title = @"Congratulations!";
         NSString *subtitle = [NSString stringWithFormat:@"You guessed right and earned %d gems", pointsAwarded];
@@ -174,7 +174,7 @@
         mime.numberoftimesviewed = [NSNumber numberWithInteger:(numTimesViewed + 1)];
         
     }
-    else if (self.viewMimeCase == kSCRAPBOOKMIME) {
+    else if (self.viewMimeCase == kVIEWSCRAPBOOKMIME) {
         
         NSString *from = [NSString stringWithFormat:@"from %@", mime.creatorname];
         NSDate  *dateCreated = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
@@ -222,70 +222,18 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-//    ResourceContext* resourceContext = [ResourceContext instance];
-//    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
-//    MimeAnswer *mimeAnswer = (MimeAnswer*)[resourceContext resourceWithType:MIMEANSWER withID:self.mimeAnswerID];
-    
     // Set up the view based on the case
-    if (self.viewMimeCase == kSENTMIME) {
+    if (self.viewMimeCase == kVIEWSENTMIME) {
         
         [self showConfirmationView];
         
     }
-    else if (self.viewMimeCase == kANSWERMIME) {
+    else if (self.viewMimeCase == kVIEWANSWERMIME) {
         
     }
-    else if (self.viewMimeCase == kSCRAPBOOKMIME) {
+    else if (self.viewMimeCase == kVIEWSCRAPBOOKMIME) {
         
     }
-    
-//    if (self.viewMimeCase == kSENTMIME && self.v_confirmationView) {
-//        NSString *title = @"Mime sent";
-//        NSString *subtitle = [NSString stringWithFormat:@"You earned %d gems!", 5];
-//        
-//        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:title withSubtitle:subtitle];
-//        self.v_confirmationView.delegate = self;
-//        self.v_confirmationView.hidden = YES;
-//        self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//        [self.view addSubview:self.v_confirmationView];
-//        
-//        [self showConfirmationView];
-//        
-//    }
-//    else if (self.viewMimeCase == kANSWERMIME) {
-//        int pointsAwarded = [mimeAnswer.pointsawarded intValue];
-//        NSString *title = @"Congratulations!";
-//        NSString *subtitle = [NSString stringWithFormat:@"You guessed right and earned %d gems", pointsAwarded];
-//        
-//        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:title withSubtitle:subtitle];
-//        self.v_confirmationView.delegate = self;
-//        self.v_confirmationView.hidden = YES;
-//        self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//        
-//        NSString *from = [NSString stringWithFormat:@"from %@", mime.creatorname];
-//        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withTitle:from withWord:mime.word];
-//        self.v_answerView.delegate = self;
-//        self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-//        [self.view addSubview:self.v_answerView];
-//        
-//        // Update the view count on this Mime
-//        NSUInteger numTimesViewed = [mime.numberoftimesviewed integerValue];
-//        mime.numberoftimesviewed = [NSNumber numberWithInteger:(numTimesViewed + 1)];
-//        
-//    }
-//    else if (self.viewMimeCase == kSCRAPBOOKMIME) {
-//        
-//        NSString *from = [NSString stringWithFormat:@"from %@", mime.creatorname];
-//        NSDate  *dateCreated = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
-//        NSString *dateCreatedStr = [DateTimeHelper formatMediumDate:dateCreated];
-//        
-//        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:from withSubtitle:dateCreatedStr];
-//        self.v_confirmationView.delegate = self;
-//        self.v_confirmationView.hidden = YES;
-//        self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//        [self.view addSubview:self.v_confirmationView];
-//        
-//    }
     
     // Adjust layout based on orientation
 //    [self didRotate];
@@ -357,7 +305,7 @@
 }
 
 - (IBAction) onOkButtonPressed:(id)sender {
-    if (self.viewMimeCase == kSENTMIME) {
+    if (self.viewMimeCase == kVIEWSENTMIME) {
         Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
         
         [UIView animateWithDuration:0.75
@@ -367,18 +315,49 @@
                          }];
         [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
     }
-    else if (self.viewMimeCase == kANSWERMIME) {
+    else if (self.viewMimeCase == kVIEWANSWERMIME) {
         [self onBackButtonPressed:nil];
     }
-    else if (self.viewMimeCase == kSCRAPBOOKMIME) {
+    else if (self.viewMimeCase == kVIEWSCRAPBOOKMIME) {
         [self onBackButtonPressed:nil];
     }
+}
+
+- (void)showHUDForSaveFavorite {
+    Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    UIProgressHUDView* progressView = appDelegate.progressView;
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+    progressView.delegate = self;
+    
+    // Indeterminate Progress bar
+    NSString* message = @"Saving favorite...";
+    [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
+    
+//    // Determinate Progress bar
+//    NSNumber* maxTimeToShowOnProgress = settings.http_timeout_seconds;
+//    NSNumber* heartbeat = [NSNumber numberWithInt:5];
+//    
+//    //we need to construc the appropriate success, failure and progress messages for the submission
+//    NSString* failureMessage = @"Oops, please try again.";
+//    NSString* successMessage = @"Favorite saved!";
+//    
+//    NSMutableArray* progressMessage = [[[NSMutableArray alloc]init]autorelease];
+//    [progressMessage addObject:@"Saving favorite..."];
+//    
+//    [self showDeterminateProgressBarWithMaximumDisplayTime:maxTimeToShowOnProgress withHeartbeat:heartbeat onSuccessMessage:successMessage onFailureMessage:failureMessage inProgressMessages:progressMessage];
+    
+    // Save
+    ResourceContext *resourceContext = [ResourceContext instance];
+    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
+    
 }
 
 - (IBAction) onFavoriteButtonPressed:(id)sender {
     // Create new Favorite object for this mime
     
     [Favorite createFavoriteWithMimeID:self.mimeID];
+    
+    [self showHUDForSaveFavorite];
 }
 
 - (void)composeShareEmail {
@@ -420,7 +399,7 @@
     NSString* successMessage = @"Success!";
     
     NSMutableArray* progressMessage = [[[NSMutableArray alloc]init]autorelease];
-    [progressMessage addObject:@"Sending answer..."];
+    [progressMessage addObject:@"Correct! Sending answer..."];
     
     [self showDeterminateProgressBarWithMaximumDisplayTime:maxTimeToShowOnProgress withHeartbeat:heartbeat onSuccessMessage:successMessage onFailureMessage:failureMessage inProgressMessages:progressMessage];
     
@@ -438,6 +417,8 @@
     
     if (isCorrect == YES) {
         // submitted answer is correct, update attempt and answer count properties on the mime object
+        
+        mime.hasanswered = [NSNumber numberWithBool:YES];
         
         NSUInteger numAttempts = [mime.numberofattempts integerValue];
         mime.numberofattempts = [NSNumber numberWithInteger:(numAttempts + 1)];
