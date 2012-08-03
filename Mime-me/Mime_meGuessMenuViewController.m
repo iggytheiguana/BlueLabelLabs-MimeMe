@@ -207,6 +207,7 @@
         NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
         self.mimeAnswersCloudEnumerator = [CloudEnumerator enumeratorForMimeAnswersWithTarget:self.loggedInUser.objectid withState:unansweredStateObj];
         self.mimeAnswersCloudEnumerator.delegate = self;
+        self.mimeAnswersCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:(kMAXROWSFRIENDS + 1)]; // We add 1 to find out if the "more" button should be shown
         [self.mimeAnswersCloudEnumerator enumerateUntilEnd:nil];
     }
 }
@@ -220,6 +221,7 @@
         self.recentMimesCloudEnumerator = nil;
         self.recentMimesCloudEnumerator = [CloudEnumerator enumeratorForMostRecentMimes];
         self.recentMimesCloudEnumerator.delegate = self;
+        self.recentMimesCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:(kMAXROWS + 1)];    // We add 1 to find out if the "more" button should be shown
         [self.recentMimesCloudEnumerator enumerateUntilEnd:nil];
     }
 }
@@ -233,6 +235,7 @@
         self.staffPickedMimesCloudEnumerator = nil;
         self.staffPickedMimesCloudEnumerator = [CloudEnumerator enumeratorForStaffPickedMimes];
         self.staffPickedMimesCloudEnumerator.delegate = self;
+        self.staffPickedMimesCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:(kMAXROWS + 1)];   // We add 1 to find out if the "more" button should be shown
         [self.staffPickedMimesCloudEnumerator enumerateUntilEnd:nil];
     }
 }

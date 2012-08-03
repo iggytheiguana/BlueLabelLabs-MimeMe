@@ -129,7 +129,7 @@
         self.mimeCloudEnumerator = nil;
         
         if (self.mimeType == kSENTMIME) {
-            self.mimeCloudEnumerator = [CloudEnumerator enumeratorForMostRecentMimes];
+            self.mimeCloudEnumerator = [CloudEnumerator enumeratorForSentMimes:self.loggedInUser.objectid];
         }
         else if (self.mimeType == kFAVORITEMIME) {
             self.mimeCloudEnumerator = [CloudEnumerator enumeratorForFavoriteMimes:self.loggedInUser.objectid];
@@ -140,6 +140,7 @@
         }
         
         self.mimeCloudEnumerator.delegate = self;
+        self.mimeCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:kMAXROWS];
         [self.mimeCloudEnumerator enumerateUntilEnd:nil];
     }
     

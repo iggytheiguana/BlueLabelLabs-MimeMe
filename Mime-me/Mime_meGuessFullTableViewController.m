@@ -143,6 +143,7 @@
         }
         
         self.mimeCloudEnumerator.delegate = self;
+        self.mimeCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:kMAXROWS];
         [self.mimeCloudEnumerator enumerateUntilEnd:nil];
     }
     

@@ -196,9 +196,9 @@
     else 
     {
         self.sentMimesCloudEnumerator = nil;
-        // TODO: Change enumerator to enumerator for sent mimes
-        self.sentMimesCloudEnumerator = [CloudEnumerator enumeratorForMostRecentMimes];
+        self.sentMimesCloudEnumerator = [CloudEnumerator enumeratorForSentMimes:self.loggedInUser.objectid];
         self.sentMimesCloudEnumerator.delegate = self;
+        self.sentMimesCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:(kMAXROWS + 1)];  // We add 1 to find out if the "more" button should be shown
         [self.sentMimesCloudEnumerator enumerateUntilEnd:nil];
     }
 }
@@ -212,6 +212,7 @@
         self.favoriteMimesCloudEnumerator = nil;
         self.favoriteMimesCloudEnumerator = [CloudEnumerator enumeratorForFavoriteMimes:self.loggedInUser.objectid];
         self.favoriteMimesCloudEnumerator.delegate = self;
+        self.sentMimesCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:(kMAXROWS + 1)];  // We add 1 to find out if the "more" button should be shown
         [self.favoriteMimesCloudEnumerator enumerateUntilEnd:nil];
     }
 }
@@ -226,6 +227,7 @@
         NSNumber* answeredStateObj = [NSNumber numberWithInt:kANSWERED];
         self.guessedMimeAnswersCloudEnumerator = [CloudEnumerator enumeratorForMimeAnswersWithTarget:self.loggedInUser.objectid withState:answeredStateObj];
         self.guessedMimeAnswersCloudEnumerator.delegate = self;
+        self.sentMimesCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:(kMAXROWS + 1)];  // We add 1 to find out if the "more" button should be shown
         [self.guessedMimeAnswersCloudEnumerator enumerateUntilEnd:nil];
     }
 }
