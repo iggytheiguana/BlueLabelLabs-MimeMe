@@ -60,4 +60,5 @@
 +(QueryOptions*)queryForFavoriteMimes:(NSNumber*)userid;
 +(QueryOptions*) queryForMostRecentMimes;
 +(QueryOptions*)queryForSentMimeAnswers:(NSNumber*)creatorid;
++(QueryOptions*)queryForSentMimes:(NSNumber*)creatorid;
 @end

@@ -86,7 +86,7 @@
 + (CloudEnumerator*) enumeratorForWords;
 + (CloudEnumerator*) enumeratorForSingleWord:(NSString*)word;
 + (CloudEnumerator*) enumeratorForMimeAnswersWithTarget:(NSNumber*)userid withState:(NSNumber*)state;
-
++ (CloudEnumerator*) enumeratorForSentMimes:(NSNumber*)creatorid;
 + (CloudEnumerator*) enumeratorForStaffPickedMimes;
 + (CloudEnumerator*) enumeratorForPublicMimes;
 + (CloudEnumerator*) enumeratorForFavoriteMimes:(NSNumber*)userid;

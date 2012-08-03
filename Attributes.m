@@ -140,3 +140,4 @@ NSString* const ISSTAFFPICK             =@"isstaffpick";
 NSString* const ISPUBLIC                =@"ispublic";
 NSString* const ISFAVORITE              =@"isfavorite";
 NSString* const HASANSWERED             =@"hasanswered";
+NSString* const MIMEID                  =@"mimeid";

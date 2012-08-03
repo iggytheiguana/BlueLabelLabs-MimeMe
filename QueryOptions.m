@@ -281,6 +281,23 @@
     return newQuery;
 }
 
++ (QueryOptions*) queryForSentMimes:(NSNumber *)creatorid
+{
+    QueryOptions* newQuery = [[QueryOptions alloc]autorelease];
+    newQuery.includelinkedobjects = YES;
+    newQuery.primary_results_sortascending = NO;
+    newQuery.primary_results_sortattribute = DATECREATED;
+    
+    newQuery.linked_results_sortAscending = NO;
+    newQuery.linked_results_sortattribute = DATECREATED;
+    newQuery.referencingattribute=MIMEID;
+    newQuery.referencingobjecttype=COMMENT;
+    newQuery.maxlinksreturnedperobject=10;
+    
+    return newQuery;
+
+}
+
 + (QueryOptions*) queryForSentMimeAnswers:(NSNumber *)creatorid
 {
     QueryOptions* newQuery = [[QueryOptions alloc]autorelease];

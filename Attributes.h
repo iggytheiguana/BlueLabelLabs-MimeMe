@@ -149,3 +149,4 @@ extern NSString* const ISSTAFFPICK;
 extern NSString* const ISPUBLIC;
 extern NSString* const ISFAVORITE;
 extern NSString* const HASANSWERED;
+extern NSString* const MIMEID;

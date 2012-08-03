@@ -423,6 +423,23 @@
     return query;
 }
 
++ (Query*) queryForSentMimes:(NSNumber*)creatorid
+{
+    Query* query = [[[Query alloc]init ]autorelease];
+    query.filterObjectType = MIME;
+    
+    QueryExpression* queryExpression = [[QueryExpression alloc]init];
+    queryExpression.attributeName = CREATORID;
+    queryExpression.opCode = opcode_QUERYEQUALITY;
+    queryExpression.value = [creatorid stringValue];
+    
+    query.attributeExpressions = [NSArray arrayWithObject:queryExpression];
+    
+    [queryExpression release];
+    return query;
+
+}
+
 + (Query*) queryForSentMimeAnswers:(NSNumber*)creatorid
 {
     Query* query = [[[Query alloc]init ]autorelease];

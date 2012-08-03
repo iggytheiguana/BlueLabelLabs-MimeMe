@@ -48,6 +48,7 @@
 +(EnumerationContext*) contextForFavoriteMimes:(NSNumber*)userid;
 +(EnumerationContext*) contextForMostRecentMimes;
 +(EnumerationContext*) contextForSentMimeAnswer:(NSNumber*)creatorid;
++(EnumerationContext*) contextForSentMimes:(NSNumber*)creatorid;
 - (id) init;
 - (NSString*) toJSON;
 @end
