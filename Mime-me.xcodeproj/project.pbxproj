@@ -1683,6 +1683,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Blue Label Solutions LLC";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Blue Label Solutions LLC";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mime-me/Mime-me-Prefix.pch";
 				"HEADER_SEARCH_PATHS[arch=*]" = (
@@ -1696,6 +1698,8 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "FAD6520A-AD8C-4E2A-8AA2-283245C0C9D8";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "FAD6520A-AD8C-4E2A-8AA2-283245C0C9D8";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
