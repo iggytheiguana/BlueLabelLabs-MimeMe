@@ -190,7 +190,7 @@
 }
 
 - (void) enumerateSentMimes {    
-    if (self.sentMimesCloudEnumerator != nil) {
+    if (self.sentMimesCloudEnumerator != nil && [self.sentMimesCloudEnumerator canEnumerate]) {
         [self.sentMimesCloudEnumerator enumerateUntilEnd:nil];
     }
     else 
@@ -204,7 +204,7 @@
 }
 
 - (void) enumerateFavoriteMimes {    
-    if (self.favoriteMimesCloudEnumerator != nil) {
+    if (self.favoriteMimesCloudEnumerator != nil && [self.favoriteMimesCloudEnumerator canEnumerate]) {
         [self.favoriteMimesCloudEnumerator enumerateUntilEnd:nil];
     }
     else 
@@ -218,7 +218,7 @@
 }
 
 - (void) enumerateGuessedMimes {    
-    if (self.guessedMimeAnswersCloudEnumerator != nil) {
+    if (self.guessedMimeAnswersCloudEnumerator != nil && [self.guessedMimeAnswersCloudEnumerator canEnumerate]) {
         [self.guessedMimeAnswersCloudEnumerator enumerateUntilEnd:nil];
     }
     else 
@@ -320,18 +320,25 @@
     
     if (section == 0) {
         // Sent section
-        count = [[self.frc_sentMimes fetchedObjects]count] + 2;     // Add 2 to the count to include 1. Header, and 2. More
-        rows = MIN(count, kMAXROWS + 2);   // Maximize the number of rows per section
+        count = [[self.frc_sentMimes fetchedObjects] count];
     }
     else if (section == 1) {
         // Favorites section
-        count = [[self.frc_favoriteMimes fetchedObjects]count] + 2;     // Add 2 to the count to include 1. Header, and 2. More
-        rows = MIN(count, kMAXROWS + 2);   // Maximize the number of rows per section
+        count = [[self.frc_favoriteMimes fetchedObjects] count];
     }
     else {
         // Guessed section
-        count = [[self.frc_guessedMimeAnswers fetchedObjects]count] + 2;     // Add 2 to the count to include 1. Header, and 2. More
-        rows = MIN(count, kMAXROWS + 2);   // Maximize the number of rows per section
+        count = [[self.frc_guessedMimeAnswers fetchedObjects] count];
+    }
+    
+    if (count == 0) {
+        rows = 2;   // 1. Header, and 2. None rows
+    }
+    else if (count <= kMAXROWS) {
+        rows = count + 1;   // Add 1 for the header
+    }
+    else {
+        rows = kMAXROWS + 2;    // Add 2 to the count to include 1. Header, and 2. More
     }
     
     return rows;
@@ -779,7 +786,7 @@
     }
     else if (indexPath.section == 2) {
         // Guessed mines selected
-        NSInteger count = MIN([[self.frc_sentMimes fetchedObjects]count], kMAXROWS);
+        NSInteger count = MIN([[self.frc_guessedMimeAnswers fetchedObjects]count], kMAXROWS);
         
         if (indexPath.row > 0 && indexPath.row <= count) {
             

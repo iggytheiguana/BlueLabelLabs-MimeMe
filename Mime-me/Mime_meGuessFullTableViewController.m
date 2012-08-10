@@ -124,7 +124,7 @@
 }
 
 - (void) enumerateMimes {    
-    if (self.mimeCloudEnumerator != nil) {
+    if (self.mimeCloudEnumerator != nil && [self.mimeCloudEnumerator canEnumerate]) {
         [self.mimeCloudEnumerator enumerateUntilEnd:nil];
     }
     else 

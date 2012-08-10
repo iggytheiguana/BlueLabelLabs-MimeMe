@@ -54,6 +54,9 @@
 
 - (IBAction) onBackButtonPressed:(id)sender;
 
+- (IBAction) onFacebookButtonPressed:(id)sender;
+- (IBAction) onTwitterButtonPressed:(id)sender;
+
 + (Mime_meViewMimeViewController*)createInstanceForCase:(int)viewMimeCase withMimeID:(NSNumber *)mimeID withMimeAnswerIDorNil:(NSNumber *)mimeAnswerID;
 
 @end

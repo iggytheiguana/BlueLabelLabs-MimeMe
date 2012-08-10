@@ -187,6 +187,14 @@
     [self.delegate onEmailButtonPressed:sender];
 }
 
+- (IBAction) onFacebookButtonPressed:(id)sender {   
+    [self.delegate onFacebookButtonPressed:sender];
+}
+
+- (IBAction) onTwitterButtonPressed:(id)sender {
+    [self.delegate onTwitterButtonPressed:sender];
+}
+
 #pragma mark - Statics
 + (Mime_meUIConfirmationView*)createInstanceWithFrame:(CGRect)frame withTitle:(NSString *)title withSubtitle:(NSString *)subtitle {
     Mime_meUIConfirmationView* instance = [[Mime_meUIConfirmationView alloc]initWithFrame:(CGRect)frame];

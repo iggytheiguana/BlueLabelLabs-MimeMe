@@ -31,7 +31,7 @@
 #define kMIMEID @"mimeid"
 
 #define kMAXROWS 3
-#define kMAXROWSFRIENDS 5
+//#define kMAXROWSFRIENDS 5
 
 @interface Mime_meGuessMenuViewController ()
 
@@ -74,7 +74,7 @@
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     [fetchRequest setEntity:entityDescription];
     
-    [fetchRequest setFetchBatchSize:(kMAXROWSFRIENDS + 1)];    // We add 1 to find out if the "more" button should be shown
+    [fetchRequest setFetchBatchSize:(kMAXROWS + 1)];    // We add 1 to find out if the "more" button should be shown
     
     NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:resourceContext.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
     
@@ -198,7 +198,7 @@
 }
 
 - (void) enumerateMimeAnswersFromFriends {    
-    if (self.mimeAnswersCloudEnumerator != nil) {
+    if (self.mimeAnswersCloudEnumerator != nil && [self.mimeAnswersCloudEnumerator canEnumerate]) {
         [self.mimeAnswersCloudEnumerator enumerateUntilEnd:nil];
     }
     else 
@@ -207,13 +207,13 @@
         NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
         self.mimeAnswersCloudEnumerator = [CloudEnumerator enumeratorForMimeAnswersWithTarget:self.loggedInUser.objectid withState:unansweredStateObj];
         self.mimeAnswersCloudEnumerator.delegate = self;
-        self.mimeAnswersCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:(kMAXROWSFRIENDS + 1)]; // We add 1 to find out if the "more" button should be shown
+        self.mimeAnswersCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:(kMAXROWS + 1)]; // We add 1 to find out if the "more" button should be shown
         [self.mimeAnswersCloudEnumerator enumerateUntilEnd:nil];
     }
 }
 
 - (void) enumerateRecentMimes {    
-    if (self.recentMimesCloudEnumerator != nil) {
+    if (self.recentMimesCloudEnumerator != nil && [self.recentMimesCloudEnumerator canEnumerate]) {
         [self.recentMimesCloudEnumerator enumerateUntilEnd:nil];
     }
     else 
@@ -226,8 +226,8 @@
     }
 }
 
-- (void) enumerateStaffPickedMimes {    
-    if (self.staffPickedMimesCloudEnumerator != nil) {
+- (void) enumerateStaffPickedMimes { 
+    if (self.staffPickedMimesCloudEnumerator != nil && [self.staffPickedMimesCloudEnumerator canEnumerate]) {
         [self.staffPickedMimesCloudEnumerator enumerateUntilEnd:nil];
     }
     else 
@@ -334,18 +334,25 @@
     
     if (section == 0) {
         // From Friends section
-        count = [[self.frc_mimeAnswersFromFriends fetchedObjects]count] + 2;     // Add 2 to the count to include 1. Header, and 2. More
-        rows = MIN(count, kMAXROWSFRIENDS + 2);   // Maximize the number of rows per section
+        count = [[self.frc_mimeAnswersFromFriends fetchedObjects] count];
     }
     else if (section == 1) {
         // Recent section
-        count = [[self.frc_recentMimes fetchedObjects]count] + 2;  // Add 2 to the count to include 1. Header, and 2. More
-        rows = MIN(count, kMAXROWS + 2);   // Maximize the number of rows per section
+        count = [[self.frc_recentMimes fetchedObjects] count];
     }
     else {
         // Staff Picks section
-        count = [[self.frc_staffPickedMimes fetchedObjects]count] + 2;  // Add 2 to the count to include 1. Header, and 2. More
-        rows = MIN(count, kMAXROWS + 2);   // Maximize the number of rows per section
+        count = [[self.frc_staffPickedMimes fetchedObjects] count];
+    }
+    
+    if (count == 0) {
+        rows = 2;   // 1. Header, and 2. None rows
+    }
+    else if (count <= kMAXROWS) {
+        rows = count + 1;   // Add 1 for the header
+    }
+    else {
+        rows = kMAXROWS + 2;    // Add 2 to the count to include 1. Header, and 2. More
     }
     
     return rows;
@@ -423,7 +430,7 @@
     if (indexPath.section == 0) {
         // From Friends section
         
-        NSInteger count = MIN([[self.frc_mimeAnswersFromFriends fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends to show
+        NSInteger count = MIN([[self.frc_mimeAnswersFromFriends fetchedObjects]count], kMAXROWS);    // Maximize the number of friends to show
         
         if (indexPath.row == 0) {
             // Set the header
@@ -721,18 +728,17 @@
     
     if (indexPath.section == 0) {
         count = [[self.frc_mimeAnswersFromFriends fetchedObjects]count];
-        rows = MIN(count, kMAXROWSFRIENDS);
     }
     else if (indexPath.section == 1) {
         // Recent section
         count = [[self.frc_recentMimes fetchedObjects]count];
-        rows = MIN(count, kMAXROWS);
     }
     else {
         // Staff Picked section
         count = [[self.frc_staffPickedMimes fetchedObjects]count];
-        rows = MIN(count, kMAXROWS);
     }
+    
+    rows = MIN(count, kMAXROWS);
     
     if (indexPath.row == 0) {
         // Header
@@ -753,7 +759,7 @@
     
     if (indexPath.section == 0) {
         // Friends mime selected
-        NSInteger count = MIN([[self.frc_mimeAnswersFromFriends fetchedObjects]count], kMAXROWSFRIENDS);
+        NSInteger count = MIN([[self.frc_mimeAnswersFromFriends fetchedObjects]count], kMAXROWS);
         
         if (indexPath.row > 0 && indexPath.row <= count) {
             
@@ -834,25 +840,25 @@
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(0,@"%@ Received NSFetechedResultsChangeDelete notification",activityName);
     }
     
-//    NSInteger section;
-    NSInteger maxNumRows;
-    if (controller == self.frc_mimeAnswersFromFriends) {
-//        section = 0;
-        maxNumRows = kMAXROWSFRIENDS;
-    }
-    else if (controller == self.frc_recentMimes) {
-//        section = 1;
-        maxNumRows = kMAXROWS;
-    }
-    else if (controller == self.frc_staffPickedMimes) {
-//        section = 2;
-        maxNumRows = kMAXROWS;
-    }
+////    NSInteger section;
+//    NSInteger maxNumRows;
+//    if (controller == self.frc_mimeAnswersFromFriends) {
+////        section = 0;
+//        maxNumRows = kMAXROWS;
+//    }
+//    else if (controller == self.frc_recentMimes) {
+////        section = 1;
+//        maxNumRows = kMAXROWS;
+//    }
+//    else if (controller == self.frc_staffPickedMimes) {
+////        section = 2;
+//        maxNumRows = kMAXROWS;
+//    }
     
     if (controller == self.frc_mimeAnswersFromFriends || controller == self.frc_recentMimes || controller == self.frc_staffPickedMimes) {
         LOG_MIME_MEGUESSMENUVIEWCONTROLLER(0, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
         
-        if (indexPath.row < maxNumRows) {
+        if (indexPath.row < kMAXROWS) {
 //            switch(type) {
 //                    
 //                case NSFetchedResultsChangeInsert:
@@ -949,7 +955,7 @@
             
             NSNumber* mimeAnswerID = [userInfo valueForKey:kMIMEANSWERID];
             
-            NSInteger count = MIN([[self.frc_mimeAnswersFromFriends fetchedObjects]count], kMAXROWSFRIENDS);    // Maximize the number of friends mimes to show
+            NSInteger count = MIN([[self.frc_mimeAnswersFromFriends fetchedObjects]count], kMAXROWS);    // Maximize the number of friends mimes to show
             for (int i = 0; i < count; i++) {
                 MimeAnswer *mimeAnswer = [[self.frc_mimeAnswersFromFriends fetchedObjects] objectAtIndex:i];
                 if ([mimeAnswer.objectid isEqualToNumber:mimeAnswerID]) {

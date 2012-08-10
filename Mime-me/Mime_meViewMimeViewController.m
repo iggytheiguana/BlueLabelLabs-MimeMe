@@ -19,6 +19,7 @@
 #import "DateTimeHelper.h"
 #import "Mime_meAppDelegate.h"
 #import "Favorite.h"
+#import "SocialSharingManager.h"
 
 #define kMIMEID @"mimeid"
 
@@ -381,6 +382,60 @@
 
 - (IBAction) onEmailButtonPressed:(id)sender {
     [self composeShareEmail];
+}
+
+- (IBAction) onFacebookButtonPressed:(id)sender {   
+    //we check to ensure the user is logged in to Facebook first
+    AuthenticationContext* loggedInContext = [[AuthenticationManager instance]contextForLoggedInUser];
+    if (loggedInContext == nil ||
+        loggedInContext.hasFacebook == NO) 
+    {
+        //user is not logged in, must log in first and also ensure they have a facebook account
+        Callback* onSuccessCallback = [Callback callbackForTarget:self selector:@selector(onFacebookButtonPressed:)  fireOnMainThread:YES];
+        [self authenticateAndGetFacebook:YES getTwitter:NO onSuccessCallback:onSuccessCallback onFailureCallback:nil];
+        
+    }
+    else {
+        Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate *)[[UIApplication sharedApplication] delegate];
+        UIProgressHUDView* progressView = appDelegate.progressView;
+        ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+        progressView.delegate = self;
+        
+        NSString* message = @"Sharing to Facebook...";
+        
+        SocialSharingManager* sharingManager = [SocialSharingManager getInstance];
+       
+        [sharingManager shareMimeOnFacebook:self.mimeID onFinish:nil trackProgressWith:progressView];
+            
+        [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
+    }
+}
+
+- (IBAction) onTwitterButtonPressed:(id)sender {   
+    //we check to ensure the user is logged in to Facebook first
+    AuthenticationContext* loggedInContext = [[AuthenticationManager instance]contextForLoggedInUser];
+    if (loggedInContext == nil ||
+        loggedInContext.hasTwitter == NO) 
+    {
+        //user is not logged in, must log in first and also ensure they have a facebook account
+        Callback* onSuccessCallback = [Callback callbackForTarget:self selector:@selector(onTwitterButtonPressed:)  fireOnMainThread:YES];
+        [self authenticateAndGetFacebook:NO getTwitter:YES onSuccessCallback:onSuccessCallback onFailureCallback:nil];
+        
+    }
+    else {
+        Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate *)[[UIApplication sharedApplication] delegate];
+        UIProgressHUDView* progressView = appDelegate.progressView;
+        ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+        progressView.delegate = self;
+        
+        NSString* message = @"Sharing to Twitter...";
+        
+        SocialSharingManager* sharingManager = [SocialSharingManager getInstance];
+        
+        [sharingManager shareMimeOnTwitter:self.mimeID onFinish:nil trackProgressWith:progressView];
+        
+        [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
+    }
 }
 
 #pragma mark Mime_meUIAnswerView Delegate Methods
