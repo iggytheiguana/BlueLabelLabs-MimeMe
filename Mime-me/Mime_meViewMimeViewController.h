@@ -22,6 +22,7 @@
     UIImageView     *m_iv_photo;
     UIImageView     *m_iv_logo;
     UIButton        *m_btn_back;
+    UIButton        *m_btn_flag;
     UIView          *m_v_background;
     
     // sentContainer    
@@ -42,6 +43,7 @@
 @property (nonatomic, retain) IBOutlet  UIImageView     *iv_photo;
 @property (nonatomic, retain) IBOutlet  UIImageView     *iv_logo;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_back;
+@property (nonatomic, retain) IBOutlet  UIButton        *btn_flag;
 @property (nonatomic, retain) IBOutlet  UIView          *v_background;
 
 // sentContainer
@@ -53,6 +55,7 @@
 @property (nonatomic, assign)           BOOL                        didUseHint;
 
 - (IBAction) onBackButtonPressed:(id)sender;
+- (IBAction) onFlagButtonPressed:(id)sender;
 
 - (IBAction) onFacebookButtonPressed:(id)sender;
 - (IBAction) onTwitterButtonPressed:(id)sender;

@@ -36,6 +36,7 @@
 @synthesize iv_photo            = m_iv_photo;
 @synthesize iv_logo             = m_iv_logo;
 @synthesize btn_back            = m_btn_back;
+@synthesize btn_flag            = m_btn_flag;
 @synthesize v_background        = m_v_background;
 
 // sentContainer
@@ -208,6 +209,7 @@
     self.iv_photo = nil;
     self.iv_logo = nil;
     self.btn_back = nil;
+    self.btn_flag = nil;
     self.v_background = nil;
     self.v_confirmationView = nil;
     self.v_answerView = nil;
@@ -298,6 +300,10 @@
     [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
     
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction) onFlagButtonPressed:(id)sender {
+    
 }
 
 #pragma mark Mime_meUIConfirmationView Delegate Methods

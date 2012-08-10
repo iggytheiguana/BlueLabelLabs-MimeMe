@@ -110,7 +110,7 @@
             //execute the enumerator
             [userEnumerator enumerateUntilEnd:nil];
         }
-        else 
+        else
         {
             //we perform a check to update the application version if necessary
             NSString* currentAppVersion = [ApplicationSettingsManager getApplicationVersion];
