@@ -134,10 +134,18 @@ insertIntoResourceContext:(ResourceContext *)context
             [lowerCaseName isEqualToString:NUMBEROFPHOTOS] ||
             [lowerCaseName isEqualToString:NUMBEROFCAPTIONS] ||
             [lowerCaseName isEqualToString:NUMBEROFPUBLISHVOTES] ||
-            [lowerCaseName isEqualToString:NUMBEROFFLAGS] ||
+           
             [lowerCaseName isEqualToString:NUMBEROFTIMESUSED] ||
             [lowerCaseName isEqualToString:NUMBERTIMESANSWERED]) {
             retVal.islocal = [NSNumber numberWithBool:YES];
+        }
+        
+        
+        if ([lowerCaseName isEqualToString:NUMBEROFFLAGS])
+        {
+            retVal.iscounter = [NSNumber numberWithBool:YES];
+            retVal.islocal = [NSNumber numberWithBool:NO];
+            
         }
     }
     

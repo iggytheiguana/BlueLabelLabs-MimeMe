@@ -14,6 +14,7 @@
 @property (nonatomic,retain) NSNumber* numberoftimesused;
 @property (nonatomic,retain) NSNumber* creatorid;
 @property (nonatomic,retain) NSNumber* difficultylevel;
+@property (nonatomic,retain) NSNumber* numberofflags;
 
 + (Word*)createWordWithString:(NSString *)string;
 

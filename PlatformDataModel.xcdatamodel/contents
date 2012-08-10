@@ -91,6 +91,7 @@
         <attribute name="ispublic" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="isstaffpick" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="numberofattempts" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberofflags" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="numberoftimesviewed" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="numbertimesanswered" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="thumbnailurl" optional="YES" attributeType="String" syncable="YES"/>
@@ -159,6 +160,7 @@
         <attribute name="creatorid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="creatorname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="difficultylevel" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberofflags" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="numberoftimesused" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="word1" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -172,12 +174,12 @@
         <element name="Favorite" positionX="466" positionY="-270" width="128" height="75"/>
         <element name="feed" positionX="367" positionY="576" width="128" height="180"/>
         <element name="Friend" positionX="529" positionY="-96" width="128" height="105"/>
-        <element name="Mime" positionX="313" positionY="-153" width="128" height="195"/>
+        <element name="Mime" positionX="313" positionY="-153" width="128" height="270"/>
         <element name="MimeAnswer" positionX="81" positionY="9" width="128" height="225"/>
         <element name="request" positionX="340" positionY="90" width="128" height="165"/>
         <element name="resource" positionX="160" positionY="414" width="128" height="135"/>
         <element name="TypeInstanceData" positionX="90" positionY="-342" width="128" height="105"/>
         <element name="user" positionX="252" positionY="852" width="128" height="300"/>
-        <element name="Word" positionX="387" positionY="279" width="128" height="120"/>
+        <element name="Word" positionX="387" positionY="279" width="128" height="135"/>
     </elements>
 </model>
