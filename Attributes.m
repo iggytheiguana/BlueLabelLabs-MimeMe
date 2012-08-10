@@ -141,3 +141,6 @@ NSString* const ISPUBLIC                =@"ispublic";
 NSString* const ISFAVORITE              =@"isfavorite";
 NSString* const HASANSWERED             =@"hasanswered";
 NSString* const MIMEID                  =@"mimeid";
+NSString* const GEMS_FOR_CLUE           =@"gems_for_clue";
+NSString* const GEMS_FOR_NEW_WORD       =@"gems_for_new_word";
+NSString* const GEMS_FOR_GETTING_NEW_WORDS  =@"gems_for_getting_new_words";

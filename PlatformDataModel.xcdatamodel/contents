@@ -7,6 +7,9 @@
         <attribute name="feed_maxnumtodownload" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
         <attribute name="follow_enumeration_timegap" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
         <attribute name="follow_maxnumtodownload" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="gems_for_clue" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="gems_for_getting_new_words" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="gems_for_new_word" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="http_timeout_seconds" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
         <attribute name="num_users" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
         <attribute name="numberoflinkedobjectstoreturn" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
@@ -165,7 +168,7 @@
         <attribute name="word1" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="applicationsettings" positionX="18" positionY="810" width="128" height="270"/>
+        <element name="applicationsettings" positionX="18" positionY="810" width="225" height="315"/>
         <element name="attributechange" positionX="-207" positionY="1017" width="128" height="165"/>
         <element name="AttributeInstanceData" positionX="-216" positionY="-141" width="128" height="150"/>
         <element name="authenticationcontext" positionX="-198" positionY="336" width="128" height="150"/>
@@ -174,12 +177,12 @@
         <element name="Favorite" positionX="466" positionY="-270" width="128" height="75"/>
         <element name="feed" positionX="367" positionY="576" width="128" height="180"/>
         <element name="Friend" positionX="529" positionY="-96" width="128" height="105"/>
-        <element name="Mime" positionX="313" positionY="-153" width="128" height="270"/>
+        <element name="Mime" positionX="313" positionY="-153" width="128" height="195"/>
         <element name="MimeAnswer" positionX="81" positionY="9" width="128" height="225"/>
         <element name="request" positionX="340" positionY="90" width="128" height="165"/>
         <element name="resource" positionX="160" positionY="414" width="128" height="135"/>
         <element name="TypeInstanceData" positionX="90" positionY="-342" width="128" height="105"/>
         <element name="user" positionX="252" positionY="852" width="128" height="300"/>
-        <element name="Word" positionX="387" positionY="279" width="128" height="135"/>
+        <element name="Word" positionX="387" positionY="279" width="128" height="120"/>
     </elements>
 </model>
