@@ -30,4 +30,8 @@
 @dynamic follow_maxnumtodownload;
 @dynamic follow_enumeration_timegap;
 
+@dynamic gems_for_clue;
+@dynamic gems_for_new_word;
+@dynamic gems_for_getting_new_words;
+
 @end
