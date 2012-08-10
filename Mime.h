@@ -25,6 +25,7 @@
 @property (nonatomic,retain) NSNumber* isstaffpick;
 @property (nonatomic,retain) NSNumber* isfavorite;
 @property (nonatomic,retain) NSNumber* hasanswered;
+@property (nonatomic,retain) NSNumber* numberofflags;
 
 + (Mime*)createMimeWithWordID:(NSNumber *)wordID
                     withImage:(UIImage *)image

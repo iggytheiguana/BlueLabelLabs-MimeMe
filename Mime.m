@@ -27,7 +27,7 @@
 @dynamic isstaffpick;
 @dynamic hasanswered;
 @dynamic isfavorite;
-
+@dynamic numberofflags;
 #pragma mark - Static Initializers
 //creates a Mime object
 + (Mime*)createMimeWithWordID:(NSNumber *)wordID

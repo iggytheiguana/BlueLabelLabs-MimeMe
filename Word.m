@@ -16,7 +16,7 @@
 @dynamic numberoftimesused;
 @dynamic difficultylevel;
 @dynamic word1;
-
+@dynamic numberofflags;
 #pragma mark - Static Initializers
 //creates a Word object
 + (Word*)createWordWithString:(NSString *)string {
