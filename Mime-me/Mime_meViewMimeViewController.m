@@ -146,6 +146,10 @@
     
     if (self.viewMimeCase == kVIEWSENTMIME) {
         NSString *title = @"Mime sent";
+        
+        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+//        int editorMinimum = [settings. intValue];
+        
         NSString *subtitle = [NSString stringWithFormat:@"You earned %d gems!", 5];
         
         self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:title withSubtitle:subtitle];
@@ -303,7 +307,45 @@
 }
 
 - (IBAction) onFlagButtonPressed:(id)sender {
-    
+    UIActionSheet *actionSheet = [[UIActionSheet alloc]
+                                  initWithTitle:@"Is something about this mime offensive?"
+                                  delegate:self
+                                  cancelButtonTitle:@"Cancel"
+                                  destructiveButtonTitle:@"Flag for review"
+                                  otherButtonTitles:nil];
+    [actionSheet showInView:self.view];
+    [actionSheet release];
+}
+
+#pragma mark - UIActionSheet Delegate
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == [actionSheet destructiveButtonIndex]) {
+        
+        //display progress view on the submission of a flag
+        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+        NSString* message = @"Flagging for review...";
+        NSString* successMessage = @"Mime is flagged for review";
+        NSString* failureMessage = @"Ooops, something went wrong. Please flag again.";
+        
+        
+        [self showDeterminateProgressBarWithMaximumDisplayTime:settings.http_timeout_seconds onSuccessMessage:successMessage onFailureMessage:failureMessage inProgressMessages:[NSArray arrayWithObject:message]];
+        
+        ResourceContext* resourceContext = [ResourceContext instance];
+        //we start a new undo group here
+        [resourceContext.managedObjectContext.undoManager beginUndoGrouping];
+        
+        Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+        
+        mime.numberofflags = [NSNumber numberWithInt:([mime.numberofflags intValue] + 1)];
+        
+        Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate *)[[UIApplication sharedApplication] delegate];
+        UIProgressHUDView* progressView = appDelegate.progressView;
+        progressView.delegate = self;
+        
+        //now we need to commit to the store
+        [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
+    }
 }
 
 #pragma mark Mime_meUIConfirmationView Delegate Methods
@@ -431,7 +473,7 @@
     else {
         Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate *)[[UIApplication sharedApplication] delegate];
         UIProgressHUDView* progressView = appDelegate.progressView;
-        ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
         progressView.delegate = self;
         
         NSString* message = @"Sharing to Twitter...";
@@ -537,64 +579,72 @@
     
     UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
     
-//    Request* request = [progressView.requests objectAtIndex:0];
-//    //now we have the request
-//    
-//    NSArray* changedAttributes = request.changedAttributesList;
-//    //list of all changed attributes
+    Request* request = [progressView.requests objectAtIndex:0];
+    //now we have the request
     
-//    if ([changedAttributes containsObject:NUMBERTIMESANSWERED]) {
-//        if (progressView.didSucceed) {
-//            // Answer sent sucessfully
-//            LOG_REQUEST(0, @"%@ Mime answer sent successful", activityName);
-//            
-//            // Remove the Answer view and back button
-//            [self.v_answerView removeFromSuperview];
-//            [self.btn_back removeFromSuperview];
-//            
-//            // Add the Confirmation view
-//            [self.view addSubview:self.v_confirmationView];
-//            
-//            [self showConfirmationView];
-//        }
-//        else {
-//            // Send answer failed
-//            LOG_REQUEST(1, @"%@ Mime answer sent failure", activityName);
-//            
-//            [self.navigationController popViewControllerAnimated:YES];
-//        }
-//    }
-//    else {
-//        if (progressView.didSucceed) {
-//            // Send updated Mime count data sucessfully
-//            LOG_REQUEST(0, @"%@ Mime attempt count update request was successful", activityName);
-//        }
-//        else {
-//            // Send updated Mime count data failed
-//            LOG_REQUEST(1, @"%@ Mime attempt count update request failure", activityName);
-//        }
-//        [self.navigationController popViewControllerAnimated:YES];
-//    }
+    NSArray* changedAttributes = request.changedAttributesList;
+    //list of all changed attributes
     
-    if (progressView.didSucceed) {
-        // Answer sent sucessfully
-        LOG_REQUEST(0, @"%@ Mime answer sent successful", activityName);
-        
-        // Remove the Answer view and back button
-        [self.v_answerView removeFromSuperview];
-        [self.btn_back removeFromSuperview];
-        
-        // Add the Confirmation view
-        [self.view addSubview:self.v_confirmationView];
-        
-        [self showConfirmationView];
+    if ([changedAttributes containsObject:NUMBEROFFLAGS]) {
+        if (progressView.didSucceed) {
+            // Flag sent sucessfully
+            LOG_REQUEST(0, @"%@ Mime flag sent successful", activityName);
+            
+        }
+        else {
+            // Send flag failed
+            LOG_REQUEST(1, @"%@ Mime flag sent failure", activityName);
+            
+            // Undo save
+            ResourceContext* resourceContext = [ResourceContext instance];
+            [resourceContext.managedObjectContext.undoManager undo];
+            
+            NSError* error = nil;
+            [resourceContext.managedObjectContext save:&error];
+        }
     }
     else {
-        // Send answer failed
-        LOG_REQUEST(1, @"%@ Mime answer sent failure", activityName);
-        
-        [self.navigationController popViewControllerAnimated:YES];
+        // Sent answer
+        if (progressView.didSucceed) {
+            // Answer sent sucessfully
+            LOG_REQUEST(0, @"%@ Mime answer sent successful", activityName);
+            
+            // Remove the Answer view and back button
+            [self.v_answerView removeFromSuperview];
+            [self.btn_back removeFromSuperview];
+            
+            // Add the Confirmation view
+            [self.view addSubview:self.v_confirmationView];
+            
+            [self showConfirmationView];
+        }
+        else {
+            // Send answer failed
+            LOG_REQUEST(1, @"%@ Mime answer sent failure", activityName);
+            
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
+    
+//    if (progressView.didSucceed) {
+//        // Answer sent sucessfully
+//        LOG_REQUEST(0, @"%@ Mime answer sent successful", activityName);
+//        
+//        // Remove the Answer view and back button
+//        [self.v_answerView removeFromSuperview];
+//        [self.btn_back removeFromSuperview];
+//        
+//        // Add the Confirmation view
+//        [self.view addSubview:self.v_confirmationView];
+//        
+//        [self showConfirmationView];
+//    }
+//    else {
+//        // Send answer failed
+//        LOG_REQUEST(1, @"%@ Mime answer sent failure", activityName);
+//        
+//        [self.navigationController popViewControllerAnimated:YES];
+//    }
 }
 
 #pragma mark - ImageManager Delegate Methods

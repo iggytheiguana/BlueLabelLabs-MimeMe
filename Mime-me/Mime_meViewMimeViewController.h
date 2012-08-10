@@ -13,7 +13,7 @@
 #import "Mime_meUIConfirmationView.h"
 #import "ViewMimeCase.h"
 
-@interface Mime_meViewMimeViewController : BaseViewController < Mime_meUIConfirmationViewDelgate, Mime_meUIAnswerViewDelgate, UIProgressHUDViewDelegate, MFMailComposeViewControllerDelegate > {
+@interface Mime_meViewMimeViewController : BaseViewController < Mime_meUIConfirmationViewDelgate, Mime_meUIAnswerViewDelgate, UIProgressHUDViewDelegate, MFMailComposeViewControllerDelegate, UIActionSheetDelegate > {
     NSNumber        *m_mimeID;
     NSNumber        *m_mimeAnswerID;
     CGSize          m_imageSize;

@@ -30,7 +30,7 @@
 #define kMIMEANSWERID @"mimeanswerid"
 #define kMIMEID @"mimeid"
 
-#define kMAXROWS 50
+#define kMAXROWS 30
 
 @interface Mime_meGuessFullTableViewController ()
 

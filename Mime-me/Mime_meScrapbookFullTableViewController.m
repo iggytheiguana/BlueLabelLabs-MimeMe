@@ -31,7 +31,7 @@
 #define kMIMEANSWERID @"mimeanswerid"
 #define kFAVORITEID @"favoriteid"
 
-#define kMAXROWS 50
+#define kMAXROWS 30
 
 @interface Mime_meScrapbookFullTableViewController ()
 

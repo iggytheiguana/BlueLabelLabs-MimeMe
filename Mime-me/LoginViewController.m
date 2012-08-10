@@ -229,6 +229,7 @@
 {
     [super viewWillAppear:animated];
     
+    
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -528,11 +529,20 @@
     LOG_LOGINVIEWCONTROLLER(0, @"%@ called for username %@",activityName,username);
     return nil;
 }
+
 - (void) twitterOAuthConnectionFailedWithData: (NSData *) data 
 {
     NSString* activityName = @"UILoginView.twitterOAuthConnectionFailedWithData:";
     LOG_LOGINVIEWCONTROLLER(1,@"%@Twitter connection failed",activityName);
     
+}
+
+- (void) OAuthTwitterControllerCanceled: (SA_OAuthTwitterController *) controller {
+    NSString* activityName = @"UILoginView.OAuthTwitterControllerCanceled:";
+    
+    LOG_LOGINVIEWCONTROLLER(0, @"%@Twitter login view controller was canceled.",activityName);
+    [self dismissModalViewControllerAnimated:YES];
+    [self dismissWithResult:NO];
 }
 
 
