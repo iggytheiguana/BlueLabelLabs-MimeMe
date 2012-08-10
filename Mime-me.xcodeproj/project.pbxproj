@@ -85,6 +85,8 @@
 		52B8763E15B0E355001C9EF8 /* icon-slideDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52B8763A15B0E355001C9EF8 /* icon-slideDown@2x.png */; };
 		52B8763F15B0E355001C9EF8 /* icon-slideUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 52B8763B15B0E355001C9EF8 /* icon-slideUp.png */; };
 		52B8764015B0E355001C9EF8 /* icon-slideUp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52B8763C15B0E355001C9EF8 /* icon-slideUp@2x.png */; };
+		52CA170F15D5B017002F9CB3 /* icon-flag.png in Resources */ = {isa = PBXBuildFile; fileRef = 52CA170D15D5B017002F9CB3 /* icon-flag.png */; };
+		52CA171015D5B017002F9CB3 /* icon-flag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52CA170E15D5B017002F9CB3 /* icon-flag@2x.png */; };
 		52D926F115D1CE8B00DA16BC /* SocialSharingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D926F015D1CE8B00DA16BC /* SocialSharingManager.m */; };
 		52DBBC2015BF566A0076A27C /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52DBBC1F15BF566A0076A27C /* AddressBook.framework */; };
 		52F5BA6215C8439F00509E8B /* UIPromptAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F5BA6115C8439F00509E8B /* UIPromptAlertView.m */; };
@@ -329,6 +331,8 @@
 		52B8763B15B0E355001C9EF8 /* icon-slideUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-slideUp.png"; sourceTree = "<group>"; };
 		52B8763C15B0E355001C9EF8 /* icon-slideUp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-slideUp@2x.png"; sourceTree = "<group>"; };
 		52B8764115B0F21A001C9EF8 /* ColorPalette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPalette.h; sourceTree = "<group>"; };
+		52CA170D15D5B017002F9CB3 /* icon-flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-flag.png"; sourceTree = "<group>"; };
+		52CA170E15D5B017002F9CB3 /* icon-flag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-flag@2x.png"; sourceTree = "<group>"; };
 		52D926EF15D1CE8B00DA16BC /* SocialSharingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialSharingManager.h; sourceTree = "<group>"; };
 		52D926F015D1CE8B00DA16BC /* SocialSharingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialSharingManager.m; sourceTree = "<group>"; };
 		52DBBC1F15BF566A0076A27C /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
@@ -1280,6 +1284,8 @@
 				52B8763A15B0E355001C9EF8 /* icon-slideDown@2x.png */,
 				52B8763B15B0E355001C9EF8 /* icon-slideUp.png */,
 				52B8763C15B0E355001C9EF8 /* icon-slideUp@2x.png */,
+				52CA170D15D5B017002F9CB3 /* icon-flag.png */,
+				52CA170E15D5B017002F9CB3 /* icon-flag@2x.png */,
 				52324CF415AD63F800D5DD91 /* f_logo.png */,
 				52324CF815AD644000D5DD91 /* twitter-bird-white-on-blue.png */,
 				522232CE15B38ABB0065C6DC /* background.png */,
@@ -1447,6 +1453,8 @@
 				52564CF615BB648C00AABC8E /* Mime_meFriendsListTableViewController.xib in Resources */,
 				52F5BA6915C871E400509E8B /* icon-favorite.png in Resources */,
 				52F5BA6A15C871E400509E8B /* icon-favorite@2x.png in Resources */,
+				52CA170F15D5B017002F9CB3 /* icon-flag.png in Resources */,
+				52CA171015D5B017002F9CB3 /* icon-flag@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
