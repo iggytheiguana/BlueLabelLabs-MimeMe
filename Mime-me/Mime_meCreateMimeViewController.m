@@ -171,9 +171,13 @@
     // Get 3 random words from the words FRC
     for (int i = 0; i < 3; i++) {
         Word* randomWord = [self getRandomWord];
-        if (randomWord != nil) 
+        if (randomWord != nil && [wordMtblArray containsObject:randomWord] == NO) 
         {
             [wordMtblArray addObject:randomWord];
+        }
+        else {
+            // we have a nil or a duplicate word, redo
+            i--;
         }
     }
     

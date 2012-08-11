@@ -538,6 +538,10 @@
     
     // Save
     ResourceContext *resourceContext = [ResourceContext instance];
+    
+    // Start a new undo group here
+    [resourceContext.managedObjectContext.undoManager beginUndoGrouping];
+    
     [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
     
 }
@@ -601,6 +605,14 @@
     else {
         //enumeration failed
         LOG_REQUEST(1, @"%@ Mime and MimeAnswer creation request failure", activityName);
+        
+        //we need to undo the operation that was last performed
+        LOG_REQUEST(0, @"%@ Rolling back actions due to request failure",activityName);
+        ResourceContext* resourceContext = [ResourceContext instance];
+        [resourceContext.managedObjectContext.undoManager undo];
+        
+        NSError* error = nil;
+        [resourceContext.managedObjectContext save:&error];
         
     }
 }

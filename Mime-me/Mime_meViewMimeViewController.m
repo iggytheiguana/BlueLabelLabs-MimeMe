@@ -147,7 +147,7 @@
     if (self.viewMimeCase == kVIEWSENTMIME) {
         NSString *title = @"Mime sent";
         
-        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+//        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
 //        int editorMinimum = [settings. intValue];
         
         NSString *subtitle = [NSString stringWithFormat:@"You earned %d gems!", 5];
@@ -301,6 +301,10 @@
     
     // Save and updated counts
     ResourceContext *resourceContext = [ResourceContext instance];
+    
+    // Start a new undo group here
+    [resourceContext.managedObjectContext.undoManager beginUndoGrouping];
+    
     [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
     
     [self.navigationController popViewControllerAnimated:YES];
@@ -397,6 +401,10 @@
     
     // Save
     ResourceContext *resourceContext = [ResourceContext instance];
+    
+    // Start a new undo group here
+    [resourceContext.managedObjectContext.undoManager beginUndoGrouping];
+    
     [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
     
 }
@@ -508,6 +516,10 @@
     
     // Save
     ResourceContext *resourceContext = [ResourceContext instance];
+    
+    // Start a new undo group here
+    [resourceContext.managedObjectContext.undoManager beginUndoGrouping];
+    
     [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
     
 }
@@ -596,6 +608,7 @@
             LOG_REQUEST(1, @"%@ Mime flag sent failure", activityName);
             
             // Undo save
+            LOG_REQUEST(0, @"%@ Rolling back actions due to request failure",activityName);
             ResourceContext* resourceContext = [ResourceContext instance];
             [resourceContext.managedObjectContext.undoManager undo];
             
@@ -621,6 +634,14 @@
         else {
             // Send answer failed
             LOG_REQUEST(1, @"%@ Mime answer sent failure", activityName);
+            
+            //we need to undo the operation that was last performed
+            LOG_REQUEST(0, @"%@ Rolling back actions due to request failure",activityName);
+            ResourceContext* resourceContext = [ResourceContext instance];
+            [resourceContext.managedObjectContext.undoManager undo];
+            
+            NSError* error = nil;
+            [resourceContext.managedObjectContext save:&error];
             
             [self.navigationController popViewControllerAnimated:YES];
         }
