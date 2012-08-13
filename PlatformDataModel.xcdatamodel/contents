@@ -8,7 +8,9 @@
         <attribute name="follow_enumeration_timegap" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
         <attribute name="follow_maxnumtodownload" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
         <attribute name="gems_for_clue" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="gems_for_correct_guess" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="gems_for_getting_new_words" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="gems_for_new_mime" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="gems_for_new_word" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="http_timeout_seconds" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
         <attribute name="num_users" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
@@ -168,7 +170,7 @@
         <attribute name="word1" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="applicationsettings" positionX="18" positionY="810" width="225" height="315"/>
+        <element name="applicationsettings" positionX="18" positionY="810" width="225" height="345"/>
         <element name="attributechange" positionX="-207" positionY="1017" width="128" height="165"/>
         <element name="AttributeInstanceData" positionX="-216" positionY="-141" width="128" height="150"/>
         <element name="authenticationcontext" positionX="-198" positionY="336" width="128" height="150"/>
