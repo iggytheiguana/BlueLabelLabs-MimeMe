@@ -10,7 +10,8 @@
 #import "BaseViewController.h"
 #import "Mime_meUINavigationHeaderView.h"
 #import "Mime_meFriendsListTableViewController.h"
-
+#import "GADBannerView.h"
+#import "GADPublisherID.h"
 
 @interface Mime_meFriendsPickerViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, UIProgressHUDViewDelegate, Mime_meFriendsListTableViewControllerDelegate, FBRequestDelegate > {
     
@@ -28,6 +29,8 @@
     NSMutableArray      *m_selectedFriendsArray;
     NSMutableArray      *m_selectedFriendsArrayCopy;
     
+    GADBannerView       *m_gad_bannerView;
+    
 }
 
 @property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
@@ -43,6 +46,8 @@
 @property (nonatomic, retain)           NSArray             *phoneContactsArray;
 @property (nonatomic, retain)           NSMutableArray      *selectedFriendsArray;
 @property (nonatomic, retain)           NSMutableArray      *selectedFriendsArrayCopy;
+
+@property (nonatomic, retain)           GADBannerView                   *gad_bannerView;
 
 - (IBAction) onGoButtonPressed:(id)sender;
 

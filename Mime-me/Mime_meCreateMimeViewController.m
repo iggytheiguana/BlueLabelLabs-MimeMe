@@ -36,6 +36,7 @@
 @synthesize chosenWord          = m_chosenWord;
 @synthesize chosenWordStr       = m_chosenWordStr;
 @synthesize cameraActionSheet   = m_cameraActionSheet;
+@synthesize gad_bannerView      = m_gad_bannerView;
 
 
 #pragma mark - Properties
@@ -185,6 +186,26 @@
     [wordMtblArray release];
 }
 
+- (void)initializeGADBannerView {
+    // Create a view of the standard size at the bottom of the screen.
+    // Available AdSize constants are explained in GADAdSize.h.
+    self.gad_bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
+    
+    // Move the view into position at the bottom of the screen
+    self.gad_bannerView.frame = CGRectMake(0.0, 430.0, 320.0, 50.0);
+    
+    // Specify the ad's "unit identifier." This is your AdMob Publisher ID.
+    self.gad_bannerView.adUnitID = kGADPublisherID;
+    
+    // Let the runtime know which UIViewController to restore after taking
+    // the user wherever the ad goes and add it to the view hierarchy.
+    self.gad_bannerView.rootViewController = self;
+    [self.view addSubview:self.gad_bannerView];
+    
+    // Initiate a generic request to load it with an ad.
+    [self.gad_bannerView loadRequest:[GADRequest request]];
+}
+
 #pragma mark - View Lifecycle
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -206,7 +227,6 @@
     
     // Add rounded corners to view
     [self.view.layer setCornerRadius:8.0f];
-    [self.view.layer setMasksToBounds:YES];
     
     // Add the navigation header
     Mime_meUINavigationHeaderView *navigationHeader = [[Mime_meUINavigationHeaderView alloc]initWithFrame:[Mime_meUINavigationHeaderView frameForNavigationHeader]];
@@ -219,6 +239,9 @@
     // Set up cloud enumerator for words
     self.wordsCloudEnumerator = [CloudEnumerator enumeratorForWords];
     self.wordsCloudEnumerator.delegate = self;
+    
+    // Initialize Google AdMob Banner view
+    [self initializeGADBannerView];
     
 }
 
@@ -234,6 +257,8 @@
     self.tc_header = nil;
     self.btn_moreWords = nil;
     self.btn_makeWord = nil;
+    self.cameraActionSheet = nil;
+    self.gad_bannerView = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

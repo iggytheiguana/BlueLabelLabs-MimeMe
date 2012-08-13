@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 #import "Mime_meUINavigationHeaderView.h"
+#import "GADBannerView.h"
+#import "GADPublisherID.h"
 
 @interface Mime_meScrapbookMenuViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate, UIProgressHUDViewDelegate > {
     
@@ -23,6 +25,8 @@
     CloudEnumerator     *m_favoriteMimesCloudEnumerator;
     CloudEnumerator     *m_guessedMimeAnswersCloudEnumerator;
     
+    GADBannerView       *m_gad_bannerView;
+    
 }
 
 @property (nonatomic, retain)           NSFetchedResultsController      *frc_sentMimes;
@@ -35,10 +39,12 @@
 
 @property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
 
-@property (nonatomic, retain) IBOutlet  UITableView         *tbl_scrapbook;
-@property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_sentHeader;
-@property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_favoritesHeader;
-@property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_guessedHeader;
+@property (nonatomic, retain) IBOutlet  UITableView                     *tbl_scrapbook;
+@property (nonatomic, retain) IBOutlet  UITableViewCell                 *tc_sentHeader;
+@property (nonatomic, retain) IBOutlet  UITableViewCell                 *tc_favoritesHeader;
+@property (nonatomic, retain) IBOutlet  UITableViewCell                 *tc_guessedHeader;
+
+@property (nonatomic, retain)           GADBannerView                   *gad_bannerView;
 
 + (Mime_meScrapbookMenuViewController*)createInstance;
 

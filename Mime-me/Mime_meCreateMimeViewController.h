@@ -12,6 +12,8 @@
 #import "Mime_meUINavigationHeaderView.h"
 #import "Mime_meUIMakeWordView.h"
 #import "Word.h"
+#import "GADBannerView.h"
+#import "GADPublisherID.h"
 
 @interface Mime_meCreateMimeViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, UICameraActionSheetDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate, UIProgressHUDViewDelegate, Mime_meUIMakeWordViewDelgate > {
     
@@ -33,6 +35,8 @@
     UICameraActionSheet *m_cameraActionSheet;
     
     CloudEnumerator     *m_wordsCloudEnumerator;
+    
+    GADBannerView       *m_gad_bannerView;
 }
 
 @property (nonatomic, retain)           NSFetchedResultsController      *frc_words;
@@ -54,6 +58,8 @@
 @property (nonatomic, retain)           NSString                        *chosenWordStr;
 
 @property (nonatomic, retain)           UICameraActionSheet             *cameraActionSheet;
+
+@property (nonatomic, retain)           GADBannerView                   *gad_bannerView;
 
 - (IBAction) onMoreWordsButtonPressed:(id)sender;
 - (IBAction) onMakeWordButtonPressed:(id)sender;

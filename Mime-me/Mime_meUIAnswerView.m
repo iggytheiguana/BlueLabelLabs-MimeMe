@@ -287,7 +287,7 @@
 
 // Handles keyboard Return button pressed while editing the textfield
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if ([self.word isEqualToString:self.tf_answer.text]) {
+    if ([[self.word lowercaseString] isEqualToString:self.tf_answer.text]) {
         // User submitted the correct answer
         
         [self.delegate onSubmittedCorrectAnswer:YES];

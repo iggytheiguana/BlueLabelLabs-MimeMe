@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 #import "Mime_meUINavigationHeaderView.h"
+#import "GADBannerView.h"
+#import "GADPublisherID.h"
 
 @interface Mime_meGuessMenuViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate, UIProgressHUDViewDelegate > {
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
@@ -21,6 +23,8 @@
     CloudEnumerator     *m_mimeAnswersCloudEnumerator;
     CloudEnumerator     *m_recentMimesCloudEnumerator;
     CloudEnumerator     *m_staffPickedMimesCloudEnumerator;
+    
+    GADBannerView       *m_gad_bannerView;
 }
 
 @property (nonatomic, retain)           NSFetchedResultsController      *frc_mimeAnswersFromFriends;
@@ -37,6 +41,8 @@
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_friendsHeader;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_recentHeader;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_staffPicksHeader;
+
+@property (nonatomic, retain)           GADBannerView       *gad_bannerView;
 
 + (Mime_meGuessMenuViewController*)createInstance;
 

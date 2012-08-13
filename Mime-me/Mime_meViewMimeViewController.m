@@ -554,6 +554,12 @@
         mimeAnswer.state = [NSNumber numberWithInt:kANSWERED];
         mimeAnswer.didusehint = [NSNumber numberWithBool:self.didUseHint];
         
+        // Increment the users gem total for the newly created Mime
+//        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+//        int gemsForCorrectAnswer = [settings. intValue];
+        int newGemTotal = [self.loggedInUser.numberofpoints intValue] + 2;
+        self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal]; 
+        
         // Show the hud and save
         [self showHUDForSendAnswer];
     }
@@ -573,6 +579,12 @@
     // Flag that the user did use a hint.
     // We will update the didUseHint property on the MimeAnswer object at save
     self.didUseHint = YES;
+    
+    // Increment the users gem total for the newly created Mime
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    int gemsForClue = [settings.gems_for_clue intValue];
+    int newGemTotal = [self.loggedInUser.numberofpoints intValue] + gemsForClue;
+    self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
 }
 
 #pragma mark - MailComposeController Delegate

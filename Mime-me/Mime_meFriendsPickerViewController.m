@@ -40,6 +40,7 @@
 @synthesize phoneContactsArray      = m_phoneContactsArray;
 @synthesize selectedFriendsArray    = m_selectedFriendsArray;
 @synthesize selectedFriendsArrayCopy = m_selectedFriendsArrayCopy;
+@synthesize gad_bannerView          = m_gad_bannerView;
 
 
 #pragma mark - Enumerators
@@ -185,6 +186,26 @@
     
 }
 
+- (void)initializeGADBannerView {
+    // Create a view of the standard size at the bottom of the screen.
+    // Available AdSize constants are explained in GADAdSize.h.
+    self.gad_bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
+    
+    // Move the view into position at the bottom of the screen
+    self.gad_bannerView.frame = CGRectMake(0.0, 430.0, 320.0, 50.0);
+    
+    // Specify the ad's "unit identifier." This is your AdMob Publisher ID.
+    self.gad_bannerView.adUnitID = kGADPublisherID;
+    
+    // Let the runtime know which UIViewController to restore after taking
+    // the user wherever the ad goes and add it to the view hierarchy.
+    self.gad_bannerView.rootViewController = self;
+    [self.view addSubview:self.gad_bannerView];
+    
+    // Initiate a generic request to load it with an ad.
+    [self.gad_bannerView loadRequest:[GADRequest request]];
+}
+
 #pragma mark - View Lifecycle
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -221,6 +242,9 @@
     // Initialize the array of selected friends
     self.selectedFriendsArray = [[NSMutableArray alloc] init];
     
+    // Initialize Google AdMob Banner view
+    [self initializeGADBannerView];
+    
 }
 
 - (void)viewDidUnload
@@ -234,6 +258,7 @@
     self.tbl_friends = nil;
     self.tc_selectedHeader = nil;
     self.tc_addContactsHeader = nil;
+    self.gad_bannerView = nil;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -572,6 +597,12 @@
         // Create a MimeAnswer for friend target
         [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetFacebookID:contact.facebookid withTargetEmail:contact.email withTargetName:contact.name];
     }
+    
+    // Increment the users gem total for the newly created Mime
+//    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+//    int gemsForNewMime = [settings. intValue];
+    int newGemTotal = [self.loggedInUser.numberofpoints intValue] + 10;
+    self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal]; 
     
     // Save
     [self showHUDForMimeUpload];
