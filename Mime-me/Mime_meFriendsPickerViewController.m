@@ -221,8 +221,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    // Add rounded corners to view
+    // Add rounded corners to view and tble view
     [self.view.layer setCornerRadius:8.0f];
+    [self.tbl_friends.layer setCornerRadius:8.0f];
     
     // Add the navigation header
     Mime_meUINavigationHeaderView *navigationHeader = [[Mime_meUINavigationHeaderView alloc]initWithFrame:[Mime_meUINavigationHeaderView frameForNavigationHeader]];

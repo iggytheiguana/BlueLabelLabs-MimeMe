@@ -234,6 +234,9 @@
     navigationHeader.btn_back.hidden = YES;
     navigationHeader.btn_gemCount.hidden = NO;
     navigationHeader.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+    if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+        navigationHeader.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    }
     self.nv_navigationHeader = navigationHeader;
     [self.view addSubview:self.nv_navigationHeader];
     [navigationHeader release];
@@ -413,7 +416,8 @@
     self.chosenWordStr = self.chosenWord.word1;
     
     // Launch photo picker
-    self.cameraActionSheet = [UICameraActionSheet createCameraActionSheetWithTitle:nil allowsEditing:NO];
+    NSString *title = [NSString stringWithFormat:@"You chose \"%@\"", self.chosenWordStr];
+    self.cameraActionSheet = [UICameraActionSheet createCameraActionSheetWithTitle:title allowsEditing:NO];
     self.cameraActionSheet.a_delegate = self;
     [self.cameraActionSheet showInView:self.view];
     
@@ -428,6 +432,9 @@
     self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
     // Update the gem count displayed in the navigation header
     self.nv_navigationHeader.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+    if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+        self.nv_navigationHeader.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    }
     
     // Save new gem total
     ResourceContext *resourceContext = [ResourceContext instance];
@@ -462,7 +469,8 @@
     self.chosenWordStr = trimmedString;
     
     // Launch photo picker
-    self.cameraActionSheet = [UICameraActionSheet createCameraActionSheetWithTitle:nil allowsEditing:NO];
+    NSString *title = [NSString stringWithFormat:@"You chose \"%@\"", self.chosenWordStr];
+    self.cameraActionSheet = [UICameraActionSheet createCameraActionSheetWithTitle:title allowsEditing:NO];
     self.cameraActionSheet.a_delegate = self;
     [self.cameraActionSheet showInView:self.view];
 }
@@ -488,6 +496,9 @@
         
         // Update the gem count displayed in the navigation header
         self.nv_navigationHeader.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+        if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+            self.nv_navigationHeader.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+        }
         
         self.chosenWord = [Word createWordWithString:self.chosenWordStr];
     }

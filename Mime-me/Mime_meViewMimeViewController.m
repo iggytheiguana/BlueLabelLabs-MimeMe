@@ -151,6 +151,9 @@
     // Setup Gem Count button, disable it for now
     [self.btn_gemCount setEnabled:NO];
     self.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+    if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+        self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    }
     
     // Create gesture recognizer for the photo image view to handle a single tap
     UITapGestureRecognizer *oneFingerTap = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showConfirmationView)] autorelease];
@@ -207,6 +210,15 @@
         self.v_confirmationView.hidden = YES;
         self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self.view addSubview:self.v_confirmationView];
+        
+        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withWord:mime.word];
+        self.v_answerView.delegate = self;
+        self.v_answerView.tf_answer.text = mime.word;
+        self.v_answerView.tf_answer.enabled = NO;
+        self.v_answerView.btn_clue.enabled = NO;
+        self.v_answerView.btn_clue.hidden = YES;
+        self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        [self.view addSubview:self.v_answerView];
         
     }
     else if (self.viewMimeCase == kVIEWANSWERMIME) {
@@ -583,7 +595,7 @@
         // Increment the users gem total for the newly created Mime
         int pointsAwarded = [mimeAnswer.pointsawarded intValue];
         int newGemTotal = [self.loggedInUser.numberofpoints intValue] + pointsAwarded;
-        self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal]; 
+        self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
         
         // Show the hud and save
         [self showHUDForSendAnswer];
@@ -610,6 +622,12 @@
     int gemsForClue = [settings.gems_for_clue intValue];
     int newGemTotal = [self.loggedInUser.numberofpoints intValue] - gemsForClue;
     self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
+    
+    // Update the gem count displayed in the navigation header
+    self.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+    if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+        self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    }
 }
 
 - (IBAction) onFlagButtonPressed:(id)sender {
@@ -705,6 +723,12 @@
                 
                 // Add the Confirmation view
                 [self.view addSubview:self.v_confirmationView];
+                
+                // Update the gem count displayed in the navigation header
+                self.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+                if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+                    self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+                }
                 
                 [self showConfirmationView];
             }

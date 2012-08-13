@@ -169,6 +169,7 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{214, 57}, {86, 37}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -205,9 +206,10 @@
 						<double key="IBUITitleEdgeInsets.right">-4</double>
 						<double key="IBUIImageEdgeInsets.top">0.0</double>
 						<double key="IBUIImageEdgeInsets.bottom">0.0</double>
-						<double key="IBUIImageEdgeInsets.left">-4</double>
+						<double key="IBUIImageEdgeInsets.left">-2</double>
 						<double key="IBUIImageEdgeInsets.right">0.0</double>
-						<string key="IBUINormalTitle">999</string>
+						<int key="IBUILineBreakMode">4</int>
+						<string key="IBUINormalTitle">9999</string>
 						<reference key="IBUIHighlightedTitleColor" ref="87913763"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>
@@ -451,7 +453,7 @@
 				<real value="2" key="14.IBUIButtonInspectorSelectedEdgeInsetMetadataKey"/>
 				<real value="1" key="14.IBUIButtonInspectorSelectedStateConfigurationMetadataKey"/>
 				<string key="28.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<real value="1" key="28.IBUIButtonInspectorSelectedEdgeInsetMetadataKey"/>
+				<real value="2" key="28.IBUIButtonInspectorSelectedEdgeInsetMetadataKey"/>
 				<string key="9.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<real value="2" key="9.IBUIButtonInspectorSelectedEdgeInsetMetadataKey"/>
 			</dictionary>

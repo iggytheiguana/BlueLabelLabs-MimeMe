@@ -292,6 +292,9 @@
     navigationHeader.btn_back.hidden = YES;
     navigationHeader.btn_gemCount.hidden = NO;
     navigationHeader.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+    if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+        navigationHeader.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    }
     self.nv_navigationHeader = navigationHeader;
     [self.view addSubview:self.nv_navigationHeader];
     [navigationHeader release];
