@@ -46,9 +46,9 @@
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="940927574"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
-						<object class="NSColor" key="IBUIBackgroundColor" id="595905488">
-							<int key="NSColorSpace">3</int>
-							<bytes key="NSWhite">MCAwAA</bytes>
+						<object class="NSColor" key="IBUIBackgroundColor">
+							<int key="NSColorSpace">2</int>
+							<bytes key="NSRGB">MCAwLjY4MjM1Mjk2MDEgMC4zOTIxNTY4OTkAA</bytes>
 						</object>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -98,7 +98,7 @@
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MC41AA</bytes>
 						</object>
-						<object class="NSCustomResource" key="IBUINormalImage" id="519888778">
+						<object class="NSCustomResource" key="IBUINormalImage" id="114713002">
 							<string key="NSClassName">NSImage</string>
 							<string key="NSResourceName">gem.png</string>
 						</object>
@@ -118,7 +118,6 @@
 						<string key="NSFrame">{{20, 380}, {280, 44}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -140,7 +139,7 @@
 							<bytes key="NSRGB">MC4wNjk1Mzg5NTQ3NiAwLjQyMzU2OTAzNyAwLjE1MTU0NTg1NjkAA</bytes>
 						</object>
 						<reference key="IBUINormalTitleShadowColor" ref="986137881"/>
-						<reference key="IBUINormalImage" ref="519888778"/>
+						<reference key="IBUINormalImage" ref="114713002"/>
 						<reference key="IBUIFontDescription" ref="1054693855"/>
 						<reference key="IBUIFont" ref="258034521"/>
 					</object>
@@ -199,7 +198,10 @@
 						<reference key="NSSuperview" ref="504906186"/>
 						<reference key="NSNextKeyView" ref="411637792"/>
 						<string key="NSReuseIdentifierKey">_NS:11</string>
-						<reference key="IBUIBackgroundColor" ref="595905488"/>
+						<object class="NSColor" key="IBUIBackgroundColor">
+							<int key="NSColorSpace">3</int>
+							<bytes key="NSWhite">MCAwAA</bytes>
+						</object>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<int key="IBUIContentMode">4</int>
