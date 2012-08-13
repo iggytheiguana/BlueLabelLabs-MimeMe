@@ -104,29 +104,30 @@
     Mime *mime = (Mime *)[resourceContext resourceWithType:MIME withID:self.mimeID];
     
     // Set up the profile picture of the sender
-    self.iv_profilePicture.contentMode = UIViewContentModeScaleAspectFill;
     self.iv_profilePicture.layer.borderColor = [UIColor whiteColor].CGColor;
     self.iv_profilePicture.layer.borderWidth = 1.0;
     
-//    ImageManager* imageManager = [ImageManager instance];
-//    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:mime.objectid forKey:kCREATORTID];
-//    
-//    if (mime.imageurl != nil && ![mime.imageurl isEqualToString:@""]) {
-//        Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
-//        callback.fireOnMainThread = YES;
-//        UIImage* image = [imageManager downloadImage:mime.imageurl withUserInfo:nil atCallback:callback];
-//        [callback release];
-//        if (image != nil) {
-//            
-//            self.iv_profilePicture.image = [image imageScaledToSize:CGSizeMake(42, 42)];
-//            
-//            [self.view setNeedsDisplay];
-//        }
-//        else {
+    ImageManager* imageManager = [ImageManager instance];
+    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:mime.creatorid forKey:kCREATORTID];
+    
+    if (mime.creatorimageurl != nil && ![mime.creatorimageurl isEqualToString:@""]) {
+        Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
+        callback.fireOnMainThread = YES;
+        UIImage* image = [imageManager downloadImage:mime.creatorimageurl withUserInfo:nil atCallback:callback];
+        [callback release];
+        if (image != nil) {
+            
+            self.iv_profilePicture.contentMode = UIViewContentModeScaleAspectFill;
+            self.iv_profilePicture.image = [image imageScaledToSize:CGSizeMake(42, 42)];
+            
+            [self.view setNeedsDisplay];
+        }
+        else {
+            self.iv_profilePicture.contentMode = UIViewContentModeScaleAspectFit;
             self.iv_profilePicture.backgroundColor = [UIColor lightGrayColor];
             self.iv_profilePicture.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(42, 42)];
-//        }
-//    }
+        }
+    }
 }
 
 - (void)viewDidLoad
@@ -749,10 +750,10 @@
 
 #pragma mark - ImageManager Delegate Methods
 - (void)onImageDownloadComplete:(CallbackResult*)result {
-    NSString* activityName = @"Mime_meShareMimeViewController.onImageDownloadComplete:";
+    NSString* activityName = @"Mime_meViewMimeViewController.onImageDownloadComplete:";
     NSDictionary* userInfo = result.context;
     NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
-    NSNumber* userID = [userInfo valueForKey:kCREATORTID];
+    NSNumber* creatorID = [userInfo valueForKey:kCREATORTID];
     ImageDownloadResponse* response = (ImageDownloadResponse*)result.response;
     
     ResourceContext* resourceContext = [ResourceContext instance];
@@ -785,19 +786,21 @@
             LOG_IMAGE(1,@"%@Image failed to download",activityName);
         }
     }
-    else if ([userID isEqualToNumber:mime.creatorid]) {
+    else if ([creatorID isEqualToNumber:mime.creatorid]) {
         // Mime image downloaded
         if ([response.didSucceed boolValue] == YES) {
             //we only draw the image if this view hasnt been repurposed for another photo
-            LOG_IMAGE(1,@"%@settings UIImage object equal to downloaded response",activityName);
+            LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
             
             UIImage *scaledImage = [response.image imageScaledToSize:CGSizeMake(42, 42)];
             
+            self.iv_profilePicture.contentMode = UIViewContentModeScaleAspectFill;
             [self.iv_profilePicture performSelectorOnMainThread:@selector(setImage:) withObject:scaledImage waitUntilDone:NO];
             
             [self.view setNeedsDisplay];
         }
         else {
+            self.iv_profilePicture.contentMode = UIViewContentModeScaleAspectFit;
             self.iv_profilePicture.backgroundColor = [UIColor lightGrayColor];
             self.iv_profilePicture.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(42, 42)];
             LOG_IMAGE(1,@"%@Image failed to download",activityName);
