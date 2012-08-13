@@ -232,6 +232,8 @@
     Mime_meUINavigationHeaderView *navigationHeader = [[Mime_meUINavigationHeaderView alloc]initWithFrame:[Mime_meUINavigationHeaderView frameForNavigationHeader]];
     navigationHeader.delegate = self;
     navigationHeader.btn_back.hidden = YES;
+    navigationHeader.btn_gemCount.hidden = NO;
+    navigationHeader.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
     self.nv_navigationHeader = navigationHeader;
     [self.view addSubview:self.nv_navigationHeader];
     [navigationHeader release];
@@ -419,6 +421,18 @@
 
 #pragma mark - UIButton Handlers
 - (IBAction) onMoreWordsButtonPressed:(id)sender {
+    // Decrement the users gem total for the request of new words
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    int gemsForGettingNewWords = [settings.gems_for_getting_new_words intValue];
+    int newGemTotal = [self.loggedInUser.numberofpoints intValue] - gemsForGettingNewWords;
+    self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
+    // Update the gem count displayed in the navigation header
+    self.nv_navigationHeader.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+    
+    // Save new gem total
+    ResourceContext *resourceContext = [ResourceContext instance];
+    [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
+    
     //We only download new words if we haven't done so recently and the enumerator is ready
     if ((!self.wordsCloudEnumerator.isLoading) && ([self.wordsCloudEnumerator canEnumerate])) {
         // Enumerate for new words
@@ -466,6 +480,15 @@
     
     // Update the chosen word object
     if (self.didMakeWord == YES) {
+        // Decrement the users gem total for the creation of a new word
+        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+        int gemsForNewWord = [settings.gems_for_new_word intValue];
+        int newGemTotal = [self.loggedInUser.numberofpoints intValue] - gemsForNewWord;
+        self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
+        
+        // Update the gem count displayed in the navigation header
+        self.nv_navigationHeader.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+        
         self.chosenWord = [Word createWordWithString:self.chosenWordStr];
     }
     else {

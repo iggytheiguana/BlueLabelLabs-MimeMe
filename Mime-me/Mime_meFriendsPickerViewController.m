@@ -228,6 +228,7 @@
     Mime_meUINavigationHeaderView *navigationHeader = [[Mime_meUINavigationHeaderView alloc]initWithFrame:[Mime_meUINavigationHeaderView frameForNavigationHeader]];
     navigationHeader.delegate = self;
     navigationHeader.btn_back.hidden = YES;
+    navigationHeader.btn_gemCount.hidden = YES;
     navigationHeader.btn_settings.hidden = YES;
     navigationHeader.btn_mime.hidden = YES;
     navigationHeader.btn_guess.hidden = YES;
@@ -599,9 +600,9 @@
     }
     
     // Increment the users gem total for the newly created Mime
-//    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
-//    int gemsForNewMime = [settings. intValue];
-    int newGemTotal = [self.loggedInUser.numberofpoints intValue] + 10;
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    int gemsForNewMime = [settings.gems_for_new_mime intValue];
+    int newGemTotal = [self.loggedInUser.numberofpoints intValue] + gemsForNewMime;
     self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal]; 
     
     // Save

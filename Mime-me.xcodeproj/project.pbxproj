@@ -65,12 +65,12 @@
 		525C7CD515B795AD00035802 /* Mime_meScrapbookFullTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 525C7CD315B795AC00035802 /* Mime_meScrapbookFullTableViewController.xib */; };
 		5277E7BF15D94527003A1DCF /* libGoogleAdMobAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5277E78A15D94527003A1DCF /* libGoogleAdMobAds.a */; };
 		5277E7C515D94A74003A1DCF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5277E7C415D94A74003A1DCF /* AudioToolbox.framework */; };
+		5277E7C915D97ED7003A1DCF /* gem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5277E7C715D97ED7003A1DCF /* gem.png */; };
+		5277E7CA15D97ED7003A1DCF /* gem@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5277E7C815D97ED7003A1DCF /* gem@2x.png */; };
 		529BE9C915A2225D00B7346A /* logo-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C715A2225D00B7346A /* logo-MimeMe.png */; };
 		529BE9CA15A2225D00B7346A /* logo-MimeMe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */; };
 		529BE9CD15A22A1900B7346A /* logo_wName-MimeMe.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */; };
 		529BE9CE15A22A1900B7346A /* logo_wName-MimeMe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9CC15A22A1900B7346A /* logo_wName-MimeMe@2x.png */; };
-		529BE9D115A22D0A00B7346A /* gem.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9CF15A22D0A00B7346A /* gem.png */; };
-		529BE9D215A22D0A00B7346A /* gem@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9D015A22D0A00B7346A /* gem@2x.png */; };
 		529BE9D615A22EEA00B7346A /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9D515A22EEA00B7346A /* BaseViewController.m */; };
 		529BE9DC15A22F6200B7346A /* UIProgressHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 529BE9D915A22F6200B7346A /* UIProgressHUDView.xib */; };
 		529BE9DD15A22F6200B7346A /* UIProgressHUDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 529BE9DB15A22F6200B7346A /* UIProgressHUDView.m */; };
@@ -316,12 +316,12 @@
 		5277E78A15D94527003A1DCF /* libGoogleAdMobAds.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAdMobAds.a; sourceTree = "<group>"; };
 		5277E7C415D94A74003A1DCF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		5277E7C615D95120003A1DCF /* GADPublisherID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADPublisherID.h; sourceTree = "<group>"; };
+		5277E7C715D97ED7003A1DCF /* gem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gem.png; sourceTree = "<group>"; };
+		5277E7C815D97ED7003A1DCF /* gem@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gem@2x.png"; sourceTree = "<group>"; };
 		529BE9C715A2225D00B7346A /* logo-MimeMe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-MimeMe.png"; sourceTree = "<group>"; };
 		529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-MimeMe@2x.png"; sourceTree = "<group>"; };
 		529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo_wName-MimeMe.png"; sourceTree = "<group>"; };
 		529BE9CC15A22A1900B7346A /* logo_wName-MimeMe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo_wName-MimeMe@2x.png"; sourceTree = "<group>"; };
-		529BE9CF15A22D0A00B7346A /* gem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gem.png; sourceTree = "<group>"; };
-		529BE9D015A22D0A00B7346A /* gem@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gem@2x.png"; sourceTree = "<group>"; };
 		529BE9D415A22EEA00B7346A /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
 		529BE9D515A22EEA00B7346A /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
 		529BE9D915A22F6200B7346A /* UIProgressHUDView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIProgressHUDView.xib; sourceTree = "<group>"; };
@@ -1304,8 +1304,6 @@
 				529BE9C815A2225D00B7346A /* logo-MimeMe@2x.png */,
 				529BE9CB15A22A1900B7346A /* logo_wName-MimeMe.png */,
 				529BE9CC15A22A1900B7346A /* logo_wName-MimeMe@2x.png */,
-				529BE9CF15A22D0A00B7346A /* gem.png */,
-				529BE9D015A22D0A00B7346A /* gem@2x.png */,
 				529BE9F615A250C800B7346A /* icon-facebook-white.png */,
 				529BE9F715A250C800B7346A /* icon-facebook-white@2x.png */,
 				529BE9F815A250C800B7346A /* icon-twitter-bird.png */,
@@ -1338,6 +1336,8 @@
 				522232D415B392220065C6DC /* background_header@2x.png */,
 				520DD0FB15A785E500C58BF1 /* waldo.png */,
 				520DD0FC15A785E500C58BF1 /* waldo@2x.png */,
+				5277E7C715D97ED7003A1DCF /* gem.png */,
+				5277E7C815D97ED7003A1DCF /* gem@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1444,8 +1444,6 @@
 				529BE9CA15A2225D00B7346A /* logo-MimeMe@2x.png in Resources */,
 				529BE9CD15A22A1900B7346A /* logo_wName-MimeMe.png in Resources */,
 				529BE9CE15A22A1900B7346A /* logo_wName-MimeMe@2x.png in Resources */,
-				529BE9D115A22D0A00B7346A /* gem.png in Resources */,
-				529BE9D215A22D0A00B7346A /* gem@2x.png in Resources */,
 				529BE9DC15A22F6200B7346A /* UIProgressHUDView.xib in Resources */,
 				529BE9FA15A250C800B7346A /* icon-facebook-white.png in Resources */,
 				529BE9FB15A250C800B7346A /* icon-facebook-white@2x.png in Resources */,
@@ -1499,6 +1497,8 @@
 				52F5BA6A15C871E400509E8B /* icon-favorite@2x.png in Resources */,
 				52CA170F15D5B017002F9CB3 /* icon-flag.png in Resources */,
 				52CA171015D5B017002F9CB3 /* icon-flag@2x.png in Resources */,
+				5277E7C915D97ED7003A1DCF /* gem.png in Resources */,
+				5277E7CA15D97ED7003A1DCF /* gem@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

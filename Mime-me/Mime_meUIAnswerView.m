@@ -21,13 +21,13 @@
 @implementation Mime_meUIAnswerView
 @synthesize view                = m_view;
 @synthesize v_answerHeader      = m_v_answerHeader;
-@synthesize lbl_title           = m_lbl_title;
 @synthesize btn_slide           = m_btn_slide;
+@synthesize btn_flag            = m_btn_flag;
 @synthesize btn_clue            = m_btn_clue;
 @synthesize tf_answer           = m_tf_answer;
 @synthesize v_wrongAnswer       = m_v_wrongAnswer;
 @synthesize word                = m_word;
-@synthesize isViewHidden            = m_isViewHidden;
+@synthesize isViewHidden        = m_isViewHidden;
 
 #pragma mark - Properties
 - (id)delegate {
@@ -107,6 +107,7 @@
                                                  selector:@selector(didRotate)
                                                      name:@"UIDeviceOrientationDidChangeNotification" object:nil];
         
+        
         [self addSubview:self.view];
         
     }
@@ -118,8 +119,8 @@
 - (void)dealloc {
     self.view = nil;
     self.v_answerHeader = nil;
-    self.lbl_title = nil;
     self.btn_slide = nil;
+    self.btn_flag = nil;
     self.btn_clue = nil;
     self.tf_answer = nil;
     self.v_wrongAnswer = nil;
@@ -209,6 +210,10 @@
      ];
     
     [self.delegate onSlideButtonPressed:sender];
+}
+
+- (IBAction) onFlagButtonPressed:(id)sender {
+    [self.delegate onFlagButtonPressed:sender];
 }
 
 - (IBAction) onClueButtonPressed:(id)sender {
@@ -341,12 +346,11 @@
 }
 
 #pragma mark - Statics
-+ (Mime_meUIAnswerView*)createInstanceWithFrame:(CGRect)frame withTitle:(NSString *)title withWord:(NSString *)word {
++ (Mime_meUIAnswerView*)createInstanceWithFrame:(CGRect)frame withWord:(NSString *)word {
     Mime_meUIAnswerView* instance = [[Mime_meUIAnswerView alloc]initWithFrame:(CGRect)frame];
     [instance autorelease];
     
-    // Set the title and answer
-    instance.lbl_title.text = title;
+    // Set the answer
     instance.word = word;
     
     return instance;

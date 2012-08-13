@@ -14,6 +14,7 @@
 #import "MimeAnswerState.h"
 #import "ImageManager.h"
 #import "ImageDownloadResponse.h"
+#import "UIImage+UIImageCategory.h"
 #import "Macros.h"
 #import "ViewMimeCase.h"
 #import "DateTimeHelper.h"
@@ -22,6 +23,7 @@
 #import "SocialSharingManager.h"
 
 #define kMIMEID @"mimeid"
+#define kCREATORTID @"creatorid"
 
 @interface Mime_meViewMimeViewController ()
 
@@ -30,14 +32,18 @@
 @implementation Mime_meViewMimeViewController
 @synthesize mimeID              = m_mimeID;
 @synthesize mimeAnswerID        = m_mimeAnswerID;
+@synthesize creatorID           = m_creatorID;
 @synthesize imageSize           = m_imageSize;
 @synthesize viewMimeCase        = viewMimeCase;
 
 @synthesize iv_photo            = m_iv_photo;
-@synthesize iv_logo             = m_iv_logo;
-@synthesize btn_back            = m_btn_back;
-@synthesize btn_flag            = m_btn_flag;
 @synthesize v_background        = m_v_background;
+
+@synthesize v_customNavContainer = m_v_customNavContainer;
+@synthesize btn_back            = m_btn_back;
+@synthesize iv_profilePicture   = m_iv_profilePicture;
+@synthesize lbl_title           = m_lbl_title;
+@synthesize btn_gemCount        = m_btn_gemCount;
 
 // sentContainer
 @synthesize v_confirmationView  = m_v_confirmationView;
@@ -93,17 +99,55 @@
     }
 }
 
+- (void)showProfilePicture {
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime *mime = (Mime *)[resourceContext resourceWithType:MIME withID:self.mimeID];
+    
+    // Set up the profile picture of the sender
+    self.iv_profilePicture.contentMode = UIViewContentModeScaleAspectFill;
+    self.iv_profilePicture.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.iv_profilePicture.layer.borderWidth = 1.0;
+    
+//    ImageManager* imageManager = [ImageManager instance];
+//    NSDictionary* userInfo = [NSDictionary dictionaryWithObject:mime.objectid forKey:kCREATORTID];
+//    
+//    if (mime.imageurl != nil && ![mime.imageurl isEqualToString:@""]) {
+//        Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
+//        callback.fireOnMainThread = YES;
+//        UIImage* image = [imageManager downloadImage:mime.imageurl withUserInfo:nil atCallback:callback];
+//        [callback release];
+//        if (image != nil) {
+//            
+//            self.iv_profilePicture.image = [image imageScaledToSize:CGSizeMake(42, 42)];
+//            
+//            [self.view setNeedsDisplay];
+//        }
+//        else {
+            self.iv_profilePicture.backgroundColor = [UIColor lightGrayColor];
+            self.iv_profilePicture.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(42, 42)];
+//        }
+//    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    // Add drop shadow to the back button
-    [self.btn_back.layer setShadowColor:[UIColor blackColor].CGColor];
-    [self.btn_back.layer setShadowOpacity:0.7f];
-    [self.btn_back.layer setShadowRadius:2.0f];
-    [self.btn_back.layer setShadowOffset:CGSizeMake(0.0f, 0.0f)];
-    [self.btn_back.layer setMasksToBounds:NO];
+    // Add rounded corners to view
+    [self.view.layer setCornerRadius:8.0f];
+    [self.view.layer setMasksToBounds:YES];
+    
+    // Add drop shadow to the custom nav container
+    [self.v_customNavContainer.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.v_customNavContainer.layer setShadowOpacity:0.7f];
+    [self.v_customNavContainer.layer setShadowRadius:2.0f];
+    [self.v_customNavContainer.layer setShadowOffset:CGSizeMake(0.0f, 0.0f)];
+    [self.v_customNavContainer.layer setMasksToBounds:NO];
+    
+    // Setup Gem Count button, disable it for now
+    [self.btn_gemCount setEnabled:NO];
+    self.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
     
     // Create gesture recognizer for the photo image view to handle a single tap
     UITapGestureRecognizer *oneFingerTap = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showConfirmationView)] autorelease];
@@ -138,21 +182,24 @@
     // Display the Mime photo onto the image view
     [self showMimePhoto];
     
+    // Display the profile picture of the sender
+    [self showProfilePicture];
     
-    // Set up the view based on the case
+    // Set up the remainder of the view based on the case
     ResourceContext* resourceContext = [ResourceContext instance];
     Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
-    MimeAnswer *mimeAnswer = (MimeAnswer*)[resourceContext resourceWithType:MIMEANSWER withID:self.mimeAnswerID];
     
     if (self.viewMimeCase == kVIEWSENTMIME) {
-        NSString *title = @"Mime sent";
+        self.lbl_title.text = [NSString stringWithFormat:@"Mime created by %@", mime.creatorname];
         
-//        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
-//        int editorMinimum = [settings. intValue];
+        NSString *confirmationTitle = @"Mime sent";
         
-        NSString *subtitle = [NSString stringWithFormat:@"You earned %d gems!", 5];
+        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+        int editorMinimum = [settings.gems_for_new_mime intValue];
         
-        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:title withSubtitle:subtitle];
+        NSString *subtitle = [NSString stringWithFormat:@"You earned %d gems!", editorMinimum];
+        
+        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:confirmationTitle withSubtitle:subtitle forMimeWithID:self.mimeID];
         self.v_confirmationView.delegate = self;
         self.v_confirmationView.hidden = YES;
         self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -160,17 +207,21 @@
         
     }
     else if (self.viewMimeCase == kVIEWANSWERMIME) {
+        self.lbl_title.text = [NSString stringWithFormat:@"You are guessing a mime from %@", mime.creatorname];
+        
+        MimeAnswer *mimeAnswer = (MimeAnswer*)[resourceContext resourceWithType:MIMEANSWER withID:self.mimeAnswerID];
+        
         int pointsAwarded = [mimeAnswer.pointsawarded intValue];
+        
         NSString *title = @"Congratulations!";
         NSString *subtitle = [NSString stringWithFormat:@"You guessed right and earned %d gems", pointsAwarded];
         
-        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:title withSubtitle:subtitle];
+        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:title withSubtitle:subtitle forMimeWithID:self.mimeID];
         self.v_confirmationView.delegate = self;
         self.v_confirmationView.hidden = YES;
         self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
-        NSString *from = [NSString stringWithFormat:@"from %@", mime.creatorname];
-        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withTitle:from withWord:mime.word];
+        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withWord:mime.word];
         self.v_answerView.delegate = self;
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.view addSubview:self.v_answerView];
@@ -181,22 +232,24 @@
         
     }
     else if (self.viewMimeCase == kVIEWSCRAPBOOKMIME) {
+        self.lbl_title.text = [NSString stringWithFormat:@"Mime created by %@", mime.creatorname];
         
         NSString *from = [NSString stringWithFormat:@"from %@", mime.creatorname];
         NSDate  *dateCreated = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
         NSString *dateCreatedStr = [DateTimeHelper formatMediumDate:dateCreated];
         
-        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:from withSubtitle:dateCreatedStr];
+        self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:from withSubtitle:dateCreatedStr forMimeWithID:self.mimeID];
         self.v_confirmationView.delegate = self;
         self.v_confirmationView.hidden = YES;
         self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self.view addSubview:self.v_confirmationView];
         
-        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withTitle:from withWord:mime.word];
+        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withWord:mime.word];
         self.v_answerView.delegate = self;
         self.v_answerView.tf_answer.text = mime.word;
         self.v_answerView.tf_answer.enabled = NO;
         self.v_answerView.btn_clue.enabled = NO;
+        self.v_answerView.btn_clue.hidden = YES;
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.view addSubview:self.v_answerView];
         
@@ -211,12 +264,15 @@
     // e.g. self.myOutlet = nil;
     
     self.iv_photo = nil;
-    self.iv_logo = nil;
-    self.btn_back = nil;
-    self.btn_flag = nil;
     self.v_background = nil;
     self.v_confirmationView = nil;
     self.v_answerView = nil;
+    
+    self.v_customNavContainer = nil;
+    self.btn_back = nil;
+    self.iv_profilePicture = nil;
+    self.lbl_title = nil;
+    self.btn_gemCount = nil;
 
 }
 
@@ -276,7 +332,7 @@
 - (void)showConfirmationView {
     [self.v_confirmationView show];
     
-    [self.view bringSubviewToFront:self.iv_logo];
+    [self.view bringSubviewToFront:self.v_customNavContainer];
     [self.view bringSubviewToFront:self.btn_back];
 }
 
@@ -293,6 +349,10 @@
 //    
 //    // Save
 //    ResourceContext *resourceContext = [ResourceContext instance];
+//    
+//    // Start a new undo group here
+//    [resourceContext.managedObjectContext.undoManager beginUndoGrouping];
+//    
 //    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
 //}
 
@@ -308,48 +368,6 @@
     [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
     
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (IBAction) onFlagButtonPressed:(id)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc]
-                                  initWithTitle:@"Is something about this mime offensive?"
-                                  delegate:self
-                                  cancelButtonTitle:@"Cancel"
-                                  destructiveButtonTitle:@"Flag for review"
-                                  otherButtonTitles:nil];
-    [actionSheet showInView:self.view];
-    [actionSheet release];
-}
-
-#pragma mark - UIActionSheet Delegate
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == [actionSheet destructiveButtonIndex]) {
-        
-        //display progress view on the submission of a flag
-        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
-        NSString* message = @"Flagging for review...";
-        NSString* successMessage = @"Mime is flagged for review";
-        NSString* failureMessage = @"Ooops, something went wrong. Please flag again.";
-        
-        
-        [self showDeterminateProgressBarWithMaximumDisplayTime:settings.http_timeout_seconds onSuccessMessage:successMessage onFailureMessage:failureMessage inProgressMessages:[NSArray arrayWithObject:message]];
-        
-        ResourceContext* resourceContext = [ResourceContext instance];
-        //we start a new undo group here
-        [resourceContext.managedObjectContext.undoManager beginUndoGrouping];
-        
-        Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
-        
-        mime.numberofflags = [NSNumber numberWithInt:([mime.numberofflags intValue] + 1)];
-        
-        Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate *)[[UIApplication sharedApplication] delegate];
-        UIProgressHUDView* progressView = appDelegate.progressView;
-        progressView.delegate = self;
-        
-        //now we need to commit to the store
-        [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
-    }
 }
 
 #pragma mark Mime_meUIConfirmationView Delegate Methods
@@ -411,9 +429,14 @@
 
 - (IBAction) onFavoriteButtonPressed:(id)sender {
     // Create new Favorite object for this mime
-    
     [Favorite createFavoriteWithMimeID:self.mimeID];
     
+    // Mark this mime as a favorite
+    ResourceContext *resourceContext = [ResourceContext instance];
+    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+    mime.isfavorite = [NSNumber numberWithBool:YES];
+    
+    // Save
     [self showHUDForSaveFavorite];
 }
 
@@ -555,9 +578,8 @@
         mimeAnswer.didusehint = [NSNumber numberWithBool:self.didUseHint];
         
         // Increment the users gem total for the newly created Mime
-//        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
-//        int gemsForCorrectAnswer = [settings. intValue];
-        int newGemTotal = [self.loggedInUser.numberofpoints intValue] + 2;
+        int pointsAwarded = [mimeAnswer.pointsawarded intValue];
+        int newGemTotal = [self.loggedInUser.numberofpoints intValue] + pointsAwarded;
         self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal]; 
         
         // Show the hud and save
@@ -580,11 +602,53 @@
     // We will update the didUseHint property on the MimeAnswer object at save
     self.didUseHint = YES;
     
-    // Increment the users gem total for the newly created Mime
+    // Decrement the users gem total for use of a clue
     ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
     int gemsForClue = [settings.gems_for_clue intValue];
-    int newGemTotal = [self.loggedInUser.numberofpoints intValue] + gemsForClue;
+    int newGemTotal = [self.loggedInUser.numberofpoints intValue] - gemsForClue;
     self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
+}
+
+- (IBAction) onFlagButtonPressed:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc]
+                                  initWithTitle:@"Is something about this mime offensive?"
+                                  delegate:self
+                                  cancelButtonTitle:@"Cancel"
+                                  destructiveButtonTitle:@"Flag for review"
+                                  otherButtonTitles:nil];
+    [actionSheet showInView:self.view];
+    [actionSheet release];
+}
+
+#pragma mark UIActionSheet Delegate
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == [actionSheet destructiveButtonIndex]) {
+        
+        //display progress view on the submission of a flag
+        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+        NSString* message = @"Flagging for review...";
+        NSString* successMessage = @"Mime is flagged for review";
+        NSString* failureMessage = @"Ooops, something went wrong. Please flag again.";
+        
+        
+        [self showDeterminateProgressBarWithMaximumDisplayTime:settings.http_timeout_seconds onSuccessMessage:successMessage onFailureMessage:failureMessage inProgressMessages:[NSArray arrayWithObject:message]];
+        
+        ResourceContext* resourceContext = [ResourceContext instance];
+        //we start a new undo group here
+        [resourceContext.managedObjectContext.undoManager beginUndoGrouping];
+        
+        Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+        
+        mime.numberofflags = [NSNumber numberWithInt:([mime.numberofflags intValue] + 1)];
+        
+        Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate *)[[UIApplication sharedApplication] delegate];
+        UIProgressHUDView* progressView = appDelegate.progressView;
+        progressView.delegate = self;
+        
+        //now we need to commit to the store
+        [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
+    }
 }
 
 #pragma mark - MailComposeController Delegate
@@ -603,81 +667,82 @@
     
     UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
     
-    Request* request = [progressView.requests objectAtIndex:0];
-    //now we have the request
-    
-    NSArray* changedAttributes = request.changedAttributesList;
-    //list of all changed attributes
-    
-    if ([changedAttributes containsObject:NUMBEROFFLAGS]) {
-        if (progressView.didSucceed) {
-            // Flag sent sucessfully
-            LOG_REQUEST(0, @"%@ Mime flag sent successful", activityName);
-            
+    for (Request* request in progressView.requests) {
+        NSArray* changedAttributes = request.changedAttributesList;
+        //list of all changed attributes
+        
+        if ([changedAttributes containsObject:NUMBEROFFLAGS]) {
+            if (progressView.didSucceed) {
+                // Flag sent sucessfully
+                LOG_REQUEST(0, @"%@ Mime flag sent successful", activityName);
+                
+            }
+            else {
+                // Send flag failed
+                LOG_REQUEST(1, @"%@ Mime flag sent failure", activityName);
+                
+                // Undo save
+                LOG_REQUEST(0, @"%@ Rolling back actions due to request failure",activityName);
+                ResourceContext* resourceContext = [ResourceContext instance];
+                [resourceContext.managedObjectContext.undoManager undo];
+                
+                NSError* error = nil;
+                [resourceContext.managedObjectContext save:&error];
+            }
+        }
+        else if ([changedAttributes containsObject:STATE]) {
+            // Sent answer
+            if (progressView.didSucceed) {
+                // Answer sent sucessfully
+                LOG_REQUEST(0, @"%@ Mime answer sent successful", activityName);
+                
+                // Remove the Answer view and back button
+                [self.v_answerView removeFromSuperview];
+                [self.btn_back removeFromSuperview];
+                
+                // Add the Confirmation view
+                [self.view addSubview:self.v_confirmationView];
+                
+                [self showConfirmationView];
+            }
+            else {
+                // Send answer failed
+                LOG_REQUEST(1, @"%@ Mime answer sent failure", activityName);
+                
+                //we need to undo the operation that was last performed
+                LOG_REQUEST(0, @"%@ Rolling back actions due to request failure",activityName);
+                ResourceContext* resourceContext = [ResourceContext instance];
+                [resourceContext.managedObjectContext.undoManager undo];
+                
+                NSError* error = nil;
+                [resourceContext.managedObjectContext save:&error];
+                
+                [self.navigationController popViewControllerAnimated:YES];
+            }
         }
         else {
-            // Send flag failed
-            LOG_REQUEST(1, @"%@ Mime flag sent failure", activityName);
-            
-            // Undo save
-            LOG_REQUEST(0, @"%@ Rolling back actions due to request failure",activityName);
-            ResourceContext* resourceContext = [ResourceContext instance];
-            [resourceContext.managedObjectContext.undoManager undo];
-            
-            NSError* error = nil;
-            [resourceContext.managedObjectContext save:&error];
+            // Saved favorite
+            if (progressView.didSucceed) {
+                // Favorite saved sucessfully
+                LOG_REQUEST(0, @"%@ Mime favorite saved successful", activityName);
+                
+            }
+            else {
+                // Favorite save failed
+                LOG_REQUEST(1, @"%@ Mime favorite save failure", activityName);
+                
+                // Undo save
+                LOG_REQUEST(0, @"%@ Rolling back actions due to request failure",activityName);
+                ResourceContext* resourceContext = [ResourceContext instance];
+                [resourceContext.managedObjectContext.undoManager undo];
+                
+                NSError* error = nil;
+                [resourceContext.managedObjectContext save:&error];
+                
+                [self.v_confirmationView.btn_favorite setEnabled:YES];
+            }
         }
     }
-    else {
-        // Sent answer
-        if (progressView.didSucceed) {
-            // Answer sent sucessfully
-            LOG_REQUEST(0, @"%@ Mime answer sent successful", activityName);
-            
-            // Remove the Answer view and back button
-            [self.v_answerView removeFromSuperview];
-            [self.btn_back removeFromSuperview];
-            
-            // Add the Confirmation view
-            [self.view addSubview:self.v_confirmationView];
-            
-            [self showConfirmationView];
-        }
-        else {
-            // Send answer failed
-            LOG_REQUEST(1, @"%@ Mime answer sent failure", activityName);
-            
-            //we need to undo the operation that was last performed
-            LOG_REQUEST(0, @"%@ Rolling back actions due to request failure",activityName);
-            ResourceContext* resourceContext = [ResourceContext instance];
-            [resourceContext.managedObjectContext.undoManager undo];
-            
-            NSError* error = nil;
-            [resourceContext.managedObjectContext save:&error];
-            
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-    }
-    
-//    if (progressView.didSucceed) {
-//        // Answer sent sucessfully
-//        LOG_REQUEST(0, @"%@ Mime answer sent successful", activityName);
-//        
-//        // Remove the Answer view and back button
-//        [self.v_answerView removeFromSuperview];
-//        [self.btn_back removeFromSuperview];
-//        
-//        // Add the Confirmation view
-//        [self.view addSubview:self.v_confirmationView];
-//        
-//        [self showConfirmationView];
-//    }
-//    else {
-//        // Send answer failed
-//        LOG_REQUEST(1, @"%@ Mime answer sent failure", activityName);
-//        
-//        [self.navigationController popViewControllerAnimated:YES];
-//    }
 }
 
 #pragma mark - ImageManager Delegate Methods
@@ -685,12 +750,17 @@
     NSString* activityName = @"Mime_meShareMimeViewController.onImageDownloadComplete:";
     NSDictionary* userInfo = result.context;
     NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
+    NSNumber* userID = [userInfo valueForKey:kCREATORTID];
     ImageDownloadResponse* response = (ImageDownloadResponse*)result.response;
     
-    if ([response.didSucceed boolValue] == YES) {
-        if ([mimeID isEqualToNumber:self.mimeID]) {
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+    
+    if ([mimeID isEqualToNumber:self.mimeID]) {
+        // Mime image downloaded
+        if ([response.didSucceed boolValue] == YES) {
             //we only draw the image if this view hasnt been repurposed for another photo
-            LOG_IMAGE(1,@"%@settings UIImage object equal to downloaded response",activityName);
+            LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
             
             self.imageSize = response.image.size;
             
@@ -706,13 +776,59 @@
             
             [self.view setNeedsDisplay];
         }
+        else {
+            self.iv_photo.contentMode = UIViewContentModeCenter;
+            self.iv_photo.backgroundColor = [UIColor lightGrayColor];
+            self.iv_photo.image = [UIImage imageNamed:@"logo-MimeMe.png"];
+            LOG_IMAGE(1,@"%@Image failed to download",activityName);
+        }
     }
-    else {
-        self.iv_photo.contentMode = UIViewContentModeCenter;
-        self.iv_photo.backgroundColor = [UIColor lightGrayColor];
-        self.iv_photo.image = [UIImage imageNamed:@"logo-MimeMe.png"];
-        LOG_IMAGE(1,@"%@Image failed to download",activityName);
+    else if ([userID isEqualToNumber:mime.creatorid]) {
+        // Mime image downloaded
+        if ([response.didSucceed boolValue] == YES) {
+            //we only draw the image if this view hasnt been repurposed for another photo
+            LOG_IMAGE(1,@"%@settings UIImage object equal to downloaded response",activityName);
+            
+            UIImage *scaledImage = [response.image imageScaledToSize:CGSizeMake(42, 42)];
+            
+            [self.iv_profilePicture performSelectorOnMainThread:@selector(setImage:) withObject:scaledImage waitUntilDone:NO];
+            
+            [self.view setNeedsDisplay];
+        }
+        else {
+            self.iv_profilePicture.backgroundColor = [UIColor lightGrayColor];
+            self.iv_profilePicture.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(42, 42)];
+            LOG_IMAGE(1,@"%@Image failed to download",activityName);
+        }
     }
+    
+//    if ([response.didSucceed boolValue] == YES) {
+//        if ([mimeID isEqualToNumber:self.mimeID]) {
+//            //we only draw the image if this view hasnt been repurposed for another photo
+//            LOG_IMAGE(1,@"%@settings UIImage object equal to downloaded response",activityName);
+//            
+//            self.imageSize = response.image.size;
+//            
+//            if (self.imageSize.height > self.imageSize.width) {
+//                self.iv_photo.contentMode = UIViewContentModeScaleAspectFill;
+//            }
+//            else {
+//                self.iv_photo.contentMode = UIViewContentModeScaleAspectFit;
+//            }
+//            
+//            [self.iv_photo performSelectorOnMainThread:@selector(setImage:) withObject:response.image waitUntilDone:NO];
+//            self.iv_photo.backgroundColor = [UIColor blackColor];
+//            
+//            [self.view setNeedsDisplay];
+//        }
+//        
+//    }
+//    else {
+//        self.iv_photo.contentMode = UIViewContentModeCenter;
+//        self.iv_photo.backgroundColor = [UIColor lightGrayColor];
+//        self.iv_photo.image = [UIImage imageNamed:@"logo-MimeMe.png"];
+//        LOG_IMAGE(1,@"%@Image failed to download",activityName);
+//    }
     
 }
 

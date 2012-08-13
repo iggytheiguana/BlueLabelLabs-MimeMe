@@ -8,6 +8,8 @@
 
 #import "Mime_meUIConfirmationView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "ResourceContext.h"
+#import "Mime.h"
 
 @implementation Mime_meUIConfirmationView
 @synthesize view                = m_view;
@@ -21,7 +23,8 @@
 @synthesize btn_facebook        = m_btn_facebook;
 @synthesize btn_twitter         = m_btn_twitter;
 @synthesize btn_email           = m_btn_email;
-@synthesize btn_favorite       = m_btn_favorite;
+@synthesize btn_favorite        = m_btn_favorite;
+@synthesize mimeID              = m_mimeID;
 
 #pragma mark - Properties
 - (id)delegate {
@@ -89,6 +92,9 @@
         [self.btn_favorite.layer setMasksToBounds:YES];
         
         [self addSubview:self.view];
+        
+        
+        [self.btn_favorite setImage:[UIImage imageNamed:@"icon-favorite-yellow.png"] forState:UIControlStateDisabled];
         
     }
     
@@ -178,7 +184,7 @@
 }
 
 - (IBAction) onFavoriteButtonPressed:(id)sender {
-    [self.btn_favorite setSelected:YES];
+    [self.btn_favorite setEnabled:NO];
     
     [self.delegate onFavoriteButtonPressed:sender];
 }
@@ -196,13 +202,21 @@
 }
 
 #pragma mark - Statics
-+ (Mime_meUIConfirmationView*)createInstanceWithFrame:(CGRect)frame withTitle:(NSString *)title withSubtitle:(NSString *)subtitle {
++ (Mime_meUIConfirmationView*)createInstanceWithFrame:(CGRect)frame withTitle:(NSString *)title withSubtitle:(NSString *)subtitle forMimeWithID:(NSNumber *)mimeID {
     Mime_meUIConfirmationView* instance = [[Mime_meUIConfirmationView alloc]initWithFrame:(CGRect)frame];
     [instance autorelease];
     
     // Set the title and subtitle
     instance.lbl_title.text = title;
     instance.lbl_subtitle.text = subtitle;
+    instance.mimeID = mimeID;
+    
+    // Check if favorite
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:instance.mimeID];
+    if ([mime.isfavorite boolValue] == YES) {
+        [instance.btn_favorite setEnabled:NO];
+    }
     
     return instance;
 }
