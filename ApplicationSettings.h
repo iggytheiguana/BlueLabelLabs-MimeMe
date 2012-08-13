@@ -51,6 +51,8 @@
 @property (nonatomic,retain) NSNumber* gems_for_clue;
 @property (nonatomic,retain) NSNumber* gems_for_getting_new_words;
 @property (nonatomic,retain) NSNumber* gems_for_new_word;
+@property (nonatomic,retain) NSNumber* gems_for_correct_guess;
+@property (nonatomic,retain) NSNumber* gems_for_new_mime;
 
 
 

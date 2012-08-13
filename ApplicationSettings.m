@@ -33,5 +33,7 @@
 @dynamic gems_for_clue;
 @dynamic gems_for_new_word;
 @dynamic gems_for_getting_new_words;
+@dynamic gems_for_new_mime;
+@dynamic gems_for_correct_guess;
 
 @end
