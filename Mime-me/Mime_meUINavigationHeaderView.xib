@@ -206,10 +206,10 @@
 						<double key="IBUITitleEdgeInsets.right">-4</double>
 						<double key="IBUIImageEdgeInsets.top">0.0</double>
 						<double key="IBUIImageEdgeInsets.bottom">0.0</double>
-						<double key="IBUIImageEdgeInsets.left">-2</double>
+						<double key="IBUIImageEdgeInsets.left">-4</double>
 						<double key="IBUIImageEdgeInsets.right">0.0</double>
 						<int key="IBUILineBreakMode">4</int>
-						<string key="IBUINormalTitle">9999</string>
+						<string key="IBUINormalTitle">0</string>
 						<reference key="IBUIHighlightedTitleColor" ref="87913763"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>

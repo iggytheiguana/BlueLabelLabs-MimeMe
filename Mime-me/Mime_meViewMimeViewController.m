@@ -150,7 +150,7 @@
     
     // Setup Gem Count button, disable it for now
     [self.btn_gemCount setEnabled:NO];
-    self.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+    [self.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
     if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
         self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     }
@@ -624,7 +624,7 @@
     self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
     
     // Update the gem count displayed in the navigation header
-    self.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+    [self.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
     if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
         self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     }
@@ -725,7 +725,7 @@
                 [self.view addSubview:self.v_confirmationView];
                 
                 // Update the gem count displayed in the navigation header
-                self.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+                [self.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
                 if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
                     self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
                 }

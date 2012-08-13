@@ -291,7 +291,7 @@
     navigationHeader.delegate = self;
     navigationHeader.btn_back.hidden = YES;
     navigationHeader.btn_gemCount.hidden = NO;
-    navigationHeader.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+    [navigationHeader.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
     if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
         navigationHeader.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     }

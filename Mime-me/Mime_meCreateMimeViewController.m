@@ -233,7 +233,7 @@
     navigationHeader.delegate = self;
     navigationHeader.btn_back.hidden = YES;
     navigationHeader.btn_gemCount.hidden = NO;
-    navigationHeader.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+    [navigationHeader.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
     if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
         navigationHeader.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     }
@@ -431,7 +431,7 @@
     int newGemTotal = [self.loggedInUser.numberofpoints intValue] - gemsForGettingNewWords;
     self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
     // Update the gem count displayed in the navigation header
-    self.nv_navigationHeader.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+    [self.nv_navigationHeader.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
     if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
         self.nv_navigationHeader.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     }
@@ -495,7 +495,7 @@
         self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
         
         // Update the gem count displayed in the navigation header
-        self.nv_navigationHeader.btn_gemCount.titleLabel.text = [self.loggedInUser.numberofpoints stringValue];
+        [self.nv_navigationHeader.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
         if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
             self.nv_navigationHeader.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
         }
