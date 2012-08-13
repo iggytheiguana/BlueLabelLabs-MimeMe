@@ -16,14 +16,18 @@
 @interface Mime_meViewMimeViewController : BaseViewController < Mime_meUIConfirmationViewDelgate, Mime_meUIAnswerViewDelgate, UIProgressHUDViewDelegate, MFMailComposeViewControllerDelegate, UIActionSheetDelegate > {
     NSNumber        *m_mimeID;
     NSNumber        *m_mimeAnswerID;
+    NSNumber        *m_creatorID;
     CGSize          m_imageSize;
     int             m_viewMimeCase;
     
     UIImageView     *m_iv_photo;
-    UIImageView     *m_iv_logo;
-    UIButton        *m_btn_back;
-    UIButton        *m_btn_flag;
     UIView          *m_v_background;
+    
+    UIView          *m_v_customNavContainer;
+    UIButton        *m_btn_back;
+    UIImageView     *m_iv_profilePicture;
+    UILabel         *m_lbl_title;
+    UIButton        *m_btn_gemCount;
     
     // sentContainer    
     Mime_meUIConfirmationView   *m_v_confirmationView;
@@ -37,14 +41,18 @@
 
 @property (nonatomic, retain)           NSNumber        *mimeID;
 @property (nonatomic, retain)           NSNumber        *mimeAnswerID;
+@property (nonatomic, retain)           NSNumber        *creatorID;
 @property                               CGSize          imageSize;
 @property                               int             viewMimeCase;
 
 @property (nonatomic, retain) IBOutlet  UIImageView     *iv_photo;
-@property (nonatomic, retain) IBOutlet  UIImageView     *iv_logo;
-@property (nonatomic, retain) IBOutlet  UIButton        *btn_back;
-@property (nonatomic, retain) IBOutlet  UIButton        *btn_flag;
 @property (nonatomic, retain) IBOutlet  UIView          *v_background;
+
+@property (nonatomic, retain) IBOutlet  UIView          *v_customNavContainer;
+@property (nonatomic, retain) IBOutlet  UIButton        *btn_back;
+@property (nonatomic, retain) IBOutlet  UIImageView     *iv_profilePicture;
+@property (nonatomic, retain) IBOutlet  UILabel         *lbl_title;
+@property (nonatomic, retain) IBOutlet  UIButton        *btn_gemCount;
 
 // sentContainer
 @property (nonatomic, retain)           Mime_meUIConfirmationView   *v_confirmationView;
@@ -55,7 +63,6 @@
 @property (nonatomic, assign)           BOOL                        didUseHint;
 
 - (IBAction) onBackButtonPressed:(id)sender;
-- (IBAction) onFlagButtonPressed:(id)sender;
 
 - (IBAction) onFacebookButtonPressed:(id)sender;
 - (IBAction) onTwitterButtonPressed:(id)sender;

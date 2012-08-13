@@ -109,7 +109,7 @@
         }
         
         // TODO: Replace string with user gem balance property
-        cell.detailTextLabel.text = @"100 gems";
+        cell.detailTextLabel.text = [self.loggedInUser.numberofpoints stringValue];
         
         return cell;
         

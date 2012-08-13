@@ -12,6 +12,7 @@
 @required
 
 - (IBAction) onSlideButtonPressed:(id)sender;
+- (IBAction) onFlagButtonPressed:(id)sender;
 - (IBAction) onClueButtonPressed:(id)sender;
 - (void) onSubmittedCorrectAnswer:(BOOL)isCorrect;
 
@@ -24,8 +25,8 @@
     UIView          *m_view;
     
     UIView          *m_v_answerHeader;
-    UILabel         *m_lbl_title;
     UIButton        *m_btn_slide;
+    UIButton        *m_btn_flag;
     UIButton        *m_btn_clue;
     UITextField     *m_tf_answer;
     UIView          *m_v_wrongAnswer;
@@ -39,16 +40,16 @@
 @property (nonatomic, retain) IBOutlet  UIView          *view;
 
 @property (nonatomic, retain) IBOutlet  UIView          *v_answerHeader;
-@property (nonatomic, retain) IBOutlet  UILabel         *lbl_title;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_slide;
+@property (nonatomic, retain) IBOutlet  UIButton        *btn_flag;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_clue;
 @property (nonatomic, retain) IBOutlet  UITextField     *tf_answer;
-@property (nonatomic, retain) IBOutlet  UIView          *v_wrongAnswer;
+@property (nonatomic, retain)           UIView          *v_wrongAnswer;
 
 @property (nonatomic, retain)           NSString        *word;
 @property (nonatomic, assign)           BOOL            isViewHidden;
 
 + (CGRect)frameForAnswerView;
-+ (Mime_meUIAnswerView*)createInstanceWithFrame:(CGRect)frame withTitle:(NSString *)title withWord:(NSString *)word;
++ (Mime_meUIAnswerView*)createInstanceWithFrame:(CGRect)frame withWord:(NSString *)word;
 
 @end

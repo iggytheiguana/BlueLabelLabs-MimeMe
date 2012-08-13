@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 #import "Mime_meUINavigationHeaderView.h"
+#import "GADBannerView.h"
+#import "GADPublisherID.h"
 
 @interface Mime_meGuessFullTableViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate, UIProgressHUDViewDelegate > {
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
@@ -21,6 +23,8 @@
     NSInteger           m_mimeType;
     
     CloudEnumerator     *m_mimeCloudEnumerator;
+
+    GADBannerView       *m_gad_bannerView;
     
 }
 
@@ -36,6 +40,8 @@
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_staffPicksHeader;
 
 @property (nonatomic, assign)           NSInteger           mimeType;
+
+@property (nonatomic, retain)           GADBannerView       *gad_bannerView;
 
 + (Mime_meGuessFullTableViewController*)createInstanceForMimeType:(NSInteger)mimeType;
 

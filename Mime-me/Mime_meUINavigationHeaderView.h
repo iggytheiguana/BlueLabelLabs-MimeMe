@@ -36,6 +36,7 @@
     
     UIButton    *m_btn_settings;
     UIButton    *m_btn_back;
+    UIButton    *m_btn_gemCount;
 }
 
 @property (nonatomic, assign) id<Mime_meUINavigationHeaderViewDelgate>  delegate;
@@ -50,6 +51,7 @@
 
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_settings;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_back;
+@property (nonatomic, retain) IBOutlet  UIButton        *btn_gemCount;
 
 + (CGRect)frameForNavigationHeader;
 

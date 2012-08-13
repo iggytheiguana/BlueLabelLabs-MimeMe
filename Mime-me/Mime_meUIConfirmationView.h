@@ -37,6 +37,8 @@
     UIButton        *m_btn_email;
     UIButton        *m_btn_favorite;
     
+    NSNumber        *m_mimeID;
+    
 }
 
 @property (nonatomic, assign) id<Mime_meUIConfirmationViewDelgate>  delegate;
@@ -55,9 +57,11 @@
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_email;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_favorite;
 
+@property (nonatomic, retain)           NSNumber        *mimeID;
+
 - (void)show;
 
 + (CGRect)frameForConfirmationView;
-+ (Mime_meUIConfirmationView*)createInstanceWithFrame:(CGRect)frame withTitle:(NSString *)title withSubtitle:(NSString *)subtitle;
++ (Mime_meUIConfirmationView*)createInstanceWithFrame:(CGRect)frame withTitle:(NSString *)title withSubtitle:(NSString *)subtitle forMimeWithID:(NSNumber *)mimeID;
 
 @end

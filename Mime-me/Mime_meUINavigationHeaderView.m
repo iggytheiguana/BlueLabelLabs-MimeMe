@@ -22,6 +22,7 @@
 @synthesize btn_mime            = m_btn_mime;
 @synthesize btn_guess           = m_btn_guess;
 @synthesize btn_scrapbook       = m_btn_scrapbook;
+@synthesize btn_gemCount        = m_btn_gemCount;
 
 
 #pragma mark - Properties
@@ -65,6 +66,9 @@
         [self.view.layer setMasksToBounds:NO];
         CGPathRef shadowPath = [UIBezierPath bezierPathWithRect:self.view.layer.bounds].CGPath;
         [self.view.layer setShadowPath:shadowPath];
+        
+        // Setup Gem Count button, disable it for now
+        [self.btn_gemCount setEnabled:NO];
 
     }
     return self;
@@ -87,6 +91,7 @@
     self.btn_mime = nil;
     self.btn_guess = nil;
     self.btn_scrapbook = nil;
+    self.btn_gemCount = nil;
     
     [super dealloc];
 }
