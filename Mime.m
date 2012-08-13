@@ -28,6 +28,7 @@
 @dynamic hasanswered;
 @dynamic isfavorite;
 @dynamic numberofflags;
+@dynamic creatorimageurl;
 #pragma mark - Static Initializers
 //creates a Mime object
 + (Mime*)createMimeWithWordID:(NSNumber *)wordID

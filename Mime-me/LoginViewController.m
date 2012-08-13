@@ -88,6 +88,7 @@
 {
     //[self.parentViewController dismissModalViewControllerAnimated:YES];
     [self dismissModalViewControllerAnimated:YES];
+    
     if (result) 
     {
         //authentication action completed successfully
