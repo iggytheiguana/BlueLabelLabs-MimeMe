@@ -142,8 +142,10 @@
     [self.v_customNavContainer.layer setShadowColor:[UIColor blackColor].CGColor];
     [self.v_customNavContainer.layer setShadowOpacity:0.7f];
     [self.v_customNavContainer.layer setShadowRadius:2.0f];
-    [self.v_customNavContainer.layer setShadowOffset:CGSizeMake(0.0f, 0.0f)];
+    [self.v_customNavContainer.layer setShadowOffset:CGSizeMake(0.0f, 3.0f)];
     [self.v_customNavContainer.layer setMasksToBounds:NO];
+    CGPathRef shadowPath = [UIBezierPath bezierPathWithRect:self.v_customNavContainer.layer.bounds].CGPath;
+    [self.v_customNavContainer.layer setShadowPath:shadowPath];
     
     // Setup Gem Count button, disable it for now
     [self.btn_gemCount setEnabled:NO];
