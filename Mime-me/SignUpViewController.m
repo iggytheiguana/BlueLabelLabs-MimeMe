@@ -332,7 +332,7 @@
                                                       onFinishNotify:callback 
                                                    trackProgressWith:progressView];
         
-        [self showDeterminateProgressBarWithMaximumDisplayTime:settings.progress_maxsecondstodisplay onSuccessMessage:@"Welcome to MimeMe!" onFailureMessage:@"Let's try this again..."  inProgressMessages:[NSArray arrayWithObject:@"Creating account..."]];
+        [self showDeterminateProgressBarWithMaximumDisplayTime:settings.progress_maxsecondstodisplay onSuccessMessage:@"Welcome to Mime-Me!" onFailureMessage:@"Let's try this again..."  inProgressMessages:[NSArray arrayWithObject:@"Creating account..."]];
     }
     
 }

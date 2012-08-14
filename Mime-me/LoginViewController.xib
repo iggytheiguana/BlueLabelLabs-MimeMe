@@ -361,7 +361,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">You need a MimeMe account before you can play.</string>
+						<string key="IBUIText">You need a Mime-Me account before you can play.</string>
 						<reference key="IBUITextColor" ref="976200728"/>
 						<reference key="IBUIHighlightedColor" ref="976200728"/>
 						<reference key="IBUIShadowColor" ref="724586861"/>
@@ -385,7 +385,7 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">or login with a MimeMe account</string>
+						<string key="IBUIText">or login with a Mime-Me account</string>
 						<reference key="IBUITextColor" ref="976200728"/>
 						<reference key="IBUIHighlightedColor" ref="976200728"/>
 						<reference key="IBUIShadowColor" ref="724586861"/>

@@ -383,7 +383,7 @@
                 cell.textLabel.text = @"Public";
                 
                 // Cell subtitle
-                cell.detailTextLabel.text = @"Share with everyone on MimeMe!";
+                cell.detailTextLabel.text = @"Share with everyone on Mime-Me!";
                 
                 // Default to selected
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
