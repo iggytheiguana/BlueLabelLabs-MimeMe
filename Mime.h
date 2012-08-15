@@ -27,6 +27,7 @@
 @property (nonatomic,retain) NSNumber* hasanswered;
 @property (nonatomic,retain) NSNumber* numberofflags;
 @property (nonatomic,retain) NSString* creatorimageurl;
+@property (nonatomic,retain) NSNumber* numberoftimesfavorited;
 
 + (Mime*)createMimeWithWordID:(NSNumber *)wordID
                     withImage:(UIImage *)image

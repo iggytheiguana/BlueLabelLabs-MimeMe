@@ -455,4 +455,13 @@
     [queryExpression release];
     return query;
 }
+
++ (Query*) queryForTopFavoritedMimes
+{
+    Query* query = [[[Query alloc]init ]autorelease];
+    query.filterObjectType = MIME;
+    
+    return query;
+
+}
 @end
