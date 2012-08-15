@@ -154,3 +154,4 @@ extern NSString* const MIMEID;
 extern NSString* const GEMS_FOR_CLUE;
 extern NSString* const GEMS_FOR_NEW_WORD;
 extern NSString* const GEMS_FOR_GETTING_NEW_WORDS;
+extern NSString* const NUMBEROFTIMESFAVORITED;
