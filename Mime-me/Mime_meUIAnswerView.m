@@ -10,10 +10,13 @@
 #import <QuartzCore/QuartzCore.h>
 
 #define kMAXWORDLENGTH 20
-#define kALLOWEDCHARACTERSET @"abcdefghijklmnopqrstuvwxyz0123456789 "
+#define kALLOWEDCHARACTERSET @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+#define kUNICHARSPACE 32
 
-#define kANSWERVIEWHEIGHT 84.0
-#define kANSWERVIEWHIDDEN 50.0
+#define kANSWERVIEWDEFAULTHEIGHT 84.0
+//#define kANSWERVIEWHIDDEN 50.0
+#define kHEADERHEIGHT 34.0
+#define kFOOTERHEIGHT 8.0
 
 #define kKEYBOARDHEIGHTPORTRAIT 216.0
 #define kKEYBOARDHEIGHTLANDSCAPE 162.0
@@ -28,6 +31,8 @@
 @synthesize v_wrongAnswer       = m_v_wrongAnswer;
 @synthesize word                = m_word;
 @synthesize isViewHidden        = m_isViewHidden;
+@synthesize isKeyboardShown     = m_isKeyboardShown;
+@synthesize didGuessCorrectAnswer = m_didGuessCorrectAnswer;
 
 #pragma mark - Properties
 - (id)delegate {
@@ -53,33 +58,8 @@
             NSLog(@"Error! Could not load Mime_meUIAnswerView file.\n");
         }
         
-        // Add drop shadow to container view
-        [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
-        [self.view.layer setShadowOpacity:0.7f];
-        [self.view.layer setShadowRadius:5.0f];
-        [self.view.layer setShadowOffset:CGSizeMake(0.0f, 0.0f)];
-        [self.view.layer setMasksToBounds:NO];
-        CGPathRef shadowPath = [UIBezierPath bezierPathWithRect:self.view.layer.bounds].CGPath;
-        [self.view.layer setShadowPath:shadowPath];
-        
-        // Add rounded corners to container view
-        [self.view.layer setCornerRadius:8.0f];
-        [self.view.layer setOpaque:NO];
-        
-        // Add rounded corners to top part of header view
-        UIBezierPath *maskPathHeader = [UIBezierPath bezierPathWithRoundedRect:self.v_answerHeader.bounds 
-                                                                   byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight
-                                                                         cornerRadii:CGSizeMake(8.0, 8.0)];
-        // Create the shape layer and set its path
-        CAShapeLayer *maskLayerHeader = [CAShapeLayer layer];
-        maskLayerHeader.frame = self.v_answerHeader.bounds;
-        maskLayerHeader.path = maskPathHeader.CGPath;
-        // Set the newly created shape layer as the mask for the view's layer
-        self.v_answerHeader.layer.mask = maskLayerHeader;
-        [self.v_answerHeader.layer setOpaque:NO];
-        
         // Animate the showing of the answer view
-        self.transform = CGAffineTransformMakeTranslation(0.0, kANSWERVIEWHEIGHT);     // move the view off the screen first
+        self.transform = CGAffineTransformMakeTranslation(0.0, kANSWERVIEWDEFAULTHEIGHT);     // move the view off the screen first
         [UIView animateWithDuration:0.3
                               delay:0.0
                             options:UIViewAnimationCurveEaseInOut
@@ -102,10 +82,25 @@
         self.v_wrongAnswer.hidden = YES;
         [self.view addSubview:self.v_wrongAnswer];
         
+        // Set up notification of system events
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        
         // Setup notification for device orientation change
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(didRotate)
-                                                     name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+        [center addObserver:self 
+                   selector:@selector(didRotate) 
+                       name:UIDeviceOrientationDidChangeNotification
+                     object:nil];
+        
+        // Setup keyboard notifications
+        [center addObserver:self 
+                   selector:@selector(keyboardDidShow) 
+                       name:UIKeyboardDidShowNotification
+                     object:nil];
+        
+        [center addObserver:self 
+                   selector:@selector(keyboardDidHide) 
+                       name:UIKeyboardDidHideNotification
+                     object:nil];
         
         
         [self addSubview:self.view];
@@ -116,7 +111,234 @@
     
 }
 
+- (void) applyViewStyles {
+    // Add drop shadow to container view
+    [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.view.layer setShadowOpacity:0.7f];
+    [self.view.layer setShadowRadius:5.0f];
+    [self.view.layer setShadowOffset:CGSizeMake(0.0f, 0.0f)];
+    [self.view.layer setMasksToBounds:NO];
+    CGPathRef shadowPath = [UIBezierPath bezierPathWithRect:self.view.layer.bounds].CGPath;
+    [self.view.layer setShadowPath:shadowPath];
+    
+    // Add rounded corners to container view
+    [self.view.layer setCornerRadius:8.0f];
+    [self.view.layer setOpaque:NO];
+    
+    // Add rounded corners to top part of header view
+    UIBezierPath *maskPathHeader = [UIBezierPath bezierPathWithRoundedRect:self.v_answerHeader.bounds 
+                                                         byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight
+                                                               cornerRadii:CGSizeMake(8.0, 8.0)];
+    // Create the shape layer and set its path
+    CAShapeLayer *maskLayerHeader = [CAShapeLayer layer];
+    maskLayerHeader.frame = self.v_answerHeader.bounds;
+    maskLayerHeader.path = maskPathHeader.CGPath;
+    // Set the newly created shape layer as the mask for the view's layer
+    self.v_answerHeader.layer.mask = maskLayerHeader;
+    [self.v_answerHeader.layer setOpaque:NO];
+}
+
+- (void) renderWordDisplay {
+    
+    unsigned int x = 0;
+    unsigned int deltaY = 36;
+    
+    unsigned int charSpace = 2;
+    unsigned int blankSpace = 12;
+    
+    unsigned int charWidth = 27;
+    unsigned int charHeight = 31;
+    
+    unsigned int characterIndex = 0;
+    unsigned int componentIndex = 0;
+    unsigned int rowIndex = 0;
+    
+    // create container views to hold the textfield boxes for each row of components
+    UIView *v_row1 = [[[UIView alloc] init] autorelease];
+    UIView *v_row2 = [[[UIView alloc] init] autorelease];
+    UIView *v_row3 = [[[UIView alloc] init] autorelease];
+    
+    for (NSString *component in [self.word componentsSeparatedByString:@" "]) {
+        
+        unsigned int len = [component length];
+        
+        // compute amount of space needed for this component of the string
+        unsigned int requiredWidth = len * (charWidth + charSpace) - charSpace;
+        
+        // determine if we need a new line for the next component of the string
+        if (componentIndex == 0 && rowIndex == 0) {
+            // set the default frame of the first row container
+            if ((x + requiredWidth) > 290) {
+                // maximize the width to 290, enough to fit 8 characters accross
+                v_row1.frame = CGRectMake(0, 44, 280, charHeight);
+            }
+            else {
+                v_row1.frame = CGRectMake(0, 44, requiredWidth, charHeight);
+            }
+        }
+        else if ((x + requiredWidth) > 290) {
+            // skip to new line
+            ++rowIndex;
+            
+            // reset x origin
+            x = 0;
+            
+            // set the default frame of the remaining row containers
+            if (rowIndex == 1) {
+                v_row2.frame = CGRectMake(0, 80, requiredWidth, charHeight);
+            }
+            else if (rowIndex == 2) {
+                v_row3.frame = CGRectMake(0, 116, requiredWidth, charHeight);
+            }
+            
+            // increase height of answer view
+            CGRect newFrame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y - deltaY, self.view.frame.size.width, self.view.frame.size.height + deltaY);
+            self.view.frame = newFrame;
+            
+            CGRect containerFrame = CGRectMake(self.frame.origin.x, self.frame.origin.y - deltaY, self.frame.size.width, self.frame.size.height + deltaY);
+            self.frame = containerFrame;
+        }
+        else { 
+            // increase the width of the row container view to accomodate the next component
+            if (rowIndex == 0) {
+                v_row1.frame = CGRectMake(0, 44, v_row1.frame.size.width + requiredWidth, charHeight);
+            }
+            else if (rowIndex == 1) {
+                v_row2.frame = CGRectMake(0, 80, v_row2.frame.size.width + requiredWidth, charHeight);
+            }
+            else if (rowIndex == 2) {
+                v_row3.frame = CGRectMake(0, 116, v_row3.frame.size.width + requiredWidth, charHeight);
+            }
+        }
+        
+        // create the textfields for each character in the component
+        unichar *buffer = calloc(len, sizeof(unichar));
+        
+        [component getCharacters:buffer range:NSMakeRange(0, len)];
+        
+        for(int i = 0; i < len; ++i) {
+            unichar current = buffer[i];
+            
+            if (current == ' ') {
+                x = x + blankSpace;
+            }
+            else {
+                UITextField *tf = [[[UITextField alloc] initWithFrame:CGRectMake(x, 0, charWidth, charHeight)] autorelease];
+                tf.delegate = self;
+                tf.borderStyle = UITextBorderStyleRoundedRect;
+                tf.textAlignment = UITextAlignmentCenter;
+                tf.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+                tf.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+                tf.font = [UIFont boldSystemFontOfSize:14.0];
+                tf.textColor = [UIColor blackColor];
+                tf.returnKeyType = UIReturnKeyDone;
+                tf.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
+                tf.text = @" "; // this blank space will help us manage a backspace press on the keyboard
+                
+                // tag the textfield so we can retrive it later
+                // we add 1 to the character index because a view tag cannot be 0
+                // adding the component index accounts for spaces in the word/phrase
+                tf.tag = (characterIndex + 1) + componentIndex;
+                
+                //increment the character index
+                ++characterIndex;
+                
+                if (rowIndex == 0) {
+                    [v_row1 addSubview:tf];
+                }
+                else if (rowIndex == 1) {
+                    [v_row2 addSubview:tf];
+                }
+                else if (rowIndex == 2) {
+                    [v_row3 addSubview:tf];
+                }
+                
+                // increment x origin for the next character
+                x = x + charWidth + charSpace;
+                
+                if (x > 260 && (len - (i + 1)) > 1) {
+                    // add hyphen and move to the next line
+                    UILabel *lbl_hyphen = [[[UILabel alloc] initWithFrame:CGRectMake(x, 0, charWidth, charHeight)] autorelease];
+                    lbl_hyphen.backgroundColor = [UIColor clearColor];
+                    lbl_hyphen.textAlignment = UITextAlignmentCenter;
+                    lbl_hyphen.font = [UIFont boldSystemFontOfSize:14.0];
+                    lbl_hyphen.text = @"-";
+                    
+                    if (rowIndex == 0) {
+                        [v_row1 addSubview:lbl_hyphen];
+                    }
+                    else if (rowIndex == 1) {
+                        [v_row2 addSubview:lbl_hyphen];
+                    }
+                    else if (rowIndex == 2) {
+                        [v_row3 addSubview:lbl_hyphen];
+                    }
+                    
+                    // skip to new line
+                    ++rowIndex;
+                    
+                    // reset x origin
+                    x = 0;
+                    
+                    // reset the required width to the width for the remaining characters
+                    requiredWidth = (len - i - 1) * (charWidth + charSpace);
+                    
+                    // set the default frame of the remaining row containers
+                    if (rowIndex == 1) {
+                        v_row2.frame = CGRectMake(0, 80, requiredWidth, charHeight);
+                    }
+                    else if (rowIndex == 2) {
+                        v_row3.frame = CGRectMake(0, 116, requiredWidth, charHeight);
+                    }
+                    
+                    // increase height of answer view
+                    CGRect newFrame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y - deltaY, self.view.frame.size.width, self.view.frame.size.height + deltaY);
+                    self.view.frame = newFrame;
+                    
+                    CGRect containerFrame = CGRectMake(self.frame.origin.x, self.frame.origin.y - deltaY, self.frame.size.width, self.frame.size.height + deltaY);
+                    self.frame = containerFrame;
+                }
+            }
+        }
+        
+        // now add a space
+        x = x + blankSpace;
+        
+        // increment string component index
+        ++componentIndex;
+    }
+    
+    // increase the width of the row container view to accomodate the next component
+    if (rowIndex == 2) {
+        [self.view addSubview:v_row1];
+        v_row1.center = CGPointMake(self.view.center.x, v_row1.center.y);
+        [self.view addSubview:v_row2];
+        v_row2.center = CGPointMake(self.view.center.x, v_row2.center.y);
+        [self.view addSubview:v_row3];
+        v_row3.center = CGPointMake(self.view.center.x, v_row3.center.y);
+    }
+    else if (rowIndex == 1) {
+        [self.view addSubview:v_row1];
+        v_row1.center = CGPointMake(self.view.center.x, v_row1.center.y);
+        [self.view addSubview:v_row2];
+        v_row2.center = CGPointMake(self.view.center.x, v_row2.center.y);
+    }
+    else if (rowIndex == 0) {
+        [self.view addSubview:v_row1];
+        v_row1.center = CGPointMake(self.view.center.x, v_row1.center.y);
+    }
+    
+    // finish applying the view layout styles
+    [self applyViewStyles];
+}
+
 - (void)dealloc {
+    // unregister for notifications
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    [center removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    
     self.view = nil;
     self.v_answerHeader = nil;
     self.btn_slide = nil;
@@ -159,6 +381,15 @@
     }
 }
 
+#pragma mark - Keyboard Notification Event Handlers
+- (void) keyboardDidShow {
+    self.isKeyboardShown = YES;
+}
+
+- (void) keyboardDidHide {
+    self.isKeyboardShown = NO;
+}
+
 #pragma mark - Helper Methods
 - (float)deltaYForKeyboard {
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
@@ -169,6 +400,102 @@
     else {
         return kKEYBOARDHEIGHTPORTRAIT;
     }
+}
+
+- (void)shakeAnswerView {
+    CGFloat deltaX = 8.0;
+    [UIView animateWithDuration:0.1
+                          delay:0.0
+                        options:UIViewAnimationCurveEaseInOut
+                     animations:^{
+                         [UIView setAnimationRepeatCount:2];
+                         self.center = CGPointMake(self.center.x + deltaX, self.center.y);
+                     }
+                     completion:^(BOOL finished){
+                         [UIView animateWithDuration:0.1
+                                               delay:0.0
+                                             options:UIViewAnimationCurveEaseInOut
+                                          animations:^{
+                                              self.center = CGPointMake(self.center.x - 2*deltaX, self.center.y);
+                                          }
+                                          completion:^(BOOL finished){
+                                              [UIView animateWithDuration:0.1
+                                                                    delay:0.0
+                                                                  options:UIViewAnimationCurveEaseInOut
+                                                               animations:^{
+                                                                   self.center = CGPointMake(self.center.x + deltaX, self.center.y);
+                                                               }
+                                                               completion:^(BOOL finished){
+                                                                   
+                                                               }];
+                                          }];
+                     }
+     ];
+}
+
+- (BOOL)checkForCorrectAnswerInitiatedByUser:(BOOL)userInitiated {
+    // Check if each textfield's character matches the character in the answer
+    
+    BOOL isCorrectAnswer = NO;
+    BOOL allTextFieldsPopulated = YES;
+    
+    for (int i = 1; i <= [self.word length]; i++) {
+        
+        unichar answerChar = [self.word characterAtIndex:(i - 1)];
+        
+        if (answerChar == kUNICHARSPACE) {
+            // Do nothing to account for space in answer
+            NSLog(@"Space in answer phrase");
+        }
+        else {
+            UITextField *tf = (UITextField *)[self.view viewWithTag:i];
+            
+            unichar tfChar = [tf.text characterAtIndex:0];
+            
+            if ([tf.text isEqualToString:@" "]) {
+                isCorrectAnswer = NO;
+                allTextFieldsPopulated = NO;
+                break;
+            }
+            else if (tfChar != answerChar) {
+                isCorrectAnswer = NO;
+            }
+            else {
+                isCorrectAnswer = YES;
+            }
+        }
+    }
+    
+    if (isCorrectAnswer == YES && allTextFieldsPopulated == YES) {
+        // User submitted the correct answer
+        
+        CGFloat deltaY = 0.0;
+        
+        if ([self.tf_answer isFirstResponder] == YES) {
+            [self.tf_answer resignFirstResponder];
+            
+            deltaY = [self deltaYForKeyboard];
+        }
+        
+        // Slide the answer view down
+        [UIView animateWithDuration:0.3
+                              delay:0.0
+                            options:UIViewAnimationCurveEaseInOut
+                         animations:^{
+                             self.center = CGPointMake(self.center.x, self.center.y + deltaY);
+                         }
+                         completion:^(BOOL finished){
+                             
+                         }
+         ];
+    }
+    else if (allTextFieldsPopulated == YES || userInitiated == YES) {
+        // Animate a horizontal shake of the answer view when an incorrent answer is entered
+        [self shakeAnswerView];
+    }
+    
+    return isCorrectAnswer;
+    
 }
 
 #pragma mark - UIButton Handlers
@@ -184,12 +511,12 @@
     else if (self.isViewHidden == YES) {
         self.isViewHidden = NO;
         // Slide the answer view back up
-        deltaY = -kANSWERVIEWHIDDEN;
+        deltaY = -self.view.frame.size.height + kHEADERHEIGHT + kFOOTERHEIGHT;
     }
     else {
         self.isViewHidden = YES;
         // Slide the answer view to the hidden position
-        deltaY = kANSWERVIEWHIDDEN;
+        deltaY = self.view.frame.size.height - kHEADERHEIGHT - kFOOTERHEIGHT;
     }
     
     // Slide the answer view down
@@ -223,6 +550,8 @@
 #pragma mark - TextField Delegate Methods
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
+    self.tf_answer = textField;
+    
     // Hide the error view if it is visible
     if (self.v_wrongAnswer.hidden == NO) {
         [UIView animateWithDuration:0.3
@@ -237,112 +566,156 @@
          ];
     }
     
-    // Slide the answer view up
-    CGFloat deltaY = [self deltaYForKeyboard];
-    
-    [UIView animateWithDuration:0.3
-                          delay:0.0
-                        options:UIViewAnimationCurveEaseInOut
-                     animations:^{
-                         self.center = CGPointMake(self.center.x, self.center.y - deltaY);
-                     }
-                     completion:^(BOOL finished){
-                         self.btn_slide.imageView.image = [UIImage imageNamed:@"icon-slideDown.png"];
-                     }
-     ];
+    // Slide the answer view up if the keyboard is not already visible
+    if (self.isKeyboardShown == NO) {
+        CGFloat deltaY = [self deltaYForKeyboard];
+        
+        [UIView animateWithDuration:0.3
+                              delay:0.0
+                            options:UIViewAnimationCurveEaseInOut
+                         animations:^{
+                             self.center = CGPointMake(self.center.x, self.center.y - deltaY);
+                         }
+                         completion:^(BOOL finished){
+                             self.btn_slide.imageView.image = [UIImage imageNamed:@"icon-slideDown.png"];
+                         }
+         ];
+    }
 }
 
-//- (void)textFieldDidEndEditing:(UITextField *)textField
-//{
-//    // textfield editing has ended
-//    
-//}
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    // textfield editing has ended
+    
+    if (self.didGuessCorrectAnswer == YES) {
+        [self.delegate onSubmittedCorrectAnswer:YES];
+    }
+}
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)text {    
-    // Prevent numbers, spaces, special characters and capitals in the word and limit to 15 letters
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)text {
+    // Prevent numbers, spaces, special characters and capitals in the word and limit to 20 letters
     
-//    if ([text rangeOfCharacterFromSet:[[NSCharacterSet lowercaseLetterCharacterSet] invertedSet]].location != NSNotFound) {
-//        // only lower case letters allowed
-//        return NO;
-//    }
-    if (([kALLOWEDCHARACTERSET rangeOfString:text].location == NSNotFound) && (range.length != 1)) {
-        // only lower case letters and numbers allowed allowed
-        return NO;
+    self.tf_answer = textField;
+    
+    BOOL shouldProcess = NO; //default to reject
+    BOOL shouldMoveToNextField = NO; //default to remaining on the current field
+    BOOL shouldMoveToPreviousField = 0; //used if backspace is pressed
+    
+    int insertStringLength = [text length];
+    if (insertStringLength == 0) { //backspace
+        shouldProcess = YES; //Process if the backspace character was pressed
+        
+        if ([[textField text] length] == 1 && [[textField text] isEqualToString:@" "]) {
+            shouldMoveToPreviousField = YES; //Backspace was pressed in an empty textfield, move to previous textfield
+        }
     }
-    else if (([textField.text length] >= kMAXWORDLENGTH) && (range.length != 1)) {
-        return NO;
+    else {
+        if (([kALLOWEDCHARACTERSET rangeOfString:text].location == NSNotFound) && (range.length != 1)) {
+            // only lower case letters and numbers allowed allowed
+            shouldProcess = NO;
+            
+            // Animate a horizontal shake of the answer view when an invalid character is entered
+            [self shakeAnswerView];
+        }
+        else if ([[textField text] length] == 0 || [[textField text] isEqualToString:@" "]) {
+            shouldProcess = YES; //Process if there is only 1 character right now or a blank space
+        }
     }
     
-    // Hide the error view if it is visible
-    if (self.v_wrongAnswer.hidden == NO) {
-        [UIView animateWithDuration:0.3
-                              delay:0.0
-                            options:UIViewAnimationCurveEaseInOut
-                         animations:^{
-                             self.v_wrongAnswer.alpha = 0.0;
-                         }
-                         completion:^(BOOL finished){
-                             self.v_wrongAnswer.hidden = YES;
-                         }
-         ];
+    //here we deal with the UITextField on our own
+    if (shouldProcess) {
+        // Special case, if entered character is a "W", left justify the text field to fit it
+        if ([text isEqualToString:@"W"]) {
+            textField.textAlignment = UITextAlignmentLeft;
+        }
+        
+        //grab a mutable copy of what's currently in the UITextField
+        NSMutableString* mstring = [[textField text] mutableCopy];
+        if ([mstring length] == 0) {
+            //nothing in the field yet so append the replacement string
+            [mstring setString:text];
+            
+            shouldMoveToNextField = YES;
+        }
+        else {
+            //adding a char or deleting?
+            if (insertStringLength > 0) {
+                [mstring setString:text];
+                
+                shouldMoveToNextField = YES;
+            }
+            else {
+                //delete case - the length of replacement string is zero for a delete
+                textField.textAlignment = UITextAlignmentCenter;
+                [mstring setString:@" "];
+            }
+        }
+        
+        //set the text now
+        [textField setText:mstring];
+        
+        [mstring release];
+        
+        // Check if the answer has been entered successfully
+        self.didGuessCorrectAnswer = [self checkForCorrectAnswerInitiatedByUser:NO];
+        
+        if (self.didGuessCorrectAnswer == YES) {
+            // User has submitted the correct answer
+            [self.delegate onSubmittedCorrectAnswer:YES];
+        }
+        else {
+            if (shouldMoveToNextField) {
+                // Move to next textfield
+                if (self.tf_answer.tag < [self.word length]) {
+                    UITextField *tf;
+                    if ([self.word characterAtIndex:(self.tf_answer.tag)] == kUNICHARSPACE) {
+                        // Next character in answer is a space, increment to next tag number by 2
+                        tf = (UITextField *)[self.view viewWithTag:(self.tf_answer.tag + 2)];
+                    }
+                    else {
+                        tf = (UITextField *)[self.view viewWithTag:(self.tf_answer.tag + 1)];
+                    }
+                    [tf becomeFirstResponder];
+                }
+                else {
+                    // Loop back to the first 
+                    UITextField *tf = (UITextField *)[self.view viewWithTag:1];
+                    [tf becomeFirstResponder];
+                }
+            }
+            else if (shouldMoveToPreviousField) {
+                // Move to previous textfield
+                if (self.tf_answer.tag > 1) {
+                    UITextField *tf;
+                    if ([self.word characterAtIndex:(self.tf_answer.tag - 2)] == kUNICHARSPACE) {
+                        // Previous character in answer is a space, increment to previous tag number by 2
+                        tf = (UITextField *)[self.view viewWithTag:(self.tf_answer.tag - 2)];
+                    }
+                    else {
+                        tf = (UITextField *)[self.view viewWithTag:(self.tf_answer.tag - 1)];
+                    }
+                    [tf becomeFirstResponder];
+                }
+                else {
+                    // Loop back to the last 
+                    UITextField *tf = (UITextField *)[self.view viewWithTag:[self.word length]];
+                    [tf becomeFirstResponder];
+                }
+            }
+        }
     }
     
-    return YES;
+    //always return no since we are manually changing the text field
+    return NO;
 }
 
 // Handles keyboard Return button pressed while editing the textfield
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if ([[self.word lowercaseString] isEqualToString:self.tf_answer.text]) {
-        // User submitted the correct answer
-        
-        [self.delegate onSubmittedCorrectAnswer:YES];
-        
-        CGFloat deltaY = 0.0;
-        
-        if ([self.tf_answer isFirstResponder] == YES) {
-            [self.tf_answer resignFirstResponder];
-            
-            deltaY = [self deltaYForKeyboard];
-        }
-        else {
-            deltaY = kANSWERVIEWHIDDEN;
-        }
-        
-        // Slide the answer view down
-        [UIView animateWithDuration:0.3
-                              delay:0.0
-                            options:UIViewAnimationCurveEaseInOut
-                         animations:^{
-                             self.center = CGPointMake(self.center.x, self.center.y + deltaY);
-                         }
-                         completion:^(BOOL finished){
-                             
-                         }
-         ];
-    }
-    else {
-        // User submitted an incorrect answer
-        
-        [self.delegate onSubmittedCorrectAnswer:NO];
-        
-        // Hide the error view if it is visible
-        if (self.v_wrongAnswer.hidden == YES) {
-            self.v_wrongAnswer.alpha = 0.0;
-            self.v_wrongAnswer.hidden = NO;
-            [UIView animateWithDuration:0.3
-                                  delay:0.0
-                                options:UIViewAnimationCurveEaseInOut
-                             animations:^{
-                                 self.v_wrongAnswer.alpha = 0.3;
-                             }
-                             completion:^(BOOL finished){
-                                 self.v_wrongAnswer.hidden = NO;
-                             }
-             ];
-        }
-    }
+    self.tf_answer = textField;
     
-    return NO;
+    self.didGuessCorrectAnswer = [self checkForCorrectAnswerInitiatedByUser:YES];
+    
+    return self.didGuessCorrectAnswer;
 }
 
 #pragma mark - Statics
@@ -351,13 +724,13 @@
     [instance autorelease];
     
     // Set the answer
-    instance.word = word;
+    instance.word = [word uppercaseString];
     
     return instance;
 }
 
 + (CGRect)frameForAnswerView {
-    // The view will start off the screen and move up into view when loaded
+    // The default view will start off the screen and move up into view when loaded
     return CGRectMake(10, 396, 300, 92);
 }
 

@@ -218,6 +218,7 @@
         self.v_answerView.btn_clue.enabled = NO;
         self.v_answerView.btn_clue.hidden = YES;
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        [self.v_answerView renderWordDisplay];
         [self.view addSubview:self.v_answerView];
         
     }
@@ -239,6 +240,7 @@
         self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withWord:mime.word];
         self.v_answerView.delegate = self;
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        [self.v_answerView renderWordDisplay];
         [self.view addSubview:self.v_answerView];
         
         // Update the view count on this Mime
@@ -266,6 +268,7 @@
         self.v_answerView.btn_clue.enabled = NO;
         self.v_answerView.btn_clue.hidden = YES;
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        [self.v_answerView renderWordDisplay];
         [self.view addSubview:self.v_answerView];
         
     }
@@ -341,6 +344,15 @@
 //        }
 //    }
 //    [self.view setNeedsDisplay];
+    
+    // Update drop shadow of the custom nav container
+    [self.v_customNavContainer.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.v_customNavContainer.layer setShadowOpacity:0.7f];
+    [self.v_customNavContainer.layer setShadowRadius:2.0f];
+    [self.v_customNavContainer.layer setShadowOffset:CGSizeMake(0.0f, 3.0f)];
+    [self.v_customNavContainer.layer setMasksToBounds:NO];
+    CGPathRef shadowPath = [UIBezierPath bezierPathWithRect:self.v_customNavContainer.layer.bounds].CGPath;
+    [self.v_customNavContainer.layer setShadowPath:shadowPath];
 }
 
 #pragma mark - UI Event Handlers
