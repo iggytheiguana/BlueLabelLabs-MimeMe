@@ -92,4 +92,5 @@
 + (CloudEnumerator*) enumeratorForFavoriteMimes:(NSNumber*)userid;
 + (CloudEnumerator*) enumeratorForMostRecentMimes;
 + (CloudEnumerator*) enumeratorForSentMimeAnswers:(NSNumber*)creatorid;
++ (CloudEnumerator*) enumeratorForTopFavoritedMimes;
 @end

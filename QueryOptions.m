@@ -315,4 +315,14 @@
 
 }
 
++ (QueryOptions*) queryForTopFavoritedMimes
+{
+    QueryOptions* newQuery = [[QueryOptions alloc]autorelease];
+    newQuery.includelinkedobjects = NO;
+    newQuery.primary_results_sortascending = NO;
+    newQuery.primary_results_sortattribute = NUMBEROFTIMESFAVORITED;
+    
+    return newQuery;
+}
+
 @end
