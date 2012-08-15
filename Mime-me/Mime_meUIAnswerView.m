@@ -498,6 +498,40 @@
     
 }
 
+- (void)disableAnswerTextFields {
+    for (int i = 1; i <= [self.word length]; i++) {
+        
+        unichar answerChar = [self.word characterAtIndex:(i - 1)];
+        
+        if (answerChar == kUNICHARSPACE) {
+            // Do nothing to account for space in answer
+            NSLog(@"Space in answer phrase");
+        }
+        else {
+            UITextField *tf = (UITextField *)[self.view viewWithTag:i];
+            
+            [tf setEnabled:NO];
+        }
+    }
+}
+
+- (void)showAnswer {
+    for (int i = 1; i <= [self.word length]; i++) {
+        
+        unichar answerChar = [self.word characterAtIndex:(i - 1)];
+        
+        if (answerChar == kUNICHARSPACE) {
+            // Do nothing to account for space in answer
+            NSLog(@"Space in answer phrase");
+        }
+        else {
+            UITextField *tf = (UITextField *)[self.view viewWithTag:i];
+            
+            [tf setText:[self.word substringWithRange:NSMakeRange(i - 1, 1)]];
+        }
+    }
+}
+
 #pragma mark - UIButton Handlers
 - (IBAction) onSlideButtonPressed:(id)sender {
     CGFloat deltaY = 0.0;
@@ -596,6 +630,9 @@
     // Prevent numbers, spaces, special characters and capitals in the word and limit to 20 letters
     
     self.tf_answer = textField;
+    
+    // Force the entered text to all caps
+    text = [text uppercaseString];
     
     BOOL shouldProcess = NO; //default to reject
     BOOL shouldMoveToNextField = NO; //default to remaining on the current field

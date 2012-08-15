@@ -205,20 +205,23 @@
         
         NSString *subtitle = [NSString stringWithFormat:@"You earned %d gems!", editorMinimum];
         
+        // Add ConfirmationView
         self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:confirmationTitle withSubtitle:subtitle forMimeWithID:self.mimeID];
         self.v_confirmationView.delegate = self;
         self.v_confirmationView.hidden = YES;
         self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self.view addSubview:self.v_confirmationView];
         
+        // Add AnswerView
         self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withWord:mime.word];
         self.v_answerView.delegate = self;
         self.v_answerView.tf_answer.text = mime.word;
-        self.v_answerView.tf_answer.enabled = NO;
         self.v_answerView.btn_clue.enabled = NO;
         self.v_answerView.btn_clue.hidden = YES;
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.v_answerView renderWordDisplay];
+        [self.v_answerView disableAnswerTextFields];
+        [self.v_answerView showAnswer];
         [self.view addSubview:self.v_answerView];
         
     }
@@ -232,11 +235,13 @@
         NSString *title = @"Congratulations!";
         NSString *subtitle = [NSString stringWithFormat:@"You guessed right and earned %d gems", pointsAwarded];
         
+        // Add ConfirmationView
         self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:title withSubtitle:subtitle forMimeWithID:self.mimeID];
         self.v_confirmationView.delegate = self;
         self.v_confirmationView.hidden = YES;
         self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
+        // Add AnswerView
         self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withWord:mime.word];
         self.v_answerView.delegate = self;
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
@@ -255,20 +260,23 @@
         NSDate  *dateCreated = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
         NSString *dateCreatedStr = [DateTimeHelper formatMediumDate:dateCreated];
         
+        // Add ConfirmationView
         self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:from withSubtitle:dateCreatedStr forMimeWithID:self.mimeID];
         self.v_confirmationView.delegate = self;
         self.v_confirmationView.hidden = YES;
         self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self.view addSubview:self.v_confirmationView];
         
+        // Add AnswerView
         self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withWord:mime.word];
         self.v_answerView.delegate = self;
         self.v_answerView.tf_answer.text = mime.word;
-        self.v_answerView.tf_answer.enabled = NO;
         self.v_answerView.btn_clue.enabled = NO;
         self.v_answerView.btn_clue.hidden = YES;
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.v_answerView renderWordDisplay];
+        [self.v_answerView disableAnswerTextFields];
+        [self.v_answerView showAnswer];
         [self.view addSubview:self.v_answerView];
         
     }
@@ -729,9 +737,9 @@
                 // Answer sent sucessfully
                 LOG_REQUEST(0, @"%@ Mime answer sent successful", activityName);
                 
-                // Remove the Answer view and back button
-                [self.v_answerView removeFromSuperview];
-                [self.btn_back removeFromSuperview];
+                self.v_answerView.btn_clue.enabled = NO;
+                self.v_answerView.btn_clue.hidden = YES;
+                [self.v_answerView disableAnswerTextFields];
                 
                 // Add the Confirmation view
                 [self.view addSubview:self.v_confirmationView];

@@ -34,8 +34,8 @@
     NSString        *m_word;
     BOOL            m_isViewHidden;
     BOOL            m_isKeyboardShown;
-    BOOL            m_userDidPressDone;
     BOOL            m_didGuessCorrectAnswer;
+    
 }
 
 @property (nonatomic, assign) id<Mime_meUIAnswerViewDelgate>  delegate;
@@ -55,6 +55,8 @@
 @property (nonatomic, assign)           BOOL            didGuessCorrectAnswer;
 
 - (void)renderWordDisplay;
+- (void)disableAnswerTextFields;
+- (void)showAnswer;
 
 + (CGRect)frameForAnswerView;
 + (Mime_meUIAnswerView*)createInstanceWithFrame:(CGRect)frame withWord:(NSString *)word;
