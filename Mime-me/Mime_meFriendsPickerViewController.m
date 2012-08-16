@@ -22,6 +22,7 @@
 #import "ImageManager.h"
 #import "ImageDownloadResponse.h"
 #import "UIImage+UIImageCategory.h"
+#import "UserDefaultSettings.h"
 
 #define kCONTACTID @"contactid"
 
@@ -41,7 +42,7 @@
 @synthesize selectedFriendsArray    = m_selectedFriendsArray;
 @synthesize selectedFriendsArrayCopy = m_selectedFriendsArrayCopy;
 @synthesize gad_bannerView          = m_gad_bannerView;
-
+@synthesize didMakeWord             = m_didMakeWord;
 
 #pragma mark - Enumerators
 - (void)showHUDForFacebookFriendsEnumerator {
@@ -576,6 +577,8 @@
 - (IBAction) onGoButtonPressed:(id)sender {
     // Create MimeAnswer objects for each tableview row selected
     
+    BOOL hasRecipient = NO;
+    
     // First check if "Public" has been seleced
     UITableViewCell *cell = [self.tbl_friends cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
     
@@ -587,6 +590,8 @@
         Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
         
         mime.ispublic = [NSNumber numberWithBool:YES];
+        
+        hasRecipient = YES;
     }
     
     // Now create a MimeAnswer object for each contact in the copy of the selected friends array.
@@ -594,20 +599,46 @@
     // the copy holds the most recent truth.
     
     for (Contact *contact in self.selectedFriendsArrayCopy) {
-//        NSLog(contact.name);
-        
         // Create a MimeAnswer for friend target
         [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetFacebookID:contact.facebookid withTargetEmail:contact.email withTargetName:contact.name];
+        
+        hasRecipient = YES;
     }
     
-    // Increment the users gem total for the newly created Mime
-    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
-    int gemsForNewMime = [settings.gems_for_new_mime intValue];
-    int newGemTotal = [self.loggedInUser.numberofpoints intValue] + gemsForNewMime;
-    self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal]; 
+    if (hasRecipient == YES) {
+        // Proceed
+        // Increment the users gem total for the newly created Mime
+        int gemsForNewMime;
+        if (self.didMakeWord == YES) {
+            gemsForNewMime = 0;
+        }
+        else {
+            ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+            gemsForNewMime = [settings.gems_for_new_mime intValue];
+        }
+        
+        int newGemTotal = [self.loggedInUser.numberofpoints intValue] + gemsForNewMime;
+        self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal]; 
+        
+        // Save
+        [self showHUDForMimeUpload];
+    }
+    else {
+        // User has not selected anyone to send this mime to, alert
+        UIAlertView* alert = [[UIAlertView alloc]
+                              initWithTitle:@"No Recipients!"
+                              message:@"You must have at least one friend or the public option selected to send this mime."
+                              delegate:self
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+    }
     
-    // Save
-    [self showHUDForMimeUpload];
+}
+
+#pragma mark - UIAlertView Delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
 }
 
@@ -626,17 +657,24 @@
 //    NSString* attributeName = [changedAttributes objectAtIndex:0];
     
     if (progressView.didSucceed) {
-        //enumeration was sucessful
+        // Mime send was sucessful
         LOG_REQUEST(0, @"%@ Mime and MimeAnswer creation request was successful", activityName);
         
+        if (self.didMakeWord == NO) {
+            // Set the user default wordIDs to nil so a new set will be shown next time
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setObject:nil forKey:setting_DEFAULTWORDIDS];
+            [userDefaults synchronize];
+        }
+        
         // Now show the confirmation share screen
-        Mime_meViewMimeViewController *shareViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWSENTMIME withMimeID:self.mimeID withMimeAnswerIDorNil:nil];
-        [self.navigationController pushViewController:shareViewController animated:YES];
-
+        Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWSENTMIME withMimeID:self.mimeID withMimeAnswerIDorNil:nil];
+        viewMimeViewController.didMakeWord = self.didMakeWord;
+        [self.navigationController pushViewController:viewMimeViewController animated:YES];
         
     }
     else {
-        //enumeration failed
+        // Mime send failed
         LOG_REQUEST(1, @"%@ Mime and MimeAnswer creation request failure", activityName);
         
         //we need to undo the operation that was last performed
@@ -724,10 +762,11 @@
 
 
 #pragma mark - Static Initializers
-+ (Mime_meFriendsPickerViewController*)createInstanceWithMimeID:(NSNumber *)mimeID {
++ (Mime_meFriendsPickerViewController*)createInstanceWithMimeID:(NSNumber *)mimeID didMakeWord:(BOOL)didMakeWord {
     Mime_meFriendsPickerViewController* instance = [[Mime_meFriendsPickerViewController alloc]initWithNibName:@"Mime_meFriendsPickerViewController" bundle:nil];
     [instance autorelease];
     instance.mimeID = mimeID;
+    instance.didMakeWord = didMakeWord;
     return instance;
 }
 

@@ -535,18 +535,13 @@
         // Increment the counter for the number of times this word has been used
         NSInteger numTimesUsed = [self.chosenWord.numberoftimesused intValue] + 1;
         self.chosenWord.numberoftimesused = [NSNumber numberWithInt:numTimesUsed];
-        
-        // Set the user default wordIDs to nil so a new set will be shown next time
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:nil forKey:setting_DEFAULTWORDIDS];
-        [userDefaults synchronize];
     }
     
     // Create the Mime object
     Mime *mime = [Mime createMimeWithWordID:self.chosenWord.objectid withImage:image withThumbnail:thumbnailImage];
     
     // Launch the friends picker
-    Mime_meFriendsPickerViewController *friendsViewController = [Mime_meFriendsPickerViewController createInstanceWithMimeID:mime.objectid];
+    Mime_meFriendsPickerViewController *friendsViewController = [Mime_meFriendsPickerViewController createInstanceWithMimeID:mime.objectid didMakeWord:self.didMakeWord];
     [self.navigationController pushViewController:friendsViewController animated:YES];
     
 }

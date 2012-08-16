@@ -13,7 +13,7 @@
 #import "GADBannerView.h"
 #import "GADPublisherID.h"
 
-@interface Mime_meFriendsPickerViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, UIProgressHUDViewDelegate, Mime_meFriendsListTableViewControllerDelegate, FBRequestDelegate > {
+@interface Mime_meFriendsPickerViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, UIProgressHUDViewDelegate, Mime_meFriendsListTableViewControllerDelegate, FBRequestDelegate, UIAlertViewDelegate > {
     
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
     UIButton            *m_btn_go;
@@ -31,6 +31,8 @@
     
     GADBannerView       *m_gad_bannerView;
     
+    BOOL                m_didMakeWord;
+    
 }
 
 @property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
@@ -47,10 +49,12 @@
 @property (nonatomic, retain)           NSMutableArray      *selectedFriendsArray;
 @property (nonatomic, retain)           NSMutableArray      *selectedFriendsArrayCopy;
 
-@property (nonatomic, retain)           GADBannerView                   *gad_bannerView;
+@property (nonatomic, retain)           GADBannerView       *gad_bannerView;
+
+@property (nonatomic, assign)           BOOL                didMakeWord;
 
 - (IBAction) onGoButtonPressed:(id)sender;
 
-+ (Mime_meFriendsPickerViewController*)createInstanceWithMimeID:(NSNumber *)mimeID;
++ (Mime_meFriendsPickerViewController*)createInstanceWithMimeID:(NSNumber *)mimeID didMakeWord:(BOOL)didMakeWord;
 
 @end

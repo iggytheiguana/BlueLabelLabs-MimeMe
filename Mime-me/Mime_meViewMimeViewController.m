@@ -52,6 +52,7 @@
 @synthesize v_answerView        = m_v_answerView;
 
 @synthesize didUseHint          = m_didUseHint;
+@synthesize didMakeWord         = m_didMakeWord;
 
 
 #pragma mark - View Lifecycle
@@ -200,10 +201,15 @@
         
         NSString *confirmationTitle = @"Mime sent";
         
-        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
-        int editorMinimum = [settings.gems_for_new_mime intValue];
-        
-        NSString *subtitle = [NSString stringWithFormat:@"You earned %d gems!", editorMinimum];
+        NSString *subtitle;
+        if (self.didMakeWord == YES) {
+            subtitle = [NSString stringWithFormat:@"You created a new word and did not earn any gems!"];
+        }
+        else {
+            ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+            int gemsForNewMime = [settings.gems_for_new_mime intValue];
+            subtitle = [NSString stringWithFormat:@"You earned %d gems!", gemsForNewMime];
+        }
         
         // Add ConfirmationView
         self.v_confirmationView = [Mime_meUIConfirmationView createInstanceWithFrame:[Mime_meUIConfirmationView frameForConfirmationView] withTitle:confirmationTitle withSubtitle:subtitle forMimeWithID:self.mimeID];

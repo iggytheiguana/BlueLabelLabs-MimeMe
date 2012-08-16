@@ -36,6 +36,7 @@
     Mime_meUIAnswerView         *m_v_answerView;
     
     BOOL                        m_didUseHint;
+    BOOL                        m_didMakeWord;
     
 }
 
@@ -61,6 +62,7 @@
 @property (nonatomic, retain)           Mime_meUIAnswerView         *v_answerView;
 
 @property (nonatomic, assign)           BOOL                        didUseHint;
+@property (nonatomic, assign)           BOOL                        didMakeWord;
 
 - (IBAction) onBackButtonPressed:(id)sender;
 
