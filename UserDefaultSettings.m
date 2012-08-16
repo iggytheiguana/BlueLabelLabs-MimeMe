@@ -23,3 +23,6 @@ NSString* const setting_HASCOMPLETEDSEQUENCE = @"hascompletedsequence";
 NSString* const setting_LASTPOSITION = @"lastposition";
 NSString* const setting_DIDSKIPLOGIN = @"didskiplogin";
 NSString* const setting_APPVERSION = @"appversion";
+
+// Mime-Me specific settings
+NSString* const setting_DEFAULTWORDIDS = @"defaultwordids";

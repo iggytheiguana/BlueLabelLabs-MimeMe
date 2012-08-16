@@ -14,7 +14,7 @@
 - (IBAction) onSlideButtonPressed:(id)sender;
 - (IBAction) onFlagButtonPressed:(id)sender;
 - (IBAction) onClueButtonPressed:(id)sender;
-- (void) onSubmittedCorrectAnswer:(BOOL)isCorrect;
+- (void) onSubmittedCorrectAnswerViaAllClues:(BOOL)usedAllClues;
 
 
 @end
@@ -36,6 +36,8 @@
     BOOL            m_isKeyboardShown;
     BOOL            m_didGuessCorrectAnswer;
     
+    NSMutableArray  *m_revealedIndexes;
+    
 }
 
 @property (nonatomic, assign) id<Mime_meUIAnswerViewDelgate>  delegate;
@@ -53,6 +55,8 @@
 @property (nonatomic, assign)           BOOL            isViewHidden;
 @property (nonatomic, assign)           BOOL            isKeyboardShown;
 @property (nonatomic, assign)           BOOL            didGuessCorrectAnswer;
+
+@property (nonatomic, retain)           NSMutableArray  *revealedIndexes;
 
 - (void)renderWordDisplay;
 - (void)disableAnswerTextFields;

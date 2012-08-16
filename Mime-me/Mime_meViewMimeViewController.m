@@ -582,50 +582,57 @@
     
 }
 
-- (void) onSubmittedCorrectAnswer:(BOOL)isCorrect {
+- (void) onSubmittedCorrectAnswerViaAllClues:(BOOL)usedAllClues {
     // User submitted an answer
     
     ResourceContext *resourceContext = [ResourceContext instance];
     Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
     
-    if (isCorrect == YES) {
-        // submitted answer is correct, update attempt and answer count properties on the mime object
+    // submitted answer is correct, update attempt and answer count properties on the mime object
+    
+    mime.hasanswered = [NSNumber numberWithBool:YES];
+    
+    NSUInteger numAttempts = [mime.numberofattempts integerValue];
+    mime.numberofattempts = [NSNumber numberWithInteger:(numAttempts + 1)];
+    
+    NSUInteger numTimesAnswered = [mime.numbertimesanswered integerValue];
+    mime.numbertimesanswered = [NSNumber numberWithInteger:(numTimesAnswered + 1)];
+    
+    if (self.mimeAnswerID == nil) {
+        // We need to create a MimeAnswer object if this mime was loaded from the recent mimes or staff picked sections
+        MimeAnswer *newMimeAnswer = [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetFacebookID:self.loggedInUser.fb_user_id withTargetEmail:self.loggedInUser.email withTargetName:self.loggedInUser.username];
         
-        mime.hasanswered = [NSNumber numberWithBool:YES];
+        self.mimeAnswerID = newMimeAnswer.objectid;
+    }
+    
+    // Update the MimeAnswer properties
+    MimeAnswer *mimeAnswer = (MimeAnswer*)[resourceContext resourceWithType:MIMEANSWER withID:self.mimeAnswerID];
+    
+    mimeAnswer.state = [NSNumber numberWithInt:kANSWERED];
+    mimeAnswer.didusehint = [NSNumber numberWithBool:self.didUseHint];
+    
+    // Increment the users gem total for the newly created Mime
+    int pointsAwarded;
+    if (usedAllClues == YES) {
+        // no points are awarded when all clue is used
+        pointsAwarded = 0;
+        mimeAnswer.pointsawarded = [NSNumber numberWithInt:0];
         
-        NSUInteger numAttempts = [mime.numberofattempts integerValue];
-        mime.numberofattempts = [NSNumber numberWithInteger:(numAttempts + 1)];
-        
-        NSUInteger numTimesAnswered = [mime.numbertimesanswered integerValue];
-        mime.numbertimesanswered = [NSNumber numberWithInteger:(numTimesAnswered + 1)];
-        
-        if (self.mimeAnswerID == nil) {
-            // We need to create a MimeAnswer object if this mime was loaded from the recent mimes or staff picked sections
-            MimeAnswer *newMimeAnswer = [MimeAnswer createMimeAnswerWithMimeID:self.mimeID withTargetFacebookID:self.loggedInUser.fb_user_id withTargetEmail:self.loggedInUser.email withTargetName:self.loggedInUser.username];
-            
-            self.mimeAnswerID = newMimeAnswer.objectid;
-        }
-        
-        // Update the MimeAnswer properties
-        MimeAnswer *mimeAnswer = (MimeAnswer*)[resourceContext resourceWithType:MIMEANSWER withID:self.mimeAnswerID];
-        
-        mimeAnswer.state = [NSNumber numberWithInt:kANSWERED];
-        mimeAnswer.didusehint = [NSNumber numberWithBool:self.didUseHint];
-        
-        // Increment the users gem total for the newly created Mime
-        int pointsAwarded = [mimeAnswer.pointsawarded intValue];
-        int newGemTotal = [self.loggedInUser.numberofpoints intValue] + pointsAwarded;
-        self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
-        
-        // Show the hud and save
-        [self showHUDForSendAnswer];
+        // update the confirmation view title and subtitles
+        NSString *title = [NSString stringWithFormat:@"Draw!", pointsAwarded];
+        NSString *subtitle = [NSString stringWithFormat:@"You did not earn any gems", pointsAwarded];
+        self.v_confirmationView.lbl_title.text = title;
+        self.v_confirmationView.lbl_subtitle.text = subtitle;
     }
     else {
-        // incorrect answer, update attempt count
-        
-        NSUInteger numAttempts = [mime.numberofattempts integerValue];
-        mime.numberofattempts = [NSNumber numberWithInteger:(numAttempts + 1)];
+        pointsAwarded = [mimeAnswer.pointsawarded intValue];
     }
+    
+    int newGemTotal = [self.loggedInUser.numberofpoints intValue] + pointsAwarded;
+    self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
+    
+    // Show the hud and save
+    [self showHUDForSendAnswer];
 }
 
 - (IBAction) onSlideButtonPressed:(id)sender {

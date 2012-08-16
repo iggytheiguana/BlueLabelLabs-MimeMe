@@ -17,6 +17,7 @@
 #import "Word.h"
 #import "Mime_meSettingsViewController.h"
 #import "Mime.h"
+#import "UserDefaultSettings.h"
 
 @interface Mime_meCreateMimeViewController ()
 
@@ -167,7 +168,8 @@
     // Release any existing array
     [self.wordsArray release];
     
-    NSMutableArray *wordMtblArray = [[NSMutableArray alloc]init];
+    NSMutableArray *wordMtblArray = [[NSMutableArray alloc] init];
+    NSMutableArray *wordIDsMtblArray = [[NSMutableArray alloc] init];
     
     // Get 3 random words from the words FRC
     for (int i = 0; i < 3; i++) {
@@ -175,6 +177,7 @@
         if (randomWord != nil && [wordMtblArray containsObject:randomWord] == NO) 
         {
             [wordMtblArray addObject:randomWord];
+            [wordIDsMtblArray addObject:randomWord.objectid];
         }
         else {
             // we have a nil or a duplicate word, redo
@@ -184,6 +187,12 @@
     
     self.wordsArray = [wordMtblArray retain];
     [wordMtblArray release];
+    
+    // Save new set of words as defaults
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:[NSArray arrayWithArray:wordIDsMtblArray] forKey:setting_DEFAULTWORDIDS];
+    [userDefaults synchronize];
+    [wordIDsMtblArray release];
 }
 
 - (void)initializeGADBannerView {
@@ -247,7 +256,6 @@
     
     // Initialize Google AdMob Banner view
     [self initializeGADBannerView];
-    
 }
 
 - (void)viewDidUnload
@@ -272,15 +280,36 @@
     [self.nv_navigationHeader.btn_mime setHighlighted:YES];
     [self.nv_navigationHeader.btn_mime setUserInteractionEnabled:NO];
     
-    // Enumerate for words if we don't already have some
-    int wordCount = [[self.frc_words fetchedObjects] count];
-    if (wordCount <= 0 ) {
-        // There are no words, enumerate
-        [self enumerateWords];
+    // Load default words
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray *wordIDsArray = [userDefaults objectForKey:setting_DEFAULTWORDIDS];
+    
+    if (wordIDsArray == nil) {
+        // We don't have any stored default words, get new ones
+        
+        // Enumerate for words if we don't already have some
+        int wordCount = [[self.frc_words fetchedObjects] count];
+        if (wordCount <= 0 ) {
+            // There are no words, enumerate
+            [self enumerateWords];
+        }
+        else {
+            // Create the array of words to present to the user
+            [self makeWordsArray];
+        }
     }
     else {
-        // Create the array of words to present to the user
-        [self makeWordsArray];
+        NSMutableArray *wordMtblArray = [[NSMutableArray alloc] init];
+        
+        ResourceContext *resourceContext = [ResourceContext instance];
+        
+        for (NSNumber *wordID in wordIDsArray) {
+            Word *word = (Word*)[resourceContext resourceWithType:WORD withID:wordID];
+            [wordMtblArray addObject:word];
+        }
+        
+        self.wordsArray = [wordMtblArray retain];
+        [wordMtblArray release];
     }
 }
 
@@ -506,6 +535,11 @@
         // Increment the counter for the number of times this word has been used
         NSInteger numTimesUsed = [self.chosenWord.numberoftimesused intValue] + 1;
         self.chosenWord.numberoftimesused = [NSNumber numberWithInt:numTimesUsed];
+        
+        // Set the user default wordIDs to nil so a new set will be shown next time
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:nil forKey:setting_DEFAULTWORDIDS];
+        [userDefaults synchronize];
     }
     
     // Create the Mime object

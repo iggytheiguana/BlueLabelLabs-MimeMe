@@ -8,6 +8,7 @@
 
 #import "Mime_meUIAnswerView.h"
 #import <QuartzCore/QuartzCore.h>
+#import <stdlib.h>
 
 #define kMAXWORDLENGTH 20
 #define kALLOWEDCHARACTERSET @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -33,6 +34,7 @@
 @synthesize isViewHidden        = m_isViewHidden;
 @synthesize isKeyboardShown     = m_isKeyboardShown;
 @synthesize didGuessCorrectAnswer = m_didGuessCorrectAnswer;
+@synthesize revealedIndexes     = m_revealedIndexes;
 
 #pragma mark - Properties
 - (id)delegate {
@@ -102,6 +104,8 @@
                        name:UIKeyboardDidHideNotification
                      object:nil];
         
+        // Initialize the array to hold which letters have been revealed via a clue
+        self.revealedIndexes = [[NSMutableArray alloc] init];
         
         [self addSubview:self.view];
         
@@ -471,7 +475,7 @@
         
         CGFloat deltaY = 0.0;
         
-        if ([self.tf_answer isFirstResponder] == YES) {
+        if (self.isKeyboardShown == YES) {
             [self.tf_answer resignFirstResponder];
             
             deltaY = [self deltaYForKeyboard];
@@ -498,6 +502,21 @@
     
 }
 
+- (void)colorizeAnswerTextFieldAtIndex:(int)index {
+    UITextField *tf = (UITextField *)[self.view viewWithTag:index];
+    
+    tf.opaque = YES;
+    tf.backgroundColor=[UIColor lightGrayColor];
+    tf.layer.cornerRadius=8.0f;
+    tf.layer.masksToBounds=YES;
+}
+
+- (void)disableAnswerTextFieldAtIndex:(int)index {
+    UITextField *tf = (UITextField *)[self.view viewWithTag:index];
+    
+    [tf setEnabled:NO];
+}
+
 - (void)disableAnswerTextFields {
     for (int i = 1; i <= [self.word length]; i++) {
         
@@ -508,11 +527,22 @@
             NSLog(@"Space in answer phrase");
         }
         else {
-            UITextField *tf = (UITextField *)[self.view viewWithTag:i];
-            
-            [tf setEnabled:NO];
+            [self disableAnswerTextFieldAtIndex:i];
         }
     }
+}
+
+- (void)showLetterAtIndex:(int)index {
+    UITextField *tf = (UITextField *)[self.view viewWithTag:index];
+    
+    NSString *letter = [self.word substringWithRange:NSMakeRange(index - 1, 1)];
+    
+    // Special case, if entered character is a "W", left justify the text field to fit it
+    if ([letter isEqualToString:@"W"]) {
+        tf.textAlignment = UITextAlignmentLeft;
+    }
+    
+    [tf setText:letter];
 }
 
 - (void)showAnswer {
@@ -525,9 +555,7 @@
             NSLog(@"Space in answer phrase");
         }
         else {
-            UITextField *tf = (UITextField *)[self.view viewWithTag:i];
-            
-            [tf setText:[self.word substringWithRange:NSMakeRange(i - 1, 1)]];
+            [self showLetterAtIndex:i];
         }
     }
 }
@@ -578,6 +606,70 @@
 }
 
 - (IBAction) onClueButtonPressed:(id)sender {
+    int numLettersToReveal = MAX([self.word length] / 3, 1);
+    int numLettersRemaining = [self.word length] - [self.revealedIndexes count];
+    
+    if (numLettersRemaining <= numLettersToReveal) {
+        // Reveal all remaining letters
+        for (int i = 1; i <= [self.word length]; i++) {
+            if (![self.revealedIndexes containsObject:[NSNumber numberWithInt:i]]) {
+                [self showLetterAtIndex:i];
+                
+                [self disableAnswerTextFieldAtIndex:i];
+                
+                [self colorizeAnswerTextFieldAtIndex:i];
+                
+                [self.revealedIndexes addObject:[NSNumber numberWithInt:i]];
+                
+                // Disable and hide the clue button
+                self.btn_clue.enabled = NO;
+                self.btn_clue.hidden = YES;
+                
+                // Show confirmation view
+                self.didGuessCorrectAnswer = [self checkForCorrectAnswerInitiatedByUser:NO];
+                if (self.didGuessCorrectAnswer == YES) {
+                    // User has submitted the correct answer
+                    [self.delegate onSubmittedCorrectAnswerViaAllClues:YES];
+                }
+            }
+        }
+    }
+    else {
+        for (int i = 0; i < numLettersToReveal; i++) {
+            int r = arc4random() % ([self.word length] - 1);
+            ++r;
+            
+            if (![self.revealedIndexes containsObject:[NSNumber numberWithInt:r]]) {
+                [self showLetterAtIndex:r];
+                
+                [self disableAnswerTextFieldAtIndex:r];
+                
+                [self colorizeAnswerTextFieldAtIndex:r];
+                
+                [self.revealedIndexes addObject:[NSNumber numberWithInt:r]];
+            }
+            else {
+                i--;
+            }
+        }
+        
+        // Make the first available textfield active
+        for (int i = 0; i < [self.word length]; i++) {
+            if ([self.word characterAtIndex:i] == kUNICHARSPACE) {
+                // Do nothing
+            }
+            else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:(i + 1)]]) {
+                // Do nothing
+            }
+            else {
+                UITextField *tf = (UITextField *)[self.view viewWithTag:(i + 1)];
+                [tf becomeFirstResponder];
+                self.tf_answer = tf;
+                break;
+            }
+        }
+    }
+    
     [self.delegate onClueButtonPressed:sender];
 }
 
@@ -622,7 +714,7 @@
     // textfield editing has ended
     
     if (self.didGuessCorrectAnswer == YES) {
-        [self.delegate onSubmittedCorrectAnswer:YES];
+        [self.delegate onSubmittedCorrectAnswerViaAllClues:NO];
     }
 }
 
@@ -698,45 +790,79 @@
         
         if (self.didGuessCorrectAnswer == YES) {
             // User has submitted the correct answer
-            [self.delegate onSubmittedCorrectAnswer:YES];
+            [self.delegate onSubmittedCorrectAnswerViaAllClues:NO];
         }
         else {
             if (shouldMoveToNextField) {
                 // Move to next textfield
                 if (self.tf_answer.tag < [self.word length]) {
-                    UITextField *tf;
-                    if ([self.word characterAtIndex:(self.tf_answer.tag)] == kUNICHARSPACE) {
-                        // Next character in answer is a space, increment to next tag number by 2
-                        tf = (UITextField *)[self.view viewWithTag:(self.tf_answer.tag + 2)];
+                    for (int i = self.tf_answer.tag; i < [self.word length]; i++) {
+                        if ([self.word characterAtIndex:i] == kUNICHARSPACE) {
+                            // Do nothing
+                        }
+                        else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:i + 1]]) {
+                            // Do nothing
+                        }
+                        else {
+                            UITextField *tf = (UITextField *)[self.view viewWithTag:(i + 1)];
+                            [tf becomeFirstResponder];
+                            self.tf_answer = tf;
+                            break;
+                        }
                     }
-                    else {
-                        tf = (UITextField *)[self.view viewWithTag:(self.tf_answer.tag + 1)];
-                    }
-                    [tf becomeFirstResponder];
                 }
                 else {
-                    // Loop back to the first 
-                    UITextField *tf = (UITextField *)[self.view viewWithTag:1];
-                    [tf becomeFirstResponder];
+                    // Loop back to the first
+                    for (int i = 0; i < [self.word length]; i++) {
+                        if ([self.word characterAtIndex:i] == kUNICHARSPACE) {
+                            // Do nothing
+                        }
+                        else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:(i + 1)]]) {
+                            // Do nothing
+                        }
+                        else {
+                            UITextField *tf = (UITextField *)[self.view viewWithTag:(i + 1)];
+                            [tf becomeFirstResponder];
+                            self.tf_answer = tf;
+                            break;
+                        }
+                    }
                 }
             }
             else if (shouldMoveToPreviousField) {
                 // Move to previous textfield
                 if (self.tf_answer.tag > 1) {
-                    UITextField *tf;
-                    if ([self.word characterAtIndex:(self.tf_answer.tag - 2)] == kUNICHARSPACE) {
-                        // Previous character in answer is a space, increment to previous tag number by 2
-                        tf = (UITextField *)[self.view viewWithTag:(self.tf_answer.tag - 2)];
+                    for (int i = self.tf_answer.tag; i > 1; i--) {
+                        if ([self.word characterAtIndex:(i - 2)] == kUNICHARSPACE) {
+                            // Do nothing
+                        }
+                        else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:i - 1]]) {
+                            // Do nothing
+                        }
+                        else {
+                            UITextField *tf = (UITextField *)[self.view viewWithTag:(i - 1)];
+                            [tf becomeFirstResponder];
+                            self.tf_answer = tf;
+                            break;
+                        }
                     }
-                    else {
-                        tf = (UITextField *)[self.view viewWithTag:(self.tf_answer.tag - 1)];
-                    }
-                    [tf becomeFirstResponder];
                 }
                 else {
-                    // Loop back to the last 
-                    UITextField *tf = (UITextField *)[self.view viewWithTag:[self.word length]];
-                    [tf becomeFirstResponder];
+                    // Loop back to the last
+                    for (int i = [self.word length]; i > 0; i--) {
+                        if ([self.word characterAtIndex:(i - 1)] == kUNICHARSPACE) {
+                            // Do nothing
+                        }
+                        else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:i]]) {
+                            // Do nothing
+                        }
+                        else {
+                            UITextField *tf = (UITextField *)[self.view viewWithTag:i];
+                            [tf becomeFirstResponder];
+                            self.tf_answer = tf;
+                            break;
+                        }
+                    }
                 }
             }
         }

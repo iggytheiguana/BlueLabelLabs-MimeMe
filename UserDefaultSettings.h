@@ -24,3 +24,6 @@ extern NSString* const setting_HASCOMPLETEDSEQUENCE;
 extern NSString* const setting_LASTPOSITION;
 extern NSString* const setting_DIDSKIPLOGIN;
 extern NSString* const setting_APPVERSION;
+
+// Mime-Me specific settings
+extern NSString* const setting_DEFAULTWORDIDS;
