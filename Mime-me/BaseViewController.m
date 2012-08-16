@@ -274,6 +274,53 @@
     //}
 }
 
+- (void)showProgressBar:(NSString*)message 
+         withCustomView:(UIView*)view 
+ withMaximumDisplayTime:(NSNumber*)maximumTimeInSeconds
+    showFinishedMessage:(BOOL)showFinishedMessage {
+    
+    NSString* activityName = @"BaseViewController.showProgressBar:";
+    
+    Mime_meAppDelegate* delegate = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    UIProgressHUDView* progressView = delegate.progressView;
+    
+    
+    //first check if this view controller is the top level visible controller
+    // if (self.navigationController.visibleViewController == self) {
+    progressView.labelText = message;
+    [progressView removeAllSubviews];
+    
+    
+    [self.view addSubview:progressView];
+    
+    if (view != nil) {
+        progressView.customView = view;
+        progressView.mode = MBProgressHUDModeCustomView;
+    }
+    else {
+        progressView.customView = nil;
+        progressView.mode = MBProgressHUDModeIndeterminate;
+    }
+    
+    //progressView.maximumDisplayTime = maximumTimeInSeconds;
+    
+    // [progressView hide:NO];
+    LOG_BASEVIEWCONTROLLER(0, @"%@showing progress bar", activityName);
+    NSArray* progressMessages = [NSArray arrayWithObject:message];
+    
+    NSString* successMessage = message;
+    NSString* failureMessage = message;
+    if (showFinishedMessage == YES) {
+        successMessage = @"Success!";
+        failureMessage = @"Oops, try again?";
+    }
+    
+    [progressView show:YES withMaximumDisplayTime:maximumTimeInSeconds showProgressMessages:progressMessages onSuccessShow:successMessage onFailureShow:failureMessage];
+    
+    //}
+    
+}
+
 - (void) hideProgressBar {
     NSString* activityName = @"BaseViewController.hideProgressBar:";
     Mime_meAppDelegate* delegate = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];

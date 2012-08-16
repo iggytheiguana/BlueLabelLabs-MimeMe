@@ -110,11 +110,14 @@
 - (void)showHUDForMimeEnumerators {
     Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
     UIProgressHUDView* progressView = appDelegate.progressView;
-    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+//    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
     progressView.delegate = self;
     
     NSString* message = @"Updating...";
-    [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
+    
+    NSNumber *maxDisplayTime = [NSNumber numberWithDouble:5.0];
+//    NSNumber *maxDisplayTime = settings.http_timeout_seconds
+    [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:maxDisplayTime showFinishedMessage:NO];
     
 }
 

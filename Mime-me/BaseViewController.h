@@ -51,7 +51,12 @@
 
 - (void)showProgressBar:(NSString*)message 
          withCustomView:(UIView*)view 
- withMaximumDisplayTime:(NSNumber*)maximumTimeInSeconds; 
+ withMaximumDisplayTime:(NSNumber*)maximumTimeInSeconds;
+
+- (void)showProgressBar:(NSString*)message 
+         withCustomView:(UIView*)view 
+ withMaximumDisplayTime:(NSNumber*)maximumTimeInSeconds
+    showFinishedMessage:(BOOL)showFinishedMessage;
 
 
 - (void)showDeterminateProgressBarWithMaximumDisplayTime:(NSNumber*)maximumTimeInSeconds
