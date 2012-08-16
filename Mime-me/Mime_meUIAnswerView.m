@@ -606,8 +606,10 @@
 }
 
 - (IBAction) onClueButtonPressed:(id)sender {
-    int numLettersToReveal = MAX([self.word length] / 3, 1);
-    int numLettersRemaining = [self.word length] - [self.revealedIndexes count];
+    NSString *trimmedWordAnswer = [self.word stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    int numLettersToReveal = MAX([trimmedWordAnswer length] / 3, 1);
+    int numLettersRemaining = [trimmedWordAnswer length] - [self.revealedIndexes count];
     
     if (numLettersRemaining <= numLettersToReveal) {
         // Reveal all remaining letters
@@ -637,9 +639,13 @@
     else {
         for (int i = 0; i < numLettersToReveal; i++) {
             int r = arc4random() % ([self.word length] - 1);
-            ++r;
+            r++;
             
-            if (![self.revealedIndexes containsObject:[NSNumber numberWithInt:r]]) {
+            if ([self.word characterAtIndex:(r - 1)] == kUNICHARSPACE) {
+                // Do not attempt to reveal blank spaces
+                i--;
+            }
+            else if (![self.revealedIndexes containsObject:[NSNumber numberWithInt:r]]) {
                 [self showLetterAtIndex:r];
                 
                 [self disableAnswerTextFieldAtIndex:r];
