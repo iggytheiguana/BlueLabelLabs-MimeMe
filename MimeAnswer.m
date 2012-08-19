@@ -25,7 +25,7 @@
 @dynamic targetuserid;
 @dynamic issentbyfriend;
 @dynamic targetname;
-
+@dynamic hasseen;
 #pragma mark - Static Initializers
 //creates a MimeAnswer object based on userIDs
 + (MimeAnswer*)createMimeAnswerWithMimeID:(NSNumber *)mimeID

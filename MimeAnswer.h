@@ -21,6 +21,7 @@
 @property (nonatomic,retain) NSNumber* targetuserid;
 @property (nonatomic,retain) NSNumber* issentbyfriend;
 @property (nonatomic,retain) NSString* targetname;
+@property (nonatomic,retain) NSNumber* hasseen;
 
 + (MimeAnswer*)createMimeAnswerWithMimeID:(NSNumber *)mimeID
                          withTargetUserID:(NSNumber *)targetUserID;
