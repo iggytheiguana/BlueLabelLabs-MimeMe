@@ -330,6 +330,21 @@
         
     }
     
+    // Mark the Mime and Mime Answer objects as seen
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+    MimeAnswer *mimeAnswer = (MimeAnswer*)[resourceContext resourceWithType:MIMEANSWER withID:self.mimeAnswerID];
+    
+    if (mime != nil) {
+        mime.hasseen = [NSNumber numberWithBool:YES];
+    }
+    if (mimeAnswer != nil) {
+        mimeAnswer.hasseen = [NSNumber numberWithBool:YES];
+    }
+    
+    // Save updates to has seen property on mime and mime answer
+    [resourceContext save:NO onFinishCallback:nil trackProgressWith:nil];
+    
     // Adjust layout based on orientation
 //    [self didRotate];
     

@@ -60,7 +60,7 @@
     ResourceContext* resourceContext = [ResourceContext instance];
     NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:DATECREATED ascending:NO];
     
-    NSArray *values = [NSArray arrayWithObjects:[loggedInUserID stringValue], feedEvent, nil];
+    NSArray *values = [NSArray arrayWithObjects:[loggedInUserID stringValue], [NSNumber numberWithInt:feedEvent], nil];
     NSArray *attributes = [NSArray arrayWithObjects:USERID, FEEDEVENT, nil];
     
     NSArray* feedObjects = [resourceContext resourcesWithType:FEED withValuesEqual:values forAttributes:attributes sortBy:[NSArray arrayWithObject:sortDescriptor]];

@@ -411,6 +411,11 @@
         cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
         
         userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_mimeAnswersFromFriends, kMIMEFRC, mimeAnswer.objectid, kMIMEANSWERID, nil];
+        
+        hasSeen = [mimeAnswer.hasseen boolValue];
+//        // mark the mime as seen
+//        mimeAnswer.hasseen = [NSNumber numberWithBool:YES];
+//        mime.hasseen = [NSNumber numberWithBool:YES];
     }
     else if (indexPath.section == 1) {
         // Recent Mimes section
@@ -422,6 +427,10 @@
         cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
         
         userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_recentMimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
+        
+        hasSeen = [mime.hasseen boolValue];
+//        // mark the mime as seen
+//        mime.hasseen = [NSNumber numberWithBool:YES];
     }
     else if (indexPath.section == 2) {
         // Staff Picked Mimes section
@@ -433,6 +442,10 @@
         cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
         
         userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_staffPickedMimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
+        
+        hasSeen = [mime.hasseen boolValue];
+//        // mark the mime as seen
+//        mime.hasseen = [NSNumber numberWithBool:YES];
     }
     
     // Set the mime image
@@ -454,21 +467,29 @@
     }
     
     // Mark mime as "new" if user has not previously seen it
+    UILabel *lbl_new = (UILabel *)[cell.contentView viewWithTag:101];
     if (hasSeen == NO) {
-        UILabel *lbl_new = [[UILabel alloc] initWithFrame:CGRectMake(235.0f, 0.0f, 40.0f, 21.0f)];
-        lbl_new.text = @"New!";
-        lbl_new.backgroundColor = [UIColor clearColor];
-        lbl_new.font =[UIFont systemFontOfSize:14.0f];
-        lbl_new.textColor = [UIColor redColor];
-        lbl_new.textAlignment = UITextAlignmentRight;
-        
-        [cell.contentView addSubview:lbl_new];
+        [lbl_new setHidden:NO];
     }
+    else {
+        [lbl_new setHidden:YES];
+    }
+    
+    // Save updates to has seen property on mime and mime answer
+//    [resourceContext save:NO onFinishCallback:nil trackProgressWith:nil];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *CellIdentifier;
+    
+    UILabel *lbl_new = [[UILabel alloc] initWithFrame:CGRectMake(235.0f, 0.0f, 40.0f, 21.0f)];
+    [lbl_new setTag:101];
+    lbl_new.text = @"New!";
+    lbl_new.backgroundColor = [UIColor clearColor];
+    lbl_new.font =[UIFont systemFontOfSize:14.0f];
+    lbl_new.textColor = [UIColor redColor];
+    lbl_new.textAlignment = UITextAlignmentRight;
     
     if (indexPath.section == 0) {
         // From Friends section
@@ -505,6 +526,8 @@
                         cell.imageView.layer.borderWidth = 1.0;
                         
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                        
+                        [cell.contentView addSubview:lbl_new];
                         
                     }
                     
@@ -591,6 +614,8 @@
                         
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         
+                        [cell.contentView addSubview:lbl_new];
+                        
                     }
                     
                     [self configureCell:cell atIndexPath:indexPath];
@@ -675,6 +700,8 @@
                         
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         
+                        [cell.contentView addSubview:lbl_new];
+                        
                     }
                     
                     [self configureCell:cell atIndexPath:indexPath];
@@ -723,6 +750,8 @@
             }
         }
     }
+    
+    [lbl_new release];
 }
 
 /*

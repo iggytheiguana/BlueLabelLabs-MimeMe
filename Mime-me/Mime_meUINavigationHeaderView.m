@@ -127,7 +127,16 @@
 
 #pragma mark - Notification Handlers
 - (void) updateNotifications {
-    [Feed unopenedNotificationsForFeedEvent:kMIME_SENT];
+//    kMIME_RECEIVED,
+//    kCOMMENT_RECEIVED,
+//    kANSWER_RECEIVED
+    
+    int numNewMimesRecieved = [Feed unopenedNotificationsForFeedEvent:kMIME_RECEIVED];
+    
+    if (numNewMimesRecieved > 0) {
+        [self.lbl_mimeNotification setText:[NSString stringWithFormat:@"%d",numNewMimesRecieved]];
+        [self.lbl_guessNotification setHidden:NO];
+    }
 }
 
 #pragma mark - UIButton Handlers

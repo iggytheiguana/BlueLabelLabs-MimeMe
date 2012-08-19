@@ -339,6 +339,9 @@
 //    {
 //        LOG_MIME_MESCRAPBOOKMENUVIEWCONTROLLER(0, @"%@Refreshing user's notification feed", activityName);
 //    }
+    
+    // Update notifications
+    [self updateNotifications];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -888,15 +891,8 @@
 #pragma mark - Feed Event Handlers
 - (void)updateNotifications {
     if ([self.authenticationManager isUserAuthenticated]) {
-        int unreadNotifications = [User unopenedNotificationsFor:self.loggedInUser.objectid];
-        
-        if (unreadNotifications > 0) {
-            [self.nv_navigationHeader.lbl_scrapbookNotification setHidden:NO];
-            [self.nv_navigationHeader.lbl_scrapbookNotification setText:[NSString stringWithFormat:@"%d", unreadNotifications]];
-        }
-        else {
-            
-        }
+        // update notification bubbles in navigation header
+        [self.nv_navigationHeader updateNotifications];
     }
 }
 
