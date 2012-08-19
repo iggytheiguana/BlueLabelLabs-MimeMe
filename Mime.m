@@ -30,6 +30,8 @@
 @dynamic numberofflags;
 @dynamic creatorimageurl;
 @dynamic numberoftimesfavorited;
+
+
 #pragma mark - Static Initializers
 //creates a Mime object
 + (Mime*)createMimeWithWordID:(NSNumber *)wordID

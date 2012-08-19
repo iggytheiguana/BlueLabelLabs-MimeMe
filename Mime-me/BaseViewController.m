@@ -158,6 +158,15 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    NSString* activityName = @"BaseViewController.viewWillAppear:";
+    
+    // Refresh the notification feed
+    Callback* callback = [Callback callbackForTarget:self selector:@selector(onFeedRefreshComplete:) fireOnMainThread:YES];
+    BOOL isEnumeratingFeed = [[FeedManager instance] tryRefreshFeedOnFinish:callback];
+    if (isEnumeratingFeed) 
+    {
+        LOG_BASEVIEWCONTROLLER(0, @"%@Refreshing user's notification feed", activityName);
+    }
 }
 
 
@@ -585,6 +594,13 @@
 
 - (void) onHideProgressView:(CallbackResult*)result {
     [self hideProgressBar];
+}
+
+#pragma mark - Feed Event Handlers
+- (void) onFeedRefreshComplete:(CallbackResult*)result 
+{
+    // Update notifications
+    
 }
 
 

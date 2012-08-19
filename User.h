@@ -30,6 +30,6 @@
 @property (nonatomic,retain) NSString* twitter_user_id;
 @property (nonatomic,retain) NSString* username;
 
-
++ (int) unopenedNotificationsFor:(NSNumber*)objectid;
 
 @end

@@ -576,6 +576,26 @@
     }
 }
 
+#pragma mark - Feed Event Handlers
+- (void)updateNotifications {
+    if ([self.authenticationManager isUserAuthenticated]) {
+        int unreadNotifications = [User unopenedNotificationsFor:self.loggedInUser.objectid];
+        
+        if (unreadNotifications > 0) {
+            
+        }
+        else {
+            
+        }
+    }
+}
+
+- (void) onFeedRefreshComplete:(CallbackResult*)result 
+{
+    // Update notifications
+    [self updateNotifications];
+}
+
 #pragma mark - CloudEnumeratorDelegate
 - (void) onEnumerateComplete:(CloudEnumerator*)enumerator 
                  withResults:(NSArray *)results 

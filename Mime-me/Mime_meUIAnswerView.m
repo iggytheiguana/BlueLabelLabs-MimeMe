@@ -608,7 +608,9 @@
 - (IBAction) onClueButtonPressed:(id)sender {
     NSString *trimmedWordAnswer = [self.word stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-    int numLettersToReveal = MAX([trimmedWordAnswer length] / 3, 1);
+//    int numLettersToReveal = MAX([trimmedWordAnswer length] / 3, 1);
+    int numLettersToReveal = ([trimmedWordAnswer length] + 3 - 1) / 3;  // Always rounds up
+    
     int numLettersRemaining = [trimmedWordAnswer length] - [self.revealedIndexes count];
     
     if (numLettersRemaining <= numLettersToReveal) {

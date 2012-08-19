@@ -320,6 +320,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    NSString* activityName = @"Mime_meScrapbookMenuViewController.viewWillAppear:";
+    
     [self.nv_navigationHeader.btn_scrapbook setHighlighted:YES];
     [self.nv_navigationHeader.btn_scrapbook setUserInteractionEnabled:NO];
     
@@ -329,6 +331,14 @@
     [self enumerateGuessedMimes];
     
     [self showHUDForMimeEnumerators];
+    
+//    // Refresh the notification feed
+//    Callback* callback = [Callback callbackForTarget:self selector:@selector(onFeedRefreshComplete:) fireOnMainThread:YES];
+//    BOOL isEnumeratingFeed = [[FeedManager instance] tryRefreshFeedOnFinish:callback];
+//    if (isEnumeratingFeed) 
+//    {
+//        LOG_MIME_MESCRAPBOOKMENUVIEWCONTROLLER(0, @"%@Refreshing user's notification feed", activityName);
+//    }
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -841,7 +851,7 @@
       forChangeType:(NSFetchedResultsChangeType)type 
        newIndexPath:(NSIndexPath *)newIndexPath {
     
-    NSString* activityName = @"Mime_meGuessMenuViewController.controller.didChangeObject:";
+    NSString* activityName = @"Mime_meScrapbookMenuViewController.controller.didChangeObject:";
     if (controller == self.frc_sentMimes) {
         LOG_MIME_MESCRAPBOOKMENUVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
         
@@ -875,9 +885,32 @@
     
 }
 
+#pragma mark - Feed Event Handlers
+- (void)updateNotifications {
+    if ([self.authenticationManager isUserAuthenticated]) {
+        int unreadNotifications = [User unopenedNotificationsFor:self.loggedInUser.objectid];
+        
+        if (unreadNotifications > 0) {
+            [self.nv_navigationHeader.lbl_scrapbookNotification setHidden:NO];
+            [self.nv_navigationHeader.lbl_scrapbookNotification setText:[NSString stringWithFormat:@"%d", unreadNotifications]];
+        }
+        else {
+            
+        }
+    }
+}
+
+- (void) onFeedRefreshComplete:(CallbackResult*)result
+{
+    [super onFeedRefreshComplete:result];
+    
+    // Update notifications
+    [self updateNotifications];
+}
+
 #pragma mark - ImageManager Delegate Methods
 - (void)onImageDownloadComplete:(CallbackResult*)result {
-    NSString* activityName = @"Mime_meGuessMenuViewController.onImageDownloadComplete:";
+    NSString* activityName = @"Mime_meScrapbookMenuViewController.onImageDownloadComplete:";
     NSDictionary* userInfo = result.context;
     
     NSFetchedResultsController *frc = (NSFetchedResultsController *)[userInfo valueForKey:kMIMEFRC];

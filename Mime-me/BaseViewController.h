@@ -75,4 +75,6 @@
 
 - (void)alertView:(UICustomAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
 
+- (void) onFeedRefreshComplete:(CallbackResult*)result;
+
 @end

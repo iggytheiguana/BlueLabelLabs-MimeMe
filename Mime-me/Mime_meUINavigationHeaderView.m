@@ -13,6 +13,8 @@
 #import "Mime_meGuessMenuViewController.h"
 #import "Mime_meScrapbookMenuViewController.h"
 #import "Mime_meSettingsViewController.h"
+#import "Feed.h"
+#import "FeedTypes.h"
 
 @implementation Mime_meUINavigationHeaderView
 @synthesize view                = m_view;
@@ -23,6 +25,9 @@
 @synthesize btn_guess           = m_btn_guess;
 @synthesize btn_scrapbook       = m_btn_scrapbook;
 @synthesize btn_gemCount        = m_btn_gemCount;
+@synthesize lbl_mimeNotification        = m_lbl_mimeNotification;
+@synthesize lbl_guessNotification       = m_lbl_guessNotification;
+@synthesize lbl_scrapbookNotification   = m_lbl_scrapbookNotification;
 
 
 #pragma mark - Properties
@@ -69,6 +74,27 @@
         
         // Setup Gem Count button, disable it for now
         [self.btn_gemCount setEnabled:NO];
+        
+        // Add rounded corners to notification labels header
+        [self.lbl_mimeNotification.layer setCornerRadius:8.0f];
+        [self.lbl_mimeNotification.layer setMasksToBounds:YES];
+        [self.lbl_mimeNotification.layer setBorderWidth:1.0f];
+        [self.lbl_mimeNotification.layer setBorderColor:[UIColor whiteColor].CGColor];
+        [self.lbl_mimeNotification setHidden:YES];
+        
+        [self.lbl_guessNotification.layer setCornerRadius:8.0f];
+        [self.lbl_guessNotification.layer setMasksToBounds:YES];
+        [self.lbl_guessNotification.layer setMasksToBounds:YES];
+        [self.lbl_guessNotification.layer setBorderWidth:1.0f];
+        [self.lbl_guessNotification.layer setBorderColor:[UIColor whiteColor].CGColor];
+        [self.lbl_guessNotification setHidden:YES];
+        
+        [self.lbl_scrapbookNotification.layer setCornerRadius:8.0f];
+        [self.lbl_scrapbookNotification.layer setMasksToBounds:YES];
+        [self.lbl_scrapbookNotification.layer setMasksToBounds:YES];
+        [self.lbl_scrapbookNotification.layer setBorderWidth:1.0f];
+        [self.lbl_scrapbookNotification.layer setBorderColor:[UIColor whiteColor].CGColor];
+        [self.lbl_scrapbookNotification setHidden:YES];
 
     }
     return self;
@@ -92,8 +118,16 @@
     self.btn_guess = nil;
     self.btn_scrapbook = nil;
     self.btn_gemCount = nil;
+    self.lbl_mimeNotification = nil;
+    self.lbl_guessNotification = nil;
+    self.lbl_scrapbookNotification = nil;
     
     [super dealloc];
+}
+
+#pragma mark - Notification Handlers
+- (void) updateNotifications {
+    [Feed unopenedNotificationsForFeedEvent:kMIME_SENT];
 }
 
 #pragma mark - UIButton Handlers

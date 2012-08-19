@@ -8,6 +8,9 @@
 
 #import "Feed.h"
 #import "JSONKit.h"
+#import "FeedTypes.h"
+#import "Attributes.h"
+#import "AuthenticationManager.h"
 
 @implementation Feed
 @dynamic message;
@@ -18,6 +21,7 @@
 @dynamic imageurl;
 @dynamic rendertype;
 @dynamic html;
+
 
 @synthesize feeddata = __feeddata;
 
@@ -47,4 +51,32 @@
     [__feeddata release];
     [super dealloc];
 }
+
+//returns the number of unexpired, unopened new Mime notifications for this user in the database
++ (int) unopenedNotificationsForFeedEvent:(int)feedEvent
+{
+    NSNumber* loggedInUserID = [[AuthenticationManager instance] m_LoggedInUserID];
+    
+    ResourceContext* resourceContext = [ResourceContext instance];
+    NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:DATECREATED ascending:NO];
+    
+    NSArray *values = [NSArray arrayWithObjects:[loggedInUserID stringValue], feedEvent, nil];
+    NSArray *attributes = [NSArray arrayWithObjects:USERID, FEEDEVENT, nil];
+    
+    NSArray* feedObjects = [resourceContext resourcesWithType:FEED withValuesEqual:values forAttributes:attributes sortBy:[NSArray arrayWithObject:sortDescriptor]];
+    
+    int count = 0;
+    //get the current date
+    double date = [[NSDate date] timeIntervalSince1970];
+    
+    for (Feed* feed in feedObjects) 
+    {
+        if ([feed.dateexpires doubleValue] > date && [feed.hasopened boolValue] == NO) {
+            //its unexpired and unopened
+            count++;
+        }
+    }
+    return count;
+}
+
 @end

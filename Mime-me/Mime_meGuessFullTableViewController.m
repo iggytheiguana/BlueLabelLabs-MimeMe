@@ -270,6 +270,8 @@
     ImageManager* imageManager = [ImageManager instance];
     NSDictionary* userInfo;
     
+    BOOL hasSeen = NO;
+    
     if (self.mimeType == kFROMFRIENDMIME) {
         // From Friends section
         MimeAnswer *mimeAnswer = [[self.frc_mimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
@@ -324,6 +326,18 @@
         }
         
         [self.view setNeedsDisplay];
+    }
+    
+    // Mark mime as "new" if user has not previously seen it
+    if (hasSeen == NO) {
+        UILabel *lbl_new = [[UILabel alloc] initWithFrame:CGRectMake(235.0f, 0.0f, 40.0f, 21.0f)];
+        lbl_new.text = @"New!";
+        lbl_new.backgroundColor = [UIColor clearColor];
+        lbl_new.font =[UIFont systemFontOfSize:14.0f];
+        lbl_new.textColor = [UIColor redColor];
+        lbl_new.textAlignment = UITextAlignmentRight;
+        
+        [cell.contentView addSubview:lbl_new];
     }
 }
 

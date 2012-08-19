@@ -37,6 +37,10 @@
     UIButton    *m_btn_settings;
     UIButton    *m_btn_back;
     UIButton    *m_btn_gemCount;
+    
+    UILabel     *m_lbl_mimeNotification;
+    UILabel     *m_lbl_guessNotification;
+    UILabel     *m_lbl_scrapbookNotification;
 }
 
 @property (nonatomic, assign) id<Mime_meUINavigationHeaderViewDelgate>  delegate;
@@ -52,6 +56,10 @@
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_settings;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_back;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_gemCount;
+
+@property (nonatomic, retain) IBOutlet  UILabel        *lbl_mimeNotification;
+@property (nonatomic, retain) IBOutlet  UILabel        *lbl_guessNotification;
+@property (nonatomic, retain) IBOutlet  UILabel        *lbl_scrapbookNotification;
 
 + (CGRect)frameForNavigationHeader;
 
