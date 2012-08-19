@@ -153,8 +153,7 @@ insertIntoResourceContext:(ResourceContext *)context
     if ([type isEqualToString:USER]) {
         if (
             [lowerCaseName isEqualToString:NUMBEROFFOLLOWERS] ||
-            [lowerCaseName isEqualToString:NUMBERFOLLOWING] ||
-            [lowerCaseName isEqualToString:NUMBEROFPOINTS]) {
+            [lowerCaseName isEqualToString:NUMBERFOLLOWING]) {
             retVal.islocal = [NSNumber numberWithBool:YES];
         }
     }
@@ -173,7 +172,8 @@ insertIntoResourceContext:(ResourceContext *)context
         [lowerCaseName isEqualToString:NUMBEROFTIMESUSED] ||
         [lowerCaseName isEqualToString:NUMBEROFATTEMPTS] ||
         [lowerCaseName isEqualToString:NUMBEROFTIMESVIEWED] ||
-        [lowerCaseName isEqualToString:NUMBEROFTIMESFAVORITED]) {
+        [lowerCaseName isEqualToString:NUMBEROFTIMESFAVORITED] ||
+         [lowerCaseName isEqualToString:NUMBEROFPOINTS]) {
         //these are all counter variables
         retVal.iscounter = [NSNumber numberWithBool:YES];
     }

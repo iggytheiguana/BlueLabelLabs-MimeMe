@@ -92,6 +92,7 @@
         <attribute name="creatorimageurl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="creatorname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="hasanswered" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="hasseen" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="imageurl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="isfavorite" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="ispublic" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -107,10 +108,10 @@
         <attribute name="wordid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="MimeAnswer" representedClassName="MimeAnswer" parentEntity="resource" syncable="YES">
-        <attribute name="answer" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="creatorid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="creatorname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="didusehint" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="hasseen" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="issentbyfriend" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="mimeid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="pointsawarded" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
