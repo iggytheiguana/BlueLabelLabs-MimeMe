@@ -42,7 +42,10 @@ typedef enum {
     kMIME_SENT,
     kMIME_ANSWERED,
     kSHARE_MIME_FACEBOOK,
-    kSHARE_MIME_TWITTER
+    kSHARE_MIME_TWITTER,
+    kMIME_RECEIVED,
+    kCOMMENT_RECEIVED,
+    kANSWER_RECEIVED
 } FeedEvent;
 
 typedef enum {
