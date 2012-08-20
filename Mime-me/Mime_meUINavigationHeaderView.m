@@ -75,25 +75,9 @@
         // Setup Gem Count button, disable it for now
         [self.btn_gemCount setEnabled:NO];
         
-        // Add rounded corners to notification labels header
-        [self.lbl_mimeNotification.layer setCornerRadius:8.0f];
-        [self.lbl_mimeNotification.layer setMasksToBounds:YES];
-        [self.lbl_mimeNotification.layer setBorderWidth:1.0f];
-        [self.lbl_mimeNotification.layer setBorderColor:[UIColor whiteColor].CGColor];
+        // Hide the notification label until they need to be shown
         [self.lbl_mimeNotification setHidden:YES];
-        
-        [self.lbl_guessNotification.layer setCornerRadius:8.0f];
-        [self.lbl_guessNotification.layer setMasksToBounds:YES];
-        [self.lbl_guessNotification.layer setMasksToBounds:YES];
-        [self.lbl_guessNotification.layer setBorderWidth:1.0f];
-        [self.lbl_guessNotification.layer setBorderColor:[UIColor whiteColor].CGColor];
         [self.lbl_guessNotification setHidden:YES];
-        
-        [self.lbl_scrapbookNotification.layer setCornerRadius:8.0f];
-        [self.lbl_scrapbookNotification.layer setMasksToBounds:YES];
-        [self.lbl_scrapbookNotification.layer setMasksToBounds:YES];
-        [self.lbl_scrapbookNotification.layer setBorderWidth:1.0f];
-        [self.lbl_scrapbookNotification.layer setBorderColor:[UIColor whiteColor].CGColor];
         [self.lbl_scrapbookNotification setHidden:YES];
 
     }
@@ -134,9 +118,10 @@
     int numNewAnswersRecieved = [Feed unopenedNotificationsForFeedEvent:kANSWER_RECEIVED];
     
     if (numNewMimesRecieved > 0) {
-        // Move the points banner to fully wrap the number of points label
-        NSString *numNewMimesStr = [NSString stringWithFormat:@"%d",numNewMimesRecieved];
+        // Adjust the size of the notification badge
+        NSString *numNewMimesStr = [NSString stringWithFormat:@"%d", numNewMimesRecieved];
         CGSize notificationLabelSize = [numNewMimesStr sizeWithFont:notificationsFont constrainedToSize:CGSizeMake(50, 20) lineBreakMode:UILineBreakModeTailTruncation];
+        notificationLabelSize.width = notificationLabelSize.width + 11.0f;
         
         if (notificationLabelSize.width > 20.0f) {
             float deltaX = self.lbl_guessNotification.frame.origin.x + 20.0f - notificationLabelSize.width;
@@ -145,6 +130,13 @@
                                                           notificationLabelSize.width,
                                                           self.lbl_guessNotification.frame.size.height);
         }
+        
+        // Add rounded corners to notification labels header
+        [self.lbl_guessNotification.layer setCornerRadius:8.0f];
+        [self.lbl_guessNotification.layer setMasksToBounds:YES];
+        [self.lbl_guessNotification.layer setMasksToBounds:YES];
+        [self.lbl_guessNotification.layer setBorderWidth:1.0f];
+        [self.lbl_guessNotification.layer setBorderColor:[UIColor whiteColor].CGColor];
         
         [self.lbl_guessNotification setText:[NSString stringWithFormat:@"%d",numNewMimesRecieved]];
         [self.lbl_guessNotification setHidden:NO];
@@ -156,7 +148,28 @@
     
     if (numNewCommentsRecieved > 0 || numNewAnswersRecieved > 0) {
         int totalScrapbookNotifications = numNewCommentsRecieved + numNewAnswersRecieved;
-        [self.lbl_scrapbookNotification setText:[NSString stringWithFormat:@"%d",totalScrapbookNotifications]];
+        
+        // Adjust the size of the notification badge
+        NSString *numNewMimesStr = [NSString stringWithFormat:@"%d", totalScrapbookNotifications];
+        CGSize notificationLabelSize = [numNewMimesStr sizeWithFont:notificationsFont constrainedToSize:CGSizeMake(50, 20) lineBreakMode:UILineBreakModeTailTruncation];
+        notificationLabelSize.width = notificationLabelSize.width + 11.0f;
+        
+        if (notificationLabelSize.width > 20.0f) {
+            float deltaX = self.lbl_scrapbookNotification.frame.origin.x + 20.0f - notificationLabelSize.width;
+            self.lbl_scrapbookNotification.frame = CGRectMake(deltaX,
+                                                          self.lbl_scrapbookNotification.frame.origin.y,
+                                                          notificationLabelSize.width,
+                                                          self.lbl_scrapbookNotification.frame.size.height);
+        }
+        
+        // Add rounded corners to notification labels header
+        [self.lbl_scrapbookNotification.layer setCornerRadius:8.0f];
+        [self.lbl_scrapbookNotification.layer setMasksToBounds:YES];
+        [self.lbl_scrapbookNotification.layer setMasksToBounds:YES];
+        [self.lbl_scrapbookNotification.layer setBorderWidth:1.0f];
+        [self.lbl_scrapbookNotification.layer setBorderColor:[UIColor whiteColor].CGColor];
+        
+        [self.lbl_scrapbookNotification setText:[NSString stringWithFormat:@"%d", totalScrapbookNotifications]];
         [self.lbl_scrapbookNotification setHidden:NO];
     }
     else {

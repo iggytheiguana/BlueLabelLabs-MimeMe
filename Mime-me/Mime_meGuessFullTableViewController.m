@@ -242,6 +242,9 @@
     // Enumerate for Mimes
     [self enumerateMimes];
     
+    // Update notifications
+    [self updateNotifications];
+    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -649,6 +652,22 @@
     if (enumerator == self.mimeCloudEnumerator) {
         
     }
+}
+
+#pragma mark - Feed Event Handlers
+- (void)updateNotifications {
+    if ([self.authenticationManager isUserAuthenticated]) {
+        // update notification bubbles in navigation header
+        [self.nv_navigationHeader updateNotifications];
+    }
+}
+
+- (void) onFeedRefreshComplete:(CallbackResult*)result
+{
+    [super onFeedRefreshComplete:result];
+    
+    // Update notifications
+    [self updateNotifications];
 }
 
 #pragma mark - MBProgressHUD Delegate

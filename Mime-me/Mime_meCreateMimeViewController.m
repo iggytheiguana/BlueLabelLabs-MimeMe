@@ -311,6 +311,9 @@
         self.wordsArray = [wordMtblArray retain];
         [wordMtblArray release];
     }
+    
+    // Update notifications
+    [self updateNotifications];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -576,26 +579,6 @@
     }
 }
 
-#pragma mark - Feed Event Handlers
-- (void)updateNotifications {
-    if ([self.authenticationManager isUserAuthenticated]) {
-        int unreadNotifications = [User unopenedNotificationsFor:self.loggedInUser.objectid];
-        
-        if (unreadNotifications > 0) {
-            
-        }
-        else {
-            
-        }
-    }
-}
-
-- (void) onFeedRefreshComplete:(CallbackResult*)result 
-{
-    // Update notifications
-    [self updateNotifications];
-}
-
 #pragma mark - CloudEnumeratorDelegate
 - (void) onEnumerateComplete:(CloudEnumerator*)enumerator 
                  withResults:(NSArray *)results 
@@ -606,6 +589,22 @@
         [self makeWordsArray];
         [self.tbl_words reloadData];
     }
+}
+
+#pragma mark - Feed Event Handlers
+- (void)updateNotifications {
+    if ([self.authenticationManager isUserAuthenticated]) {
+        // update notification bubbles in navigation header
+        [self.nv_navigationHeader updateNotifications];
+    }
+}
+
+- (void) onFeedRefreshComplete:(CallbackResult*)result
+{
+    [super onFeedRefreshComplete:result];
+    
+    // Update notifications
+    [self updateNotifications];
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate methods
