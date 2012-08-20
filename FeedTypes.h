@@ -38,6 +38,7 @@ typedef enum {
     kNEW_FOLLOW,
     kUSERNAME_CHANGE,
     kUSERIMAGE_CHANGE,
+    kUNFOLLOW,
     kACHIEVEMENT_EARNED,
     kMIME_SENT,
     kMIME_ANSWERED,
