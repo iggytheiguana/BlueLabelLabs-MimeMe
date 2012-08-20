@@ -52,4 +52,5 @@
 + (id) queryForSentMimeAnswers:(NSNumber*)creatorid;
 + (id) queryForSentMimes:(NSNumber*)creatorid;
 + (id) queryForTopFavoritedMimes;
++ (id) queryForMimeAnswersForMime:(NSNumber*)mimeid;
 @end

@@ -288,4 +288,15 @@
     return enumerationContext;
 
 }
+
++ (EnumerationContext*) contextForMimeAnswersForMime:(NSNumber *)mimeid
+{
+    ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize = settingsObject.pagesize;
+    
+    enumerationContext.maximumNumberOfResults = settingsObject.feed_maxnumtodownload;   
+    return enumerationContext;
+
+}
 @end

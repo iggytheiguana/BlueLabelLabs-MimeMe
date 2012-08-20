@@ -646,6 +646,20 @@ static NSLock* _lock; //lock used to synchronize the processing of enumeration r
 
 }
 
++ (CloudEnumerator*) enumeratorForMimeAnswersForMime:(NSNumber *)mimeid
+{
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    Query* query = [Query queryForMimeAnswersForMime:mimeid];
+    QueryOptions* queryOptions = [QueryOptions queryForMimeAnswersForMime:mimeid];
+    EnumerationContext* enumerationContext = [EnumerationContext contextForMimeAnswersForMime:mimeid];
+    query.queryOptions = queryOptions;
+    
+    CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
+    return enumerator;
+}
+
+
 //
 //+ (CloudEnumerator*) enumeratorForFollowers:(NSNumber *)userid
 //{
