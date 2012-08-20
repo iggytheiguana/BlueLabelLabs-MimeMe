@@ -26,6 +26,6 @@
 @property (nonatomic,retain) NSNumber* rendertype;
 @property (nonatomic,retain) NSString* html;
 
-+ (int) unopenedNotificationsForFeedEvent:(int)feedEvent;
++ (int) unopenedNotificationsForFeedEvent:(int)feedEvent markAsOpen:(BOOL)markAsOpen;
 
 @end

@@ -53,7 +53,7 @@
 }
 
 //returns the number of unexpired, unopened new Mime notifications for this user in the database
-+ (int) unopenedNotificationsForFeedEvent:(int)feedEvent
++ (int) unopenedNotificationsForFeedEvent:(int)feedEvent markAsOpen:(BOOL)markAsOpen
 {
     NSNumber* loggedInUserID = [[AuthenticationManager instance] m_LoggedInUserID];
     
@@ -74,6 +74,11 @@
         if ([feed.dateexpires doubleValue] > date && [feed.hasopened boolValue] == NO) {
             //its unexpired and unopened
             count++;
+            
+            // mark as opened
+            if (markAsOpen == YES) {
+                feed.hasopened = [NSNumber numberWithBool:YES];
+            }
         }
     }
     return count;

@@ -113,9 +113,28 @@
 - (void) updateNotifications {
     UIFont* notificationsFont = [UIFont boldSystemFontOfSize:14.0f];
     
-    int numNewMimesRecieved = [Feed unopenedNotificationsForFeedEvent:kMIME_RECEIVED];
-    int numNewCommentsRecieved = [Feed unopenedNotificationsForFeedEvent:kCOMMENT_RECEIVED];
-    int numNewAnswersRecieved = [Feed unopenedNotificationsForFeedEvent:kANSWER_RECEIVED];
+    int numNewMimesRecieved = 0;
+    int numNewCommentsRecieved = 0;
+    int numNewAnswersRecieved = 0;
+    
+    if ([self.delegate isKindOfClass:[Mime_meCreateMimeViewController class]]) {
+        // in Mime view controller
+        numNewMimesRecieved = [Feed unopenedNotificationsForFeedEvent:kMIME_RECEIVED markAsOpen:NO];
+        numNewCommentsRecieved = [Feed unopenedNotificationsForFeedEvent:kCOMMENT_RECEIVED markAsOpen:NO];
+        numNewAnswersRecieved = [Feed unopenedNotificationsForFeedEvent:kANSWER_RECEIVED markAsOpen:NO];
+    }
+    else if ([self.delegate isKindOfClass:[Mime_meGuessMenuViewController class]]) {
+        // in Guess view controller
+        numNewMimesRecieved = [Feed unopenedNotificationsForFeedEvent:kMIME_RECEIVED markAsOpen:YES];
+        numNewCommentsRecieved = [Feed unopenedNotificationsForFeedEvent:kCOMMENT_RECEIVED markAsOpen:NO];
+        numNewAnswersRecieved = [Feed unopenedNotificationsForFeedEvent:kANSWER_RECEIVED markAsOpen:NO];
+    }
+    else if ([self.delegate isKindOfClass:[Mime_meScrapbookMenuViewController class]]) {
+        // in Scrapbook view controller
+        numNewMimesRecieved = [Feed unopenedNotificationsForFeedEvent:kMIME_RECEIVED markAsOpen:NO];
+        numNewCommentsRecieved = [Feed unopenedNotificationsForFeedEvent:kCOMMENT_RECEIVED markAsOpen:YES];
+        numNewAnswersRecieved = [Feed unopenedNotificationsForFeedEvent:kANSWER_RECEIVED markAsOpen:YES];
+    }
     
     if (numNewMimesRecieved > 0) {
         // Adjust the size of the notification badge
