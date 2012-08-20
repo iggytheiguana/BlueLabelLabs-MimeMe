@@ -21,6 +21,7 @@
 #import "Mime_meAppDelegate.h"
 #import "Favorite.h"
 #import "SocialSharingManager.h"
+#import "Mime_meScrapbookMenuViewController.h"
 
 #define kMIMEID @"mimeid"
 #define kCREATORTID @"creatorid"
@@ -260,9 +261,23 @@
         
     }
     else if (self.viewMimeCase == kVIEWSCRAPBOOKMIME) {
-        self.lbl_title.text = [NSString stringWithFormat:@"Mime created by %@", mime.creatorname];
+        // Set up view Mime header
+        NSString *from;
+        if ([mime.creatorid isEqualToNumber:self.loggedInUser.objectid]) {
+            // This mime was created by the loggedin user
+            
+            [self.lbl_title setHidden:YES];
+            from = [NSString stringWithFormat:@"Sent on"];
+        }
+        else {
+            // This mime was created by someone else
+            self.lbl_title.text = [NSString stringWithFormat:@"Mime created by %@", mime.creatorname];
+            from = [NSString stringWithFormat:@"from %@", mime.creatorname];
+        }
         
-        NSString *from = [NSString stringWithFormat:@"from %@", mime.creatorname];
+        // Hide the gem count
+        [self.btn_gemCount setHidden:YES];
+        
         NSDate  *dateCreated = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
         NSString *dateCreatedStr = [DateTimeHelper formatMediumDate:dateCreated];
         
@@ -433,14 +448,16 @@
 
 - (IBAction) onOkButtonPressed:(id)sender {
     if (self.viewMimeCase == kVIEWSENTMIME) {
-        Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+//        Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+        Mime_meScrapbookMenuViewController *scrapbookMenuViewController = [Mime_meScrapbookMenuViewController createInstance];
         
         [UIView animateWithDuration:0.75
                          animations:^{
                              [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
                              [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.navigationController.view cache:YES];
                          }];
-        [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
+//        [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
+        [self.navigationController setViewControllers:[NSArray arrayWithObject:scrapbookMenuViewController] animated:NO];
     }
     else if (self.viewMimeCase == kVIEWANSWERMIME) {
         [self onBackButtonPressed:nil];

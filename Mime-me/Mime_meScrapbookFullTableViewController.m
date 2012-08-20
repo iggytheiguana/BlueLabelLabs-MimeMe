@@ -629,7 +629,7 @@
     
     if ([response.didSucceed boolValue] == YES) {
         
-        UITableViewCell *cell;
+        UITableViewCell *cell = nil;
         
         if (self.mimeType == kSENTMIME) {
             
@@ -674,14 +674,16 @@
             }
         }
         
-        //we only draw the image if this view hasnt been repurposed for another photo
-        LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
-        
-        UIImage *image = [response.image imageScaledToSize:CGSizeMake(50, 50)];
-        
-        [cell.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
-        
-        [self.view setNeedsDisplay];
+        if (cell != nil) {
+            //we only draw the image if this view hasnt been repurposed for another photo
+            LOG_IMAGE(0,@"%@settings UIImage object equal to downloaded response",activityName);
+            
+            UIImage *image = [response.image imageScaledToSize:CGSizeMake(50, 50)];
+            
+            [cell.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
+            
+            [self.view setNeedsDisplay];
+        }
     }
 }
 
