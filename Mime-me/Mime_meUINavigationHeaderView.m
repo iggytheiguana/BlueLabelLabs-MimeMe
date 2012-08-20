@@ -127,15 +127,41 @@
 
 #pragma mark - Notification Handlers
 - (void) updateNotifications {
-//    kMIME_RECEIVED,
-//    kCOMMENT_RECEIVED,
-//    kANSWER_RECEIVED
+    UIFont* notificationsFont = [UIFont boldSystemFontOfSize:14.0f];
     
     int numNewMimesRecieved = [Feed unopenedNotificationsForFeedEvent:kMIME_RECEIVED];
+    int numNewCommentsRecieved = [Feed unopenedNotificationsForFeedEvent:kCOMMENT_RECEIVED];
+    int numNewAnswersRecieved = [Feed unopenedNotificationsForFeedEvent:kANSWER_RECEIVED];
     
     if (numNewMimesRecieved > 0) {
-        [self.lbl_mimeNotification setText:[NSString stringWithFormat:@"%d",numNewMimesRecieved]];
+        // Move the points banner to fully wrap the number of points label
+        NSString *numNewMimesStr = [NSString stringWithFormat:@"%d",numNewMimesRecieved];
+        CGSize notificationLabelSize = [numNewMimesStr sizeWithFont:notificationsFont constrainedToSize:CGSizeMake(50, 20) lineBreakMode:UILineBreakModeTailTruncation];
+        
+        if (notificationLabelSize.width > 20.0f) {
+            float deltaX = self.lbl_guessNotification.frame.origin.x + 20.0f - notificationLabelSize.width;
+            self.lbl_guessNotification.frame = CGRectMake(self.lbl_guessNotification.frame.origin.x - deltaX,
+                                                          self.lbl_guessNotification.frame.origin.y,
+                                                          notificationLabelSize.width,
+                                                          self.lbl_guessNotification.frame.size.height);
+        }
+        
+        [self.lbl_guessNotification setText:[NSString stringWithFormat:@"%d",numNewMimesRecieved]];
         [self.lbl_guessNotification setHidden:NO];
+    }
+    else {
+        [self.lbl_guessNotification setHidden:YES];
+        [self.lbl_guessNotification setText:[NSString stringWithFormat:@"!"]];
+    }
+    
+    if (numNewCommentsRecieved > 0 || numNewAnswersRecieved > 0) {
+        int totalScrapbookNotifications = numNewCommentsRecieved + numNewAnswersRecieved;
+        [self.lbl_scrapbookNotification setText:[NSString stringWithFormat:@"%d",totalScrapbookNotifications]];
+        [self.lbl_scrapbookNotification setHidden:NO];
+    }
+    else {
+        [self.lbl_scrapbookNotification setHidden:YES];
+        [self.lbl_scrapbookNotification setText:[NSString stringWithFormat:@"!"]];
     }
 }
 

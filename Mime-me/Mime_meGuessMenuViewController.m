@@ -413,9 +413,6 @@
         userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_mimeAnswersFromFriends, kMIMEFRC, mimeAnswer.objectid, kMIMEANSWERID, nil];
         
         hasSeen = [mimeAnswer.hasseen boolValue];
-//        // mark the mime as seen
-//        mimeAnswer.hasseen = [NSNumber numberWithBool:YES];
-//        mime.hasseen = [NSNumber numberWithBool:YES];
     }
     else if (indexPath.section == 1) {
         // Recent Mimes section
@@ -429,8 +426,6 @@
         userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_recentMimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
         
         hasSeen = [mime.hasseen boolValue];
-//        // mark the mime as seen
-//        mime.hasseen = [NSNumber numberWithBool:YES];
     }
     else if (indexPath.section == 2) {
         // Staff Picked Mimes section
@@ -444,8 +439,6 @@
         userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_staffPickedMimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
         
         hasSeen = [mime.hasseen boolValue];
-//        // mark the mime as seen
-//        mime.hasseen = [NSNumber numberWithBool:YES];
     }
     
     // Set the mime image
@@ -475,8 +468,6 @@
         [lbl_new setHidden:YES];
     }
     
-    // Save updates to has seen property on mime and mime answer
-//    [resourceContext save:NO onFinishCallback:nil trackProgressWith:nil];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -564,13 +555,13 @@
                 if (cell == nil) {
                     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     
-                    cell.textLabel.text = @"No mimes from friends!";
+                    cell.textLabel.text = @"Create a new Mime!";
                     cell.textLabel.textAlignment = UITextAlignmentCenter;
                     cell.textLabel.shadowColor = [UIColor whiteColor];
                     cell.textLabel.shadowOffset = CGSizeMake(0.0, 1.0);
                     cell.textLabel.textColor = [UIColor lightGrayColor];
                     
-                    cell.userInteractionEnabled = NO;
+                    cell.userInteractionEnabled = YES;
                 }
                 
                 return cell;
@@ -830,21 +821,30 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (indexPath.section == 0) {
+                
         // Friends mime selected
         NSInteger count = MIN([[self.frc_mimeAnswersFromFriends fetchedObjects]count], kMAXROWS);
         
-        if (indexPath.row > 0 && indexPath.row <= count) {
+        if (count == 0) {
+            // No mimes from friends, user selected to create new mime
+            Mime_meCreateMimeViewController *mimeViewController = [Mime_meCreateMimeViewController createInstance];
             
-            MimeAnswer *mimeAnswer = [[self.frc_mimeAnswersFromFriends fetchedObjects] objectAtIndex:(indexPath.row - 1)];
-            
-            // Show the Mime
-            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWANSWERMIME withMimeID:mimeAnswer.mimeid withMimeAnswerIDorNil:mimeAnswer.objectid];
-            [self.navigationController pushViewController:viewMimeViewController animated:YES];
+            [self.navigationController setViewControllers:[NSArray arrayWithObject:mimeViewController] animated:NO];
         }
         else {
-            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kFROMFRIENDMIME];
-            
-            [self.navigationController pushViewController:fullTableViewController animated:YES];
+            if (indexPath.row > 0 && indexPath.row <= count) {
+                
+                MimeAnswer *mimeAnswer = [[self.frc_mimeAnswersFromFriends fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+                
+                // Show the Mime
+                Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWANSWERMIME withMimeID:mimeAnswer.mimeid withMimeAnswerIDorNil:mimeAnswer.objectid];
+                [self.navigationController pushViewController:viewMimeViewController animated:YES];
+            }
+            else {
+                Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kFROMFRIENDMIME];
+                
+                [self.navigationController pushViewController:fullTableViewController animated:YES];
+            }
         }
     }
     else if (indexPath.section == 1) {

@@ -15,6 +15,7 @@
 #import "ApplicationSettings.h"
 #import "ApplicationSettingsManager.h"
 #import "Mime_meAppDelegate.h"
+#import "Mime_meGuessMenuViewController.h"
 
 #define kMAXUSERNAMELENGTH 15
 #define kMAXPASSWORDLENGTH 20
@@ -269,8 +270,11 @@
     
     LOG_SECURITY(1, @"%@Authentication successful",activityName);
     
-    // Successful user login, launch menu
-    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+//    // Successful user login, launch menu
+//    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+    
+    // Successful user login, launch create Mime screen
+    Mime_meGuessMenuViewController* guessMenuViewController = [Mime_meGuessMenuViewController createInstance];
     
     [UIView animateWithDuration:0.75
                      animations:^{
@@ -278,7 +282,8 @@
                          [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.navigationController.view cache:YES];
                      }];
     
-    [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
+//    [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
+    [self.navigationController setViewControllers:[NSArray arrayWithObject:guessMenuViewController] animated:NO];
     
 }
 

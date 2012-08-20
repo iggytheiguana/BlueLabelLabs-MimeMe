@@ -14,6 +14,7 @@
 #import "LoginViewController.h"
 #import "Mime_meMenuViewController.h"
 #import "ApplicationSettings.h"
+#import "Mime_meGuessMenuViewController.h"
 
 @implementation Mime_meAppDelegate
 
@@ -83,7 +84,7 @@
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
     
-    NSString* activityName = @"PlatformAppDelegate.applicationDidiFinishLoading:";
+    NSString* activityName = @"Mime_meAppDelegate.applicationDidiFinishLoading:";
     
     [self.applicationSettingsManager settings];
     AuthenticationManager* authenticationManager = [AuthenticationManager instance];
@@ -125,9 +126,13 @@
                 [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
             }
             
-            // We are ready to launch the menu
-            Mime_meMenuViewController* menuViewController = [Mime_meMenuViewController createInstance];
-            self.navigationController = [[[UINavigationController alloc]initWithRootViewController:menuViewController] autorelease];
+//            // We are ready to launch the menu
+//            Mime_meMenuViewController* menuViewController = [Mime_meMenuViewController createInstance];
+//            self.navigationController = [[[UINavigationController alloc]initWithRootViewController:menuViewController] autorelease];
+            
+            // Launch into the Guess Menu view controller
+            Mime_meGuessMenuViewController* guessMenuViewController = [Mime_meGuessMenuViewController createInstance];
+            self.navigationController = [[[UINavigationController alloc]initWithRootViewController:guessMenuViewController] autorelease];
         }
     }
     else {
@@ -227,15 +232,19 @@
     
     LOG_SECURITY(0, @"%@Authentication successful",activityName);
     
-    // Successful user login, launch menu
-    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+//    // Successful user login, launch menu
+//    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+    
+    // Successful user login, launch create Mime screen
+    Mime_meGuessMenuViewController* guessMenuViewController = [Mime_meGuessMenuViewController createInstance];
     
     [UIView animateWithDuration:0.75
                      animations:^{
                          [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
                          [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.navigationController.view cache:YES];
                      }];
-    [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
+//    [self.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
+    [self.navigationController setViewControllers:[NSArray arrayWithObject:guessMenuViewController] animated:NO];
     
 }
 
@@ -254,6 +263,66 @@
     LOG_SECURITY(0, @"%@Device token is %@",activityName,self.deviceToken);
     
 }
+
+#pragma mark - CloudEnumeratorDelegate
+- (void) onEnumerateComplete:(CloudEnumerator*)enumerator 
+                 withResults:(NSArray *)results 
+                withUserInfo:(NSDictionary *)userInfo
+{
+    NSString* activityName = @"Mime_meAppDelegate.onEnumerateComplete:";
+    
+    AuthenticationManager* authenticationManager = [AuthenticationManager instance];
+    
+    //let us make some checks beginning with the user object
+    if ([authenticationManager isUserAuthenticated]) {
+        ResourceContext* resourceContext = [ResourceContext instance];
+        
+        //if the user is logged in, lets check to make sure we have a copy of their user object
+        //check to see if the profile picture is empty, if so, lets grab it from fb
+        User* currentUser = (User*)[resourceContext resourceWithType:USER withID:authenticationManager.m_LoggedInUserID]; 
+        
+        if (currentUser == nil) {
+            //if the user object isnt in the database, we need a login
+            Callback* onSucccessCallback = [[Callback alloc]initWithTarget:self withSelector:@selector(onLoginSuccess:) withContext:nil];        
+            Callback* onFailCallback = [[Callback alloc]initWithTarget:self withSelector:@selector(onLoginFailed:)];
+            
+            // Launch login view controller
+            LoginViewController* loginViewController = [LoginViewController createAuthenticationInstance:NO shouldGetTwitter:NO onSuccessCallback:onSucccessCallback onFailureCallback:onFailCallback];
+            self.navigationController = [[[UINavigationController alloc]initWithRootViewController:loginViewController] autorelease];
+        }
+        else
+        {
+            //we perform a check to update the application version if necessary
+            NSString* currentAppVersion = [ApplicationSettingsManager getApplicationVersion];
+            
+            if ([currentUser.app_version isEqualToString:@""] ||
+                ![currentUser.app_version isEqualToString:currentAppVersion] ||
+                currentUser.app_version == nil)
+            {
+                //we need to update the User object because the versions do not match
+                currentUser.app_version = currentAppVersion;
+                LOG_APPLICATIONSETTINGSMANAGER(0, @"%@Updating user's app version number from %@ to %@",activityName,currentUser.app_version,currentAppVersion);
+                [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
+            }
+            
+            // Launch into the Guess Menu view controller
+            Mime_meGuessMenuViewController* guessMenuViewController = [Mime_meGuessMenuViewController createInstance];
+            self.navigationController = [[[UINavigationController alloc]initWithRootViewController:guessMenuViewController] autorelease];
+        }
+    }
+    else {
+        // User is not logged in, we need a login
+        Callback* onSucccessCallback = [[Callback alloc]initWithTarget:self withSelector:@selector(onLoginSuccess:) withContext:nil];        
+        Callback* onFailCallback = [[Callback alloc]initWithTarget:self withSelector:@selector(onLoginFailed:)];
+        
+        // Launch login view controller
+        LoginViewController* loginViewController = [LoginViewController createAuthenticationInstance:NO shouldGetTwitter:NO onSuccessCallback:onSucccessCallback onFailureCallback:onFailCallback];
+        self.navigationController = [[[UINavigationController alloc]initWithRootViewController:loginViewController] autorelease];
+        
+    }
+    
+}
+
 
 #pragma mark - Core Data stack
 
