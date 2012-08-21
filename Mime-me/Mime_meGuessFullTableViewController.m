@@ -289,6 +289,8 @@
         cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
         
         userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_mimes, kMIMEFRC, mimeAnswer.objectid, kMIMEANSWERID, nil];
+        
+        hasSeen = [mimeAnswer.hasseen boolValue];
     }
     else if (self.mimeType == kRECENTMIME) {
         // Recent Mimes section
@@ -300,6 +302,8 @@
         cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
         
         userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_mimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
+        
+        hasSeen = [mime.hasseen boolValue];
     }
     else if (self.mimeType == kSTAFFPICKEDMIME) {
         // Staff Picked Mimes section
@@ -311,6 +315,8 @@
         cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
         
         userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_mimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
+        
+        hasSeen = [mime.hasseen boolValue];
     }
     
     // Set the mime image
@@ -332,21 +338,26 @@
     }
     
     // Mark mime as "new" if user has not previously seen it
+    UILabel *lbl_new = (UILabel *)[cell.contentView viewWithTag:101];
     if (hasSeen == NO) {
-        UILabel *lbl_new = [[UILabel alloc] initWithFrame:CGRectMake(235.0f, 0.0f, 40.0f, 21.0f)];
-        lbl_new.text = @"New!";
-        lbl_new.backgroundColor = [UIColor clearColor];
-        lbl_new.font =[UIFont systemFontOfSize:14.0f];
-        lbl_new.textColor = [UIColor redColor];
-        lbl_new.textAlignment = UITextAlignmentRight;
-        
-        [cell.contentView addSubview:lbl_new];
+        [lbl_new setHidden:NO];
+    }
+    else {
+        [lbl_new setHidden:YES];
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *CellIdentifier;
+    
+    UILabel *lbl_new = [[UILabel alloc] initWithFrame:CGRectMake(235.0f, 0.0f, 40.0f, 21.0f)];
+    [lbl_new setTag:101];
+    lbl_new.text = @"New!";
+    lbl_new.backgroundColor = [UIColor clearColor];
+    lbl_new.font =[UIFont systemFontOfSize:14.0f];
+    lbl_new.textColor = [UIColor redColor];
+    lbl_new.textAlignment = UITextAlignmentRight;
     
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
@@ -402,6 +413,8 @@
                     cell.imageView.layer.borderWidth = 1.0;
                     
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    
+                    [cell.contentView addSubview:lbl_new];
                     
                 }
                 

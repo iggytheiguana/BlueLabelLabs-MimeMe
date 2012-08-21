@@ -29,6 +29,10 @@
     UILabel         *m_lbl_title;
     UIButton        *m_btn_gemCount;
     
+    UIView          *m_v_fromUserContainer;
+    UIButton        *m_btn_answers;
+    UIButton        *m_btn_comments;
+    
     // sentContainer    
     Mime_meUIConfirmationView   *m_v_confirmationView;
     
@@ -55,6 +59,10 @@
 @property (nonatomic, retain) IBOutlet  UILabel         *lbl_title;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_gemCount;
 
+@property (nonatomic, retain) IBOutlet  UIView          *v_fromUserContainer;
+@property (nonatomic, retain) IBOutlet  UIButton        *btn_answers;
+@property (nonatomic, retain) IBOutlet  UIButton        *btn_comments;
+
 // sentContainer
 @property (nonatomic, retain)           Mime_meUIConfirmationView   *v_confirmationView;
 
@@ -65,6 +73,8 @@
 @property (nonatomic, assign)           BOOL                        didMakeWord;
 
 - (IBAction) onBackButtonPressed:(id)sender;
+- (IBAction) onAnswersButtonPressed:(id)sender;
+- (IBAction) onCommentsButtonPressed:(id)sender;
 
 - (IBAction) onFacebookButtonPressed:(id)sender;
 - (IBAction) onTwitterButtonPressed:(id)sender;

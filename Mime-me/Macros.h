@@ -65,6 +65,7 @@
 #define LOG_MIME_MEFRIENDLISTTABLEVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_mefriendlisttableviewvontroller",level,__VA_ARGS__)
 #define LOG_MIME_MESCRAPBOOKFULLTABLEVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_mescrapbookfulltableviewvontroller",level,__VA_ARGS__)
 #define LOG_MIME_MEAPPDELEGATE(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_meappdelegate",level,__VA_ARGS__)
+#define LOG_MIME_MEANSWERSTABLEVIEWCONTROLLER(level, ...)   LogMessageF(__FILE__,__LINE__,__FUNCTION__,@"mime_meanswerstableviewvontroller",level,__VA_ARGS__)
 
 
 
