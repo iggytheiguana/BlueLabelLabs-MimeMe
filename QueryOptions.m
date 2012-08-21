@@ -325,4 +325,14 @@
     return newQuery;
 }
 
++ (QueryOptions*) queryForMimeAnswersForMime:(NSNumber*)mimeid
+{
+    QueryOptions* newQuery = [[QueryOptions alloc]autorelease];
+    newQuery.includelinkedobjects = NO;
+    newQuery.primary_results_sortascending = NO;
+    newQuery.primary_results_sortattribute = DATECREATED;
+    
+    return newQuery;
+}
+
 @end

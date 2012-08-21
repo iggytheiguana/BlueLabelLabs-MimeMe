@@ -464,4 +464,21 @@
     return query;
 
 }
+
++ (Query*) queryForMimeAnswersForMime:(NSNumber*)mimeid
+{
+    Query* query = [[[Query alloc]init ]autorelease];
+    query.filterObjectType = MIMEANSWER;
+    
+    QueryExpression* queryExpression = [[QueryExpression alloc]init];
+    queryExpression.attributeName = MIMEID;
+    queryExpression.opCode = opcode_QUERYEQUALITY;
+    queryExpression.value = [mimeid stringValue];
+    
+    query.attributeExpressions = [NSArray arrayWithObject:queryExpression];
+    
+    [queryExpression release];
+    return query;
+
+}
 @end
