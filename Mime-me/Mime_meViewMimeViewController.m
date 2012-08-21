@@ -46,6 +46,10 @@
 @synthesize lbl_title           = m_lbl_title;
 @synthesize btn_gemCount        = m_btn_gemCount;
 
+@synthesize v_fromUserContainer = m_v_fromUserContainer;
+@synthesize btn_answers         = m_btn_answers;
+@synthesize btn_comments        = m_btn_comments;
+
 // sentContainer
 @synthesize v_confirmationView  = m_v_confirmationView;
 
@@ -320,6 +324,10 @@
     self.iv_profilePicture = nil;
     self.lbl_title = nil;
     self.btn_gemCount = nil;
+    
+    self.v_fromUserContainer = nil;
+    self.btn_answers = nil;
+    self.btn_comments = nil;
 
 }
 
@@ -439,6 +447,14 @@
     [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
     
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction) onAnswersButtonPressed:(id)sender {
+    
+}
+
+- (IBAction) onCommentsButtonPressed:(id)sender {
+    
 }
 
 #pragma mark Mime_meUIConfirmationView Delegate Methods

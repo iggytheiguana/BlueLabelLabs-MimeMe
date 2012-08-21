@@ -94,6 +94,8 @@
 		52F5BA6215C8439F00509E8B /* UIPromptAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F5BA6115C8439F00509E8B /* UIPromptAlertView.m */; };
 		52F5BA6915C871E400509E8B /* icon-favorite.png in Resources */ = {isa = PBXBuildFile; fileRef = 52F5BA6715C871E400509E8B /* icon-favorite.png */; };
 		52F5BA6A15C871E400509E8B /* icon-favorite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52F5BA6815C871E400509E8B /* icon-favorite@2x.png */; };
+		52FDC02E15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52FDC02C15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.m */; };
+		52FDC02F15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52FDC02D15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.xib */; };
 		C523A010159F7CE7004AA39C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A00F159F7CE7004AA39C /* UIKit.framework */; };
 		C523A012159F7CE7004AA39C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A011159F7CE7004AA39C /* Foundation.framework */; };
 		C523A014159F7CE7004AA39C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C523A013159F7CE7004AA39C /* CoreGraphics.framework */; };
@@ -355,6 +357,9 @@
 		52F5BA6115C8439F00509E8B /* UIPromptAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPromptAlertView.m; sourceTree = "<group>"; };
 		52F5BA6715C871E400509E8B /* icon-favorite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-favorite.png"; sourceTree = "<group>"; };
 		52F5BA6815C871E400509E8B /* icon-favorite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-favorite@2x.png"; sourceTree = "<group>"; };
+		52FDC02B15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meAnswersTableViewController.h; sourceTree = "<group>"; };
+		52FDC02C15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meAnswersTableViewController.m; sourceTree = "<group>"; };
+		52FDC02D15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meAnswersTableViewController.xib; sourceTree = "<group>"; };
 		C523A00B159F7CE7004AA39C /* Mime-me.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mime-me.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C523A00F159F7CE7004AA39C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C523A011159F7CE7004AA39C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1382,6 +1387,9 @@
 				525C7CD115B795AC00035802 /* Mime_meScrapbookFullTableViewController.h */,
 				525C7CD215B795AC00035802 /* Mime_meScrapbookFullTableViewController.m */,
 				525C7CD315B795AC00035802 /* Mime_meScrapbookFullTableViewController.xib */,
+				52FDC02B15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.h */,
+				52FDC02C15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.m */,
+				52FDC02D15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1499,6 +1507,7 @@
 				52CA171015D5B017002F9CB3 /* icon-flag@2x.png in Resources */,
 				5277E7C915D97ED7003A1DCF /* gem.png in Resources */,
 				5277E7CA15D97ED7003A1DCF /* gem@2x.png in Resources */,
+				52FDC02F15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1664,6 +1673,7 @@
 				52564CF515BB648C00AABC8E /* Mime_meFriendsListTableViewController.m in Sources */,
 				52F5BA6215C8439F00509E8B /* UIPromptAlertView.m in Sources */,
 				52D926F115D1CE8B00DA16BC /* SocialSharingManager.m in Sources */,
+				52FDC02E15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
