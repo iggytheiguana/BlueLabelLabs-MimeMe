@@ -14,4 +14,5 @@
 @dynamic creatorname;
 @dynamic creatorid;
 @dynamic mimeid;
+@dynamic hasseen;
 @end

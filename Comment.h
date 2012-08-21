@@ -14,4 +14,5 @@
 @property (nonatomic,retain) NSNumber* creatorid;
 @property (nonatomic,retain) NSNumber* mimeanswerid;
 @property (nonatomic,retain) NSNumber* mimeid;
+@property (nonatomic,retain) NSNumber* hasseen;
 @end
