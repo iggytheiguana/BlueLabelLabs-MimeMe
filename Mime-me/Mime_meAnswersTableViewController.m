@@ -174,6 +174,14 @@
     self.v_headerContainer = nil;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // Enumerate for Mimes Answers
+    [self enumerateMimeAnswers];
+    
+}
+
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
