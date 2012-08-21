@@ -80,6 +80,27 @@
 							</object>
 							<object class="IBUIButton" id="185960856">
 								<reference key="NSNextResponder" ref="730296150"/>
+								<int key="NSvFlags">-2147483356</int>
+								<string key="NSFrame">{{3, 1}, {30, 30}}</string>
+								<reference key="NSSuperview" ref="730296150"/>
+								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView" ref="584140001"/>
+								<string key="NSReuseIdentifierKey">_NS:9</string>
+								<bool key="IBUIOpaque">NO</bool>
+								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<int key="IBUIContentHorizontalAlignment">0</int>
+								<int key="IBUIContentVerticalAlignment">0</int>
+								<reference key="IBUIHighlightedTitleColor" ref="656512376"/>
+								<reference key="IBUINormalTitleShadowColor" ref="305547085"/>
+								<object class="NSCustomResource" key="IBUINormalImage">
+									<string key="NSClassName">NSImage</string>
+									<string key="NSResourceName">icon-flag.png</string>
+								</object>
+								<reference key="IBUIFontDescription" ref="644838641"/>
+								<reference key="IBUIFont" ref="229247930"/>
+							</object>
+							<object class="IBUIButton" id="584140001">
+								<reference key="NSNextResponder" ref="730296150"/>
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{3, 1}, {30, 30}}</string>
 								<reference key="NSSuperview" ref="730296150"/>
@@ -94,7 +115,7 @@
 								<reference key="IBUINormalTitleShadowColor" ref="305547085"/>
 								<object class="NSCustomResource" key="IBUINormalImage">
 									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">icon-flag.png</string>
+									<string key="NSResourceName">icon-more.png</string>
 								</object>
 								<reference key="IBUIFontDescription" ref="644838641"/>
 								<reference key="IBUIFont" ref="229247930"/>
@@ -152,6 +173,7 @@
 						<string key="NSFrame">{{10, 44}, {31, 31}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="656512376"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -250,6 +272,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">btn_more</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="584140001"/>
+					</object>
+					<int key="connectionID">43</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">delegate</string>
 						<reference key="source" ref="508607668"/>
 						<reference key="destination" ref="372490531"/>
@@ -282,6 +312,15 @@
 						<int key="IBEventType">7</int>
 					</object>
 					<int key="connectionID">35</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">onMoreButtonPressed:</string>
+						<reference key="source" ref="584140001"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">42</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -319,6 +358,7 @@
 							<reference ref="522214563"/>
 							<reference ref="185960856"/>
 							<reference ref="751074365"/>
+							<reference ref="584140001"/>
 						</array>
 						<reference key="parent" ref="191373211"/>
 						<string key="objectName">view - header</string>
@@ -345,6 +385,12 @@
 						<reference key="object" ref="751074365"/>
 						<reference key="parent" ref="730296150"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">40</int>
+						<reference key="object" ref="584140001"/>
+						<reference key="parent" ref="730296150"/>
+						<string key="objectName">Button - More</string>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -357,6 +403,8 @@
 				<string key="34.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<real value="2" key="34.IBUIButtonInspectorSelectedEdgeInsetMetadataKey"/>
 				<string key="4.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="40.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<real value="2" key="40.IBUIButtonInspectorSelectedEdgeInsetMetadataKey"/>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<real value="2" key="5.IBUIButtonInspectorSelectedEdgeInsetMetadataKey"/>
 				<string key="6.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -366,7 +414,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">39</int>
+			<int key="maxID">43</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -376,6 +424,7 @@
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="btn_clue">UIButton</string>
 						<string key="btn_flag">UIButton</string>
+						<string key="btn_more">UIButton</string>
 						<string key="btn_slide">UIButton</string>
 						<string key="tf_answer">UITextField</string>
 						<string key="v_answerHeader">UIView</string>
@@ -388,6 +437,10 @@
 						</object>
 						<object class="IBToOneOutletInfo" key="btn_flag">
 							<string key="name">btn_flag</string>
+							<string key="candidateClassName">UIButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="btn_more">
+							<string key="name">btn_more</string>
 							<string key="candidateClassName">UIButton</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="btn_slide">
@@ -425,6 +478,7 @@
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="gem.png">{19, 26}</string>
 			<string key="icon-flag.png">{30, 30}</string>
+			<string key="icon-more.png">{30, 30}</string>
 			<string key="icon-slideDown.png">{30, 30}</string>
 		</dictionary>
 		<string key="IBCocoaTouchPluginVersion">1181</string>

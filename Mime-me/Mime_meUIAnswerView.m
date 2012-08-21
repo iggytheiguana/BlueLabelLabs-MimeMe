@@ -27,6 +27,7 @@
 @synthesize v_answerHeader      = m_v_answerHeader;
 @synthesize btn_slide           = m_btn_slide;
 @synthesize btn_flag            = m_btn_flag;
+@synthesize btn_more            = m_btn_more;
 @synthesize btn_clue            = m_btn_clue;
 @synthesize tf_answer           = m_tf_answer;
 @synthesize v_wrongAnswer       = m_v_wrongAnswer;
@@ -173,7 +174,7 @@
         if (componentIndex == 0 && rowIndex == 0) {
             // set the default frame of the first row container
             if ((x + requiredWidth) > 290) {
-                // maximize the width to 290, enough to fit 8 characters accross
+                // maximize the width to 280, enough to fit 8 characters accross
                 v_row1.frame = CGRectMake(0, 44, 280, charHeight);
             }
             else {
@@ -202,16 +203,19 @@
             CGRect containerFrame = CGRectMake(self.frame.origin.x, self.frame.origin.y - deltaY, self.frame.size.width, self.frame.size.height + deltaY);
             self.frame = containerFrame;
         }
-        else { 
+        else {
+            // now add a space
+            x = x + blankSpace;
+            
             // increase the width of the row container view to accomodate the next component
             if (rowIndex == 0) {
-                v_row1.frame = CGRectMake(0, 44, v_row1.frame.size.width + requiredWidth, charHeight);
+                v_row1.frame = CGRectMake(0, 44, v_row1.frame.size.width + requiredWidth + blankSpace, charHeight);
             }
             else if (rowIndex == 1) {
-                v_row2.frame = CGRectMake(0, 80, v_row2.frame.size.width + requiredWidth, charHeight);
+                v_row2.frame = CGRectMake(0, 80, v_row2.frame.size.width + requiredWidth + blankSpace, charHeight);
             }
             else if (rowIndex == 2) {
-                v_row3.frame = CGRectMake(0, 116, v_row3.frame.size.width + requiredWidth, charHeight);
+                v_row3.frame = CGRectMake(0, 116, v_row3.frame.size.width + requiredWidth + blankSpace, charHeight);
             }
         }
         
@@ -305,9 +309,6 @@
             }
         }
         
-        // now add a space
-        x = x + blankSpace;
-        
         // increment string component index
         ++componentIndex;
     }
@@ -347,6 +348,7 @@
     self.v_answerHeader = nil;
     self.btn_slide = nil;
     self.btn_flag = nil;
+    self.btn_more = nil;
     self.btn_clue = nil;
     self.tf_answer = nil;
     self.v_wrongAnswer = nil;
@@ -603,6 +605,10 @@
 
 - (IBAction) onFlagButtonPressed:(id)sender {
     [self.delegate onFlagButtonPressed:sender];
+}
+
+- (IBAction) onMoreButtonPressed:(id)sender {
+    [self.delegate onMoreButtonPressed:sender];
 }
 
 - (IBAction) onClueButtonPressed:(id)sender {

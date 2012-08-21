@@ -11,6 +11,7 @@
 #import "User.h"
 #import "Word.h"
 #import "ImageManager.h"
+#import "MimeAnswerState.h"
 
 @implementation Mime
 @dynamic creatorid;
@@ -56,10 +57,13 @@
     ImageManager* imageManager = [ImageManager instance];
     retVal.imageurl = [imageManager saveImage:image forMimeWithID:retVal.objectid];
     retVal.thumbnailurl = [imageManager saveThumbnailImage:thumbnailImage forMimeWithID:retVal.objectid];
+    retVal.creatorimageurl = user.thumbnailurl;
     
     retVal.numberofattempts = [NSNumber numberWithInteger:0];
     retVal.numberoftimesviewed = [NSNumber numberWithInteger:0];
     retVal.numbertimesanswered = [NSNumber numberWithInteger:0];
+    retVal.numberofflags = [NSNumber numberWithInteger:0];
+    retVal.numberoftimesfavorited = [NSNumber numberWithInteger:0];
     
     retVal.visibility = [NSNumber numberWithInt:0];
     
@@ -69,6 +73,52 @@
     retVal.isfavorite = [NSNumber numberWithBool:NO];
     
     return retVal;
+}
+
+//returns the number of unopened MimeAnswers for a specific Mime in the database
+- (int) numUnopenedMimeAnswers
+{
+    ResourceContext* resourceContext = [ResourceContext instance];
+    
+    NSArray *values = [NSArray arrayWithObjects:
+                       [self.objectid stringValue],
+                       [NSNumber numberWithInt:kANSWERED],
+                       [NSNumber numberWithBool:NO],
+                       nil];
+    
+    NSArray *attributes = [NSArray arrayWithObjects:
+                           MIMEID,
+                           STATE,
+                           HASSEEN,
+                           nil];
+    
+    NSArray* feedObjects = [resourceContext resourcesWithType:MIMEANSWER withValuesEqual:values forAttributes:attributes sortBy:nil];
+    
+    int count = [feedObjects count];
+    
+    return count;
+}
+
+//returns the number of unopened Comments for a specific Mime in the database
+- (int) numUnopenedComments
+{
+    ResourceContext* resourceContext = [ResourceContext instance];
+    
+    NSArray *values = [NSArray arrayWithObjects:
+                       [self.objectid stringValue],
+                       [NSNumber numberWithBool:NO],
+                       nil];
+    
+    NSArray *attributes = [NSArray arrayWithObjects:
+                           MIMEID, 
+                           HASOPENED,
+                           nil];
+    
+    NSArray* feedObjects = [resourceContext resourcesWithType:COMMENT withValuesEqual:values forAttributes:attributes sortBy:nil];
+    
+    int count = [feedObjects count];
+    
+    return count;
 }
 
 @end

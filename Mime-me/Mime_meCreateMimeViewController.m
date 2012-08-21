@@ -457,38 +457,75 @@
 
 #pragma mark - UIButton Handlers
 - (IBAction) onMoreWordsButtonPressed:(id)sender {
-    // Decrement the users gem total for the request of new words
     ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
     int gemsForGettingNewWords = [settings.gems_for_getting_new_words intValue];
-    int newGemTotal = [self.loggedInUser.numberofpoints intValue] - gemsForGettingNewWords;
-    self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
-    // Update the gem count displayed in the navigation header
-    [self.nv_navigationHeader.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
-    if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
-        self.nv_navigationHeader.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
-    }
+    int userGemCount = [self.loggedInUser.numberofpoints intValue];
     
-    // Save new gem total
-    ResourceContext *resourceContext = [ResourceContext instance];
-    [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
-    
-    //We only download new words if we haven't done so recently and the enumerator is ready
-    if ((!self.wordsCloudEnumerator.isLoading) && ([self.wordsCloudEnumerator canEnumerate])) {
-        // Enumerate for new words
-        [self enumerateWords];
+    if (userGemCount >= gemsForGettingNewWords) {
+        // Decrement the users gem total for the request of new words
+        int newGemTotal = userGemCount - gemsForGettingNewWords;
+        self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
+        
+        // Update the gem count displayed in the navigation header
+        [self.nv_navigationHeader.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
+        if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+            self.nv_navigationHeader.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+        }
+        
+        // Save new gem total
+        ResourceContext *resourceContext = [ResourceContext instance];
+        [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
+        
+        //We only download new words if we haven't done so recently and the enumerator is ready
+        if ((!self.wordsCloudEnumerator.isLoading) && ([self.wordsCloudEnumerator canEnumerate])) {
+            // Enumerate for new words
+            [self enumerateWords];
+        }
+        else {
+            // Get a new selection of words from the existing words in the FRC
+            [self makeWordsArray];
+            [self.tbl_words reloadData];
+        }
     }
     else {
-        // Get a new selection of words from the existing words in the FRC
-        [self makeWordsArray];
-        [self.tbl_words reloadData];
+        // User goes not have enough gems, alert
+        NSString *message = [NSString stringWithFormat:@"You must have at least %d gems to get 3 new words.", gemsForGettingNewWords];
+        
+        UIAlertView* alert = [[UIAlertView alloc]
+                              initWithTitle:@"Not enough gems!"
+                              message:message
+                              delegate:self
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
     }
 }
 
 - (IBAction) onMakeWordButtonPressed:(id)sender {
-    self.v_makeWordView = [[[Mime_meUIMakeWordView alloc] initWithFrame:[Mime_meUIMakeWordView frameForMakeWordView]] autorelease];
-    self.v_makeWordView.delegate = self;
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    int gemsForMakingNewWord = [settings.gems_for_new_word intValue];
+    int userGemCount = [self.loggedInUser.numberofpoints intValue];
     
-    [self.view addSubview:self.v_makeWordView];
+    if (userGemCount >= gemsForMakingNewWord) {
+        self.v_makeWordView = [[[Mime_meUIMakeWordView alloc] initWithFrame:[Mime_meUIMakeWordView frameForMakeWordView]] autorelease];
+        self.v_makeWordView.delegate = self;
+        
+        [self.view addSubview:self.v_makeWordView];
+    }
+    else {
+        // User goes not have enough gems, alert
+        NSString *message = [NSString stringWithFormat:@"You must have at least %d gems to make a new word.", gemsForMakingNewWord];
+        
+        UIAlertView* alert = [[UIAlertView alloc]
+                              initWithTitle:@"Not enough gems!"
+                              message:message
+                              delegate:self
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+    }
     
 }
 
@@ -558,6 +595,11 @@
            [self.v_makeWordView.tf_newWord becomeFirstResponder];
         }
     }
+}
+
+#pragma mark - UIAlertView Delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
 }
 
 #pragma mark -  MBProgressHUD Delegate

@@ -25,6 +25,8 @@
 #import "Mime_meScrapbookFullTableViewController.h"
 #import "Favorite.h"
 #import "MimeAnswerState.h"
+#import "Feed.h"
+#import "FeedTypes.h"
 
 
 #define kMIMEFRC @"mimefrc"
@@ -452,11 +454,99 @@
         
         [self.view setNeedsDisplay];
     }
+    
+    
+//    // Display label for new answers if there are unseen answers
+//    int numNewAnswers = [mime numUnopenedMimeAnswers];
+//    UILabel *lbl_newAnswer = (UILabel *)[cell.contentView viewWithTag:101];
+//    if (numNewAnswers > 1) {
+//        [lbl_newAnswer setHidden:NO];
+//        [lbl_newAnswer setText:@"New answers!"];
+//    }
+//    else if (numNewAnswers == 1) {
+//        [lbl_newAnswer setHidden:NO];
+//        [lbl_newAnswer setText:@"New answer!"];
+//    }
+//    else {
+//        [lbl_newAnswer setHidden:YES];
+//    }
+//    
+//    // Display label for new comments if there are unseen comments
+//    int numNewComments = 0;
+//    UILabel *lbl_newComment = (UILabel *)[cell.contentView viewWithTag:102];
+//    if (numNewComments > 1) {
+//        [lbl_newComment setHidden:NO];
+//        [lbl_newComment setText:@"New comments!"];
+//    }
+//    else if (numNewComments == 1) {
+//        [lbl_newComment setHidden:NO];
+//        [lbl_newComment setText:@"New comment!"];
+//    }
+//    else {
+//        [lbl_newComment setHidden:YES];
+//    }
+    
+    
+    // Display label for new answers if there are unseen answers
+    int numNewAnswers = [mime numUnopenedMimeAnswers];
+//    int numNewComments = [mime numUnopenedComments];
+    int numNewComments = 0;
+    
+    UILabel *lbl_newNotification = [[UILabel alloc] initWithFrame:CGRectMake(175.0f, 0.0f, 90.0f, 36.0f)];
+    lbl_newNotification.backgroundColor = [UIColor clearColor];
+    lbl_newNotification.font =[UIFont systemFontOfSize:12.0f];
+    lbl_newNotification.adjustsFontSizeToFitWidth = YES;
+    lbl_newNotification.textColor = [UIColor blueColor];
+    lbl_newNotification.textAlignment = UITextAlignmentRight;
+    
+    if (numNewAnswers > 0 && numNewComments > 0) {
+        lbl_newNotification.numberOfLines = 2;
+        [lbl_newNotification setText:@"New answer!\nNew comment!"];
+        
+        cell.accessoryView = lbl_newNotification;
+    }
+    else if (numNewAnswers > 0 && numNewComments == 0) {
+        lbl_newNotification.numberOfLines = 1;
+        [lbl_newNotification setText:@"New answer!"];
+        
+        cell.accessoryView = lbl_newNotification;
+    }
+    else if (numNewAnswers == 0 && numNewComments > 0) {
+        lbl_newNotification.numberOfLines = 1;
+        [lbl_newNotification setText:@"New comment!"];
+        
+        cell.accessoryView = lbl_newNotification;
+    }
+    else {
+        cell.accessoryView = nil;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    
+    [lbl_newNotification release];
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *CellIdentifier;
+    
+//    UILabel *lbl_newAnswer = [[UILabel alloc] initWithFrame:CGRectMake(175.0f, 0.0f, 100.0f, 21.0f)];
+//    [lbl_newAnswer setTag:101];
+//    lbl_newAnswer.text = @"New answers!";
+//    lbl_newAnswer.backgroundColor = [UIColor clearColor];
+//    lbl_newAnswer.font =[UIFont systemFontOfSize:14.0f];
+//    lbl_newAnswer.textColor = [UIColor redColor];
+//    lbl_newAnswer.textAlignment = UITextAlignmentRight;
+//    [lbl_newAnswer setHidden:YES];
+//    
+//    UILabel *lbl_newComment = [[UILabel alloc] initWithFrame:CGRectMake(175.0f, 29.0f, 100.0f, 21.0f)];
+//    [lbl_newComment setTag:102];
+//    lbl_newComment.text = @"New comments!";
+//    lbl_newComment.backgroundColor = [UIColor clearColor];
+//    lbl_newComment.font =[UIFont systemFontOfSize:14.0f];
+//    lbl_newComment.textColor = [UIColor blueColor];
+//    lbl_newComment.textAlignment = UITextAlignmentRight;
+//    [lbl_newComment setHidden:YES];
     
     if (indexPath.section == 0) {
         // From Friends section
@@ -493,6 +583,9 @@
                         cell.imageView.layer.borderWidth = 1.0;
                         
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                        
+//                        [cell.contentView addSubview:lbl_newAnswer];
+//                        [cell.contentView addSubview:lbl_newComment];
                         
                     }
                     
@@ -578,6 +671,9 @@
                         
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         
+//                        [cell.contentView addSubview:lbl_newAnswer];
+//                        [cell.contentView addSubview:lbl_newComment];
+                        
                     }
                     
                     [self configureCell:cell atIndexPath:indexPath];
@@ -661,6 +757,9 @@
                         cell.imageView.layer.borderWidth = 1.0;
                         
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                        
+//                        [cell.contentView addSubview:lbl_newAnswer];
+//                        [cell.contentView addSubview:lbl_newComment];
                         
                     }
                     

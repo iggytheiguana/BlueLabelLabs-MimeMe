@@ -52,36 +52,95 @@
     [super dealloc];
 }
 
-//returns the number of unexpired, unopened new Mime notifications for this user in the database
-+ (int) unopenedNotificationsForFeedEvent:(int)feedEvent markAsOpen:(BOOL)markAsOpen
+////returns the number of unexpired, unopened new Mime notifications for this user in the database
+//+ (int) numUnopenedNotificationsForFeedEvent:(int)feedEvent markAsOpen:(BOOL)markAsOpen
+//{
+//    NSNumber* loggedInUserID = [[AuthenticationManager instance] m_LoggedInUserID];
+//    
+//    ResourceContext* resourceContext = [ResourceContext instance];
+//    NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:DATECREATED ascending:NO];
+//    
+//    NSArray *values = [NSArray arrayWithObjects:[loggedInUserID stringValue], [NSString stringWithFormat:@"%d", feedEvent], nil];
+//    NSArray *attributes = [NSArray arrayWithObjects:USERID, FEEDEVENT, nil];
+//    
+//    NSArray* feedObjects = [resourceContext resourcesWithType:FEED withValuesEqual:values forAttributes:attributes sortBy:[NSArray arrayWithObject:sortDescriptor]];
+//    
+//    int count = 0;
+//    //get the current date
+//    double date = [[NSDate date] timeIntervalSince1970];
+//    
+//    for (Feed* feed in feedObjects) 
+//    {
+//        if ([feed.dateexpires doubleValue] > date && [feed.hasopened boolValue] == NO) {
+//            //its unexpired and unopened
+//            count++;
+//            
+//            // mark as opened
+//            if (markAsOpen == YES) {
+//                feed.hasopened = [NSNumber numberWithBool:YES];
+//            }
+//        }
+//    }
+//    return count;
+//}
+
+//returns the number of unopened new Mime notifications for this user in the database
++ (int) numUnopenedNotificationsForFeedEvent:(int)feedEvent markAsOpen:(BOOL)markAsOpen
 {
     NSNumber* loggedInUserID = [[AuthenticationManager instance] m_LoggedInUserID];
     
     ResourceContext* resourceContext = [ResourceContext instance];
     NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:DATECREATED ascending:NO];
     
-    NSArray *values = [NSArray arrayWithObjects:[loggedInUserID stringValue], [NSString stringWithFormat:@"%d", feedEvent], nil];
-    NSArray *attributes = [NSArray arrayWithObjects:USERID, FEEDEVENT, nil];
+    NSArray *values = [NSArray arrayWithObjects:
+                       [loggedInUserID stringValue],
+                       [NSString stringWithFormat:@"%d", feedEvent],
+                       [NSNumber numberWithBool:NO],
+                       nil];
+    
+    NSArray *attributes = [NSArray arrayWithObjects:
+                           USERID, 
+                           FEEDEVENT,
+                           HASOPENED,
+                           nil];
     
     NSArray* feedObjects = [resourceContext resourcesWithType:FEED withValuesEqual:values forAttributes:attributes sortBy:[NSArray arrayWithObject:sortDescriptor]];
     
-    int count = 0;
-    //get the current date
-    double date = [[NSDate date] timeIntervalSince1970];
+    int count = [feedObjects count];
     
     for (Feed* feed in feedObjects) 
     {
-        if ([feed.dateexpires doubleValue] > date && [feed.hasopened boolValue] == NO) {
-            //its unexpired and unopened
-            count++;
-            
-            // mark as opened
-            if (markAsOpen == YES) {
-                feed.hasopened = [NSNumber numberWithBool:YES];
-            }
+        // mark as opened if requested to
+        if (markAsOpen == YES) {
+            feed.hasopened = [NSNumber numberWithBool:YES];
         }
     }
     return count;
+}
+
+//returns an array of unopened new Mime notifications for this user in the database
++ (NSArray *) unopenedNotificationsForFeedEvent:(int)feedEvent
+{
+    NSNumber* loggedInUserID = [[AuthenticationManager instance] m_LoggedInUserID];
+    
+    ResourceContext* resourceContext = [ResourceContext instance];
+    NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:DATECREATED ascending:NO];
+    
+    NSArray *values = [NSArray arrayWithObjects:
+                       [loggedInUserID stringValue],
+                       [NSString stringWithFormat:@"%d", feedEvent],
+                       [NSNumber numberWithBool:NO],
+                       nil];
+    
+    NSArray *attributes = [NSArray arrayWithObjects:
+                           USERID, 
+                           FEEDEVENT,
+                           HASOPENED,
+                           nil];
+    
+    NSArray* feedObjects = [resourceContext resourcesWithType:FEED withValuesEqual:values forAttributes:attributes sortBy:[NSArray arrayWithObject:sortDescriptor]];
+    
+    return feedObjects;
 }
 
 @end

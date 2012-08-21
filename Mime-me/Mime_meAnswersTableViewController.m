@@ -49,7 +49,7 @@
     Mime_meAppDelegate* app = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:MIMEANSWER inManagedObjectContext:app.managedObjectContext];
     
-    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
+    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATEMODIFIED ascending:NO];
     
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K=%@", MIMEID, self.mimeID];
     
@@ -102,8 +102,7 @@
     else 
     {
         self.mimeAnswerCloudEnumerator = nil;
-        NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
-        self.mimeAnswerCloudEnumerator = [CloudEnumerator enumeratorForMimeAnswersWithTarget:self.loggedInUser.objectid withState:unansweredStateObj];
+        self.mimeAnswerCloudEnumerator = [CloudEnumerator enumeratorForMimeAnswersForMime:self.mimeID];
         self.mimeAnswerCloudEnumerator.delegate = self;
         self.mimeAnswerCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:kMAXROWS];
         [self.mimeAnswerCloudEnumerator enumerateUntilEnd:nil];
@@ -111,6 +110,23 @@
 }
 
 #pragma mark - Helper Methods
+- (void)markMimeAnswersSeen {
+    BOOL shouldSave = NO;
+    
+    for (MimeAnswer *mimeAnswer in [self.frc_mimeAnswers fetchedObjects]) {
+        if ([mimeAnswer.state isEqualToNumber:[NSNumber numberWithInt:kANSWERED]] &&
+            [mimeAnswer.hasseen boolValue] == NO)
+        {
+            mimeAnswer.hasseen = [NSNumber numberWithBool:YES];
+            shouldSave = YES;
+        }
+    }
+    
+    if (shouldSave == YES) {
+        ResourceContext* resourceContext = [ResourceContext instance];
+        [resourceContext save:NO onFinishCallback:nil trackProgressWith:nil];
+    }
+}
 
 
 #pragma mark - View Lifecycle
@@ -127,6 +143,24 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    // Add rounded corners to view
+    [self.view.layer setCornerRadius:8.0f];
+    
+    // Add rounded corners to top part of header view
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.v_headerContainer.bounds 
+                                                   byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight
+                                                         cornerRadii:CGSizeMake(8.0, 8.0)];
+    
+    // Create the shape layer and set its path
+    CAShapeLayer *maskLayer = [CAShapeLayer layer];
+    maskLayer.frame = self.v_headerContainer.bounds;
+    maskLayer.path = maskPath.CGPath;
+    
+    // Set the newly created shape layer as the mask for the view's layer
+    self.v_headerContainer.layer.mask = maskLayer;
+    [self.v_headerContainer.layer setOpaque:NO];
+    
 }
 
 - (void)viewDidUnload
@@ -138,6 +172,13 @@
     self.tbl_answers = nil;
     self.btn_back = nil;
     self.v_headerContainer = nil;
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    [self markMimeAnswersSeen];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -162,8 +203,9 @@
     
     ResourceContext* resourceContext = [ResourceContext instance];
     MimeAnswer *mimeAnswer = [[self.frc_mimeAnswers fetchedObjects] objectAtIndex:indexPath.row];
+    User *user = (User*)[resourceContext resourceWithType:USER withID:mimeAnswer.targetuserid];
     
-    NSString *targetName = mimeAnswer.targetname;
+    NSString *targetName = user.username;
     cell.textLabel.text = targetName;
     
     if ([mimeAnswer.state intValue] == kANSWERED) {
@@ -177,8 +219,6 @@
     
     ImageManager* imageManager = [ImageManager instance];
     
-    User *user = (User*)[resourceContext resourceWithType:USER withID:mimeAnswer.targetuserid];    
-    
     // Set the user profile image
     if (user.thumbnailurl != nil && ![user.thumbnailurl isEqualToString:@""]) {
         Callback* callback = [[Callback alloc]initWithTarget:self withSelector:@selector(onImageDownloadComplete:) withContext:userInfo];
@@ -187,37 +227,73 @@
         [callback release];
         if (image != nil) {
             
-            cell.imageView.image = [image imageScaledToSize:CGSizeMake(50, 50)];
+            cell.imageView.image = [image imageScaledToSize:CGSizeMake(40, 40)];
         }
         else {
             cell.imageView.backgroundColor = [UIColor lightGrayColor];
-            cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(50, 50)];
+            cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(40, 40)];
         }
         
         [self.view setNeedsDisplay];
     }
     
+//    // Mark mime as "new" if user has not previously seen it
+//    UILabel *lbl_new = (UILabel *)[cell.contentView viewWithTag:101];
+//    if ([mimeAnswer.state isEqualToNumber:[NSNumber numberWithInt:kANSWERED]])
+//    {
+//        cell.detailTextLabel.textColor = [UIColor blueColor];
+//        
+//        if ([mimeAnswer.hasseen boolValue] == NO) {
+//            [lbl_new setHidden:NO];
+//        }
+//        else {
+//            [lbl_new setHidden:YES];
+//        }
+//    }
+//    else {
+//        [lbl_new setHidden:YES];
+//        cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+//    }
+    
     // Mark mime as "new" if user has not previously seen it
-    UILabel *lbl_new = (UILabel *)[cell.contentView viewWithTag:101];
-    if ([mimeAnswer.hasseen boolValue] == NO) {
-        [lbl_new setHidden:NO];
+    if ([mimeAnswer.state isEqualToNumber:[NSNumber numberWithInt:kANSWERED]])
+    {
+        cell.detailTextLabel.textColor = [UIColor blueColor];
+        
+        if ([mimeAnswer.hasseen boolValue] == NO) {
+            UILabel *lbl_new = [[UILabel alloc] initWithFrame:CGRectMake(270.0f, 0.0f, 40.0f, 21.0f)];
+            lbl_new.text = @"New!";
+            lbl_new.backgroundColor = [UIColor clearColor];
+            lbl_new.font =[UIFont systemFontOfSize:14.0f];
+            lbl_new.adjustsFontSizeToFitWidth = YES;
+            lbl_new.textColor = [UIColor blueColor];
+            lbl_new.textAlignment = UITextAlignmentRight;
+            
+            cell.accessoryView = lbl_new;
+            [lbl_new release];
+        }
+        else {
+            cell.accessoryView = nil;
+        }
     }
     else {
-        [lbl_new setHidden:YES];
+        cell.accessoryView = nil;
+        cell.detailTextLabel.textColor = [UIColor lightGrayColor];
     }
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *CellIdentifier;
     
-    UILabel *lbl_new = [[UILabel alloc] initWithFrame:CGRectMake(235.0f, 0.0f, 40.0f, 21.0f)];
-    [lbl_new setTag:101];
-    lbl_new.text = @"New!";
-    lbl_new.backgroundColor = [UIColor clearColor];
-    lbl_new.font =[UIFont systemFontOfSize:14.0f];
-    lbl_new.textColor = [UIColor redColor];
-    lbl_new.textAlignment = UITextAlignmentRight;
+//    UILabel *lbl_new = [[UILabel alloc] initWithFrame:CGRectMake(270.0f, 0.0f, 40.0f, 21.0f)];
+//    [lbl_new setTag:101];
+//    lbl_new.text = @"New!";
+//    lbl_new.backgroundColor = [UIColor clearColor];
+//    lbl_new.font =[UIFont systemFontOfSize:14.0f];
+//    lbl_new.textColor = [UIColor redColor];
+//    lbl_new.textAlignment = UITextAlignmentRight;
     
     NSInteger count = [[self.frc_mimeAnswers fetchedObjects]count];
     
@@ -238,9 +314,9 @@
             cell.imageView.backgroundColor = [UIColor lightGrayColor];
             cell.imageView.image = [[UIImage imageNamed:@"logo-MimeMe.png"] imageScaledToSize:CGSizeMake(40, 40)];
             
-            cell.userInteractionEnabled = NO;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             
-            [cell.contentView addSubview:lbl_new];
+//            [cell.contentView addSubview:lbl_new];
         }
         
         [self configureCell:cell atIndexPath:indexPath];
@@ -317,6 +393,11 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+}
+
+#pragma mark UIButton Handlers
+- (IBAction) onBackButtonPressed:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

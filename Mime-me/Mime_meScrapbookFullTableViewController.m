@@ -329,6 +329,40 @@
         
         [self.view setNeedsDisplay];
     }
+    
+    // Display label for new answers if there are unseen answers
+    int numNewAnswers = [mime numUnopenedMimeAnswers];
+//    int numNewComments = [mime numUnopenedComments];
+    int numNewComments = 0;
+    
+    UILabel *lbl_newNotification = [[UILabel alloc] initWithFrame:CGRectMake(175.0f, 0.0f, 90.0f, 36.0f)];
+    lbl_newNotification.backgroundColor = [UIColor clearColor];
+    lbl_newNotification.font =[UIFont systemFontOfSize:12.0f];
+    lbl_newNotification.adjustsFontSizeToFitWidth = YES;
+    lbl_newNotification.textColor = [UIColor blueColor];
+    lbl_newNotification.textAlignment = UITextAlignmentRight;
+    
+    if (numNewAnswers > 0 && numNewComments > 0) {
+        lbl_newNotification.numberOfLines = 2;
+        [lbl_newNotification setText:@"New answer!\nNew comment!"];
+        cell.accessoryView = lbl_newNotification;
+    }
+    else if (numNewAnswers > 0 && numNewComments == 0) {
+        lbl_newNotification.numberOfLines = 1;
+        [lbl_newNotification setText:@"New answer!"];
+        cell.accessoryView = lbl_newNotification;
+    }
+    else if (numNewAnswers == 0 && numNewComments > 0) {
+        lbl_newNotification.numberOfLines = 1;
+        [lbl_newNotification setText:@"New comment!"];
+        cell.accessoryView = lbl_newNotification;
+    }
+    else {
+        cell.accessoryView = nil;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    
+    [lbl_newNotification release];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

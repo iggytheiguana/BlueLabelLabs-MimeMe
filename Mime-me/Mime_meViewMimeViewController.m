@@ -22,6 +22,7 @@
 #import "Favorite.h"
 #import "SocialSharingManager.h"
 #import "Mime_meScrapbookMenuViewController.h"
+#import "Mime_meAnswersTableViewController.h"
 
 #define kMIMEID @"mimeid"
 #define kCREATORTID @"creatorid"
@@ -202,6 +203,10 @@
     Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
     
     if (self.viewMimeCase == kVIEWSENTMIME) {
+        
+        [self.v_fromUserContainer setHidden:YES];
+        [self.lbl_title setHidden:NO];
+        
         self.lbl_title.text = [NSString stringWithFormat:@"Mime created by %@", mime.creatorname];
         
         NSString *confirmationTitle = @"Mime sent";
@@ -237,11 +242,14 @@
         
     }
     else if (self.viewMimeCase == kVIEWANSWERMIME) {
+        
+        [self.v_fromUserContainer setHidden:YES];
+        [self.lbl_title setHidden:NO];
+        
         self.lbl_title.text = [NSString stringWithFormat:@"You are guessing a mime from %@", mime.creatorname];
         
-        MimeAnswer *mimeAnswer = (MimeAnswer*)[resourceContext resourceWithType:MIMEANSWER withID:self.mimeAnswerID];
-        
-        int pointsAwarded = [mimeAnswer.pointsawarded intValue];
+        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+        int pointsAwarded = [settings.gems_for_correct_guess intValue];
         
         NSString *title = @"Congratulations!";
         NSString *subtitle = [NSString stringWithFormat:@"You guessed right and earned %d gems", pointsAwarded];
@@ -270,11 +278,17 @@
         if ([mime.creatorid isEqualToNumber:self.loggedInUser.objectid]) {
             // This mime was created by the loggedin user
             
-            [self.lbl_title setHidden:YES];
+            [self.v_fromUserContainer setHidden:YES];
+            
+            self.lbl_title.text = [NSString stringWithFormat:@"Mime created by YOU!", mime.creatorname];
             from = [NSString stringWithFormat:@"Sent on"];
         }
         else {
             // This mime was created by someone else
+            
+            [self.v_fromUserContainer setHidden:YES];
+            [self.lbl_title setHidden:NO];
+            
             self.lbl_title.text = [NSString stringWithFormat:@"Mime created by %@", mime.creatorname];
             from = [NSString stringWithFormat:@"from %@", mime.creatorname];
         }
@@ -450,7 +464,9 @@
 }
 
 - (IBAction) onAnswersButtonPressed:(id)sender {
+    Mime_meAnswersTableViewController *answersViewController = [Mime_meAnswersTableViewController createInstanceForMimeWithID:self.mimeID];
     
+   [self.navigationController pushViewController:answersViewController animated:YES];
 }
 
 - (IBAction) onCommentsButtonPressed:(id)sender {
@@ -694,30 +710,58 @@
 }
 
 - (IBAction) onClueButtonPressed:(id)sender {
-    // Flag that the user did use a hint.
-    // We will update the didUseHint property on the MimeAnswer object at save
-    self.didUseHint = YES;
-    
-    // Decrement the users gem total for use of a clue
     ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
     int gemsForClue = [settings.gems_for_clue intValue];
-    int newGemTotal = [self.loggedInUser.numberofpoints intValue] - gemsForClue;
-    self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
+    int userGemCount = [self.loggedInUser.numberofpoints intValue];
     
-    // Update the gem count displayed in the navigation header
-    [self.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
-    if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
-        self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    if (userGemCount >= gemsForClue) {
+        // Flag that the user did use a hint.
+        // We will update the didUseHint property on the MimeAnswer object at save
+        self.didUseHint = YES;
+        
+        // Decrement the users gem total for use of a clue
+        int newGemTotal = userGemCount - gemsForClue;
+        self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
+        
+        // Update the gem count displayed in the navigation header
+        [self.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
+        if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+            self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+        }
+    }
+    else {
+        // User goes not have enough gems, alert
+        NSString *message = [NSString stringWithFormat:@"You must have at least %d gem to get a clue.", gemsForClue];
+        
+        UIAlertView* alert = [[UIAlertView alloc]
+                              initWithTitle:@"Not enough gems!"
+                              message:message
+                              delegate:self
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
     }
 }
 
 - (IBAction) onFlagButtonPressed:(id)sender {
+//    UIActionSheet *actionSheet = [[UIActionSheet alloc]
+//                                  initWithTitle:@"Is something about this mime offensive?"
+//                                  delegate:self
+//                                  cancelButtonTitle:@"Cancel"
+//                                  destructiveButtonTitle:@"Flag for review"
+//                                  otherButtonTitles:nil];
+//    [actionSheet showInView:self.view];
+//    [actionSheet release];
+}
+
+- (IBAction) onMoreButtonPressed:(id)sender {
     UIActionSheet *actionSheet = [[UIActionSheet alloc]
-                                  initWithTitle:@"Is something about this mime offensive?"
+                                  initWithTitle:nil
                                   delegate:self
                                   cancelButtonTitle:@"Cancel"
                                   destructiveButtonTitle:@"Flag for review"
-                                  otherButtonTitles:nil];
+                                  otherButtonTitles:@"Comments (Coming Soon)", @"Answers", nil];
     [actionSheet showInView:self.view];
     [actionSheet release];
 }
@@ -726,6 +770,7 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == [actionSheet destructiveButtonIndex]) {
+        // User flagged item
         
         //display progress view on the submission of a flag
         ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
@@ -750,6 +795,17 @@
         
         //now we need to commit to the store
         [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
+    }
+    else if (buttonIndex == 1) {
+        // Comments Selected
+        
+    }
+    else if (buttonIndex == 2) {
+        // Answers selected
+        
+        Mime_meAnswersTableViewController *answersViewController = [Mime_meAnswersTableViewController createInstanceForMimeWithID:self.mimeID];
+        
+        [self.navigationController pushViewController:answersViewController animated:YES];
     }
 }
 

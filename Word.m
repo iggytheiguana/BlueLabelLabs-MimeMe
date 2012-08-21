@@ -17,6 +17,7 @@
 @dynamic difficultylevel;
 @dynamic word1;
 @dynamic numberofflags;
+
 #pragma mark - Static Initializers
 //creates a Word object
 + (Word*)createWordWithString:(NSString *)string {
@@ -34,6 +35,7 @@
     retVal.word1 = string;
     retVal.numberoftimesused = [NSNumber numberWithInt:1];
     retVal.difficultylevel = [NSNumber numberWithInt:0];
+    retVal.numberofflags = [NSNumber numberWithInteger:0];
     
     return retVal;
 }

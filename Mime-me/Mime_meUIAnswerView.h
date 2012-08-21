@@ -13,6 +13,7 @@
 
 - (IBAction) onSlideButtonPressed:(id)sender;
 - (IBAction) onFlagButtonPressed:(id)sender;
+- (IBAction) onMoreButtonPressed:(id)sender;
 - (IBAction) onClueButtonPressed:(id)sender;
 - (void) onSubmittedCorrectAnswerViaAllClues:(BOOL)usedAllClues;
 
@@ -27,6 +28,7 @@
     UIView          *m_v_answerHeader;
     UIButton        *m_btn_slide;
     UIButton        *m_btn_flag;
+    UIButton        *m_btn_more;
     UIButton        *m_btn_clue;
     UITextField     *m_tf_answer;
     UIView          *m_v_wrongAnswer;
@@ -47,6 +49,7 @@
 @property (nonatomic, retain) IBOutlet  UIView          *v_answerHeader;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_slide;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_flag;
+@property (nonatomic, retain) IBOutlet  UIButton        *btn_more;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_clue;
 @property (nonatomic, retain) IBOutlet  UITextField     *tf_answer;
 @property (nonatomic, retain)           UIView          *v_wrongAnswer;

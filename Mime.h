@@ -30,6 +30,9 @@
 @property (nonatomic,retain) NSNumber* numberoftimesfavorited;
 @property (nonatomic,retain) NSNumber* hasseen;
 
+- (int) numUnopenedMimeAnswers;
+- (int) numUnopenedComments;
+
 + (Mime*)createMimeWithWordID:(NSNumber *)wordID
                     withImage:(UIImage *)image
                 withThumbnail:(UIImage *)thumbnailImage;

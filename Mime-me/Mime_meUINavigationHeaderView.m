@@ -119,21 +119,21 @@
     
     if ([self.delegate isKindOfClass:[Mime_meCreateMimeViewController class]]) {
         // in Mime view controller
-        numNewMimesRecieved = [Feed unopenedNotificationsForFeedEvent:kMIME_RECEIVED markAsOpen:NO];
-        numNewCommentsRecieved = [Feed unopenedNotificationsForFeedEvent:kCOMMENT_RECEIVED markAsOpen:NO];
-        numNewAnswersRecieved = [Feed unopenedNotificationsForFeedEvent:kANSWER_RECEIVED markAsOpen:NO];
+        numNewMimesRecieved = [Feed numUnopenedNotificationsForFeedEvent:kMIME_RECEIVED markAsOpen:NO];
+        numNewCommentsRecieved = [Feed numUnopenedNotificationsForFeedEvent:kCOMMENT_RECEIVED markAsOpen:NO];
+        numNewAnswersRecieved = [Feed numUnopenedNotificationsForFeedEvent:kANSWER_RECEIVED markAsOpen:NO];
     }
     else if ([self.delegate isKindOfClass:[Mime_meGuessMenuViewController class]]) {
         // in Guess view controller
-        numNewMimesRecieved = [Feed unopenedNotificationsForFeedEvent:kMIME_RECEIVED markAsOpen:YES];
-        numNewCommentsRecieved = [Feed unopenedNotificationsForFeedEvent:kCOMMENT_RECEIVED markAsOpen:NO];
-        numNewAnswersRecieved = [Feed unopenedNotificationsForFeedEvent:kANSWER_RECEIVED markAsOpen:NO];
+        numNewMimesRecieved = [Feed numUnopenedNotificationsForFeedEvent:kMIME_RECEIVED markAsOpen:YES];
+        numNewCommentsRecieved = [Feed numUnopenedNotificationsForFeedEvent:kCOMMENT_RECEIVED markAsOpen:NO];
+        numNewAnswersRecieved = [Feed numUnopenedNotificationsForFeedEvent:kANSWER_RECEIVED markAsOpen:NO];
     }
     else if ([self.delegate isKindOfClass:[Mime_meScrapbookMenuViewController class]]) {
         // in Scrapbook view controller
-        numNewMimesRecieved = [Feed unopenedNotificationsForFeedEvent:kMIME_RECEIVED markAsOpen:NO];
-        numNewCommentsRecieved = [Feed unopenedNotificationsForFeedEvent:kCOMMENT_RECEIVED markAsOpen:YES];
-        numNewAnswersRecieved = [Feed unopenedNotificationsForFeedEvent:kANSWER_RECEIVED markAsOpen:YES];
+        numNewMimesRecieved = [Feed numUnopenedNotificationsForFeedEvent:kMIME_RECEIVED markAsOpen:NO];
+        numNewCommentsRecieved = [Feed numUnopenedNotificationsForFeedEvent:kCOMMENT_RECEIVED markAsOpen:YES];
+        numNewAnswersRecieved = [Feed numUnopenedNotificationsForFeedEvent:kANSWER_RECEIVED markAsOpen:YES];
     }
     
     if (numNewMimesRecieved > 0) {

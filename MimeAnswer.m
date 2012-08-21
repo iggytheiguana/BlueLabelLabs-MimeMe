@@ -59,6 +59,7 @@
     retVal.issentbyfriend = [NSNumber numberWithBool:YES];
     retVal.pointsawarded = [NSNumber numberWithInt:0];
     retVal.state = [NSNumber numberWithInt:kUNANSWERED];
+    retVal.hasseen = [NSNumber numberWithBool:NO];
     
     Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:mimeID];
     retVal.answer = mime.word;

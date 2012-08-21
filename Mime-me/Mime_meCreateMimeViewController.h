@@ -15,7 +15,7 @@
 #import "GADBannerView.h"
 #import "GADPublisherID.h"
 
-@interface Mime_meCreateMimeViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, UICameraActionSheetDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate, UIProgressHUDViewDelegate, Mime_meUIMakeWordViewDelgate > {
+@interface Mime_meCreateMimeViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, UICameraActionSheetDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate, UIProgressHUDViewDelegate, Mime_meUIMakeWordViewDelgate, UIAlertViewDelegate > {
     
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
     
