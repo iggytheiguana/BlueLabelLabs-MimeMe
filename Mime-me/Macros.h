@@ -122,6 +122,8 @@
 #define LOG_MIME_MESCRAPBOOKFULLTABLEVIEWCONTROLLER(...) do {} while (0)
 
 #define LOG_MIME_FRIENDPICKERVIEWCONTROLLER(level, ...)   do{}while(0)
+#define LOG_MIME_MEANSWERSTABLEVIEWCONTROLLER(level, ...)   do{}while(0)
+
 
 
 

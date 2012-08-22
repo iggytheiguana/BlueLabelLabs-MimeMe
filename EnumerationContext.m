@@ -114,14 +114,14 @@
 
 }
 
-//+ (EnumerationContext*) contextForObjectIDs:(NSArray*)objectIDs 
-//                                  withTypes:(NSArray*)objectTypes 
-//{
-//    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
-//    enumerationContext.pageSize = [NSNumber numberWithInt:[objectIDs count]];
-//    enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:[objectIDs count]];
-//    return enumerationContext;
-//}
++ (EnumerationContext*) contextForObjectIDs:(NSArray*)objectIDs 
+                                  withTypes:(NSArray*)objectTypes 
+{
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize = [NSNumber numberWithInt:[objectIDs count]];
+    enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:[objectIDs count]];
+    return enumerationContext;
+}
 //
 //
 //+ (EnumerationContext*) contextForCaptions:(NSNumber *)photoid {
@@ -290,6 +290,17 @@
 }
 
 + (EnumerationContext*) contextForMimeAnswersForMime:(NSNumber *)mimeid
+{
+    ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize = settingsObject.pagesize;
+    
+    enumerationContext.maximumNumberOfResults = settingsObject.feed_maxnumtodownload;   
+    return enumerationContext;
+
+}
+
++ (EnumerationContext*) contextForComments:(NSNumber *)mimeid
 {
     ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
     EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
