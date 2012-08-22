@@ -18,6 +18,7 @@
 #import "DateTimeHelper.h"
 #import "UIImage+UIImageCategory.h"
 #import "MimeAnswerState.h"
+#import <QuartzCore/QuartzCore.h>
 
 #define kMIMEANSWERID @"mimeanswerid"
 #define kMIMEID @"mimeid"
@@ -84,7 +85,7 @@
 }
 
 #pragma mark - Enumerators
-- (void)showHUDForMimeEnumerators {
+- (void)showHUDForMimeAnswersEnumerator {
     Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
     UIProgressHUDView* progressView = appDelegate.progressView;
     ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
@@ -107,6 +108,8 @@
         self.mimeAnswerCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:kMAXROWS];
         [self.mimeAnswerCloudEnumerator enumerateUntilEnd:nil];
     }
+    
+    [self showHUDForMimeAnswersEnumerator];
 }
 
 #pragma mark - Helper Methods

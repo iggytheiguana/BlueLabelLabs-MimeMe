@@ -15,4 +15,7 @@
 @property (nonatomic,retain) NSNumber* mimeanswerid;
 @property (nonatomic,retain) NSNumber* mimeid;
 @property (nonatomic,retain) NSNumber* hasseen;
+
++ (Comment *)createCommentWithString:(NSString *)string forMimeID:(NSNumber *)mimeID forMimeAnswerID:(NSNumber *)mimeAnswerID;
+
 @end

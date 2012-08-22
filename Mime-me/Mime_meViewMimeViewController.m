@@ -237,7 +237,6 @@
         self.v_answerView.btn_clue.hidden = YES;
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.v_answerView renderWordDisplay];
-        [self.v_answerView updateNotifications];
         [self.v_answerView disableAnswerTextFields];
         [self.v_answerView showAnswer];
         [self.view addSubview:self.v_answerView];
@@ -267,7 +266,6 @@
         self.v_answerView.delegate = self;
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.v_answerView renderWordDisplay];
-        [self.v_answerView updateNotifications];
         [self.view addSubview:self.v_answerView];
         
         // Update the view count on this Mime
@@ -317,7 +315,6 @@
         self.v_answerView.btn_clue.hidden = YES;
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.v_answerView renderWordDisplay];
-        [self.v_answerView updateNotifications];
         [self.v_answerView disableAnswerTextFields];
         [self.v_answerView showAnswer];
         [self.view addSubview:self.v_answerView];
@@ -385,6 +382,9 @@
     
     // Save updates to has seen property on mime and mime answer
     [resourceContext save:NO onFinishCallback:nil trackProgressWith:nil];
+    
+    // Update the notifications badge
+    [self.v_answerView updateNotifications];
     
     // Adjust layout based on orientation
 //    [self didRotate];

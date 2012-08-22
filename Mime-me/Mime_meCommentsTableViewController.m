@@ -17,11 +17,17 @@
 #import "ImageDownloadResponse.h"
 #import "DateTimeHelper.h"
 #import "UIImage+UIImageCategory.h"
+#import <QuartzCore/QuartzCore.h>
 
 #define kCOMMENTID @"commentid"
 #define kMIMEID @"mimeid"
 
 #define kMAXROWS 200
+#define kDEFAULTVIEWCELLHEIGHT 62.0
+
+#define kHEADERHEIGHT 50.0
+#define kFOOTERHEIGHT 44.0
+#define kKEYBOARDHEIGHTPORTRAIT 216.0
 
 @interface Mime_meCommentsTableViewController ()
 
@@ -31,9 +37,14 @@
 @synthesize mimeID                      = m_mimeID;
 @synthesize frc_comments                = __frc_comments;
 @synthesize commentsCloudEnumerator     = m_commentsCloudEnumerator;
-@synthesize tbl_comments                 = m_tbl_comments;
+@synthesize tbl_comments                = m_tbl_comments;
 @synthesize btn_back                    = m_btn_back;
 @synthesize v_headerContainer           = m_v_headerContainer;
+@synthesize btn_send                    = m_btn_send;
+@synthesize btn_cancel                  = m_btn_cancel;
+@synthesize tv_comment                  = m_tv_comment;
+@synthesize v_newCommentContainer       = m_v_newCommentContainer;
+@synthesize tapGestureRecognizer        = m_tapGestureRecognizer;
 
 #pragma mark - FRCs
 - (NSFetchedResultsController*)frc_comments {
@@ -82,7 +93,7 @@
 }
 
 #pragma mark - Enumerators
-- (void)showHUDForMimeEnumerators {
+- (void)showHUDForCommentEnumerator {
     Mime_meAppDelegate* appDelegate = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
     UIProgressHUDView* progressView = appDelegate.progressView;
     ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
@@ -100,11 +111,13 @@
     else 
     {
         self.commentsCloudEnumerator = nil;
-        self.commentsCloudEnumerator = [CloudEnumerator enumeratorForMimeAnswersForMime:self.mimeID];
+        self.commentsCloudEnumerator = [CloudEnumerator enumeratorForComments:self.mimeID];
         self.commentsCloudEnumerator.delegate = self;
         self.commentsCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:kMAXROWS];
         [self.commentsCloudEnumerator enumerateUntilEnd:nil];
     }
+    
+    [self showHUDForCommentEnumerator];
 }
 
 #pragma mark - Helper Methods
@@ -161,7 +174,7 @@
     // Add rounded corners to top part of header view
     UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.v_headerContainer.bounds 
                                                    byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight
-                                                         cornerRadii:CGSizeMake(8.0, 8.0)];
+                                                         cornerRadii:CGSizeMake(8.0f, 8.0f)];
     
     // Create the shape layer and set its path
     CAShapeLayer *maskLayer = [CAShapeLayer layer];
@@ -171,6 +184,21 @@
     // Set the newly created shape layer as the mask for the view's layer
     self.v_headerContainer.layer.mask = maskLayer;
     [self.v_headerContainer.layer setOpaque:NO];
+    
+    // Style the comment textview to look like a textfield
+    [self.tv_comment.layer setBorderColor:[[[UIColor grayColor] colorWithAlphaComponent:0.5] CGColor]];
+    [self.tv_comment.layer setBorderWidth:1.0f];
+    self.tv_comment.layer.cornerRadius = 8.0f;
+    self.tv_comment.clipsToBounds = YES;
+    
+    // Disable the send button until text is entered
+    [self.btn_send setEnabled:NO];
+    
+    // Hide Cancel button until text entry starts
+    [self.btn_cancel setHidden:YES];
+    
+    // Setup tap gesture recognizer to capture touches on the tableview when the keyboard is visible
+    self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
 }
 
 - (void)viewDidUnload
@@ -182,6 +210,11 @@
     self.tbl_comments = nil;
     self.btn_back = nil;
     self.v_headerContainer = nil;
+    self.btn_send = nil;
+    self.btn_cancel = nil;
+    self.tv_comment = nil;
+    self.v_newCommentContainer = nil;
+    self.tapGestureRecognizer = nil;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -215,11 +248,14 @@
     Comment *comment = [[self.frc_comments fetchedObjects] objectAtIndex:indexPath.row];
     User *user = (User*)[resourceContext resourceWithType:USER withID:comment.creatorid];
     
-    NSString *creatorName = user.username;
-    cell.textLabel.text = creatorName;
+    NSString *commentStr = comment.comment1;
+    cell.textLabel.text = commentStr;
     
+    NSString *creatorName = user.username;
     NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:comment.datecreated];
-    cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
+    NSString *dateSentStr = [self getDateStringForMimeDate:dateSent];
+    
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"from %@, %@", creatorName, dateSentStr];
     
     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:comment.objectid, kCOMMENTID, nil];
     
@@ -274,6 +310,13 @@
         
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+            
+            cell.textLabel.font = [UIFont systemFontOfSize:14.0];
+            cell.textLabel.numberOfLines = 0;
+            cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+            cell.textLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:11.0];
             
             cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
             cell.imageView.layer.masksToBounds = YES;
@@ -354,9 +397,29 @@
  */
 
 #pragma mark - Table view delegate
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    
-//}
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Dynamic height based on comment size
+    CGFloat defaultTableViewCellHeight = kDEFAULTVIEWCELLHEIGHT;
+    CGFloat singleLineHeight = 18.0;
+    
+    Comment* comment = [[self.frc_comments fetchedObjects] objectAtIndex:[indexPath row]];
+    
+    UIFont* font = [UIFont systemFontOfSize:14.0];
+    
+    CGFloat maximumWidth = 200.0;
+    CGFloat maximumHeight = 2000.0;
+    CGSize constraint = CGSizeMake(maximumWidth, maximumHeight);
+    
+    CGSize commentSize = [comment.comment1 sizeWithFont:font constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    
+    CGFloat rowHeight = defaultTableViewCellHeight;
+    if (commentSize.height > singleLineHeight) {
+        int numRows = (commentSize.height + singleLineHeight - 1.0) / singleLineHeight;  // Always rounds up
+        rowHeight = defaultTableViewCellHeight + (numRows - 1)*singleLineHeight;
+    }
+    
+    return rowHeight;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -364,9 +427,148 @@
     
 }
 
+#pragma mark - UITextview and TextField Delegate Methods
+- (void) slideCommentViewUp {
+    int newHeight = 100.0f;
+    int newY = 480 - kKEYBOARDHEIGHTPORTRAIT - newHeight;
+    
+    // Slide the answer view up
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationCurveEaseInOut
+                     animations:^{
+                         self.v_newCommentContainer.frame = CGRectMake(0.0f, newY, 320.0f, newHeight);
+                     }
+                     completion:^(BOOL finished){
+                         
+                     }
+     ];
+}
+
+- (void) slideCommentViewDown {
+    // Slide the answer view down
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationCurveEaseInOut
+                     animations:^{
+                         self.v_newCommentContainer.frame = CGRectMake(0.0f, 436.0f, 320.0f, 44.0f);
+                     }
+                     completion:^(BOOL finished){
+                         
+                     }
+     ];
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    // comment textview editing has begun
+    self.tv_comment = textView;
+    [self.tv_comment resignFirstResponder];
+    
+    // Enable the send button
+    [self.btn_send setEnabled:YES];
+    
+    // hide back button until text entry complete
+    [self.btn_back setHidden:YES];
+    
+    // show the Cancel button
+    [self.btn_cancel setHidden:NO];
+    
+    // slide comment container up and show keyboard
+    [self slideCommentViewUp];
+    
+    // Add the tap gesture recognizer to capture background touches which will dismiss the keyboard
+    [self.tbl_comments addGestureRecognizer:self.tapGestureRecognizer];
+    
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    // reason textview editing has ended
+    self.tv_comment = textView;
+    
+    NSString *commentStr = self.tv_comment.text;
+    
+    // Check to see that the newWord is not empty and does not contain any whitespace
+    if (commentStr == nil ||
+        [commentStr isEqualToString:@""] ||
+        [commentStr isEqualToString:@" "])
+    {
+        // Disable the send button if no text was entered
+        [self.btn_send setEnabled:NO];
+    }
+    else {
+        // Enable the send button
+        [self.btn_send setEnabled:YES];
+    }
+    
+    // Show the back button
+    [self.btn_back setHidden:NO];
+    
+    // Hide the Cancel button
+    [self.btn_cancel setHidden:YES];
+    
+    // slide comment container back down
+    [self slideCommentViewDown];
+    
+    // remove the tap gesture recognizer so it does not interfere with other table view touches
+    [self.tbl_comments removeGestureRecognizer:self.tapGestureRecognizer];
+    
+}
+
 #pragma mark - UIButton Handlers
+- (void)showHUDForSendComment {
+    Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    UIProgressHUDView* progressView = appDelegate.progressView;
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+    progressView.delegate = self;
+    
+    // Determinate Progress bar
+    NSNumber* maxTimeToShowOnProgress = settings.http_timeout_seconds;
+    NSNumber* heartbeat = [NSNumber numberWithInt:5];
+    
+    //we need to construct the appropriate success, failure and progress messages for the submission
+    NSString* failureMessage = @"Oops, please try again.";
+    NSString* successMessage = @"Success!";
+    
+    NSMutableArray* progressMessage = [[[NSMutableArray alloc]init]autorelease];
+    [progressMessage addObject:@"Sending comment..."];
+    
+    [self showDeterminateProgressBarWithMaximumDisplayTime:maxTimeToShowOnProgress withHeartbeat:heartbeat onSuccessMessage:successMessage onFailureMessage:failureMessage inProgressMessages:progressMessage];
+    
+    // Save
+    ResourceContext *resourceContext = [ResourceContext instance];
+    
+    // Start a new undo group here
+    [resourceContext.managedObjectContext.undoManager beginUndoGrouping];
+    
+    [resourceContext save:YES onFinishCallback:nil trackProgressWith:progressView];
+    
+}
+
 - (IBAction) onBackButtonPressed:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction) onCancelCommentButtonPressed:(id)sender {
+    // Clear the textview text
+    self.tv_comment.text = nil;
+    
+    [self.tv_comment resignFirstResponder];
+}
+
+- (IBAction) onSendCommentButtonPressed:(id)sender {
+    [self.tv_comment resignFirstResponder];
+    
+    NSString *commentStr = [self.tv_comment.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    [Comment createCommentWithString:commentStr forMimeID:self.mimeID forMimeAnswerID:nil];
+    
+    [self showHUDForSendComment];
+}
+
+- (void)hideKeyboard {
+    [self.tv_comment resignFirstResponder];
 }
 
 
@@ -413,17 +615,52 @@
     
     UIProgressHUDView* progressView = (UIProgressHUDView*)hud;
     
-    if (progressView.didSucceed) {
-        //enumeration was sucessful
-        LOG_REQUEST(0, @"%@ Comments enumeration was successful", activityName);
+    for (Request* request in progressView.requests) {
+        NSArray* changedAttributes = request.changedAttributesList;
+        //list of all changed attributes
         
-    }
-    else {
-        //enumeration failed
-        LOG_REQUEST(1, @"%@ Comments enumeration failure", activityName);
-        
+        if ([changedAttributes containsObject:CREATORID]) {
+            // Comment creation
+            if (progressView.didSucceed) {
+                // Comment sent sucessfully
+                LOG_REQUEST(0, @"%@ New Comment sent successful", activityName);
+                
+                self.tv_comment.text = nil;
+                
+            }
+            else {
+                // Send comment failed
+                LOG_REQUEST(1, @"%@ New Comment sent failure", activityName);
+                
+                // Undo save
+                LOG_REQUEST(0, @"%@ Rolling back actions due to request failure",activityName);
+                ResourceContext* resourceContext = [ResourceContext instance];
+                [resourceContext.managedObjectContext.undoManager undo];
+                
+                NSError* error = nil;
+                [resourceContext.managedObjectContext save:&error];
+                
+                [self.tbl_comments reloadData];
+            }
+            
+            [self.tbl_comments scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        }
+        else {
+            // Comment enumeration
+            if (progressView.didSucceed) {
+                //enumeration was sucessful
+                LOG_REQUEST(0, @"%@ Comments enumeration was successful", activityName);
+                
+            }
+            else {
+                //enumeration failed
+                LOG_REQUEST(1, @"%@ Comments enumeration failure", activityName);
+                
+            }
+        }
     }
 }
+
 
 #pragma mark - ImageManager Delegate Methods
 - (void)onImageDownloadComplete:(CallbackResult*)result {

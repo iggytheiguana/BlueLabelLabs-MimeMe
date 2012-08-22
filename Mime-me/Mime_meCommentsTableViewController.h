@@ -9,13 +9,20 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 
-@interface Mime_meCommentsTableViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate, UIProgressHUDViewDelegate > {
+@interface Mime_meCommentsTableViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate, UIProgressHUDViewDelegate, UITextViewDelegate > {
     NSNumber                    *m_mimeID;
     
     UITableView                 *m_tbl_comments;
     
     UIButton                    *m_btn_back;
     UIView                      *m_v_headerContainer;
+    
+    UIButton                    *m_btn_send;
+    UIButton                    *m_btn_cancel;
+    UITextView                  *m_tv_comment;
+    UIView                      *m_v_newCommentContainer;
+    
+    UITapGestureRecognizer      *m_tapGestureRecognizer;
     
     CloudEnumerator             *m_commentsCloudEnumerator;
     
@@ -32,7 +39,16 @@
 @property (nonatomic, retain) IBOutlet  UIButton                    *btn_back;
 @property (nonatomic, retain) IBOutlet  UIView                      *v_headerContainer;
 
+@property (nonatomic, retain) IBOutlet  UIButton                    *btn_send;
+@property (nonatomic, retain) IBOutlet  UIButton                    *btn_cancel;
+@property (nonatomic, retain) IBOutlet  UITextView                  *tv_comment;
+@property (nonatomic, retain) IBOutlet  UIView                      *v_newCommentContainer;
+
+@property (nonatomic, retain)           UITapGestureRecognizer      *tapGestureRecognizer;
+
 - (IBAction) onBackButtonPressed:(id)sender;
+- (IBAction) onCancelCommentButtonPressed:(id)sender;
+- (IBAction) onSendCommentButtonPressed:(id)sender;
 
 + (Mime_meCommentsTableViewController*)createInstanceForMimeWithID:(NSNumber *)mimeID;
 

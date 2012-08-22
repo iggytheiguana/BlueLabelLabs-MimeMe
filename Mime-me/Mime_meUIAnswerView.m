@@ -112,6 +112,9 @@
         // Initialize the array to hold which letters have been revealed via a clue
         self.revealedIndexes = [[NSMutableArray alloc] init];
         
+        // Hide the notification label until it needs to be shown
+        [self.lbl_notificationsBadge setHidden:YES];
+        
         [self addSubview:self.view];
         
     }
