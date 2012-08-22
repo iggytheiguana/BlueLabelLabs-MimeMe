@@ -23,6 +23,7 @@
 #import "SocialSharingManager.h"
 #import "Mime_meScrapbookMenuViewController.h"
 #import "Mime_meAnswersTableViewController.h"
+#import "Mime_meCommentsTableViewController.h"
 
 #define kMIMEID @"mimeid"
 #define kCREATORTID @"creatorid"
@@ -779,7 +780,7 @@
         commentsTitle = [NSString stringWithFormat:@"Comments (%d new)", numNewComments];
     }
     else {
-        commentsTitle = [NSString stringWithFormat:@"Comments (Coming soon)"];
+        commentsTitle = [NSString stringWithFormat:@"Comments"];
     }
     
     UIActionSheet *actionSheet = [[UIActionSheet alloc]
@@ -824,6 +825,10 @@
     }
     else if (buttonIndex == 1) {
         // Comments Selected
+        
+        Mime_meCommentsTableViewController *commentsViewController = [Mime_meCommentsTableViewController createInstanceForMimeWithID:self.mimeID];
+        
+        [self.navigationController pushViewController:commentsViewController animated:YES];
         
     }
     else if (buttonIndex == 2) {
