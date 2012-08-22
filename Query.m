@@ -271,7 +271,7 @@
     
     
     QueryExpression* queryExpression = [[QueryExpression alloc]init];
-    queryExpression.attributeName = STATE;
+    queryExpression.attributeName = ID;
     queryExpression.opCode = opcode_QUERYEQUALITY;
     queryExpression.value = [NSString stringWithFormat:@"%d",kPUBLISHED];
     
@@ -480,5 +480,21 @@
     [queryExpression release];
     return query;
 
+}
+
++ (Query*) queryForComments:(NSNumber*)mimeid
+{
+    Query* query = [[[Query alloc]init ]autorelease];
+    query.filterObjectType = COMMENT;
+    
+    QueryExpression* queryExpression = [[QueryExpression alloc]init];
+    queryExpression.attributeName = MIMEID;
+    queryExpression.opCode = opcode_QUERYEQUALITY;
+    queryExpression.value = [mimeid stringValue];
+    
+    query.attributeExpressions = [NSArray arrayWithObject:queryExpression];
+    
+    [queryExpression release];
+    return query;
 }
 @end

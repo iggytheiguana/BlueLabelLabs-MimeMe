@@ -418,15 +418,29 @@ static NSLock* _lock; //lock used to synchronize the processing of enumeration r
 //    return enumerator;
 //}
 
-+ (CloudEnumerator*) enumeratorForUser:(NSNumber *)userid {
-    Query* query = [Query queryUser:userid];
-    QueryOptions* queryOptions = [QueryOptions queryForUser:userid];
-    EnumerationContext* enumerationContext = [EnumerationContext contextForUser:userid];
++ (CloudEnumerator*) enumeratorForIDs:(NSArray*)objectIDs 
+                            withTypes:(NSArray*)objectTypes 
+
+{
+    Query* query = [Query queryForIDs:objectIDs withTypes:objectTypes];
+    QueryOptions* queryOptions = [QueryOptions queryForObjectIDs:objectIDs withTypes:objectTypes];
+    EnumerationContext* enumerationContext = [EnumerationContext contextForObjectIDs:objectIDs withTypes:objectTypes];
     query.queryOptions = queryOptions;
-    CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
-    enumerator.identifier = [userid stringValue];
-    enumerator.secondsBetweenConsecutiveSearches = 5;
+    
+    CloudEnumerator* enumerator = [[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions];
+    [enumerator autorelease];
+    
     return enumerator;
+    
+    
+}
+
++ (CloudEnumerator*) enumeratorForUser:(NSNumber *)userid {
+   
+        
+        CloudEnumerator* retVal = [CloudEnumerator enumeratorForIDs:[NSArray arrayWithObject:userid] withTypes:[NSArray arrayWithObject:USER]];
+        return retVal;
+    
 }
 
 
@@ -652,6 +666,19 @@ static NSLock* _lock; //lock used to synchronize the processing of enumeration r
     Query* query = [Query queryForMimeAnswersForMime:mimeid];
     QueryOptions* queryOptions = [QueryOptions queryForMimeAnswersForMime:mimeid];
     EnumerationContext* enumerationContext = [EnumerationContext contextForMimeAnswersForMime:mimeid];
+    query.queryOptions = queryOptions;
+    
+    CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
+    return enumerator;
+}
+
++ (CloudEnumerator*) enumeratorForComments:(NSNumber*)mimeid;
+{
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    Query* query = [Query queryForComments:mimeid];
+    QueryOptions* queryOptions = [QueryOptions queryForComments:mimeid];
+    EnumerationContext* enumerationContext = [EnumerationContext contextForComments:mimeid];
     query.queryOptions = queryOptions;
     
     CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];

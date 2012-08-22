@@ -33,7 +33,7 @@
 //+ (EnumerationContext*) contextForCaptions:     (NSNumber*)photoid;
 + (EnumerationContext*) contextForUser:         (NSNumber*)userid;
 //+ (EnumerationContext*) contextForDrafts;
-//+ (EnumerationContext*) contextForObjectIDs:(NSArray*)objectIDs withTypes:(NSArray*)objectTypes;
++ (EnumerationContext*) contextForObjectIDs:(NSArray*)objectIDs withTypes:(NSArray*)objectTypes;
 + (EnumerationContext*) contextForApplicationSettings:(NSNumber*)userid;
 //+ (EnumerationContext*) contextForFollowers:    (NSNumber*)userid;
 //+ (EnumerationContext*) contextForFollowing:    (NSNumber*)userid;
@@ -51,6 +51,7 @@
 +(EnumerationContext*) contextForSentMimes:(NSNumber*)creatorid;
 +(EnumerationContext*) contextForTopFavoritedMimes;
 +(EnumerationContext*) contextForMimeAnswersForMime:(NSNumber*)mimeid;
++(EnumerationContext*) contextForComments:(NSNumber*)mimeid;
 - (id) init;
 - (NSString*) toJSON;
 @end
