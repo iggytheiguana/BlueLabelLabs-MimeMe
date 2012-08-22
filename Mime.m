@@ -111,7 +111,7 @@
     
     NSArray *attributes = [NSArray arrayWithObjects:
                            MIMEID, 
-                           HASOPENED,
+                           HASSEEN,
                            nil];
     
     NSArray* feedObjects = [resourceContext resourcesWithType:COMMENT withValuesEqual:values forAttributes:attributes sortBy:nil];

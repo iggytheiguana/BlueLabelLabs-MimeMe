@@ -32,7 +32,9 @@
     UIButton        *m_btn_clue;
     UITextField     *m_tf_answer;
     UIView          *m_v_wrongAnswer;
+    UILabel         *m_lbl_notificationsBadge;
     
+    NSNumber        *m_mimeID;
     NSString        *m_word;
     BOOL            m_isViewHidden;
     BOOL            m_isKeyboardShown;
@@ -53,7 +55,9 @@
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_clue;
 @property (nonatomic, retain) IBOutlet  UITextField     *tf_answer;
 @property (nonatomic, retain)           UIView          *v_wrongAnswer;
+@property (nonatomic, retain) IBOutlet  UILabel         *lbl_notificationsBadge;
 
+@property (nonatomic, retain)           NSNumber        *mimeID;
 @property (nonatomic, retain)           NSString        *word;
 @property (nonatomic, assign)           BOOL            isViewHidden;
 @property (nonatomic, assign)           BOOL            isKeyboardShown;
@@ -62,10 +66,11 @@
 @property (nonatomic, retain)           NSMutableArray  *revealedIndexes;
 
 - (void)renderWordDisplay;
+- (void)updateNotifications;
 - (void)disableAnswerTextFields;
 - (void)showAnswer;
 
 + (CGRect)frameForAnswerView;
-+ (Mime_meUIAnswerView*)createInstanceWithFrame:(CGRect)frame withWord:(NSString *)word;
++ (Mime_meUIAnswerView*)createInstanceWithFrame:(CGRect)frame forMimeWithID:(NSNumber *)mimeID;
 
 @end

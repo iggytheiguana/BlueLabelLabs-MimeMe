@@ -217,10 +217,15 @@
     cell.textLabel.text = targetName;
     
     if ([mimeAnswer.state intValue] == kANSWERED) {
-        cell.detailTextLabel.text = @"Answered correctly!";
+        if ([mimeAnswer.didusehint boolValue] == YES) {
+            cell.detailTextLabel.text = @"Answered, but used a hint.";
+        }
+        else {
+            cell.detailTextLabel.text = @"Answered without hints!";
+        }
     }
     else {
-        cell.detailTextLabel.text = @"Has not answered yet!";
+        cell.detailTextLabel.text = @"Has not answered yet.";
     }
     
     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:mimeAnswer.objectid, kMIMEANSWERID, nil];

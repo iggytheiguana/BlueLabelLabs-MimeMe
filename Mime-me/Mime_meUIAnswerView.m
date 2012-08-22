@@ -9,6 +9,8 @@
 #import "Mime_meUIAnswerView.h"
 #import <QuartzCore/QuartzCore.h>
 #import <stdlib.h>
+#import "ResourceContext.h"
+#import "Mime.h"
 
 #define kMAXWORDLENGTH 20
 #define kALLOWEDCHARACTERSET @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -31,6 +33,8 @@
 @synthesize btn_clue            = m_btn_clue;
 @synthesize tf_answer           = m_tf_answer;
 @synthesize v_wrongAnswer       = m_v_wrongAnswer;
+@synthesize lbl_notificationsBadge = m_lbl_notificationsBadge;
+@synthesize mimeID              = m_mimeID;
 @synthesize word                = m_word;
 @synthesize isViewHidden        = m_isViewHidden;
 @synthesize isKeyboardShown     = m_isKeyboardShown;
@@ -352,6 +356,7 @@
     self.btn_clue = nil;
     self.tf_answer = nil;
     self.v_wrongAnswer = nil;
+    self.lbl_notificationsBadge = nil;
     
     [super dealloc];
 }
@@ -395,6 +400,50 @@
 - (void) keyboardDidHide {
     self.isKeyboardShown = NO;
 }
+
+#pragma mark - Notification Handlers
+- (void)updateNotifications {
+    UIFont* notificationsFont = [UIFont boldSystemFontOfSize:14.0f];
+    
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+    
+    // Display label for new answers if there are unseen answers
+    int numNewAnswers = [mime numUnopenedMimeAnswers];
+    int numNewComments = [mime numUnopenedComments];
+    
+    int totalNewNotifications = numNewAnswers + numNewComments;
+    
+    if (totalNewNotifications > 0) {
+        // Adjust the size of the notification badge
+        NSString *numNewNotificationsStr = [NSString stringWithFormat:@"%d", totalNewNotifications];
+        CGSize notificationLabelSize = [numNewNotificationsStr sizeWithFont:notificationsFont constrainedToSize:CGSizeMake(40, 20) lineBreakMode:UILineBreakModeTailTruncation];
+        notificationLabelSize.width = notificationLabelSize.width + 11.0f;
+        
+        if (notificationLabelSize.width > 20.0f) {
+            float deltaX = self.lbl_notificationsBadge.frame.origin.x + 20.0f - notificationLabelSize.width;
+            self.lbl_notificationsBadge.frame = CGRectMake(self.lbl_notificationsBadge.frame.origin.x - deltaX,
+                                                          self.lbl_notificationsBadge.frame.origin.y,
+                                                          notificationLabelSize.width,
+                                                          self.lbl_notificationsBadge.frame.size.height);
+        }
+        
+        // Add rounded corners to notification labels header
+        [self.lbl_notificationsBadge.layer setCornerRadius:8.0f];
+        [self.lbl_notificationsBadge.layer setMasksToBounds:YES];
+        [self.lbl_notificationsBadge.layer setMasksToBounds:YES];
+        [self.lbl_notificationsBadge.layer setBorderWidth:1.0f];
+        [self.lbl_notificationsBadge.layer setBorderColor:[UIColor whiteColor].CGColor];
+        
+        [self.lbl_notificationsBadge setText:[NSString stringWithFormat:@"%d",totalNewNotifications]];
+        [self.lbl_notificationsBadge setHidden:NO];
+    }
+    else {
+        [self.lbl_notificationsBadge setHidden:YES];
+        [self.lbl_notificationsBadge setText:[NSString stringWithFormat:@"!"]];
+    }
+}
+
 
 #pragma mark - Helper Methods
 - (float)deltaYForKeyboard {
@@ -896,12 +945,17 @@
 }
 
 #pragma mark - Statics
-+ (Mime_meUIAnswerView*)createInstanceWithFrame:(CGRect)frame withWord:(NSString *)word {
++ (Mime_meUIAnswerView*)createInstanceWithFrame:(CGRect)frame forMimeWithID:(NSNumber *)mimeID {
     Mime_meUIAnswerView* instance = [[Mime_meUIAnswerView alloc]initWithFrame:(CGRect)frame];
     [instance autorelease];
     
+    instance.mimeID = mimeID;
+    
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:mimeID];
+    
     // Set the answer
-    instance.word = [word uppercaseString];
+    instance.word = [mime.word uppercaseString];
     
     return instance;
 }

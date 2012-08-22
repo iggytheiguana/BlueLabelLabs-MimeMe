@@ -229,13 +229,14 @@
         [self.view addSubview:self.v_confirmationView];
         
         // Add AnswerView
-        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withWord:mime.word];
+        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] forMimeWithID:self.mimeID];
         self.v_answerView.delegate = self;
         self.v_answerView.tf_answer.text = mime.word;
         self.v_answerView.btn_clue.enabled = NO;
         self.v_answerView.btn_clue.hidden = YES;
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.v_answerView renderWordDisplay];
+        [self.v_answerView updateNotifications];
         [self.v_answerView disableAnswerTextFields];
         [self.v_answerView showAnswer];
         [self.view addSubview:self.v_answerView];
@@ -261,10 +262,11 @@
         self.v_confirmationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         // Add AnswerView
-        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withWord:mime.word];
+        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] forMimeWithID:self.mimeID];
         self.v_answerView.delegate = self;
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.v_answerView renderWordDisplay];
+        [self.v_answerView updateNotifications];
         [self.view addSubview:self.v_answerView];
         
         // Update the view count on this Mime
@@ -307,13 +309,14 @@
         [self.view addSubview:self.v_confirmationView];
         
         // Add AnswerView
-        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] withWord:mime.word];
+        self.v_answerView = [Mime_meUIAnswerView createInstanceWithFrame:[Mime_meUIAnswerView frameForAnswerView] forMimeWithID:self.mimeID];
         self.v_answerView.delegate = self;
         self.v_answerView.tf_answer.text = mime.word;
         self.v_answerView.btn_clue.enabled = NO;
         self.v_answerView.btn_clue.hidden = YES;
         self.v_answerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.v_answerView renderWordDisplay];
+        [self.v_answerView updateNotifications];
         [self.v_answerView disableAnswerTextFields];
         [self.v_answerView showAnswer];
         [self.view addSubview:self.v_answerView];
@@ -756,12 +759,35 @@
 }
 
 - (IBAction) onMoreButtonPressed:(id)sender {
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:self.mimeID];
+    
+    // Display label for new answers if there are unseen answers
+    int numNewAnswers = [mime numUnopenedMimeAnswers];
+    int numNewComments = [mime numUnopenedComments];
+    
+    NSString *answersTitle;
+    if (numNewAnswers > 0) {
+        answersTitle = [NSString stringWithFormat:@"Answers (%d new)", numNewAnswers];
+    }
+    else {
+        answersTitle = [NSString stringWithFormat:@"Answers"];
+    }
+    
+    NSString *commentsTitle;
+    if (numNewComments > 0) {
+        commentsTitle = [NSString stringWithFormat:@"Comments (%d new)", numNewComments];
+    }
+    else {
+        commentsTitle = [NSString stringWithFormat:@"Comments (Coming soon)"];
+    }
+    
     UIActionSheet *actionSheet = [[UIActionSheet alloc]
                                   initWithTitle:nil
                                   delegate:self
                                   cancelButtonTitle:@"Cancel"
                                   destructiveButtonTitle:@"Flag for review"
-                                  otherButtonTitles:@"Comments (Coming Soon)", @"Answers", nil];
+                                  otherButtonTitles:commentsTitle, answersTitle, nil];
     [actionSheet showInView:self.view];
     [actionSheet release];
 }

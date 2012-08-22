@@ -85,6 +85,8 @@
 		52B3E7D115E41B9C004E9C4A /* icon-more@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52B3E7CF15E41B9C004E9C4A /* icon-more@2x.png */; };
 		52B3E7D315E442AA004E9C4A /* appIcon_MimeMe_57.png in Resources */ = {isa = PBXBuildFile; fileRef = 52B3E7D215E442A9004E9C4A /* appIcon_MimeMe_57.png */; };
 		52B3E7D515E442B1004E9C4A /* appIcon_MimeMe_114.png in Resources */ = {isa = PBXBuildFile; fileRef = 52B3E7D415E442B1004E9C4A /* appIcon_MimeMe_114.png */; };
+		52B3E7DD15E531D2004E9C4A /* Mime_meCommentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52B3E7DB15E531D0004E9C4A /* Mime_meCommentsTableViewController.m */; };
+		52B3E7DE15E531D2004E9C4A /* Mime_meCommentsTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52B3E7DC15E531D1004E9C4A /* Mime_meCommentsTableViewController.xib */; };
 		52B8763D15B0E355001C9EF8 /* icon-slideDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 52B8763915B0E355001C9EF8 /* icon-slideDown.png */; };
 		52B8763E15B0E355001C9EF8 /* icon-slideDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52B8763A15B0E355001C9EF8 /* icon-slideDown@2x.png */; };
 		52B8763F15B0E355001C9EF8 /* icon-slideUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 52B8763B15B0E355001C9EF8 /* icon-slideUp.png */; };
@@ -345,6 +347,9 @@
 		52B3E7CF15E41B9C004E9C4A /* icon-more@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-more@2x.png"; sourceTree = "<group>"; };
 		52B3E7D215E442A9004E9C4A /* appIcon_MimeMe_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appIcon_MimeMe_57.png; sourceTree = "<group>"; };
 		52B3E7D415E442B1004E9C4A /* appIcon_MimeMe_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appIcon_MimeMe_114.png; sourceTree = "<group>"; };
+		52B3E7DA15E531CF004E9C4A /* Mime_meCommentsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meCommentsTableViewController.h; sourceTree = "<group>"; };
+		52B3E7DB15E531D0004E9C4A /* Mime_meCommentsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meCommentsTableViewController.m; sourceTree = "<group>"; };
+		52B3E7DC15E531D1004E9C4A /* Mime_meCommentsTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meCommentsTableViewController.xib; sourceTree = "<group>"; };
 		52B8762A15B08EEB001C9EF8 /* ViewMimeCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewMimeCase.h; path = ../ViewMimeCase.h; sourceTree = "<group>"; };
 		52B8763915B0E355001C9EF8 /* icon-slideDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-slideDown.png"; sourceTree = "<group>"; };
 		52B8763A15B0E355001C9EF8 /* icon-slideDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-slideDown@2x.png"; sourceTree = "<group>"; };
@@ -1396,6 +1401,9 @@
 				52FDC02B15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.h */,
 				52FDC02C15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.m */,
 				52FDC02D15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.xib */,
+				52B3E7DA15E531CF004E9C4A /* Mime_meCommentsTableViewController.h */,
+				52B3E7DB15E531D0004E9C4A /* Mime_meCommentsTableViewController.m */,
+				52B3E7DC15E531D1004E9C4A /* Mime_meCommentsTableViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1516,6 +1524,7 @@
 				52B3E7D115E41B9C004E9C4A /* icon-more@2x.png in Resources */,
 				52B3E7D315E442AA004E9C4A /* appIcon_MimeMe_57.png in Resources */,
 				52B3E7D515E442B1004E9C4A /* appIcon_MimeMe_114.png in Resources */,
+				52B3E7DE15E531D2004E9C4A /* Mime_meCommentsTableViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1682,6 +1691,7 @@
 				52F5BA6215C8439F00509E8B /* UIPromptAlertView.m in Sources */,
 				52D926F115D1CE8B00DA16BC /* SocialSharingManager.m in Sources */,
 				52FDC02E15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.m in Sources */,
+				52B3E7DD15E531D2004E9C4A /* Mime_meCommentsTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
