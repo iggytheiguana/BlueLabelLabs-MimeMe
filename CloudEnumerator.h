@@ -73,7 +73,7 @@
 //+ (CloudEnumerator*) enumeratorForCaptions:(NSNumber*)photoid;
 //+ (CloudEnumerator*) enumeratorForPhotos:(NSNumber*)themeid;
 //+ (CloudEnumerator*) enumeratorForPages;
-//+ (CloudEnumerator*) enumeratorForUser:(NSNumber*)userid;
++ (CloudEnumerator*) enumeratorForUser:(NSNumber*)userid;
 //+ (CloudEnumerator*) enumeratorForDrafts;
 //+ (CloudEnumerator*) enumeratorForFollowers:(NSNumber*)userid;
 //+ (CloudEnumerator*) enumeratorForFollowing:(NSNumber*)userid;

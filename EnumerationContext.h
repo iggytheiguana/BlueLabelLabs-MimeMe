@@ -31,7 +31,7 @@
 //+ (EnumerationContext*) contextForPhotosInTheme:(NSNumber*)themeid;
 //+ (EnumerationContext*) contextForPages;
 //+ (EnumerationContext*) contextForCaptions:     (NSNumber*)photoid;
-//+ (EnumerationContext*) contextForUser:         (NSNumber*)userid;
++ (EnumerationContext*) contextForUser:         (NSNumber*)userid;
 //+ (EnumerationContext*) contextForDrafts;
 //+ (EnumerationContext*) contextForObjectIDs:(NSArray*)objectIDs withTypes:(NSArray*)objectTypes;
 + (EnumerationContext*) contextForApplicationSettings:(NSNumber*)userid;

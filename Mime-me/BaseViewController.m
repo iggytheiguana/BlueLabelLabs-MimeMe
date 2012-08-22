@@ -26,6 +26,7 @@
 @synthesize feedManager           = __feedManager;
 @synthesize eventManager          = __eventManager;
 @synthesize loginView             = m_loginView;
+@synthesize userCloudEnumerator   = m_userCloudEnumerator;
 
 #pragma mark - Properties
 - (EventManager*) eventManager {
@@ -59,6 +60,19 @@
         return (User*)[resourceContext resourceWithType:USER withID:self.authenticationManager.m_LoggedInUserID];
     } else {
         return nil;
+    }
+}
+
+- (void) enumerateUser {    
+    if (self.userCloudEnumerator != nil) {
+        [self.userCloudEnumerator enumerateUntilEnd:nil];
+    }
+    else 
+    {
+        self.userCloudEnumerator = nil;
+        self.userCloudEnumerator = [CloudEnumerator enumeratorForUser:self.authenticationManager.m_LoggedInUserID];
+        self.userCloudEnumerator.delegate = self;
+        [self.userCloudEnumerator enumerateUntilEnd:nil];
     }
 }
 
@@ -159,6 +173,9 @@
     [super viewWillAppear:animated];
     
     NSString* activityName = @"BaseViewController.viewWillAppear:";
+    
+    // Refresh the user object
+    [self enumerateUser];
     
     // Refresh the notification feed
     Callback* callback = [Callback callbackForTarget:self selector:@selector(onFeedRefreshComplete:) fireOnMainThread:YES];
@@ -439,6 +456,16 @@
                 LOG_BASEVIEWCONTROLLER(1,@"%@Callback target object is nil, cannot resume",activityName);
             }
         }
+    }
+}
+
+#pragma mark - CloudEnumeratorDelegate
+- (void) onEnumerateComplete:(CloudEnumerator*)enumerator 
+                 withResults:(NSArray *)results 
+                withUserInfo:(NSDictionary *)userInfo
+{
+    if (enumerator == self.userCloudEnumerator) {
+        
     }
 }
 

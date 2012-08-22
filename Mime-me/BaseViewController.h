@@ -23,8 +23,10 @@
 @class UICameraActionSheet;
 @class ResourceContext;
 
-@interface BaseViewController : UIViewController < UIAlertViewDelegate > {
+@interface BaseViewController : UIViewController < UIAlertViewDelegate, CloudEnumeratorDelegate > {
     UILoginView*            m_loginView;
+    
+    CloudEnumerator         *m_userCloudEnumerator;
 }
 
 @property (nonatomic, retain) FeedManager*              feedManager;
@@ -34,6 +36,9 @@
 
 @property (nonatomic, retain) User*                     loggedInUser;
 @property (nonatomic, retain) UILoginView*              loginView;
+
+@property (nonatomic, retain) CloudEnumerator           *userCloudEnumerator;
+
 
 - (void)authenticate:(BOOL)facebook 
          withTwitter:(BOOL)twitter 

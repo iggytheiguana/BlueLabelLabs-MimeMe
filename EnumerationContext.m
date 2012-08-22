@@ -105,15 +105,15 @@
 //    enumerationContext.maximumNumberOfResults = settingsObject.page_maxnumtodownload;    
 //    return enumerationContext;
 //}
-//
-//+ (EnumerationContext*)contextForUser:(NSNumber *)userid {
-//    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
-//    enumerationContext.pageSize = [NSNumber numberWithInt:1];
-//    enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:1];
-//    return enumerationContext;
-//
-//}
-//
+
++ (EnumerationContext*)contextForUser:(NSNumber *)userid {
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize = [NSNumber numberWithInt:1];
+    enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:1];
+    return enumerationContext;
+
+}
+
 //+ (EnumerationContext*) contextForObjectIDs:(NSArray*)objectIDs 
 //                                  withTypes:(NSArray*)objectTypes 
 //{
