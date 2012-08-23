@@ -173,8 +173,7 @@ insertIntoResourceContext:(ResourceContext *)context
         [lowerCaseName isEqualToString:NUMBEROFTIMESUSED] ||
         [lowerCaseName isEqualToString:NUMBEROFATTEMPTS] ||
         [lowerCaseName isEqualToString:NUMBEROFTIMESVIEWED] ||
-        [lowerCaseName isEqualToString:NUMBEROFTIMESFAVORITED] ||
-         [lowerCaseName isEqualToString:NUMBEROFPOINTS]) {
+        [lowerCaseName isEqualToString:NUMBEROFTIMESFAVORITED]) {
         //these are all counter variables
         retVal.iscounter = [NSNumber numberWithBool:YES];
     }
