@@ -727,6 +727,10 @@
         int newGemTotal = userGemCount - gemsForClue;
         self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
         
+        // Save new gem total
+        ResourceContext *resourceContext = [ResourceContext instance];
+        [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
+        
         // Update the gem count displayed in the navigation header
         [self.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
         if ([self.loggedInUser.numberofpoints stringValue].length > 3) {

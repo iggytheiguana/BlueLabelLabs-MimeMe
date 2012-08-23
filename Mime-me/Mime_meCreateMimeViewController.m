@@ -209,6 +209,16 @@
     // Let the runtime know which UIViewController to restore after taking
     // the user wherever the ad goes and add it to the view hierarchy.
     self.gad_bannerView.rootViewController = self;
+    
+    // Add drop shadow to Ad view
+    [self.gad_bannerView.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.gad_bannerView.layer setShadowOpacity:0.7f];
+    [self.gad_bannerView.layer setShadowRadius:2.0f];
+    [self.gad_bannerView.layer setShadowOffset:CGSizeMake(0.0f, 0.0f)];
+    [self.gad_bannerView.layer setMasksToBounds:NO];
+    CGPathRef shadowPath = [UIBezierPath bezierPathWithRect:self.view.layer.bounds].CGPath;
+    [self.gad_bannerView.layer setShadowPath:shadowPath];
+    
     [self.view addSubview:self.gad_bannerView];
     
     // Initiate a generic request to load it with an ad.
@@ -560,11 +570,13 @@
         // Decrement the users gem total for the creation of a new word
         ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
         int gemsForNewWord = [settings.gems_for_new_word intValue];
-        int newGemTotal = [self.loggedInUser.numberofpoints intValue] - gemsForNewWord;
-        self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
+//        int newGemTotal = [self.loggedInUser.numberofpoints intValue] - gemsForNewWord;
+//        self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
+        int newGemTotal = [self.nv_navigationHeader.btn_gemCount.titleLabel.text intValue] - gemsForNewWord;
         
         // Update the gem count displayed in the navigation header
-        [self.nv_navigationHeader.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
+//        [self.nv_navigationHeader.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
+        [self.nv_navigationHeader.btn_gemCount setTitle:[NSString stringWithFormat:@"%d", newGemTotal] forState:UIControlStateNormal];
         if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
             self.nv_navigationHeader.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
         }

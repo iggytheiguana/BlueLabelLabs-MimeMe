@@ -264,6 +264,16 @@
     // Let the runtime know which UIViewController to restore after taking
     // the user wherever the ad goes and add it to the view hierarchy.
     self.gad_bannerView.rootViewController = self;
+    
+    // Add drop shadow to Ad view
+    [self.gad_bannerView.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.gad_bannerView.layer setShadowOpacity:0.7f];
+    [self.gad_bannerView.layer setShadowRadius:2.0f];
+    [self.gad_bannerView.layer setShadowOffset:CGSizeMake(0.0f, 0.0f)];
+    [self.gad_bannerView.layer setMasksToBounds:NO];
+    CGPathRef shadowPath = [UIBezierPath bezierPathWithRect:self.view.layer.bounds].CGPath;
+    [self.gad_bannerView.layer setShadowPath:shadowPath];
+    
     [self.view addSubview:self.gad_bannerView];
     
     // Initiate a generic request to load it with an ad.
