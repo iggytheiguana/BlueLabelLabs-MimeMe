@@ -41,7 +41,7 @@
 @synthesize frc_mimes           = __frc_mimes;
 @synthesize mimeCloudEnumerator = m_mimeCloudEnumerator;
 @synthesize nv_navigationHeader = m_nv_navigationHeader;
-@synthesize tbl_mimes           = m_tbl_mimes;
+@synthesize tbl_scrapbook           = m_tbl_scrapbook;
 @synthesize tc_sentHeader       = m_tc_sentHeader;
 @synthesize tc_favoritesHeader  = m_tc_favoritesHeader;
 @synthesize tc_guessedHeader    = m_tc_guessedHeader;
@@ -234,7 +234,7 @@
     
     self.nv_navigationHeader = nil;
     
-    self.tbl_mimes = nil;
+    self.tbl_scrapbook = nil;
     self.tc_sentHeader = nil;
     self.tc_favoritesHeader = nil;
     self.tc_guessedHeader = nil;
@@ -251,8 +251,11 @@
     // Enumerate for Mimes
     [self enumerateMimes];
     
-    // Update notifications
-    [self updateNotifications];
+    // Update notifications and Gem count
+    [self updateNotificationsAndGemCount];
+    
+    // Reload the tableview to update "new" badges
+    [self.tbl_scrapbook reloadData];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -643,7 +646,7 @@
         LOG_MIME_MESCRAPBOOKFULLTABLEVIEWCONTROLLER(1, @"%@Received a didChange message from a NSFetchedResultsController. %p", activityName, &controller);
         
         if (indexPath.row < kMAXROWS) {
-            [self.tbl_mimes reloadData];
+            [self.tbl_scrapbook reloadData];
         }
     }
     else {
@@ -665,10 +668,10 @@
 }
 
 #pragma mark - Feed Event Handlers
-- (void)updateNotifications {
+- (void)updateNotificationsAndGemCount {
     if ([self.authenticationManager isUserAuthenticated]) {
         // update notification bubbles in navigation header
-        [self.nv_navigationHeader updateNotifications];
+        [self.nv_navigationHeader updateNotificationsAndGemCount];
     }
 }
 
@@ -676,8 +679,8 @@
 {
     [super onFeedRefreshComplete:result];
     
-    // Update notifications
-    [self updateNotifications];
+    // Update notifications and Gem count
+    [self updateNotificationsAndGemCount];
 }
 
 #pragma mark - ImageManager Delegate Methods
@@ -701,7 +704,7 @@
             for (int i = 0; i < count; i++) {
                 MimeAnswer *mimeAnswer = [[self.frc_mimes fetchedObjects] objectAtIndex:i];
                 if ([mimeAnswer.objectid isEqualToNumber:mimeID]) {
-                    cell = [self.tbl_mimes cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:0]];
+                    cell = [self.tbl_scrapbook cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:0]];
                     
                     break;
                 }
@@ -715,7 +718,7 @@
             for (int i = 0; i < count; i++) {
                 Favorite *favorite = [[self.frc_mimes fetchedObjects] objectAtIndex:i];
                 if ([favorite.objectid isEqualToNumber:favoriteID]) {
-                    cell = [self.tbl_mimes cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:0]];
+                    cell = [self.tbl_scrapbook cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:0]];
                     
                     break;
                 }
@@ -729,7 +732,7 @@
             for (int i = 0; i < count; i++) {
                 MimeAnswer *mimeAnswer = [[self.frc_mimes fetchedObjects] objectAtIndex:i];
                 if ([mimeAnswer.objectid isEqualToNumber:mimeAnswerID]) {
-                    cell = [self.tbl_mimes cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:2]];
+                    cell = [self.tbl_scrapbook cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:2]];
                     
                     break;
                 }

@@ -15,7 +15,7 @@
 @interface Mime_meScrapbookFullTableViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, NSFetchedResultsControllerDelegate, CloudEnumeratorDelegate, UIProgressHUDViewDelegate > {
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
     
-    UITableView         *m_tbl_mimes;
+    UITableView         *m_tbl_scrapbook;
     UITableViewCell     *m_tc_sentHeader;
     UITableViewCell     *m_tc_favoritesHeader;
     UITableViewCell     *m_tc_guessedHeader;
@@ -34,7 +34,7 @@
 
 @property (nonatomic, retain)           Mime_meUINavigationHeaderView   *nv_navigationHeader;
 
-@property (nonatomic, retain) IBOutlet  UITableView         *tbl_mimes;
+@property (nonatomic, retain) IBOutlet  UITableView         *tbl_scrapbook;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_sentHeader;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_favoritesHeader;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_guessedHeader;

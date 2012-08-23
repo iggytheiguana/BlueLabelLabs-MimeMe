@@ -32,7 +32,7 @@
 @synthesize btn_more            = m_btn_more;
 @synthesize btn_clue            = m_btn_clue;
 @synthesize tf_answer           = m_tf_answer;
-@synthesize v_wrongAnswer       = m_v_wrongAnswer;
+//@synthesize v_wrongAnswer       = m_v_wrongAnswer;
 @synthesize lbl_notificationsBadge = m_lbl_notificationsBadge;
 @synthesize mimeID              = m_mimeID;
 @synthesize word                = m_word;
@@ -78,16 +78,16 @@
                          }
          ];
         
-        // Add a view to highlight a wrong answer
-        self.v_wrongAnswer = [[UIView alloc] initWithFrame:self.tf_answer.frame];
-        self.v_wrongAnswer.layer.cornerRadius = 6.0f;
-        self.v_wrongAnswer.layer.masksToBounds = YES;
-        self.v_wrongAnswer.backgroundColor = [UIColor redColor];
-        self.v_wrongAnswer.alpha = 0.0;
-        self.v_wrongAnswer.userInteractionEnabled = NO;
-        self.v_wrongAnswer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.v_wrongAnswer.hidden = YES;
-        [self.view addSubview:self.v_wrongAnswer];
+//        // Add a view to highlight a wrong answer
+//        self.v_wrongAnswer = [[UIView alloc] initWithFrame:self.tf_answer.frame];
+//        self.v_wrongAnswer.layer.cornerRadius = 6.0f;
+//        self.v_wrongAnswer.layer.masksToBounds = YES;
+//        self.v_wrongAnswer.backgroundColor = [UIColor redColor];
+//        self.v_wrongAnswer.alpha = 0.0;
+//        self.v_wrongAnswer.userInteractionEnabled = NO;
+//        self.v_wrongAnswer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+//        self.v_wrongAnswer.hidden = YES;
+//        [self.view addSubview:self.v_wrongAnswer];
         
         // Set up notification of system events
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
@@ -358,7 +358,7 @@
     self.btn_more = nil;
     self.btn_clue = nil;
     self.tf_answer = nil;
-    self.v_wrongAnswer = nil;
+//    self.v_wrongAnswer = nil;
     self.lbl_notificationsBadge = nil;
     
     [super dealloc];
@@ -424,8 +424,9 @@
         notificationLabelSize.width = notificationLabelSize.width + 11.0f;
         
         if (notificationLabelSize.width > 20.0f) {
-            float deltaX = self.lbl_notificationsBadge.frame.origin.x + 20.0f - notificationLabelSize.width;
-            self.lbl_notificationsBadge.frame = CGRectMake(self.lbl_notificationsBadge.frame.origin.x - deltaX,
+//            float deltaX = self.lbl_notificationsBadge.frame.origin.x + 20.0f - notificationLabelSize.width;
+            float deltaX = 20.0f + 20.0f - notificationLabelSize.width;
+            self.lbl_notificationsBadge.frame = CGRectMake(deltaX,
                                                           self.lbl_notificationsBadge.frame.origin.y,
                                                           notificationLabelSize.width,
                                                           self.lbl_notificationsBadge.frame.size.height);
@@ -635,7 +636,7 @@
         deltaY = self.view.frame.size.height - kHEADERHEIGHT - kFOOTERHEIGHT;
     }
     
-    // Slide the answer view down
+    // Slide the answer view
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:UIViewAnimationCurveEaseInOut
@@ -660,6 +661,25 @@
 }
 
 - (IBAction) onMoreButtonPressed:(id)sender {
+    if ([self.tf_answer isFirstResponder] == YES) {
+        [self.tf_answer resignFirstResponder];
+        
+        // Slide the answer view down after the keyboard hides
+        CGFloat deltaY = [self deltaYForKeyboard];
+        
+        // Slide the answer view down
+        [UIView animateWithDuration:0.3
+                              delay:0.0
+                            options:UIViewAnimationCurveEaseInOut
+                         animations:^{
+                             self.center = CGPointMake(self.center.x, self.center.y + deltaY);
+                         }
+                         completion:^(BOOL finished){
+                             
+                         }
+         ];
+    }
+    
     [self.delegate onMoreButtonPressed:sender];
 }
 
@@ -744,19 +764,19 @@
 {
     self.tf_answer = textField;
     
-    // Hide the error view if it is visible
-    if (self.v_wrongAnswer.hidden == NO) {
-        [UIView animateWithDuration:0.3
-                              delay:0.0
-                            options:UIViewAnimationCurveEaseInOut
-                         animations:^{
-                             self.v_wrongAnswer.alpha = 0.0;
-                         }
-                         completion:^(BOOL finished){
-                             self.v_wrongAnswer.hidden = YES;
-                         }
-         ];
-    }
+//    // Hide the error view if it is visible
+//    if (self.v_wrongAnswer.hidden == NO) {
+//        [UIView animateWithDuration:0.3
+//                              delay:0.0
+//                            options:UIViewAnimationCurveEaseInOut
+//                         animations:^{
+//                             self.v_wrongAnswer.alpha = 0.0;
+//                         }
+//                         completion:^(BOOL finished){
+//                             self.v_wrongAnswer.hidden = YES;
+//                         }
+//         ];
+//    }
     
     // Slide the answer view up if the keyboard is not already visible
     if (self.isKeyboardShown == NO) {

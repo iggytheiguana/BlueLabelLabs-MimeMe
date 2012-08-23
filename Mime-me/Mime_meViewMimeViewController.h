@@ -13,7 +13,7 @@
 #import "Mime_meUIConfirmationView.h"
 #import "ViewMimeCase.h"
 
-@interface Mime_meViewMimeViewController : BaseViewController < Mime_meUIConfirmationViewDelgate, Mime_meUIAnswerViewDelgate, UIProgressHUDViewDelegate, MFMailComposeViewControllerDelegate, UIActionSheetDelegate > {
+@interface Mime_meViewMimeViewController : BaseViewController < Mime_meUIConfirmationViewDelgate, Mime_meUIAnswerViewDelgate, UIProgressHUDViewDelegate, MFMailComposeViewControllerDelegate, UIActionSheetDelegate, CloudEnumeratorDelegate > {
     NSNumber        *m_mimeID;
     NSNumber        *m_mimeAnswerID;
     NSNumber        *m_creatorID;
@@ -39,8 +39,11 @@
     // answerContainer
     Mime_meUIAnswerView         *m_v_answerView;
     
-    BOOL                        m_didUseHint;
+    int                         m_numHintsUsed;
     BOOL                        m_didMakeWord;
+    
+    CloudEnumerator             *m_mimeAnswerCloudEnumerator;
+    CloudEnumerator             *m_commentsCloudEnumerator;
     
 }
 
@@ -69,8 +72,11 @@
 // answerContainer
 @property (nonatomic, retain)           Mime_meUIAnswerView         *v_answerView;
 
-@property (nonatomic, assign)           BOOL                        didUseHint;
+@property (nonatomic, assign)           int                         numHintsUsed;
 @property (nonatomic, assign)           BOOL                        didMakeWord;
+
+@property (nonatomic, retain)           CloudEnumerator             *mimeAnswerCloudEnumerator;
+@property (nonatomic, retain)           CloudEnumerator             *commentsCloudEnumerator;
 
 - (IBAction) onBackButtonPressed:(id)sender;
 - (IBAction) onAnswersButtonPressed:(id)sender;

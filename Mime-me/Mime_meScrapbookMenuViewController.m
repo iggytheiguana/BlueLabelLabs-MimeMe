@@ -352,8 +352,11 @@
 //        LOG_MIME_MESCRAPBOOKMENUVIEWCONTROLLER(0, @"%@Refreshing user's notification feed", activityName);
 //    }
     
-    // Update notifications
-    [self updateNotifications];
+    // Update notifications and Gem count
+    [self updateNotificationsAndGemCount];
+    
+    // Reload the tableview to update "new" badges
+    [self.tbl_scrapbook reloadData];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -997,10 +1000,10 @@
 }
 
 #pragma mark - Feed Event Handlers
-- (void)updateNotifications {
+- (void)updateNotificationsAndGemCount {
     if ([self.authenticationManager isUserAuthenticated]) {
         // update notification bubbles in navigation header
-        [self.nv_navigationHeader updateNotifications];
+        [self.nv_navigationHeader updateNotificationsAndGemCount];
     }
 }
 
@@ -1008,8 +1011,8 @@
 {
     [super onFeedRefreshComplete:result];
     
-    // Update notifications
-    [self updateNotifications];
+    // Update notifications and Gem count
+    [self updateNotificationsAndGemCount];
 }
 
 #pragma mark - ImageManager Delegate Methods

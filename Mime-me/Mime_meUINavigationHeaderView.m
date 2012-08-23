@@ -110,7 +110,7 @@
 }
 
 #pragma mark - Notification Handlers
-- (void) updateNotifications {
+- (void) updateNotificationsAndGemCount {
     UIFont* notificationsFont = [UIFont boldSystemFontOfSize:14.0f];
     
     int numNewMimesRecieved = 0;
@@ -143,7 +143,8 @@
         notificationLabelSize.width = notificationLabelSize.width + 11.0f;
         
         if (notificationLabelSize.width > 20.0f) {
-            float deltaX = self.lbl_guessNotification.frame.origin.x + 20.0f - notificationLabelSize.width;
+//            float deltaX = self.lbl_guessNotification.frame.origin.x + 20.0f - notificationLabelSize.width;
+            float deltaX = 189.0f + 20.0f - notificationLabelSize.width;
             self.lbl_guessNotification.frame = CGRectMake(self.lbl_guessNotification.frame.origin.x - deltaX,
                                                           self.lbl_guessNotification.frame.origin.y,
                                                           notificationLabelSize.width,
@@ -174,7 +175,8 @@
         notificationLabelSize.width = notificationLabelSize.width + 11.0f;
         
         if (notificationLabelSize.width > 20.0f) {
-            float deltaX = self.lbl_scrapbookNotification.frame.origin.x + 20.0f - notificationLabelSize.width;
+//            float deltaX = self.lbl_scrapbookNotification.frame.origin.x + 20.0f - notificationLabelSize.width;
+            float deltaX = 286.0f + 20.0f - notificationLabelSize.width;
             self.lbl_scrapbookNotification.frame = CGRectMake(deltaX,
                                                           self.lbl_scrapbookNotification.frame.origin.y,
                                                           notificationLabelSize.width,
@@ -195,6 +197,18 @@
         [self.lbl_scrapbookNotification setHidden:YES];
         [self.lbl_scrapbookNotification setText:[NSString stringWithFormat:@"!"]];
     }
+    
+    // Update Gem count
+    ResourceContext* resourceContext = [ResourceContext instance];
+    AuthenticationManager* authenticationManager = [AuthenticationManager instance];
+    User *user = (User*)[resourceContext resourceWithType:USER withID:authenticationManager.m_LoggedInUserID];
+    
+    [self.btn_gemCount setTitle:[user.numberofpoints stringValue] forState:UIControlStateNormal];
+    if ([user.numberofpoints stringValue].length > 3) {
+        self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    } 
+    
+    
 }
 
 #pragma mark - UIButton Handlers

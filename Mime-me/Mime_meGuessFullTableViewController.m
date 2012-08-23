@@ -252,8 +252,11 @@
     // Enumerate for Mimes
     [self enumerateMimes];
     
-    // Update notifications
-    [self updateNotifications];
+    // Update notifications and Gem count
+    [self updateNotificationsAndGemCount];
+    
+    // Reload the tableview to update "new" badges
+    [self.tbl_mimes reloadData];
     
 }
 
@@ -695,10 +698,10 @@
 }
 
 #pragma mark - Feed Event Handlers
-- (void)updateNotifications {
+- (void)updateNotificationsAndGemCount {
     if ([self.authenticationManager isUserAuthenticated]) {
         // update notification bubbles in navigation header
-        [self.nv_navigationHeader updateNotifications];
+        [self.nv_navigationHeader updateNotificationsAndGemCount];
     }
 }
 
@@ -706,8 +709,8 @@
 {
     [super onFeedRefreshComplete:result];
     
-    // Update notifications
-    [self updateNotifications];
+    // Update notifications and Gem count
+    [self updateNotificationsAndGemCount];
 }
 
 #pragma mark - MBProgressHUD Delegate

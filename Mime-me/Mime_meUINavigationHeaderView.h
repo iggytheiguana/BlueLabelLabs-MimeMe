@@ -61,7 +61,7 @@
 @property (nonatomic, retain) IBOutlet  UILabel        *lbl_guessNotification;
 @property (nonatomic, retain) IBOutlet  UILabel        *lbl_scrapbookNotification;
 
-- (void) updateNotifications;
+- (void) updateNotificationsAndGemCount;
 
 + (CGRect)frameForNavigationHeader;
 

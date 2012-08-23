@@ -31,7 +31,7 @@
     UIButton        *m_btn_more;
     UIButton        *m_btn_clue;
     UITextField     *m_tf_answer;
-    UIView          *m_v_wrongAnswer;
+//    UIView          *m_v_wrongAnswer;
     UILabel         *m_lbl_notificationsBadge;
     
     NSNumber        *m_mimeID;
@@ -54,7 +54,7 @@
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_more;
 @property (nonatomic, retain) IBOutlet  UIButton        *btn_clue;
 @property (nonatomic, retain) IBOutlet  UITextField     *tf_answer;
-@property (nonatomic, retain)           UIView          *v_wrongAnswer;
+//@property (nonatomic, retain)           UIView          *v_wrongAnswer;
 @property (nonatomic, retain) IBOutlet  UILabel         *lbl_notificationsBadge;
 
 @property (nonatomic, retain)           NSNumber        *mimeID;

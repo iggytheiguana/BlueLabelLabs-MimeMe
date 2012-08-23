@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #define kMAXWORDLENGTH 20
-#define kALLOWEDCHARACTERSET @"abcdefghijklmnopqrstuvwxyz0123456789 "
+#define kALLOWEDCHARACTERSET @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
 
 @implementation Mime_meUIMakeWordView
 @synthesize view                = m_view;

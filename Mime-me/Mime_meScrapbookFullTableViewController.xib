@@ -34,7 +34,7 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUIView" id="191373211">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUITableView" id="310087814">
@@ -65,7 +65,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{320, 480}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="310087814"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">2</int>
@@ -74,7 +73,7 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUITableViewCell" id="767398472">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="500155520">
@@ -132,7 +131,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{280, 50}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="500155520"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
@@ -145,7 +143,7 @@
 				<real value="50" key="IBUIRowHeight"/>
 			</object>
 			<object class="IBUITableViewCell" id="822954803">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="987008480">
@@ -187,7 +185,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{280, 50}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="987008480"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
@@ -200,7 +197,7 @@
 				<real value="50" key="IBUIRowHeight"/>
 			</object>
 			<object class="IBUITableViewCell" id="995089788">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="244511798">
@@ -242,7 +239,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{280, 50}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="244511798"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
@@ -267,14 +263,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">tbl_mimes</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="310087814"/>
-					</object>
-					<int key="connectionID">21</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">tc_guessedHeader</string>
 						<reference key="source" ref="372490531"/>
 						<reference key="destination" ref="767398472"/>
@@ -296,6 +284,14 @@
 						<reference key="destination" ref="995089788"/>
 					</object>
 					<int key="connectionID">53</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">tbl_scrapbook</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="310087814"/>
+					</object>
+					<int key="connectionID">54</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -405,7 +401,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">53</int>
+			<int key="maxID">54</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>

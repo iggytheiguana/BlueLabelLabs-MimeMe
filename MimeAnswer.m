@@ -27,6 +27,7 @@
 @dynamic targetname;
 @dynamic hasseen;
 @dynamic numberofhintsused;
+
 #pragma mark - Static Initializers
 //creates a MimeAnswer object based on userIDs
 + (MimeAnswer*)createMimeAnswerWithMimeID:(NSNumber *)mimeID
@@ -61,6 +62,7 @@
     retVal.pointsawarded = [NSNumber numberWithInt:0];
     retVal.state = [NSNumber numberWithInt:kUNANSWERED];
     retVal.hasseen = [NSNumber numberWithBool:NO];
+    retVal.numberofhintsused = [NSNumber numberWithInt:0];
     
     Mime *mime = (Mime*)[resourceContext resourceWithType:MIME withID:mimeID];
     retVal.answer = mime.word;

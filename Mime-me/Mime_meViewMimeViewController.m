@@ -58,8 +58,52 @@
 // answerContainer
 @synthesize v_answerView        = m_v_answerView;
 
-@synthesize didUseHint          = m_didUseHint;
+@synthesize numHintsUsed        = m_numHintsUsed;
 @synthesize didMakeWord         = m_didMakeWord;
+
+@synthesize mimeAnswerCloudEnumerator   = m_mimeAnswerCloudEnumerator;
+@synthesize commentsCloudEnumerator     = m_commentsCloudEnumerator;
+
+
+#pragma mark - Enumerators
+//- (void)showHUDForEnumerators {
+//    Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+//    UIProgressHUDView* progressView = appDelegate.progressView;
+//    ApplicationSettings* settings = [[ApplicationSettingsManager instance]settings];
+//    progressView.delegate = self;
+//    
+//    NSString* message = @"Updating...";
+//    [self showProgressBar:message withCustomView:nil withMaximumDisplayTime:settings.http_timeout_seconds];
+//    
+//}
+
+- (void) enumerateMimeAnswersAndComments {
+    // Mime Answers
+    if (self.mimeAnswerCloudEnumerator != nil && [self.mimeAnswerCloudEnumerator canEnumerate]) {
+        [self.mimeAnswerCloudEnumerator enumerateUntilEnd:nil];
+    }
+    else 
+    {
+        self.mimeAnswerCloudEnumerator = nil;
+        self.mimeAnswerCloudEnumerator = [CloudEnumerator enumeratorForMimeAnswersForMime:self.mimeID];
+        self.mimeAnswerCloudEnumerator.delegate = self;
+        [self.mimeAnswerCloudEnumerator enumerateUntilEnd:nil];
+    }
+    
+    // Comments
+    if (self.commentsCloudEnumerator != nil && [self.commentsCloudEnumerator canEnumerate]) {
+        [self.commentsCloudEnumerator enumerateUntilEnd:nil];
+    }
+    else 
+    {
+        self.commentsCloudEnumerator = nil;
+        self.commentsCloudEnumerator = [CloudEnumerator enumeratorForComments:self.mimeID];
+        self.commentsCloudEnumerator.delegate = self;
+        [self.commentsCloudEnumerator enumerateUntilEnd:nil];
+    }
+    
+//    [self showHUDForEnumerators];
+}
 
 
 #pragma mark - View Lifecycle
@@ -187,6 +231,9 @@
             self.btn_back.hidden = NO;
             break;
     }
+    
+    // Set up hint use counter
+    self.numHintsUsed = 0;
     
     // Setup notification for device orientation change
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -344,6 +391,14 @@
     self.btn_answers = nil;
     self.btn_comments = nil;
 
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // Enumerate for Mimes Answers and Comments
+    [self enumerateMimeAnswersAndComments];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -683,7 +738,11 @@
     MimeAnswer *mimeAnswer = (MimeAnswer*)[resourceContext resourceWithType:MIMEANSWER withID:self.mimeAnswerID];
     
     mimeAnswer.state = [NSNumber numberWithInt:kANSWERED];
-    mimeAnswer.didusehint = [NSNumber numberWithBool:self.didUseHint];
+    
+    if (self.numHintsUsed > 0) {
+        mimeAnswer.didusehint = [NSNumber numberWithBool:self.numHintsUsed];
+        mimeAnswer.numberofhintsused = [NSNumber numberWithInt:self.numHintsUsed];
+    }
     
     // Increment the users gem total for the newly created Mime
     int pointsAwarded;
@@ -702,8 +761,8 @@
         pointsAwarded = [mimeAnswer.pointsawarded intValue];
     }
     
-    int newGemTotal = [self.loggedInUser.numberofpoints intValue] + pointsAwarded;
-    self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
+//    int newGemTotal = [self.loggedInUser.numberofpoints intValue] + pointsAwarded;
+//    self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
     
     // Show the hud and save
     [self showHUDForSendAnswer];
@@ -721,7 +780,7 @@
     if (userGemCount >= gemsForClue) {
         // Flag that the user did use a hint.
         // We will update the didUseHint property on the MimeAnswer object at save
-        self.didUseHint = YES;
+        self.numHintsUsed++;
         
         // Decrement the users gem total for use of a clue
         int newGemTotal = userGemCount - gemsForClue;
@@ -865,6 +924,7 @@
         //list of all changed attributes
         
         if ([changedAttributes containsObject:NUMBEROFFLAGS]) {
+            // Send flag
             if (progressView.didSucceed) {
                 // Flag sent sucessfully
                 LOG_REQUEST(0, @"%@ Mime flag sent successful", activityName);
@@ -942,6 +1002,18 @@
             }
         }
     }
+}
+
+#pragma mark - CloudEnumeratorDelegate
+- (void) onEnumerateComplete:(CloudEnumerator*)enumerator 
+                 withResults:(NSArray *)results 
+                withUserInfo:(NSDictionary *)userInfo
+{
+    
+//    [self hideProgressBar];
+    
+    [self.v_answerView updateNotifications];
+    
 }
 
 #pragma mark - ImageManager Delegate Methods
