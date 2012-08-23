@@ -322,7 +322,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    NSString* activityName = @"Mime_meScrapbookMenuViewController.viewWillAppear:";
+//    NSString* activityName = @"Mime_meScrapbookMenuViewController.viewWillAppear:";
     
     [self.nv_navigationHeader.btn_scrapbook setHighlighted:YES];
     [self.nv_navigationHeader.btn_scrapbook setUserInteractionEnabled:NO];
@@ -489,8 +489,7 @@
     
     // Display label for new answers if there are unseen answers
     int numNewAnswers = [mime numUnopenedMimeAnswers];
-//    int numNewComments = [mime numUnopenedComments];
-    int numNewComments = 0;
+    int numNewComments = [mime numUnopenedComments];
     
     UILabel *lbl_newNotification = [[UILabel alloc] initWithFrame:CGRectMake(175.0f, 0.0f, 90.0f, 36.0f)];
     lbl_newNotification.backgroundColor = [UIColor clearColor];
