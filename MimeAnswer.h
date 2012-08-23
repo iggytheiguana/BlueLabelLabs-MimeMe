@@ -22,7 +22,7 @@
 @property (nonatomic,retain) NSNumber* issentbyfriend;
 @property (nonatomic,retain) NSString* targetname;
 @property (nonatomic,retain) NSNumber* hasseen;
-
+@property (nonatomic,retain) NSNumber* numberofhintsused;
 + (MimeAnswer*)createMimeAnswerWithMimeID:(NSNumber *)mimeID
                          withTargetUserID:(NSNumber *)targetUserID;
 
