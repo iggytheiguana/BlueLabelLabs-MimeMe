@@ -512,12 +512,12 @@
 //    [self showHUDForMimeGuessCancelled];
     
     // Save and updated counts
-    ResourceContext *resourceContext = [ResourceContext instance];
+  //  ResourceContext *resourceContext = [ResourceContext instance];
     
     // Start a new undo group here
-    [resourceContext.managedObjectContext.undoManager beginUndoGrouping];
+  //  [resourceContext.managedObjectContext.undoManager beginUndoGrouping];
     
-    [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
+    //[resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
     
     [self.navigationController popViewControllerAnimated:YES];
 }
