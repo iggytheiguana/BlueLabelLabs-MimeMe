@@ -41,10 +41,12 @@
 @synthesize frc_mimeAnswersFromFriends  = __frc_mimeAnswersFromFriends;
 @synthesize frc_recentMimes             = __frc_recentMimes;
 @synthesize frc_staffPickedMimes        = __frc_staffPickedMimes;
+@synthesize frc_topFavoriteMimes        = __frc_topFavoriteMimes;
 
 @synthesize mimeAnswersCloudEnumerator  = m_mimeAnswersCloudEnumerator;
 @synthesize recentMimesCloudEnumerator  = m_recentMimesCloudEnumerator;
 @synthesize staffPickedMimesCloudEnumerator = m_staffPickedMimesCloudEnumerator;
+@synthesize topFavoriteMimesCloudEnumerator = m_topFavoriteMimesCloudEnumerator;
 
 @synthesize nv_navigationHeader = m_nv_navigationHeader;
 
@@ -52,6 +54,7 @@
 @synthesize tc_friendsHeader    = m_tc_friendsHeader;
 @synthesize tc_recentHeader     = m_tc_recentHeader;
 @synthesize tc_staffPicksHeader = m_tc_staffPicksHeader;
+@synthesize tc_topFavoritesHeader = m_tc_topFavoritesHeader;
 @synthesize gad_bannerView      = m_gad_bannerView;
 
 #pragma mark - FRCs
@@ -186,6 +189,49 @@
     
 }
 
+- (NSFetchedResultsController*)frc_topFavoriteMimes {
+    NSString* activityName = @"Mime_meGuessMenuViewController.frc_topFavoriteMimes:";
+    if (__frc_topFavoriteMimes != nil) {
+        return __frc_topFavoriteMimes;
+    }
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    ResourceContext* resourceContext = [ResourceContext instance];
+    Mime_meAppDelegate* app = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:MIME inManagedObjectContext:app.managedObjectContext];
+    
+    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:NUMBEROFTIMESFAVORITED ascending:NO];
+    
+    NSNumber* hasAnsweredObj = [NSNumber numberWithBool:NO];
+    NSNumber* minFavorited = [NSNumber numberWithInt:0];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K>%@", CREATORID, self.loggedInUser.objectid, HASANSWERED, hasAnsweredObj, NUMBEROFTIMESFAVORITED, minFavorited];
+    
+    [fetchRequest setPredicate:predicate];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    [fetchRequest setEntity:entityDescription];
+    
+    [fetchRequest setFetchBatchSize:(kMAXROWS + 1)];    // We add 1 to find out if the "more" button should be shown
+    
+    NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:resourceContext.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+    
+    controller.delegate = self;
+    self.frc_topFavoriteMimes = controller;
+    
+    NSError* error = nil;
+    [controller performFetch:&error];
+  	if (error != nil)
+    {
+        LOG_MIME_MEGUESSMENUVIEWCONTROLLER(1, @"%@Could not create instance of NSFetchedResultsController due to %@", activityName, [error userInfo]);
+    }
+    
+    [controller release];
+    [fetchRequest release];
+    [sortDescriptor release];
+    [predicate release];
+    return __frc_topFavoriteMimes;
+    
+}
+
 #pragma mark - Enumerators
 - (void)showHUDForMimeEnumerators {
     Mime_meAppDelegate* appDelegate =(Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
@@ -238,6 +284,20 @@
         self.staffPickedMimesCloudEnumerator.delegate = self;
         self.staffPickedMimesCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:(kMAXROWS + 1)];   // We add 1 to find out if the "more" button should be shown
         [self.staffPickedMimesCloudEnumerator enumerateUntilEnd:nil];
+    }
+}
+
+- (void) enumerateTopFavoriteMimes { 
+    if (self.topFavoriteMimesCloudEnumerator != nil && [self.topFavoriteMimesCloudEnumerator canEnumerate]) {
+        [self.topFavoriteMimesCloudEnumerator enumerateUntilEnd:nil];
+    }
+    else 
+    {
+        self.topFavoriteMimesCloudEnumerator = nil;
+        self.topFavoriteMimesCloudEnumerator = [CloudEnumerator enumeratorForTopFavoritedMimes];
+        self.topFavoriteMimesCloudEnumerator.delegate = self;
+        self.topFavoriteMimesCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:(kMAXROWS + 1)];   // We add 1 to find out if the "more" button should be shown
+        [self.topFavoriteMimesCloudEnumerator enumerateUntilEnd:nil];
     }
 }
 
@@ -337,6 +397,7 @@
     self.tc_friendsHeader = nil;
     self.tc_recentHeader = nil;
     self.tc_staffPicksHeader = nil;
+    self.tc_topFavoritesHeader = nil;
     self.gad_bannerView = nil;
 }
 
@@ -350,6 +411,7 @@
     [self enumerateMimeAnswersFromFriends];
     [self enumerateRecentMimes];
     [self enumerateStaffPickedMimes];
+    [self enumerateTopFavoriteMimes];
     
     [self showHUDForMimeEnumerators];
     
@@ -369,7 +431,7 @@
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -384,6 +446,10 @@
     else if (section == 1) {
         // Recent section
         count = [[self.frc_recentMimes fetchedObjects] count];
+    }
+    else if (section == 2) {
+        // Top Favorites section
+        count = [[self.frc_topFavoriteMimes fetchedObjects] count];
     }
     else {
         // Staff Picks section
@@ -444,6 +510,26 @@
         hasSeen = [mime.hasseen boolValue];
     }
     else if (indexPath.section == 2) {
+        // Top Favorite Mimes section
+        mime = [[self.frc_topFavoriteMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+        
+        cell.textLabel.text = mime.creatorname;
+        
+//        NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
+//        cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
+        int numTimesFavorited = [mime.numberoftimesfavorited intValue];
+        if (numTimesFavorited == 1) {
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Favorited %d time!", numTimesFavorited];
+        }
+        else {
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Favorited %d times!", numTimesFavorited];
+        }
+        
+        userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_topFavoriteMimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
+        
+        hasSeen = [mime.hasseen boolValue];
+    }
+    else if (indexPath.section == 3) {
         // Staff Picked Mimes section
         mime = [[self.frc_staffPickedMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
         
@@ -523,7 +609,7 @@
         
         if (indexPath.row == 0) {
             // Set the header
-            CellIdentifier = @"FriendsHeader";
+            CellIdentifier = @"FromFriendsHeader";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
             if (cell == nil) {
@@ -589,7 +675,7 @@
                 if (cell == nil) {
                     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     
-                    cell.textLabel.text = @"Create a new Mime!";
+                    cell.textLabel.text = @"Create a new mime!";
                     cell.textLabel.textAlignment = UITextAlignmentCenter;
                     cell.textLabel.shadowColor = [UIColor whiteColor];
                     cell.textLabel.shadowOffset = CGSizeMake(0.0, 1.0);
@@ -609,7 +695,7 @@
         
         if (indexPath.row == 0) {
             // Set the header
-            CellIdentifier = @"RecentHeader";
+            CellIdentifier = @"MostRecentHeader";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
             if (cell == nil) {
@@ -676,7 +762,94 @@
                 if (cell == nil) {
                     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     
-                    cell.textLabel.text = @"No recent Mimes!";
+                    cell.textLabel.text = @"No recent mimes!";
+                    cell.textLabel.textAlignment = UITextAlignmentCenter;
+                    cell.textLabel.shadowColor = [UIColor whiteColor];
+                    cell.textLabel.shadowOffset = CGSizeMake(0.0, 1.0);
+                    cell.textLabel.textColor = [UIColor lightGrayColor];
+                    
+                    cell.userInteractionEnabled = NO;
+                }
+                
+                return cell;
+            }
+        }
+    }
+    if (indexPath.section == 2) {
+        // Top Favorite Mimes section
+        
+        NSInteger count = MIN([[self.frc_topFavoriteMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of recent mimes to show to 3
+        
+        if (indexPath.row == 0) {
+            // Set the header
+            CellIdentifier = @"TopFavoritesHeader";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            if (cell == nil) {
+                cell = self.tc_topFavoritesHeader;
+                
+                // Cell properties
+                cell.userInteractionEnabled = NO;
+            }
+            
+            return cell;
+        }
+        else {
+            if (count > 0) {
+                if (indexPath.row > 0 && indexPath.row <= count) {
+                    // Set Top Favorite mime
+                    CellIdentifier = @"TopFavoriteMime";
+                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    
+                    if (cell == nil) {
+                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+                        
+                        cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+                        cell.imageView.layer.masksToBounds = YES;
+                        cell.imageView.layer.cornerRadius = 8.0;
+                        cell.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+                        cell.imageView.layer.borderWidth = 1.0;
+                        
+                        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                        
+                        //                        [cell.contentView addSubview:lbl_new];
+                        
+                    }
+                    
+                    [self configureCell:cell atIndexPath:indexPath];
+                    
+                    return cell;
+                }
+                else {
+                    // Set More row
+                    CellIdentifier = @"MoreTopFavorites";
+                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    
+                    if (cell == nil) {
+                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        
+                        cell.textLabel.text = @"More top favorited mimes";
+                        cell.textLabel.textAlignment = UITextAlignmentCenter;
+                        cell.textLabel.shadowColor = [UIColor whiteColor];
+                        cell.textLabel.shadowOffset = CGSizeMake(0.0, 1.0);
+                        cell.textLabel.textColor = [UIColor lightGrayColor];
+                        
+                        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                        
+                    }
+                    
+                    return cell;
+                }
+            }
+            else {
+                // Set None row
+                CellIdentifier = @"NoneTopFavorited";
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                
+                if (cell == nil) {
+                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                    
+                    cell.textLabel.text = @"No top favorited mimes!";
                     cell.textLabel.textAlignment = UITextAlignmentCenter;
                     cell.textLabel.shadowColor = [UIColor whiteColor];
                     cell.textLabel.shadowOffset = CGSizeMake(0.0, 1.0);
@@ -830,6 +1003,10 @@
         // Recent section
         count = [[self.frc_recentMimes fetchedObjects]count];
     }
+    else if (indexPath.section == 2) {
+        // Top Favorites section
+        count = [[self.frc_topFavoriteMimes fetchedObjects]count];
+    }
     else {
         // Staff Picked section
         count = [[self.frc_staffPickedMimes fetchedObjects]count];
@@ -895,6 +1072,24 @@
         }
         else {
             Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kRECENTMIME];
+            
+            [self.navigationController pushViewController:fullTableViewController animated:YES];
+        }
+    }
+    else if (indexPath.section == 2) {
+        // Top Favorited mime selected
+        NSInteger count = MIN([[self.frc_topFavoriteMimes fetchedObjects]count], kMAXROWS);
+        
+        if (indexPath.row > 0 && indexPath.row <= count) {
+            
+            Mime *mime = [[self.frc_topFavoriteMimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+            
+            // Show the Mime
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            [self.navigationController pushViewController:viewMimeViewController animated:YES];
+        }
+        else {
+            Mime_meGuessFullTableViewController *fullTableViewController = [Mime_meGuessFullTableViewController createInstanceForMimeType:kTOPFAVORITEDMIME];
             
             [self.navigationController pushViewController:fullTableViewController animated:YES];
         }
@@ -1101,6 +1296,20 @@
                 }
             }
         }
+        else if (frc == self.frc_topFavoriteMimes) {
+            
+            NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
+            
+            NSInteger count = MIN([[self.frc_topFavoriteMimes fetchedObjects]count], kMAXROWS);    // Maximize the number of recent mimes to show
+            for (int i = 0; i < count; i++) {
+                Mime *mime = [[self.frc_topFavoriteMimes fetchedObjects] objectAtIndex:i];
+                if ([mime.objectid isEqualToNumber:mimeID]) {
+                    cell = [self.tbl_mimes cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:2]];
+                    
+                    break;
+                }
+            }
+        }
         else if (frc == self.frc_staffPickedMimes) {
             
             NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
@@ -1109,7 +1318,7 @@
             for (int i = 0; i < count; i++) {
                 Mime *mime = [[self.frc_staffPickedMimes fetchedObjects] objectAtIndex:i];
                 if ([mime.objectid isEqualToNumber:mimeID]) {
-                    cell = [self.tbl_mimes cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:2]];
+                    cell = [self.tbl_mimes cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:3]];
                     
                     break;
                 }

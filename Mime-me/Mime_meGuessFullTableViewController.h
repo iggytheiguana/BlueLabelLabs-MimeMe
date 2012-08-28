@@ -19,6 +19,7 @@
     UITableViewCell     *m_tc_friendsHeader;
     UITableViewCell     *m_tc_recentHeader;
     UITableViewCell     *m_tc_staffPicksHeader;
+    UITableViewCell     *m_tc_topFavoritesHeader;
     
     NSInteger           m_mimeType;
     
@@ -38,6 +39,7 @@
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_friendsHeader;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_recentHeader;
 @property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_staffPicksHeader;
+@property (nonatomic, retain) IBOutlet  UITableViewCell     *tc_topFavoritesHeader;
 
 @property (nonatomic, assign)           NSInteger           mimeType;
 

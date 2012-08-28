@@ -44,6 +44,7 @@
 @synthesize tc_friendsHeader    = m_tc_friendsHeader;
 @synthesize tc_recentHeader     = m_tc_recentHeader;
 @synthesize tc_staffPicksHeader = m_tc_staffPicksHeader;
+@synthesize tc_topFavoritesHeader = m_tc_topFavoritesHeader;
 @synthesize mimeType            = m_mimeType;
 @synthesize gad_bannerView      = m_gad_bannerView;
 
@@ -59,30 +60,44 @@
     ResourceContext* resourceContext = [ResourceContext instance];
     Mime_meAppDelegate* app = (Mime_meAppDelegate*)[[UIApplication sharedApplication]delegate];
     
+    NSSortDescriptor* sortDescriptor;
     NSEntityDescription *entityDescription;
     NSPredicate* predicate;
     
     if (self.mimeType == kFROMFRIENDMIME) {
+        sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
+        
         entityDescription = [NSEntityDescription entityForName:MIMEANSWER inManagedObjectContext:app.managedObjectContext];
         
         NSNumber* unansweredStateObj = [NSNumber numberWithInt:kUNANSWERED];
         predicate = [NSPredicate predicateWithFormat:@"%K=%@ AND %K=%@", TARGETUSERID, self.loggedInUser.objectid, STATE, unansweredStateObj];
     }
     else if (self.mimeType == kRECENTMIME) {
+        sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
+        
         entityDescription = [NSEntityDescription entityForName:MIME inManagedObjectContext:app.managedObjectContext];
         
         NSNumber* hasAnsweredObj = [NSNumber numberWithBool:NO];
         predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, HASANSWERED, hasAnsweredObj];
     }
+    else if (self.mimeType == kTOPFAVORITEDMIME) {
+        sortDescriptor = [[NSSortDescriptor alloc] initWithKey:NUMBEROFTIMESFAVORITED ascending:NO];
+        
+        entityDescription = [NSEntityDescription entityForName:MIME inManagedObjectContext:app.managedObjectContext];
+        
+        NSNumber* hasAnsweredObj = [NSNumber numberWithBool:NO];
+        NSNumber* minFavorited = [NSNumber numberWithInt:0];
+        predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K>%@", CREATORID, self.loggedInUser.objectid, HASANSWERED, hasAnsweredObj, NUMBEROFTIMESFAVORITED, minFavorited];
+    }
     else if (self.mimeType == kSTAFFPICKEDMIME) {
+        sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
+        
         entityDescription = [NSEntityDescription entityForName:MIME inManagedObjectContext:app.managedObjectContext];
         
         NSNumber* hasAnsweredObj = [NSNumber numberWithBool:NO];
         NSNumber* isStaffPickObj = [NSNumber numberWithBool:YES];
         predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, ISSTAFFPICK, isStaffPickObj, HASANSWERED, hasAnsweredObj];
     }
-    
-    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
     [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -137,6 +152,9 @@
         }
         else if (self.mimeType == kRECENTMIME) {
             self.mimeCloudEnumerator = [CloudEnumerator enumeratorForMostRecentMimes];
+        }
+        else if (self.mimeType == kTOPFAVORITEDMIME) {
+            self.mimeCloudEnumerator = [CloudEnumerator enumeratorForTopFavoritedMimes];
         }
         else if (self.mimeType == kSTAFFPICKEDMIME) {
             self.mimeCloudEnumerator = [CloudEnumerator enumeratorForStaffPickedMimes];
@@ -239,6 +257,7 @@
     self.tc_friendsHeader = nil;
     self.tc_recentHeader = nil;
     self.tc_staffPicksHeader = nil;
+    self.tc_topFavoritesHeader = nil;
     self.gad_bannerView = nil;
     
 }
@@ -313,6 +332,26 @@
         
         NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
         cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
+        
+        userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_mimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
+        
+        hasSeen = [mime.hasseen boolValue];
+    }
+    else if (self.mimeType == kTOPFAVORITEDMIME) {
+        // Top Favorites Mimes section
+        mime = [[self.frc_mimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+        
+        cell.textLabel.text = mime.creatorname;
+        
+//        NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:mime.datecreated];
+//        cell.detailTextLabel.text = [self getDateStringForMimeDate:dateSent];
+        int numTimesFavorited = [mime.numberoftimesfavorited intValue];
+        if (numTimesFavorited == 1) {
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Favorited %d time!", numTimesFavorited];
+        }
+        else {
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"Favorited %d times!", numTimesFavorited];
+        }
         
         userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.frc_mimes, kMIMEFRC, mime.objectid, kMIMEID, nil];
         
@@ -394,13 +433,16 @@
             // Set the header
             
             if (self.mimeType == kFROMFRIENDMIME) {
-                CellIdentifier = @"FromFriends";
+                CellIdentifier = @"FromFriendsHeader";
             }
             else if (self.mimeType == kRECENTMIME) {
-                CellIdentifier = @"MostRecent";
+                CellIdentifier = @"MostRecentHeader";
+            }
+            else if (self.mimeType == kTOPFAVORITEDMIME) {
+                CellIdentifier = @"TopFavoritedHeader";
             }
             else if (self.mimeType == kSTAFFPICKEDMIME) {
-                CellIdentifier = @"StaffPicks";
+                CellIdentifier = @"StaffPicksHeader";
             }
             
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -412,6 +454,9 @@
                 }
                 else if (self.mimeType == kRECENTMIME) {
                     cell = self.tc_recentHeader;
+                }
+                else if (self.mimeType == kTOPFAVORITEDMIME) {
+                    cell = self.tc_topFavoritesHeader;
                 }
                 else if (self.mimeType == kSTAFFPICKEDMIME) {
                     cell = self.tc_staffPicksHeader;
@@ -466,6 +511,9 @@
                     else if (self.mimeType == kRECENTMIME) {
                         cell.textLabel.text = @"No recent mimes!";
                     }
+                    else if (self.mimeType == kTOPFAVORITEDMIME) {
+                        cell.textLabel.text = @"No top favorited mimes!";
+                    }
                     else if (self.mimeType == kSTAFFPICKEDMIME) {
                         cell.textLabel.text = @"No staff picks!";
                     }
@@ -498,6 +546,9 @@
             }
             else if (self.mimeType == kRECENTMIME) {
                 cell.textLabel.text = @"No recent Mimes!";
+            }
+            else if (self.mimeType == kTOPFAVORITEDMIME) {
+                cell.textLabel.text = @"No top favorited Mimes!";
             }
             else if (self.mimeType == kSTAFFPICKEDMIME) {
                 cell.textLabel.text = @"No staff picks!";
@@ -593,6 +644,19 @@
     }
     else if (self.mimeType == kRECENTMIME) {
         // Recent mime selected
+        NSInteger count = [[self.frc_mimes fetchedObjects] count];
+        
+        if (indexPath.row > 0 && indexPath.row <= count) {
+            
+            Mime *mime = [[self.frc_mimes fetchedObjects] objectAtIndex:(indexPath.row - 1)];
+            
+            // Show the Mime
+            Mime_meViewMimeViewController *viewMimeViewController = [Mime_meViewMimeViewController createInstanceForCase:kVIEWANSWERMIME withMimeID:mime.objectid withMimeAnswerIDorNil:nil];
+            [self.navigationController pushViewController:viewMimeViewController animated:YES];
+        }
+    }
+    else if (self.mimeType == kTOPFAVORITEDMIME) {
+        // Top Favorited mime selected
         NSInteger count = [[self.frc_mimes fetchedObjects] count];
         
         if (indexPath.row > 0 && indexPath.row <= count) {
@@ -767,6 +831,20 @@
             }
         }
         else if (self.mimeType == kRECENTMIME) {
+            
+            NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
+            
+            NSInteger count = [[self.frc_mimes fetchedObjects] count];
+            for (int i = 0; i < count; i++) {
+                Mime *mime = [[self.frc_mimes fetchedObjects] objectAtIndex:i];
+                if ([mime.objectid isEqualToNumber:mimeID]) {
+                    cell = [self.tbl_mimes cellForRowAtIndexPath:[NSIndexPath indexPathForRow:(i+1) inSection:0]];
+                    
+                    break;
+                }
+            }
+        }
+        else if (self.mimeType == kTOPFAVORITEDMIME) {
             
             NSNumber* mimeID = [userInfo valueForKey:kMIMEID];
             
