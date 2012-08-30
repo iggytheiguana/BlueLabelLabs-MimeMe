@@ -124,6 +124,7 @@
 
 #define LOG_MIME_FRIENDPICKERVIEWCONTROLLER(level, ...)   do{}while(0)
 #define LOG_MIME_MEANSWERSTABLEVIEWCONTROLLER(level, ...)   do{}while(0)
+#define LOG_MIME_MECOMMENTSTABLEVIEWCONTROLLER(level, ...)   do{}while(0)
 
 
 
