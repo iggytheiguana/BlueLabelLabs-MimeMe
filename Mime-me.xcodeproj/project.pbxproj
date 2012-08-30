@@ -19,8 +19,6 @@
 		520DD0E315A6C30F00C58BF1 /* icon-back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0E115A6C30F00C58BF1 /* icon-back@2x.png */; };
 		520DD0E615A6CD0900C58BF1 /* Mime_meUINavigationHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0E515A6CD0900C58BF1 /* Mime_meUINavigationHeaderView.xib */; };
 		520DD0E915A6CE3500C58BF1 /* Mime_meUINavigationHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DD0E815A6CE3400C58BF1 /* Mime_meUINavigationHeaderView.m */; };
-		520DD0F315A6EB4800C58BF1 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0F215A6EB4800C58BF1 /* Default.png */; };
-		520DD0F515A6EB4C00C58BF1 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0F415A6EB4B00C58BF1 /* Default@2x.png */; };
 		520DD0F915A7838500C58BF1 /* Mime_meViewMimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 520DD0F715A7838300C58BF1 /* Mime_meViewMimeViewController.m */; };
 		520DD0FA15A7838500C58BF1 /* Mime_meViewMimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0F815A7838500C58BF1 /* Mime_meViewMimeViewController.xib */; };
 		520DD0FD15A785E500C58BF1 /* waldo.png in Resources */ = {isa = PBXBuildFile; fileRef = 520DD0FB15A785E500C58BF1 /* waldo.png */; };
@@ -95,6 +93,8 @@
 		52CA171015D5B017002F9CB3 /* icon-flag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52CA170E15D5B017002F9CB3 /* icon-flag@2x.png */; };
 		52D926F115D1CE8B00DA16BC /* SocialSharingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 52D926F015D1CE8B00DA16BC /* SocialSharingManager.m */; };
 		52DBBC2015BF566A0076A27C /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52DBBC1F15BF566A0076A27C /* AddressBook.framework */; };
+		52F53A5415EC1BD2002930D4 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 52F53A5315EC1BD2002930D4 /* Default.png */; };
+		52F53A5615EC1BD7002930D4 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52F53A5515EC1BD7002930D4 /* Default@2x.png */; };
 		52F5BA6215C8439F00509E8B /* UIPromptAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 52F5BA6115C8439F00509E8B /* UIPromptAlertView.m */; };
 		52F5BA6915C871E400509E8B /* icon-favorite.png in Resources */ = {isa = PBXBuildFile; fileRef = 52F5BA6715C871E400509E8B /* icon-favorite.png */; };
 		52F5BA6A15C871E400509E8B /* icon-favorite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 52F5BA6815C871E400509E8B /* icon-favorite@2x.png */; };
@@ -252,8 +252,6 @@
 		520DD0E515A6CD0900C58BF1 /* Mime_meUINavigationHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meUINavigationHeaderView.xib; sourceTree = "<group>"; };
 		520DD0E715A6CE3400C58BF1 /* Mime_meUINavigationHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meUINavigationHeaderView.h; sourceTree = "<group>"; };
 		520DD0E815A6CE3400C58BF1 /* Mime_meUINavigationHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meUINavigationHeaderView.m; sourceTree = "<group>"; };
-		520DD0F215A6EB4800C58BF1 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		520DD0F415A6EB4B00C58BF1 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		520DD0F615A7838300C58BF1 /* Mime_meViewMimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meViewMimeViewController.h; sourceTree = "<group>"; };
 		520DD0F715A7838300C58BF1 /* Mime_meViewMimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meViewMimeViewController.m; sourceTree = "<group>"; };
 		520DD0F815A7838500C58BF1 /* Mime_meViewMimeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meViewMimeViewController.xib; sourceTree = "<group>"; };
@@ -361,6 +359,8 @@
 		52D926EF15D1CE8B00DA16BC /* SocialSharingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialSharingManager.h; sourceTree = "<group>"; };
 		52D926F015D1CE8B00DA16BC /* SocialSharingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialSharingManager.m; sourceTree = "<group>"; };
 		52DBBC1F15BF566A0076A27C /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		52F53A5315EC1BD2002930D4 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		52F53A5515EC1BD7002930D4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		52F5BA5B15C72D9300509E8B /* MimeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MimeType.h; sourceTree = "<group>"; };
 		52F5BA6015C8439F00509E8B /* UIPromptAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPromptAlertView.h; sourceTree = "<group>"; };
 		52F5BA6115C8439F00509E8B /* UIPromptAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPromptAlertView.m; sourceTree = "<group>"; };
@@ -786,11 +786,11 @@
 		C523A000159F7CE6004AA39C = {
 			isa = PBXGroup;
 			children = (
+				52F53A5515EC1BD7002930D4 /* Default@2x.png */,
+				52F53A5315EC1BD2002930D4 /* Default.png */,
 				52B3E7D415E442B1004E9C4A /* appIcon_MimeMe_114.png */,
 				52B3E7D215E442A9004E9C4A /* appIcon_MimeMe_57.png */,
 				5277E7C415D94A74003A1DCF /* AudioToolbox.framework */,
-				520DD0F415A6EB4B00C58BF1 /* Default@2x.png */,
-				520DD0F215A6EB4800C58BF1 /* Default.png */,
 				C523A114159F88B9004AA39C /* libz.1.1.3.dylib */,
 				C523A115159F88B9004AA39C /* libz.1.2.5.dylib */,
 				C523A116159F88B9004AA39C /* libz.dylib */,
@@ -1481,8 +1481,6 @@
 				520DD0E215A6C30F00C58BF1 /* icon-back.png in Resources */,
 				520DD0E315A6C30F00C58BF1 /* icon-back@2x.png in Resources */,
 				520DD0E615A6CD0900C58BF1 /* Mime_meUINavigationHeaderView.xib in Resources */,
-				520DD0F315A6EB4800C58BF1 /* Default.png in Resources */,
-				520DD0F515A6EB4C00C58BF1 /* Default@2x.png in Resources */,
 				520DD0FA15A7838500C58BF1 /* Mime_meViewMimeViewController.xib in Resources */,
 				520DD0FD15A785E500C58BF1 /* waldo.png in Resources */,
 				520DD0FE15A785E500C58BF1 /* waldo@2x.png in Resources */,
@@ -1525,6 +1523,8 @@
 				52B3E7D315E442AA004E9C4A /* appIcon_MimeMe_57.png in Resources */,
 				52B3E7D515E442B1004E9C4A /* appIcon_MimeMe_114.png in Resources */,
 				52B3E7DE15E531D2004E9C4A /* Mime_meCommentsTableViewController.xib in Resources */,
+				52F53A5415EC1BD2002930D4 /* Default.png in Resources */,
+				52F53A5615EC1BD7002930D4 /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -107,22 +107,33 @@
 }
 
 - (void)showFacebookFriends {
-    if (self.facebookFriendsArray == nil) {
-        // We don't yet have the facebook friends, enumerate
-        [self enumerateFacebookFriends];
-        
+    AuthenticationContext* loggedInContext = [[AuthenticationManager instance] contextForLoggedInUser];
+    
+    if (loggedInContext == nil ||
+        loggedInContext.hasFacebook == NO) 
+    {
+        //user is not logged in, must log in first and also ensure they have a facebook account
+        Callback* onSuccessCallback = [Callback callbackForTarget:self selector:@selector(showFacebookFriends) fireOnMainThread:YES];
+        [self authenticateAndGetFacebook:YES getTwitter:NO onSuccessCallback:onSuccessCallback onFailureCallback:nil];
     }
     else {
-        // Replace the selected friedns array with the copy that has any deselected friends removed
-        self.selectedFriendsArray = self.selectedFriendsArrayCopy;
-        
-        // Launch the friends list with the Facebook friends list loaded
-        Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
-        friendsListTableViewController.delegate = self;
-        friendsListTableViewController.contacts = self.facebookFriendsArray;
-        self.selectedFriendsArray = self.selectedFriendsArrayCopy;
-        
-        [self.navigationController pushViewController:friendsListTableViewController animated:YES];
+        if (self.facebookFriendsArray == nil) {
+            // We don't yet have the facebook friends, enumerate
+            [self enumerateFacebookFriends];
+            
+        }
+        else {
+            // Replace the selected friedns array with the copy that has any deselected friends removed
+            self.selectedFriendsArray = self.selectedFriendsArrayCopy;
+            
+            // Launch the friends list with the Facebook friends list loaded
+            Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
+            friendsListTableViewController.delegate = self;
+            friendsListTableViewController.contacts = self.facebookFriendsArray;
+            self.selectedFriendsArray = self.selectedFriendsArrayCopy;
+            
+            [self.navigationController pushViewController:friendsListTableViewController animated:YES];
+        }
     }
 }
 
