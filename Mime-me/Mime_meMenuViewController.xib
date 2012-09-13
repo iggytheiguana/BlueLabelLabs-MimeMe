@@ -39,7 +39,7 @@
 					<object class="IBUIImageView" id="322695639">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">293</int>
-						<string key="NSFrame">{{85, 5}, {150, 44}}</string>
+						<string key="NSFrame">{{20, 17}, {280, 82}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="477142814"/>
@@ -48,13 +48,13 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<object class="NSCustomResource" key="IBUIImage">
 							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">logo_wName-MimeMe.png</string>
+							<string key="NSResourceName">logo_wName-MimeMeLarge.png</string>
 						</object>
 					</object>
 					<object class="IBUIButton" id="477142814">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{20, 110}, {130, 130}}</string>
+						<string key="NSFrame">{{20, 115}, {130, 130}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="692108125"/>
@@ -90,7 +90,7 @@
 					<object class="IBUIButton" id="692108125">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{170, 110}, {130, 130}}</string>
+						<string key="NSFrame">{{170, 115}, {130, 130}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="222226140"/>
@@ -113,7 +113,7 @@
 					<object class="IBUIButton" id="222226140">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{20, 260}, {130, 130}}</string>
+						<string key="NSFrame">{{20, 265}, {130, 130}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="495443386"/>
@@ -136,7 +136,7 @@
 					<object class="IBUIButton" id="495443386">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{170, 260}, {130, 130}}</string>
+						<string key="NSFrame">{{170, 265}, {130, 130}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="499715996"/>
@@ -301,12 +301,12 @@
 						<int key="objectID">1</int>
 						<reference key="object" ref="191373211"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="322695639"/>
 							<reference ref="477142814"/>
 							<reference ref="692108125"/>
 							<reference ref="222226140"/>
 							<reference ref="495443386"/>
 							<reference ref="499715996"/>
+							<reference ref="322695639"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -444,8 +444,8 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NS.key.0">logo_wName-MimeMe.png</string>
-			<string key="NS.object.0">{150, 44}</string>
+			<string key="NS.key.0">logo_wName-MimeMeLarge.png</string>
+			<string key="NS.object.0">{280, 82}</string>
 		</object>
 		<string key="IBCocoaTouchPluginVersion">1181</string>
 	</data>

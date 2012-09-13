@@ -14,6 +14,7 @@
 - (IBAction) onSlideButtonPressed:(id)sender;
 - (IBAction) onFlagButtonPressed:(id)sender;
 - (IBAction) onMoreButtonPressed:(id)sender;
+- (BOOL)canUseHint;
 - (IBAction) onClueButtonPressed:(id)sender;
 - (void) onSubmittedCorrectAnswerViaAllClues:(BOOL)usedAllClues;
 

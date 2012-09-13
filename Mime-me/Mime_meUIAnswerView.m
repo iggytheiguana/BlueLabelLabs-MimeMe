@@ -684,74 +684,80 @@
 }
 
 - (IBAction) onClueButtonPressed:(id)sender {
-    NSString *trimmedWordAnswer = [self.word stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-//    int numLettersToReveal = MAX([trimmedWordAnswer length] / 3, 1);
-    int numLettersToReveal = ([trimmedWordAnswer length] + 3 - 1) / 3;  // Always rounds up
+    // Check if the user has enough gems to use a hint
+    BOOL canUseHint = [self.delegate canUseHint];
     
-    int numLettersRemaining = [trimmedWordAnswer length] - [self.revealedIndexes count];
-    
-    if (numLettersRemaining <= numLettersToReveal) {
-        // Reveal all remaining letters
-        for (int i = 1; i <= [self.word length]; i++) {
-            if (![self.revealedIndexes containsObject:[NSNumber numberWithInt:i]]) {
-                [self showLetterAtIndex:i];
-                
-                [self disableAnswerTextFieldAtIndex:i];
-                
-                [self colorizeAnswerTextFieldAtIndex:i];
-                
-                [self.revealedIndexes addObject:[NSNumber numberWithInt:i]];
-                
-                // Disable and hide the clue button
-                self.btn_clue.enabled = NO;
-                self.btn_clue.hidden = YES;
-                
-                // Show confirmation view
-                self.didGuessCorrectAnswer = [self checkForCorrectAnswerInitiatedByUser:NO];
-                if (self.didGuessCorrectAnswer == YES) {
-                    // User has submitted the correct answer
-                    [self.delegate onSubmittedCorrectAnswerViaAllClues:YES];
+    if (canUseHint == YES) {
+        NSString *trimmedWordAnswer = [self.word stringByReplacingOccurrencesOfString:@" " withString:@""];
+        
+        //    int numLettersToReveal = MAX([trimmedWordAnswer length] / 3, 1);
+        int numLettersToReveal = ([trimmedWordAnswer length] + 3 - 1) / 3;  // Always rounds up
+        
+        int numLettersRemaining = [trimmedWordAnswer length] - [self.revealedIndexes count];
+        
+        if (numLettersRemaining <= numLettersToReveal) {
+            // Reveal all remaining letters
+            for (int i = 1; i <= [self.word length]; i++) {
+                if (![self.revealedIndexes containsObject:[NSNumber numberWithInt:i]]) {
+                    [self showLetterAtIndex:i];
+                    
+                    [self disableAnswerTextFieldAtIndex:i];
+                    
+                    [self colorizeAnswerTextFieldAtIndex:i];
+                    
+                    [self.revealedIndexes addObject:[NSNumber numberWithInt:i]];
+                    
+                    // Disable and hide the clue button
+                    self.btn_clue.enabled = NO;
+                    self.btn_clue.hidden = YES;
+                    
+                    // Show confirmation view
+                    self.didGuessCorrectAnswer = [self checkForCorrectAnswerInitiatedByUser:NO];
+                    if (self.didGuessCorrectAnswer == YES) {
+                        // User has submitted the correct answer
+                        [self.delegate onSubmittedCorrectAnswerViaAllClues:YES];
+                    }
                 }
             }
         }
-    }
-    else {
-        for (int i = 0; i < numLettersToReveal; i++) {
-            int r = arc4random() % ([self.word length] - 1);
-            r++;
+        else {
+            for (int i = 0; i < numLettersToReveal; i++) {
+                int r = arc4random() % ([self.word length] - 1);
+                r++;
+                
+                if ([self.word characterAtIndex:(r - 1)] == kUNICHARSPACE) {
+                    // Do not attempt to reveal blank spaces
+                    i--;
+                }
+                else if (![self.revealedIndexes containsObject:[NSNumber numberWithInt:r]]) {
+                    [self showLetterAtIndex:r];
+                    
+                    [self disableAnswerTextFieldAtIndex:r];
+                    
+                    [self colorizeAnswerTextFieldAtIndex:r];
+                    
+                    [self.revealedIndexes addObject:[NSNumber numberWithInt:r]];
+                }
+                else {
+                    i--;
+                }
+            }
             
-            if ([self.word characterAtIndex:(r - 1)] == kUNICHARSPACE) {
-                // Do not attempt to reveal blank spaces
-                i--;
-            }
-            else if (![self.revealedIndexes containsObject:[NSNumber numberWithInt:r]]) {
-                [self showLetterAtIndex:r];
-                
-                [self disableAnswerTextFieldAtIndex:r];
-                
-                [self colorizeAnswerTextFieldAtIndex:r];
-                
-                [self.revealedIndexes addObject:[NSNumber numberWithInt:r]];
-            }
-            else {
-                i--;
-            }
-        }
-        
-        // Make the first available textfield active
-        for (int i = 0; i < [self.word length]; i++) {
-            if ([self.word characterAtIndex:i] == kUNICHARSPACE) {
-                // Do nothing
-            }
-            else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:(i + 1)]]) {
-                // Do nothing
-            }
-            else {
-                UITextField *tf = (UITextField *)[self.view viewWithTag:(i + 1)];
-                [tf becomeFirstResponder];
-                self.tf_answer = tf;
-                break;
+            // Make the first available textfield active
+            for (int i = 0; i < [self.word length]; i++) {
+                if ([self.word characterAtIndex:i] == kUNICHARSPACE) {
+                    // Do nothing
+                }
+                else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:(i + 1)]]) {
+                    // Do nothing
+                }
+                else {
+                    UITextField *tf = (UITextField *)[self.view viewWithTag:(i + 1)];
+                    [tf becomeFirstResponder];
+                    self.tf_answer = tf;
+                    break;
+                }
             }
         }
     }

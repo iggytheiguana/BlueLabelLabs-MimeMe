@@ -40,6 +40,7 @@
     Mime_meUIAnswerView         *m_v_answerView;
     
     int                         m_numHintsUsed;
+    int                         m_userGemCount;
     BOOL                        m_didMakeWord;
     
     CloudEnumerator             *m_mimeAnswerCloudEnumerator;
@@ -73,6 +74,7 @@
 @property (nonatomic, retain)           Mime_meUIAnswerView         *v_answerView;
 
 @property (nonatomic, assign)           int                         numHintsUsed;
+@property (nonatomic, assign)           int                         userGemCount;
 @property (nonatomic, assign)           BOOL                        didMakeWord;
 
 @property (nonatomic, retain)           CloudEnumerator             *mimeAnswerCloudEnumerator;

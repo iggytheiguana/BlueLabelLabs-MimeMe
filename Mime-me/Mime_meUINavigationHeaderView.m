@@ -206,8 +206,7 @@
     [self.btn_gemCount setTitle:[user.numberofpoints stringValue] forState:UIControlStateNormal];
     if ([user.numberofpoints stringValue].length > 3) {
         self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
-    } 
-    
+    }
     
 }
 

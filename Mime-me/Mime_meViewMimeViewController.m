@@ -59,6 +59,7 @@
 @synthesize v_answerView        = m_v_answerView;
 
 @synthesize numHintsUsed        = m_numHintsUsed;
+@synthesize userGemCount      = m_userGemCount;
 @synthesize didMakeWord         = m_didMakeWord;
 
 @synthesize mimeAnswerCloudEnumerator   = m_mimeAnswerCloudEnumerator;
@@ -200,10 +201,19 @@
     CGPathRef shadowPath = [UIBezierPath bezierPathWithRect:self.v_customNavContainer.layer.bounds].CGPath;
     [self.v_customNavContainer.layer setShadowPath:shadowPath];
     
+    
+    // Update the local store of the user's gem count which will be used for updating UI elements
+    self.userGemCount = [self.loggedInUser.numberofpoints intValue];
+    
     // Setup Gem Count button, disable it for now
     [self.btn_gemCount setEnabled:NO];
-    [self.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
-    if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+//    [self.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
+//    if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+//        self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+//    }
+    NSString *userGemCountStr = [NSString stringWithFormat:@"%d", self.userGemCount];
+    [self.btn_gemCount setTitle:userGemCountStr forState:UIControlStateNormal];
+    if (userGemCountStr.length > 3) {
         self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     }
     
@@ -763,6 +773,7 @@
     
 //    int newGemTotal = [self.loggedInUser.numberofpoints intValue] + pointsAwarded;
 //    self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
+    self.userGemCount = self.userGemCount + pointsAwarded;
     
     // Show the hud and save
     [self showHUDForSendAnswer];
@@ -772,29 +783,14 @@
     
 }
 
-- (IBAction) onClueButtonPressed:(id)sender {
+- (BOOL)canUseHint {
     ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
     int gemsForClue = [settings.gems_for_clue intValue];
-    int userGemCount = [self.loggedInUser.numberofpoints intValue];
+//    int userGemCount = [self.loggedInUser.numberofpoints intValue];
+    int userGemCount = self.userGemCount;
     
     if (userGemCount >= gemsForClue) {
-        // Flag that the user did use a hint.
-        // We will update the didUseHint property on the MimeAnswer object at save
-        self.numHintsUsed++;
-        
-        // Decrement the users gem total for use of a clue
-        int newGemTotal = userGemCount - gemsForClue;
-        self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
-        
-        // Save new gem total
-        ResourceContext *resourceContext = [ResourceContext instance];
-        [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
-        
-        // Update the gem count displayed in the navigation header
-        [self.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
-        if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
-            self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
-        }
+        return YES;
     }
     else {
         // User goes not have enough gems, alert
@@ -808,7 +804,55 @@
                               otherButtonTitles:nil];
         [alert show];
         [alert release];
+        
+        return NO;
     }
+}
+
+- (IBAction) onClueButtonPressed:(id)sender {
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    int gemsForClue = [settings.gems_for_clue intValue];
+//    int userGemCount = [self.loggedInUser.numberofpoints intValue];
+    int userGemCount = self.userGemCount;
+    
+    if (userGemCount >= gemsForClue) {
+        // Flag that the user did use a hint.
+        // We will update the didUseHint property on the MimeAnswer object at save
+        self.numHintsUsed++;
+        
+        // Decrement the users gem total for use of a clue
+        int newGemTotal = userGemCount - gemsForClue;
+        self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
+        self.userGemCount = newGemTotal;
+        
+        // Save new gem total
+        ResourceContext *resourceContext = [ResourceContext instance];
+        [resourceContext save:YES onFinishCallback:nil trackProgressWith:nil];
+        
+        // Update the gem count displayed in the navigation header
+//        [self.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
+//        if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+//            self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+//        }
+        NSString *userGemCountStr = [NSString stringWithFormat:@"%d", self.userGemCount];
+        [self.btn_gemCount setTitle:userGemCountStr forState:UIControlStateNormal];
+        if (userGemCountStr.length > 3) {
+            self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+        }
+    }
+//    else {
+//        // User goes not have enough gems, alert
+//        NSString *message = [NSString stringWithFormat:@"You must have at least %d gem to get a clue.", gemsForClue];
+//        
+//        UIAlertView* alert = [[UIAlertView alloc]
+//                              initWithTitle:@"Not enough gems!"
+//                              message:message
+//                              delegate:self
+//                              cancelButtonTitle:@"OK"
+//                              otherButtonTitles:nil];
+//        [alert show];
+//        [alert release];
+//    }
 }
 
 - (IBAction) onFlagButtonPressed:(id)sender {
@@ -957,8 +1001,13 @@
                 [self.view addSubview:self.v_confirmationView];
                 
                 // Update the gem count displayed in the navigation header
-                [self.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
-                if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+//                [self.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
+//                if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+//                    self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+//                }
+                NSString *userGemCountStr = [NSString stringWithFormat:@"%d", self.userGemCount];
+                [self.btn_gemCount setTitle:userGemCountStr forState:UIControlStateNormal];
+                if (userGemCountStr.length > 3) {
                     self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
                 }
                 
