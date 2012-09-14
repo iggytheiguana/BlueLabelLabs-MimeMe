@@ -755,20 +755,24 @@
     }
     
     // Increment the users gem total for the newly created Mime
+    int userGemCount = self.userGemCount;
+    
     int pointsAwarded;
     if (usedAllClues == YES) {
         // no points are awarded when all clue is used
         pointsAwarded = 0;
-        mimeAnswer.pointsawarded = [NSNumber numberWithInt:0];
+//        mimeAnswer.pointsawarded = [NSNumber numberWithInt:0];
         
         // update the confirmation view title and subtitles
-        NSString *title = [NSString stringWithFormat:@"Draw!", pointsAwarded];
-        NSString *subtitle = [NSString stringWithFormat:@"You did not earn any gems", pointsAwarded];
+        NSString *title = [NSString stringWithFormat:@"Draw!"];
+        NSString *subtitle = [NSString stringWithFormat:@"You did not earn any gems"];
         self.v_confirmationView.lbl_title.text = title;
         self.v_confirmationView.lbl_subtitle.text = subtitle;
     }
     else {
-        pointsAwarded = [mimeAnswer.pointsawarded intValue];
+//        pointsAwarded = [mimeAnswer.pointsawarded intValue];
+        ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+        pointsAwarded = [settings.gems_for_correct_guess intValue];
     }
     
 //    int newGemTotal = [self.loggedInUser.numberofpoints intValue] + pointsAwarded;
@@ -1001,15 +1005,24 @@
                 [self.view addSubview:self.v_confirmationView];
                 
                 // Update the gem count displayed in the navigation header
-//                [self.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
-//                if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
+//                ResourceContext* resourceContext = [ResourceContext instance];
+//                AuthenticationManager* authenticationManager = [AuthenticationManager instance];
+//                User *user = (User*)[resourceContext resourceWithType:USER withID:authenticationManager.m_LoggedInUserID];
+//                [self.btn_gemCount setTitle:[user.numberofpoints stringValue] forState:UIControlStateNormal];
+//                if ([user.numberofpoints stringValue].length > 3) {
 //                    self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
 //                }
-                NSString *userGemCountStr = [NSString stringWithFormat:@"%d", self.userGemCount];
-                [self.btn_gemCount setTitle:userGemCountStr forState:UIControlStateNormal];
-                if (userGemCountStr.length > 3) {
+                
+                int numUserPointsTEMP = [self.loggedInUser.numberofpoints intValue];
+                [self.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
+                if ([self.loggedInUser.numberofpoints stringValue].length > 3) {
                     self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
                 }
+//                NSString *userGemCountStr = [NSString stringWithFormat:@"%d", self.userGemCount];
+//                [self.btn_gemCount setTitle:userGemCountStr forState:UIControlStateNormal];
+//                if (userGemCountStr.length > 3) {
+//                    self.btn_gemCount.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+//                }
                 
                 [self showConfirmationView];
             }
