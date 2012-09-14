@@ -87,7 +87,7 @@
 - (void) dismissWithResult:(BOOL)result 
 {
     //[self.parentViewController dismissModalViewControllerAnimated:YES];
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissModalViewControllerAnimated:NO];
     
     if (result) 
     {

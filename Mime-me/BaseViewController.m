@@ -175,7 +175,11 @@
     NSString* activityName = @"BaseViewController.viewWillAppear:";
     
     // Refresh the user object
-    [self enumerateUser];
+    AuthenticationManager* authenticationManager = [AuthenticationManager instance];
+    if ([authenticationManager isUserAuthenticated])
+    {
+        [self enumerateUser];
+    }
     
     // Refresh the notification feed
     Callback* callback = [Callback callbackForTarget:self selector:@selector(onFeedRefreshComplete:) fireOnMainThread:YES];
@@ -394,14 +398,15 @@
 {
     LoginViewController* loginViewController = [LoginViewController createAuthenticationInstance:getFaceobook shouldGetTwitter:getTwitter onSuccessCallback:successCallback onFailureCallback:failCallback];
    
-//    UINavigationController* navigationController = [[UINavigationController alloc]initWithRootViewController:loginViewController];
+    UINavigationController* navigationController = [[UINavigationController alloc]initWithRootViewController:loginViewController];
+ 
 //    navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 //    [navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     [self.navigationController hidesBottomBarWhenPushed];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    
-    [self.navigationController setViewControllers:[NSArray arrayWithObject:loginViewController] animated:NO];
-//    [navigationController release];
+    [self presentModalViewController:navigationController animated:YES];
+    //[self.navigationController setViewControllers:[NSArray arrayWithObject:loginViewController] animated:NO];
+    [navigationController release];
     
 }
 
