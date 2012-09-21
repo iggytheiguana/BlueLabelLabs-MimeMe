@@ -317,7 +317,7 @@
     EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
     enumerationContext.pageSize = settingsObject.pagesize;
     
-    enumerationContext.maximumNumberOfResults = settingsObject.feed_maxnumtodownload;   
+    enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:[facebookids count]];  
     return enumerationContext;
 
 }
