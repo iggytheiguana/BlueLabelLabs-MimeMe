@@ -54,4 +54,5 @@
 + (id) queryForTopFavoritedMimes;
 + (id) queryForMimeAnswersForMime:(NSNumber*)mimeid;
 + (id) queryForComments:(NSNumber*)mimeid;
++ (id) queryForUsersByFacebookIDs:(NSArray*)facebookids;
 @end

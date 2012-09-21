@@ -52,6 +52,7 @@
 +(EnumerationContext*) contextForTopFavoritedMimes;
 +(EnumerationContext*) contextForMimeAnswersForMime:(NSNumber*)mimeid;
 +(EnumerationContext*) contextForComments:(NSNumber*)mimeid;
++(EnumerationContext*) contextForUsersByFacebookID:(NSArray*)facebookids;
 - (id) init;
 - (NSString*) toJSON;
 @end
