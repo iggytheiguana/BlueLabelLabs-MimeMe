@@ -18,6 +18,7 @@
     UIView                      *m_v_headerContainer;
     
     CloudEnumerator             *m_mimeAnswerCloudEnumerator;
+//    CloudEnumerator             *m_userCloudEnumerator;
     
 }
 
@@ -26,6 +27,7 @@
 @property (nonatomic, retain)           NSFetchedResultsController  *frc_mimeAnswers;
 
 @property (nonatomic, retain)           CloudEnumerator             *mimeAnswerCloudEnumerator;
+//@property (nonatomic, retain)           CloudEnumerator             *userCloudEnumerator;
 
 @property (nonatomic, retain) IBOutlet  UITableView                 *tbl_answers;
 

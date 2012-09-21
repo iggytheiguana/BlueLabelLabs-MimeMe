@@ -118,7 +118,8 @@
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
     
     NSNumber* hasAnsweredObj = [NSNumber numberWithBool:NO];
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, HASANSWERED, hasAnsweredObj];
+    NSNumber* isPublicObj = [NSNumber numberWithBool:YES];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, HASANSWERED, hasAnsweredObj, ISPUBLIC, isPublicObj];
     
     [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -161,7 +162,8 @@
     
     NSNumber* hasAnsweredObj = [NSNumber numberWithBool:NO];
     NSNumber* isStaffPickObj = [NSNumber numberWithBool:YES];
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, ISSTAFFPICK, isStaffPickObj, HASANSWERED, hasAnsweredObj];
+    NSNumber* isPublicObj = [NSNumber numberWithBool:YES];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, ISSTAFFPICK, isStaffPickObj, HASANSWERED, hasAnsweredObj, ISPUBLIC, isPublicObj];
     
     [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -204,7 +206,8 @@
     
     NSNumber* hasAnsweredObj = [NSNumber numberWithBool:NO];
     NSNumber* minFavorited = [NSNumber numberWithInt:0];
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K>%@", CREATORID, self.loggedInUser.objectid, HASANSWERED, hasAnsweredObj, NUMBEROFTIMESFAVORITED, minFavorited];
+    NSNumber* isPublicObj = [NSNumber numberWithBool:YES];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K>%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, HASANSWERED, hasAnsweredObj, NUMBEROFTIMESFAVORITED, minFavorited, ISPUBLIC, isPublicObj];
     
     [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];

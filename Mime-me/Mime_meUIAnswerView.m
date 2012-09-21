@@ -498,32 +498,71 @@
     BOOL isCorrectAnswer = NO;
     BOOL allTextFieldsPopulated = YES;
     
+    /* OLD WAY */
+//    for (int i = 1; i <= [self.word length]; i++) {
+//        
+//        unichar answerChar = [self.word characterAtIndex:(i - 1)];
+//        
+//        if (answerChar == kUNICHARSPACE) {
+//            // Do nothing to account for space in answer
+//            NSLog(@"Space in answer phrase");
+//        }
+//        else {
+//            UITextField *tf = (UITextField *)[self.view viewWithTag:i];
+//            
+//            unichar tfChar = [tf.text characterAtIndex:0];
+//            
+//            if ([tf.text isEqualToString:@" "]) {
+//                isCorrectAnswer = NO;
+//                allTextFieldsPopulated = NO;
+//                break;
+//            }
+//            else if (tfChar != answerChar) {
+//                isCorrectAnswer = NO;
+//            }
+//            else {
+//                isCorrectAnswer = YES;
+//            }
+//        }
+//    }
+    /* END OLD WAY */
+    
+    /* NEW WAY */
+    // Build a string from the answer textfield boxes
+    NSString *userAnswerStr = [[NSString alloc] init];
     for (int i = 1; i <= [self.word length]; i++) {
         
         unichar answerChar = [self.word characterAtIndex:(i - 1)];
         
         if (answerChar == kUNICHARSPACE) {
-            // Do nothing to account for space in answer
             NSLog(@"Space in answer phrase");
+            
+            // Add space for space in user answer string
+            userAnswerStr = [NSString stringWithFormat:@"%@ ", userAnswerStr];
         }
         else {
             UITextField *tf = (UITextField *)[self.view viewWithTag:i];
             
-            unichar tfChar = [tf.text characterAtIndex:0];
-            
-            if ([tf.text isEqualToString:@" "]) {
+            if (tf.text == nil || [tf.text isEqualToString:@" "]) {
+                // We have an empty box, we can break
+                userAnswerStr = [NSString stringWithFormat:@"%@ ", userAnswerStr];
                 isCorrectAnswer = NO;
                 allTextFieldsPopulated = NO;
                 break;
             }
-            else if (tfChar != answerChar) {
-                isCorrectAnswer = NO;
-            }
             else {
-                isCorrectAnswer = YES;
+                // Add letter to user answer string
+                userAnswerStr = [NSString stringWithFormat:@"%@%@", userAnswerStr, tf.text];
             }
         }
     }
+    
+    // Now check to see if the answers match
+    if ([self.word isEqualToString:userAnswerStr] == YES) {
+        isCorrectAnswer = YES;
+        allTextFieldsPopulated = YES;
+    }
+    /* END NEW WAY */
     
     if (isCorrectAnswer == YES && allTextFieldsPopulated == YES) {
         // User submitted the correct answer

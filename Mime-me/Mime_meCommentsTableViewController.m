@@ -251,7 +251,8 @@
     NSString *commentStr = comment.comment1;
     cell.textLabel.text = commentStr;
     
-    NSString *creatorName = user.username;
+//    NSString *creatorName = user.username;
+    NSString *creatorName = comment.creatorname;
     NSDate* dateSent = [DateTimeHelper parseWebServiceDateDouble:comment.datecreated];
     NSString *dateSentStr = [self getDateStringForMimeDate:dateSent];
     

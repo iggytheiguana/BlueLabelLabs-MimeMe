@@ -36,6 +36,7 @@
 @synthesize tbl_answers                 = m_tbl_answers;
 @synthesize btn_back                    = m_btn_back;
 @synthesize v_headerContainer           = m_v_headerContainer;
+//@synthesize userCloudEnumerator         = m_userCloudEnumerator;
 
 
 #pragma mark - FRCs
@@ -216,7 +217,8 @@
     MimeAnswer *mimeAnswer = [[self.frc_mimeAnswers fetchedObjects] objectAtIndex:indexPath.row];
     User *user = (User*)[resourceContext resourceWithType:USER withID:mimeAnswer.targetuserid];
     
-    NSString *targetName = user.username;
+//    NSString *targetName = user.username;
+    NSString *targetName = mimeAnswer.targetname;
     cell.textLabel.text = targetName;
     
     if ([mimeAnswer.state intValue] == kANSWERED) {

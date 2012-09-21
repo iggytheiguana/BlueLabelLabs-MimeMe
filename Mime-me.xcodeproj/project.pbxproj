@@ -1780,6 +1780,7 @@
 				);
 				"OTHER_LDFLAGS[arch=*]" = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1808,6 +1809,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "CB00A2D1-EFBE-4786-A39C-1B2E06A8576D";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "CB00A2D1-EFBE-4786-A39C-1B2E06A8576D";
+				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

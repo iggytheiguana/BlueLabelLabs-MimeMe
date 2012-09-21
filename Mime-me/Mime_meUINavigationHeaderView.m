@@ -214,14 +214,16 @@
 - (IBAction) onHomeButtonPressed:(id)sender {
     UIViewController *parentViewController = (UIViewController *)self.delegate;
     
-    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+//    Mime_meMenuViewController *menuViewController = [Mime_meMenuViewController createInstance];
+    Mime_meCreateMimeViewController *createMimeViewController = [Mime_meCreateMimeViewController createInstance];
+    
     
     [UIView animateWithDuration:0.75
                      animations:^{
                          [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
                          [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:parentViewController.navigationController.view cache:YES];
                      }];
-    [parentViewController.navigationController setViewControllers:[NSArray arrayWithObject:menuViewController] animated:NO];
+    [parentViewController.navigationController setViewControllers:[NSArray arrayWithObject:createMimeViewController] animated:NO];
     
 //    [self.delegate onHomeButtonPressed:sender];
 }
