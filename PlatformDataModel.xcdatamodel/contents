@@ -163,6 +163,7 @@
         <attribute name="numberofpointssw" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="prevachievementthreshold" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="sharinglevel" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="state" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="thumbnailurl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="twitter_user_Id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
@@ -190,7 +191,7 @@
         <element name="request" positionX="340" positionY="90" width="128" height="165"/>
         <element name="resource" positionX="160" positionY="414" width="128" height="135"/>
         <element name="TypeInstanceData" positionX="90" positionY="-342" width="128" height="105"/>
-        <element name="user" positionX="252" positionY="852" width="128" height="300"/>
+        <element name="user" positionX="252" positionY="852" width="128" height="315"/>
         <element name="Word" positionX="387" positionY="279" width="128" height="120"/>
     </elements>
 </model>

@@ -29,6 +29,7 @@
 @property (nonatomic,retain) NSString* thumbnailurl;
 @property (nonatomic,retain) NSString* twitter_user_id;
 @property (nonatomic,retain) NSString* username;
+@property (nonatomic,retain) NSNumber* state;
 
 + (int) unopenedNotificationsFor:(NSNumber*)objectid;
 

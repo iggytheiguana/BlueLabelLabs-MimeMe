@@ -31,6 +31,7 @@
 @dynamic twitter_user_id;
 @dynamic username;
 @dynamic thumbnailurl;
+@dynamic state;
 
 
 - (id) initFromJSONDictionary:(NSDictionary *)jsonDictionary {
