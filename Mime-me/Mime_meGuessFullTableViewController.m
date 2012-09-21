@@ -78,7 +78,8 @@
         entityDescription = [NSEntityDescription entityForName:MIME inManagedObjectContext:app.managedObjectContext];
         
         NSNumber* hasAnsweredObj = [NSNumber numberWithBool:NO];
-        predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, HASANSWERED, hasAnsweredObj];
+        NSNumber* isPublicObj = [NSNumber numberWithBool:YES];
+        predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, HASANSWERED, hasAnsweredObj, ISPUBLIC, isPublicObj];
     }
     else if (self.mimeType == kTOPFAVORITEDMIME) {
         sortDescriptor = [[NSSortDescriptor alloc] initWithKey:NUMBEROFTIMESFAVORITED ascending:NO];
@@ -87,7 +88,8 @@
         
         NSNumber* hasAnsweredObj = [NSNumber numberWithBool:NO];
         NSNumber* minFavorited = [NSNumber numberWithInt:0];
-        predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K>%@", CREATORID, self.loggedInUser.objectid, HASANSWERED, hasAnsweredObj, NUMBEROFTIMESFAVORITED, minFavorited];
+        NSNumber* isPublicObj = [NSNumber numberWithBool:YES];
+        predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K>%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, HASANSWERED, hasAnsweredObj, NUMBEROFTIMESFAVORITED, minFavorited, ISPUBLIC, isPublicObj];
     }
     else if (self.mimeType == kSTAFFPICKEDMIME) {
         sortDescriptor = [[NSSortDescriptor alloc] initWithKey:DATECREATED ascending:NO];
@@ -96,7 +98,8 @@
         
         NSNumber* hasAnsweredObj = [NSNumber numberWithBool:NO];
         NSNumber* isStaffPickObj = [NSNumber numberWithBool:YES];
-        predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, ISSTAFFPICK, isStaffPickObj, HASANSWERED, hasAnsweredObj];
+        NSNumber* isPublicObj = [NSNumber numberWithBool:YES];
+        predicate = [NSPredicate predicateWithFormat:@"%K!=%@ AND %K=%@ AND %K=%@ AND %K=%@", CREATORID, self.loggedInUser.objectid, ISSTAFFPICK, isStaffPickObj, HASANSWERED, hasAnsweredObj, ISPUBLIC, isPublicObj];
     }
     
     [fetchRequest setPredicate:predicate];

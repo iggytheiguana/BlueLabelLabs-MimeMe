@@ -256,6 +256,7 @@
     navigationHeader.btn_mime.hidden = YES;
     navigationHeader.btn_guess.hidden = YES;
     navigationHeader.btn_scrapbook.hidden = YES;
+    [navigationHeader.btn_home setEnabled:YES];     // Enable the Home button to bring the user back to the create start screen and cancel out of the mime creation
     self.nv_navigationHeader = navigationHeader;
     [self.view addSubview:self.nv_navigationHeader];
     [navigationHeader release];

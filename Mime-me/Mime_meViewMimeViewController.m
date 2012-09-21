@@ -422,15 +422,13 @@
     
     // Set up the view based on the case
     if (self.viewMimeCase == kVIEWSENTMIME) {
-        
         [self showConfirmationView];
-        
     }
     else if (self.viewMimeCase == kVIEWANSWERMIME) {
         
     }
     else if (self.viewMimeCase == kVIEWSCRAPBOOKMIME) {
-        
+        [self performSelector:@selector(showConfirmationView) withObject:nil afterDelay:1];
     }
     
     // Mark the Mime and Mime Answer objects as seen
