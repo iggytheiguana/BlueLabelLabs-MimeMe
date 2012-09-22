@@ -352,7 +352,11 @@
 //    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Mime_me" withExtension:@"momd"];
 //    __managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
 
-    __managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
+   // __managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
+    
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"PlatformDataModel-v2" ofType:@"momd"];
+    NSURL *momURL = [NSURL fileURLWithPath:path];
+    __managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:momURL];
     return __managedObjectModel;
 }
 
