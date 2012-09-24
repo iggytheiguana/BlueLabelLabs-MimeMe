@@ -145,7 +145,8 @@
             // we can move forward with the algorithm. If it is less than or = to 0 it means 
             // the sum of the fitness values is 0.
             while (random > 0) {
-                random = random - [[fitnessArray objectAtIndex:wordIndex] floatValue];
+                float fitnessVal = [[fitnessArray objectAtIndex:wordIndex] floatValue];
+                random = random - fitnessVal;
                 wordIndex++;
             }
             wordIndex--;
