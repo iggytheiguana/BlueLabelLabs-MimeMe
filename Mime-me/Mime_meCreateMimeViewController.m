@@ -270,6 +270,7 @@
     // Set up cloud enumerator for words
     self.wordsCloudEnumerator = [CloudEnumerator enumeratorForWords];
     self.wordsCloudEnumerator.delegate = self;
+    self.wordsCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:kNUMWORDS];
     
     // Initialize Google AdMob Banner view
     [self initializeGADBannerView];
