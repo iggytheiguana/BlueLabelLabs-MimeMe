@@ -686,6 +686,19 @@ static NSLock* _lock; //lock used to synchronize the processing of enumeration r
     return enumerator;
 }
 
++ (CloudEnumerator*) enumerateForUsersByFacebookID:(NSArray*)facebookids
+{
+    ApplicationSettings* settings = [[ApplicationSettingsManager instance] settings];
+    Query* query = [Query queryForUsersByFacebookIDs:facebookids];
+    QueryOptions* queryOptions = [QueryOptions queryForUsersByFacebookID:facebookids];
+    EnumerationContext* enumerationContext = [EnumerationContext contextForUsersByFacebookID:facebookids];
+    query.queryOptions = queryOptions;
+    
+    CloudEnumerator* enumerator = [[[CloudEnumerator alloc]initWithEnumerationContext:enumerationContext withQuery:query withQueryOptions:queryOptions]autorelease];
+    enumerator.secondsBetweenConsecutiveSearches = [settings.feed_enumeration_timegap intValue];
+    return enumerator;
+}
+
 
 //
 //+ (CloudEnumerator*) enumeratorForFollowers:(NSNumber *)userid

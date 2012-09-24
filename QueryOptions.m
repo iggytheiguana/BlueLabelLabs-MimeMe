@@ -344,4 +344,14 @@
     return newQuery;
 }
 
++(QueryOptions*)queryForUsersByFacebookID:(NSArray *)facebookids
+{
+    QueryOptions* newQuery = [[QueryOptions alloc]autorelease];
+    newQuery.includelinkedobjects = NO;
+    newQuery.primary_results_sortascending = NO;
+    newQuery.primary_results_sortattribute = DATECREATED;
+    newQuery.clause_operator = opcode_CLAUSEOR;
+    return newQuery;
+}
+
 @end

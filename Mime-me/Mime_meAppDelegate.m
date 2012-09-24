@@ -352,7 +352,11 @@
 //    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Mime_me" withExtension:@"momd"];
 //    __managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
 
-    __managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
+   // __managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
+    
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"PlatformDataModel-v2" ofType:@"momd"];
+    NSURL *momURL = [NSURL fileURLWithPath:path];
+    __managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:momURL];
     return __managedObjectModel;
 }
 
@@ -365,10 +369,12 @@
     }
     
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Mime_me.sqlite"];
-    
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
     NSError *error = nil;
     __persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![__persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+    if (![__persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
         /*
          Replace this implementation with code to handle the error appropriately.
          

@@ -310,4 +310,15 @@
     return enumerationContext;
 
 }
+
++ (EnumerationContext*) contextForUsersByFacebookID:(NSArray *)facebookids
+{
+    ApplicationSettings* settingsObject = [[ApplicationSettingsManager instance] settings];
+    EnumerationContext* enumerationContext = [[[EnumerationContext alloc]init] autorelease];
+    enumerationContext.pageSize = settingsObject.pagesize;
+    
+    enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:[facebookids count]];  
+    return enumerationContext;
+
+}
 @end

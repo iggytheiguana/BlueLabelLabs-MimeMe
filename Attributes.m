@@ -147,3 +147,4 @@ NSString* const GEMS_FOR_GETTING_NEW_WORDS  =@"gems_for_getting_new_words";
 NSString* const NUMBEROFTIMESFAVORITED = @"numberoftimesfavorited";
 NSString* const NUMBEROFPOINTSLW        =@"numberofpointslw";
 NSString* const NUMBEROFHINTSUSED       =@"numberofhintsused";
+NSString* const FB_USER_ID              =@"fb_user_id";

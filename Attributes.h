@@ -157,3 +157,4 @@ extern NSString* const GEMS_FOR_GETTING_NEW_WORDS;
 extern NSString* const NUMBEROFTIMESFAVORITED;
 extern NSString* const NUMBEROFPOINTSLW;
 extern NSString* const NUMBEROFHINTSUSED;
+extern NSString* const FB_USER_ID;

@@ -95,4 +95,5 @@
 + (CloudEnumerator*) enumeratorForTopFavoritedMimes;
 + (CloudEnumerator*) enumeratorForMimeAnswersForMime:(NSNumber*)mimeid;
 + (CloudEnumerator*) enumeratorForComments:(NSNumber*)mimeid;
++ (CloudEnumerator*) enumerateForUsersByFacebookID:(NSArray*)facebookids;
 @end

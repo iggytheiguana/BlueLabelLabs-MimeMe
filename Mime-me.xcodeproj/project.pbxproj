@@ -197,7 +197,6 @@
 		C523A162159F8A47004AA39C /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = C523A0FA159F8090004AA39C /* ASIAuthenticationDialog.m */; };
 		C523A163159F8A47004AA39C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = C523A0FC159F80A3004AA39C /* JSONKit.m */; };
 		C523A164159F8A47004AA39C /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = C523A0FF159F80AD004AA39C /* MBProgressHUD.m */; };
-		C523A16E159F8B30004AA39C /* PlatformDataModel.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = C523A165159F8B30004AA39C /* PlatformDataModel.xcdatamodel */; };
 		C523A16F159F8B30004AA39C /* Feed.m in Sources */ = {isa = PBXBuildFile; fileRef = C523A167159F8B30004AA39C /* Feed.m */; };
 		C523A170159F8B30004AA39C /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = C523A169159F8B30004AA39C /* User.m */; };
 		C523A171159F8B30004AA39C /* FeedData.m in Sources */ = {isa = PBXBuildFile; fileRef = C523A16B159F8B30004AA39C /* FeedData.m */; };
@@ -235,6 +234,7 @@
 		C57AAEBE15A1155A009FFCCF /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = C57AAEBD15A1155A009FFCCF /* Friend.m */; };
 		C57AAEC115A115A8009FFCCF /* Favorite.m in Sources */ = {isa = PBXBuildFile; fileRef = C57AAEC015A115A8009FFCCF /* Favorite.m */; };
 		C57AAEC415A115CF009FFCCF /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = C57AAEC315A115CF009FFCCF /* Comment.m */; };
+		C58D8785160E603F006166DE /* PlatformDataModel-v2.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C58D8782160E603F006166DE /* PlatformDataModel-v2.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -584,7 +584,6 @@
 		C523A114159F88B9004AA39C /* libz.1.1.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.1.3.dylib; path = usr/lib/libz.1.1.3.dylib; sourceTree = SDKROOT; };
 		C523A115159F88B9004AA39C /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		C523A116159F88B9004AA39C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		C523A165159F8B30004AA39C /* PlatformDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PlatformDataModel.xcdatamodel; sourceTree = "<group>"; };
 		C523A166159F8B30004AA39C /* Feed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feed.h; sourceTree = "<group>"; };
 		C523A167159F8B30004AA39C /* Feed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Feed.m; sourceTree = "<group>"; };
 		C523A168159F8B30004AA39C /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -662,6 +661,8 @@
 		C57AAEC015A115A8009FFCCF /* Favorite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Favorite.m; sourceTree = "<group>"; };
 		C57AAEC215A115CF009FFCCF /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
 		C57AAEC315A115CF009FFCCF /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
+		C58D8783160E603F006166DE /* PlatformDataModel-v 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "PlatformDataModel-v 2.xcdatamodel"; sourceTree = "<group>"; };
+		C58D8784160E603F006166DE /* PlatformDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PlatformDataModel.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -983,7 +984,7 @@
 		C523A032159F7EC1004AA39C /* Application */ = {
 			isa = PBXGroup;
 			children = (
-				C523A165159F8B30004AA39C /* PlatformDataModel.xcdatamodel */,
+				C58D8782160E603F006166DE /* PlatformDataModel-v2.xcdatamodeld */,
 				C523A166159F8B30004AA39C /* Feed.h */,
 				C523A167159F8B30004AA39C /* Feed.m */,
 				C523A168159F8B30004AA39C /* User.h */,
@@ -1635,7 +1636,6 @@
 				C523A164159F8A47004AA39C /* MBProgressHUD.m in Sources */,
 				C523A01E159F7CE7004AA39C /* main.m in Sources */,
 				C523A025159F7CE7004AA39C /* Mime_me.xcdatamodeld in Sources */,
-				C523A16E159F8B30004AA39C /* PlatformDataModel.xcdatamodel in Sources */,
 				C523A16F159F8B30004AA39C /* Feed.m in Sources */,
 				C523A170159F8B30004AA39C /* User.m in Sources */,
 				C523A171159F8B30004AA39C /* FeedData.m in Sources */,
@@ -1700,6 +1700,7 @@
 				52D926F115D1CE8B00DA16BC /* SocialSharingManager.m in Sources */,
 				52FDC02E15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.m in Sources */,
 				52B3E7DD15E531D2004E9C4A /* Mime_meCommentsTableViewController.m in Sources */,
+				C58D8785160E603F006166DE /* PlatformDataModel-v2.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1845,6 +1846,17 @@
 			);
 			currentVersion = C523A024159F7CE7004AA39C /* Mime_me.xcdatamodel */;
 			path = Mime_me.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		C58D8782160E603F006166DE /* PlatformDataModel-v2.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C58D8783160E603F006166DE /* PlatformDataModel-v 2.xcdatamodel */,
+				C58D8784160E603F006166DE /* PlatformDataModel.xcdatamodel */,
+			);
+			currentVersion = C58D8783160E603F006166DE /* PlatformDataModel-v 2.xcdatamodel */;
+			path = "PlatformDataModel-v2.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

@@ -497,4 +497,30 @@
     [queryExpression release];
     return query;
 }
+
++ (Query*) queryForUsersByFacebookIDs:(NSArray*)facebookids
+{
+    Query* query = [[[Query alloc]init ]autorelease];
+    query.filterObjectType = USER;
+    NSMutableArray* queryExpressions = [[NSMutableArray alloc]init ];
+    
+    for (NSNumber* facebookUserID in facebookids) {
+        QueryExpression* queryExpression = [[QueryExpression alloc]init];
+        queryExpression.attributeName = FB_USER_ID;
+        queryExpression.opCode = opcode_QUERYEQUALITY;
+        queryExpression.value = [facebookUserID stringValue];
+        
+        [queryExpressions addObject:facebookUserID];
+        [queryExpression release];
+    }
+    
+    
+    
+    query.attributeExpressions = queryExpressions;
+    [queryExpressions release];
+    
+    
+    return query;
+
+}
 @end

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11E53" minimumToolsVersion="Xcode 4.2" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="applicationsettings" representedClassName="ApplicationSettings" parentEntity="resource">
+        <attribute name="base_url" optional="YES" attributeType="String"/>
+        <attribute name="fb_app_id" optional="YES" attributeType="String"/>
+        <attribute name="feed_enumeration_timegap" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="feed_maxnumtodownload" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="follow_enumeration_timegap" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="follow_maxnumtodownload" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="gems_for_clue" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="gems_for_correct_guess" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="gems_for_getting_new_words" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="gems_for_new_mime" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="gems_for_new_word" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="http_timeout_seconds" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="num_users" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="numberoflinkedobjectstoreturn" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="pagesize" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="poll_expiry_seconds" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="progress_maxsecondstodisplay" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="twitter_consumerkey" optional="YES" attributeType="String"/>
+        <attribute name="twitter_consumersecret" optional="YES" attributeType="String"/>
+        <attribute name="version" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+    </entity>
+    <entity name="attributechange" representedClassName="AttributeChange" syncable="YES">
+        <attribute name="attributename" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="delta" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="hasbeenprocessed" optional="YES" attributeType="Boolean" defaultValueString="0" syncable="YES"/>
+        <attribute name="newvalue" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="oldvalue" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="opcode" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="targetobjectid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="targetobjecttype" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="AttributeInstanceData" representedClassName="AttributeInstanceData">
+        <attribute name="attributename" optional="YES" attributeType="String"/>
+        <attribute name="iscounter" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="isdirty" optional="YES" attributeType="Boolean" defaultValueString="NO"/>
+        <attribute name="islocal" optional="YES" attributeType="Boolean"/>
+        <attribute name="islocked" optional="YES" attributeType="Boolean" defaultValueString="NO"/>
+        <attribute name="isurlattachment" optional="YES" attributeType="Boolean"/>
+        <relationship name="resource" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="resource" inverseName="attributeinstancedata" inverseEntity="resource" indexed="YES"/>
+    </entity>
+    <entity name="authenticationcontext" representedClassName="AuthenticationContext">
+        <attribute name="authenticator" optional="YES" attributeType="Binary"/>
+        <attribute name="expirydate" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="facebooktoken" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="facebooktokenexpiry" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="facebookuserid" optional="YES" attributeType="String"/>
+        <attribute name="hasfacebook" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="hastwitter" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="isfirsttime" optional="YES" attributeType="Boolean" defaultValueString="NO"/>
+        <attribute name="userid" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+    </entity>
+    <entity name="Comment" representedClassName="Comment" parentEntity="resource" syncable="YES">
+        <attribute name="comment1" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="creatorid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="creatorname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hasseen" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="mimeanswerid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="mimeid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="Contact" representedClassName="Contact" syncable="YES">
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="facebookid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="hasinstalled" optional="YES" attributeType="Boolean" defaultValueString="0" syncable="YES"/>
+        <attribute name="imageurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Favorite" representedClassName="Favorite" parentEntity="resource" syncable="YES">
+        <attribute name="mimeid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="userid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="feed" representedClassName="Feed" parentEntity="resource">
+        <attribute name="dateexpires" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="feeddatas" optional="YES" attributeType="Transformable"/>
+        <attribute name="feedevent" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="hasopened" attributeType="Boolean" defaultValueString="NO"/>
+        <attribute name="html" optional="YES" attributeType="String"/>
+        <attribute name="imageurl" optional="YES" attributeType="String"/>
+        <attribute name="message" optional="YES" attributeType="String"/>
+        <attribute name="rendertype" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="userid" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+    </entity>
+    <entity name="Friend" representedClassName="Friend" parentEntity="resource" syncable="YES">
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="facebookid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="targetuserid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="userid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="Mime" representedClassName="Mime" parentEntity="resource" syncable="YES">
+        <attribute name="creatorid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="creatorimageurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="creatorname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hasanswered" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="hasseen" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="imageurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isfavorite" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="ispublic" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="isstaffpick" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberofattempts" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberofflags" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberoftimesfavorited" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberoftimesviewed" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numbertimesanswered" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="thumbnailurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="visibility" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="word" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="wordid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="MimeAnswer" representedClassName="MimeAnswer" parentEntity="resource" syncable="YES">
+        <attribute name="answer" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="creatorid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="creatorname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="didusehint" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="hasseen" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="issentbyfriend" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="mimeid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberofhintsused" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="pointsawarded" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="state" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="targetemail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="targetfacebookid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="targetname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="targetuserid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="request" representedClassName="Request">
+        <attribute name="changedattributes" optional="YES" attributeType="String"/>
+        <attribute name="errormessage" optional="YES" attributeType="String"/>
+        <attribute name="objectid" attributeType="Integer 64" defaultValueString="0" indexed="YES"/>
+        <attribute name="operationcode" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="statuscode" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="targetresourceid" optional="YES" attributeType="Integer 64" defaultValueString="0"/>
+        <attribute name="targetresourcetype" optional="YES" attributeType="String"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="resource" representedClassName="Resource" isAbstract="YES">
+        <attribute name="datecreated" attributeType="Double" defaultValueString="0"/>
+        <attribute name="datemodified" optional="YES" attributeType="Double" defaultValueString="0"/>
+        <attribute name="objectid" attributeType="Integer 64" defaultValueString="0" indexed="YES"/>
+        <attribute name="objecttype" attributeType="String"/>
+        <relationship name="attributeinstancedata" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AttributeInstanceData" inverseName="resource" inverseEntity="AttributeInstanceData" indexed="YES"/>
+        <relationship name="typeinstancedata" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="TypeInstanceData" inverseName="resource" inverseEntity="TypeInstanceData" indexed="YES"/>
+    </entity>
+    <entity name="TypeInstanceData" representedClassName="TypeInstanceData">
+        <attribute name="iscloudtype" optional="YES" attributeType="Boolean"/>
+        <attribute name="issingleton" optional="YES" attributeType="Boolean"/>
+        <attribute name="typename" optional="YES" attributeType="String"/>
+        <relationship name="resource" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="resource" inverseName="typeinstancedata" inverseEntity="resource" indexed="YES"/>
+    </entity>
+    <entity name="user" representedClassName="User" parentEntity="resource">
+        <attribute name="achievementthreshold" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="app_version" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="devicetoken" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="displayname" optional="YES" attributeType="String"/>
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fb_user_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="imageurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="numberfollowing" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberoffollowers" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberofpoints" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberofpointslw" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberofpointssw" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="prevachievementthreshold" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="sharinglevel" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="state" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="thumbnailurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="twitter_user_Id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Word" representedClassName="Word" parentEntity="resource" syncable="YES">
+        <attribute name="creatorid" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="creatorname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="difficultylevel" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberofflags" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="numberoftimesused" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="word1" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="applicationsettings" positionX="18" positionY="810" width="225" height="345"/>
+        <element name="attributechange" positionX="-207" positionY="1017" width="128" height="165"/>
+        <element name="AttributeInstanceData" positionX="-216" positionY="-141" width="128" height="150"/>
+        <element name="authenticationcontext" positionX="-198" positionY="336" width="128" height="150"/>
+        <element name="Comment" positionX="18" positionY="-189" width="128" height="135"/>
+        <element name="Contact" positionX="-207" positionY="576" width="128" height="120"/>
+        <element name="Favorite" positionX="466" positionY="-270" width="128" height="75"/>
+        <element name="feed" positionX="367" positionY="576" width="128" height="180"/>
+        <element name="Friend" positionX="529" positionY="-96" width="128" height="105"/>
+        <element name="Mime" positionX="261" positionY="-297" width="128" height="300"/>
+        <element name="MimeAnswer" positionX="81" positionY="9" width="128" height="240"/>
+        <element name="request" positionX="340" positionY="90" width="128" height="165"/>
+        <element name="resource" positionX="160" positionY="414" width="128" height="135"/>
+        <element name="TypeInstanceData" positionX="90" positionY="-342" width="128" height="105"/>
+        <element name="user" positionX="252" positionY="852" width="128" height="315"/>
+        <element name="Word" positionX="387" positionY="279" width="128" height="120"/>
+    </elements>
+</model>
