@@ -19,6 +19,8 @@
 #import "Mime.h"
 #import "UserDefaultSettings.h"
 
+#define kNUMWORDS 200
+
 @interface Mime_meCreateMimeViewController ()
 
 @end
@@ -100,6 +102,7 @@
         self.wordsCloudEnumerator = nil;
         self.wordsCloudEnumerator = [CloudEnumerator enumeratorForWords];
         self.wordsCloudEnumerator.delegate = self;
+        self.wordsCloudEnumerator.enumerationContext.maximumNumberOfResults = [NSNumber numberWithInt:kNUMWORDS];
         [self.wordsCloudEnumerator enumerateUntilEnd:nil];
     }
     
