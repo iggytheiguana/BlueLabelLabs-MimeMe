@@ -123,7 +123,7 @@
             
         }
         else {
-            // Replace the selected friedns array with the copy that has any deselected friends removed
+            // Replace the selected friends array with the copy that has any deselected friends removed
             self.selectedFriendsArray = self.selectedFriendsArrayCopy;
             
             // Launch the friends list with the Facebook friends list loaded

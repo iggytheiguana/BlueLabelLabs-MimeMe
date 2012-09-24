@@ -58,8 +58,8 @@
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     [fetchRequest setEntity:entityDescription];
     
-    // Fetch 100 words then we'll perform a random selection
-    [fetchRequest setFetchBatchSize:100];
+    // Fetch 500 words then we'll perform a random selection
+    [fetchRequest setFetchBatchSize:500];
     
     NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:resourceContext.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
     
@@ -121,9 +121,10 @@
             
             // Get the fitness of the word and invert it
             float fitnessF = 1.0;   // the defualt fitness value is 1.0, therefore we need to add 1.0 to each fitness value
-            if ([word.numberoftimesused floatValue] > 0.0) {
+            float numTimesUsed = [word.numberoftimesused floatValue];
+            if (numTimesUsed > 0.0) {
                 // invert the fitness value for this word so it is less likely to be chosen
-                fitnessF = (1.0 / ([word.numberoftimesused floatValue] + 1.0));
+                fitnessF = (1.0 / (numTimesUsed + 1.0));
             }
             
             // Add the words fitness to the fitness total sum
@@ -140,7 +141,7 @@
         int wordIndex = 0;
         
         if (random > 0) {
-            // So long as the random value retuned form the roulette selection is > 0
+            // So long as the random value returned from the roulette selection is > 0
             // we can move forward with the algorithm. If it is less than or = to 0 it means 
             // the sum of the fitness values is 0.
             while (random > 0) {
@@ -151,9 +152,11 @@
         }
         else {
             // If the random value is 0, there is not enough information from the fitness values.
-            // We need to use a standard random selection from the availalbe words.
+            // We need to use a standard random selection from the available words.
             wordIndex = arc4random() % wordCount;
         }
+        
+//        int wordIndex = arc4random() % wordCount;
         
         Word *randomWord = [[self.frc_words fetchedObjects] objectAtIndex:wordIndex];
         
