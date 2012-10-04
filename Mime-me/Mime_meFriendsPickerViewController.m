@@ -228,6 +228,24 @@
     [self.gad_bannerView loadRequest:[GADRequest request]];
 }
 
+- (void)setUserDefaultFriendsArray {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    [userDefaults setObject:self.selectedFriendsArrayCopy forKey:setting_DEFAULTFRIENDSARRAY];
+    
+    [userDefaults synchronize];
+}
+
+- (NSMutableArray *)getUserDefaultFriendsArray {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if ([userDefaults objectForKey:setting_DEFAULTFRIENDSARRAY] != nil) {
+        return [userDefaults objectForKey:setting_DEFAULTFRIENDSARRAY];
+    }
+    
+    return nil;
+}
+
 #pragma mark - View Lifecycle
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -265,7 +283,11 @@
     [self.nv_navigationHeader addSubview:self.btn_go];
     
     // Initialize the array of selected friends
-    self.selectedFriendsArray = [[NSMutableArray alloc] init];
+//    self.selectedFriendsArray = [[NSMutableArray alloc] init];
+    self.selectedFriendsArray = [self getUserDefaultFriendsArray];
+    if (self.selectedFriendsArray == nil) {
+        self.selectedFriendsArray = [[NSMutableArray alloc] init];
+    }
     
     // Initialize Google AdMob Banner view
     [self initializeGADBannerView];
@@ -640,7 +662,10 @@
         }
         
         int newGemTotal = [self.loggedInUser.numberofpoints intValue] + gemsForNewMime;
-        self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal]; 
+        self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
+        
+        // Save the selected friends to the user defaults for next time
+        [self setUserDefaultFriendsArray];
         
         // Save
         [self showHUDForMimeUpload];

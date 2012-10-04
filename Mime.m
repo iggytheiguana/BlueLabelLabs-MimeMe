@@ -31,6 +31,7 @@
 @dynamic numberofflags;
 @dynamic creatorimageurl;
 @dynamic numberoftimesfavorited;
+@dynamic hasseen;
 
 
 #pragma mark - Static Initializers

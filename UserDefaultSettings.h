@@ -27,3 +27,4 @@ extern NSString* const setting_APPVERSION;
 
 // Mime-Me specific settings
 extern NSString* const setting_DEFAULTWORDIDS;
+extern NSString* const setting_DEFAULTFRIENDSARRAY;

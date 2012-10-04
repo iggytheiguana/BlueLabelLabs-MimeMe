@@ -26,3 +26,4 @@ NSString* const setting_APPVERSION = @"appversion";
 
 // Mime-Me specific settings
 NSString* const setting_DEFAULTWORDIDS = @"defaultwordids";
+NSString* const setting_DEFAULTFRIENDSARRAY = @"defaultfriendsarray";
