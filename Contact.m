@@ -37,11 +37,11 @@
     self = [[Contact alloc] init];
     if (self != nil)
     {
-        self.facebookid = [coder decodeObjectForKey:@"facebookid"];
-        self.name = [coder decodeObjectForKey:@"name"];
-        self.email = [coder decodeObjectForKey:@"email"];
-        self.imageurl = [coder decodeObjectForKey:@"imageurl"];
-        self.hasinstalled = [coder decodeObjectForKey:@"hasinstalled"];
+        self.facebookid = [[coder decodeObjectForKey:@"facebookid"] retain];
+        self.name = [[coder decodeObjectForKey:@"name"] retain];
+        self.email = [[coder decodeObjectForKey:@"email"] retain];
+        self.imageurl = [[coder decodeObjectForKey:@"imageurl"] retain];
+        self.hasinstalled = [[coder decodeObjectForKey:@"hasinstalled"] retain];
     }
     return self;
 }
