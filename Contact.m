@@ -23,6 +23,29 @@
 @dynamic hasinstalled;
 
 
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeObject:self.facebookid forKey:@"facebookid"];
+    [coder encodeObject:self.name forKey:@"name"];
+    [coder encodeObject:self.email forKey:@"email"];
+    [coder encodeObject:self.imageurl forKey:@"imageurl"];
+    [coder encodeObject:self.hasinstalled forKey:@"hasinstalled"];
+}
+
+- (id)initWithCoder:(NSCoder *)coder
+{
+    self = [[Contact alloc] init];
+    if (self != nil)
+    {
+        self.facebookid = [coder decodeObjectForKey:@"facebookid"];
+        self.name = [coder decodeObjectForKey:@"name"];
+        self.email = [coder decodeObjectForKey:@"email"];
+        self.imageurl = [coder decodeObjectForKey:@"imageurl"];
+        self.hasinstalled = [coder decodeObjectForKey:@"hasinstalled"];
+    }
+    return self;
+}
+
 - (void) readAttributesFromJSONDictionary:(NSDictionary*)jsonDictionary
 {
   

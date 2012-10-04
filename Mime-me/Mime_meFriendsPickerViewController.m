@@ -229,21 +229,52 @@
 }
 
 - (void)setUserDefaultFriendsArray {
+    // Get the ids of the selected friends
+    
+//    NSMutableArray *friendsIDsArray = [[NSMutableArray alloc] init];
+//    
+//    for (Contact *friend in self.selectedFriendsArrayCopy) {
+//        [friendsIDsArray addObject:friend.objectID];
+//    }
+    
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    [userDefaults setObject:self.selectedFriendsArrayCopy forKey:setting_DEFAULTFRIENDSARRAY];
+//    [userDefaults setObject:friendsIDsArray forKey:setting_DEFAULTFRIENDSIDS];
+    [userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:self.selectedFriendsArrayCopy] forKey:setting_DEFAULTFRIENDSIDS];
     
     [userDefaults synchronize];
 }
 
 - (NSMutableArray *)getUserDefaultFriendsArray {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    // Load default selected friends
+    NSMutableArray *friendsMtblArray = nil;
     
-    if ([userDefaults objectForKey:setting_DEFAULTFRIENDSARRAY] != nil) {
-        return [userDefaults objectForKey:setting_DEFAULTFRIENDSARRAY];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    NSArray *friendsIDsArray = [userDefaults objectForKey:setting_DEFAULTFRIENDSIDS];
+//    
+//    if (friendsIDsArray != nil) {
+//        friendsMtblArray = [[NSMutableArray alloc] init];
+//        
+//        ResourceContext *resourceContext = [ResourceContext instance];
+//        
+//        for (NSNumber *friendID in friendsIDsArray) {
+//            Contact *contact = (Contact *)[resourceContext resourceWithType:CONTACT withID:friendID];
+//            [friendsMtblArray addObject:contact];
+//        }
+//    }
+    
+    NSData *dataRepresentingSavedArray = [userDefaults objectForKey:setting_DEFAULTFRIENDSIDS];
+    if (dataRepresentingSavedArray != nil)
+    {
+        NSArray *oldSavedArray = [NSKeyedUnarchiver unarchiveObjectWithData:dataRepresentingSavedArray];
+        if (oldSavedArray != nil)
+            friendsMtblArray = [[NSMutableArray alloc] initWithArray:oldSavedArray];
+        else
+            friendsMtblArray = [[NSMutableArray alloc] init];
     }
     
-    return nil;
+    return friendsMtblArray;
 }
 
 #pragma mark - View Lifecycle

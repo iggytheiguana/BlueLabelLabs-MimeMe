@@ -18,6 +18,9 @@
 @property (nonatomic,copy) NSString* imageurl;
 @property (nonatomic,copy) NSNumber* hasinstalled;
 
+- (void)encodeWithCoder:(NSCoder *)coder;
+- (id)initWithCoder:(NSCoder *)coder;
+
 - (id) initFromJSONDictionary:(NSDictionary*)jsonDictionary 
         withEntityDescription:(NSEntityDescription*)entity 
     insertIntoResourceContext:(ResourceContext*)resourceContext;
