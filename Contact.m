@@ -22,6 +22,15 @@
 @dynamic imageurl;
 @dynamic hasinstalled;
 
+#pragma mark - Properties
+//- (id)facebookid {
+//    return self.facebookid;
+//}
+//
+//- (void)setFacebookid:(NSNumber *)fid
+//{
+//    self.facebookid = fid;
+//}
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
