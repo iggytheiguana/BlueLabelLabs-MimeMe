@@ -60,7 +60,7 @@
   
     NSString* facebookid = [jsonDictionary objectForKey:@"id"];
     NSString* name = [jsonDictionary objectForKey:@"name"];
-    NSString* imageurl = [jsonDictionary objectForKey:@"picture"];
+
     NSNumber* hasinstalled = [jsonDictionary objectForKey:@"installed"];
     
     NSNumber* facebookIDNumber = [facebookid numberValue];
@@ -68,6 +68,12 @@
     
     self.facebookid = facebookIDNumber;
     self.name  = name;
+    
+    NSDictionary* imageDictionary = [jsonDictionary objectForKey:@"picture"];
+    NSDictionary* dataDictionary = [imageDictionary objectForKey:@"data"];
+    
+    
+    NSString* imageurl = [dataDictionary objectForKey:@"url"];
     
     if (imageurl != nil)
     {
