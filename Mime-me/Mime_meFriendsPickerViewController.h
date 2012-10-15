@@ -13,7 +13,7 @@
 #import "GADBannerView.h"
 #import "GADPublisherID.h"
 
-@interface Mime_meFriendsPickerViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, UIProgressHUDViewDelegate, Mime_meFriendsListTableViewControllerDelegate, FBRequestDelegate, UIAlertViewDelegate > {
+@interface Mime_meFriendsPickerViewController : BaseViewController < UITableViewDataSource, UITableViewDelegate, Mime_meUINavigationHeaderViewDelgate, UIProgressHUDViewDelegate, Mime_meFriendsListTableViewControllerDelegate, FBRequestDelegate, UIAlertViewDelegate, CloudEnumeratorDelegate > {
     
     Mime_meUINavigationHeaderView   *m_nv_navigationHeader;
     UIButton            *m_btn_go;
@@ -32,6 +32,8 @@
     GADBannerView       *m_gad_bannerView;
     
     BOOL                m_didMakeWord;
+    
+    CloudEnumerator     *m_facebookMimeMeUsersEnumerator;
     
 }
 
@@ -52,6 +54,8 @@
 @property (nonatomic, retain)           GADBannerView       *gad_bannerView;
 
 @property (nonatomic, assign)           BOOL                didMakeWord;
+
+@property (nonatomic, retain)           CloudEnumerator     *facebookMimeMeUsersEnumerator;
 
 - (IBAction) onGoButtonPressed:(id)sender;
 

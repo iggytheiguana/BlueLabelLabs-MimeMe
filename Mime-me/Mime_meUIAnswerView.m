@@ -866,17 +866,30 @@
         shouldProcess = YES; //Process if the backspace character was pressed
         
         if ([[textField text] length] == 1 && [[textField text] isEqualToString:@" "]) {
-            shouldMoveToPreviousField = YES; //Backspace was pressed in an empty textfield, move to previous textfield
+//            shouldMoveToPreviousField = YES; //Backspace was pressed in an empty textfield, move to previous textfield
+            [self moveToPreviousTextField]; //Backspace was pressed in an empty textfield, move to previous textfield
+            
+            textField = self.tf_answer;
+        }
+        else {
+            shouldMoveToPreviousField = YES; //Backspace was pressed in an populated textfield, delete the text, then move to previous texfield
         }
     }
     else {
         if (([kALLOWEDCHARACTERSET rangeOfString:text].location == NSNotFound) && (range.length != 1)) {
-            // only lower case letters and numbers allowed allowed
+            // only letters and numbers allowed allowed
             shouldProcess = NO;
             
             // Animate a horizontal shake of the answer view when an invalid character is entered
             [self shakeAnswerView];
         }
+//        else if ([[textField text] length] == 1 && ![[textField text] isEqualToString:@" "]) {
+//            // This textfield already has a letter in it, move to the next textfield and enter the text there
+//            [self moveToNextTextField];
+//            textField = self.tf_answer;
+//            
+//            shouldProcess = YES; //Process if there is only 1 character right now or a blank space
+//        }
         else if ([[textField text] length] == 0 || [[textField text] isEqualToString:@" "]) {
             shouldProcess = YES; //Process if there is only 1 character right now or a blank space
         }
@@ -926,75 +939,81 @@
         else {
             if (shouldMoveToNextField) {
                 // Move to next textfield
-                if (self.tf_answer.tag < [self.word length]) {
-                    for (int i = self.tf_answer.tag; i < [self.word length]; i++) {
-                        if ([self.word characterAtIndex:i] == kUNICHARSPACE) {
-                            // Do nothing
-                        }
-                        else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:i + 1]]) {
-                            // Do nothing
-                        }
-                        else {
-                            UITextField *tf = (UITextField *)[self.view viewWithTag:(i + 1)];
-                            [tf becomeFirstResponder];
-                            self.tf_answer = tf;
-                            break;
-                        }
-                    }
-                }
-                else {
-                    // Loop back to the first
-                    for (int i = 0; i < [self.word length]; i++) {
-                        if ([self.word characterAtIndex:i] == kUNICHARSPACE) {
-                            // Do nothing
-                        }
-                        else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:(i + 1)]]) {
-                            // Do nothing
-                        }
-                        else {
-                            UITextField *tf = (UITextField *)[self.view viewWithTag:(i + 1)];
-                            [tf becomeFirstResponder];
-                            self.tf_answer = tf;
-                            break;
-                        }
-                    }
-                }
+                
+                [self moveToNextTextField];
+                
+//                if (self.tf_answer.tag < [self.word length]) {
+//                    for (int i = self.tf_answer.tag; i < [self.word length]; i++) {
+//                        if ([self.word characterAtIndex:i] == kUNICHARSPACE) {
+//                            // Do nothing
+//                        }
+//                        else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:i + 1]]) {
+//                            // Do nothing
+//                        }
+//                        else {
+//                            UITextField *tf = (UITextField *)[self.view viewWithTag:(i + 1)];
+//                            [tf becomeFirstResponder];
+//                            self.tf_answer = tf;
+//                            break;
+//                        }
+//                    }
+//                }
+//                else {
+//                    // Loop back to the first
+//                    for (int i = 0; i < [self.word length]; i++) {
+//                        if ([self.word characterAtIndex:i] == kUNICHARSPACE) {
+//                            // Do nothing
+//                        }
+//                        else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:(i + 1)]]) {
+//                            // Do nothing
+//                        }
+//                        else {
+//                            UITextField *tf = (UITextField *)[self.view viewWithTag:(i + 1)];
+//                            [tf becomeFirstResponder];
+//                            self.tf_answer = tf;
+//                            break;
+//                        }
+//                    }
+//                }
             }
             else if (shouldMoveToPreviousField) {
                 // Move to previous textfield
-                if (self.tf_answer.tag > 1) {
-                    for (int i = self.tf_answer.tag; i > 1; i--) {
-                        if ([self.word characterAtIndex:(i - 2)] == kUNICHARSPACE) {
-                            // Do nothing
-                        }
-                        else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:i - 1]]) {
-                            // Do nothing
-                        }
-                        else {
-                            UITextField *tf = (UITextField *)[self.view viewWithTag:(i - 1)];
-                            [tf becomeFirstResponder];
-                            self.tf_answer = tf;
-                            break;
-                        }
-                    }
-                }
-                else {
-                    // Loop back to the last
-                    for (int i = [self.word length]; i > 0; i--) {
-                        if ([self.word characterAtIndex:(i - 1)] == kUNICHARSPACE) {
-                            // Do nothing
-                        }
-                        else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:i]]) {
-                            // Do nothing
-                        }
-                        else {
-                            UITextField *tf = (UITextField *)[self.view viewWithTag:i];
-                            [tf becomeFirstResponder];
-                            self.tf_answer = tf;
-                            break;
-                        }
-                    }
-                }
+                
+                [self moveToPreviousTextField];
+                
+//                if (self.tf_answer.tag > 1) {
+//                    for (int i = self.tf_answer.tag; i > 1; i--) {
+//                        if ([self.word characterAtIndex:(i - 2)] == kUNICHARSPACE) {
+//                            // Do nothing
+//                        }
+//                        else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:i - 1]]) {
+//                            // Do nothing
+//                        }
+//                        else {
+//                            UITextField *tf = (UITextField *)[self.view viewWithTag:(i - 1)];
+//                            [tf becomeFirstResponder];
+//                            self.tf_answer = tf;
+//                            break;
+//                        }
+//                    }
+//                }
+//                else {
+//                    // Loop back to the last
+//                    for (int i = [self.word length]; i > 0; i--) {
+//                        if ([self.word characterAtIndex:(i - 1)] == kUNICHARSPACE) {
+//                            // Do nothing
+//                        }
+//                        else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:i]]) {
+//                            // Do nothing
+//                        }
+//                        else {
+//                            UITextField *tf = (UITextField *)[self.view viewWithTag:i];
+//                            [tf becomeFirstResponder];
+//                            self.tf_answer = tf;
+//                            break;
+//                        }
+//                    }
+//                }
             }
         }
     }
@@ -1010,6 +1029,81 @@
     self.didGuessCorrectAnswer = [self checkForCorrectAnswerInitiatedByUser:YES];
     
     return self.didGuessCorrectAnswer;
+}
+
+#pragma mark TextField Helpers
+-(void)moveToNextTextField {
+    // Make the next textfield active moving left to right
+    if (self.tf_answer.tag < [self.word length]) {
+        for (int i = self.tf_answer.tag; i < [self.word length]; i++) {
+            if ([self.word characterAtIndex:i] == kUNICHARSPACE) {
+                // Do nothing
+            }
+            else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:i + 1]]) {
+                // Do nothing
+            }
+            else {
+                UITextField *tf = (UITextField *)[self.view viewWithTag:(i + 1)];
+                [tf becomeFirstResponder];
+                self.tf_answer = tf;
+                break;
+            }
+        }
+    }
+    else {
+        // Loop back to the first
+        for (int i = 0; i < [self.word length]; i++) {
+            if ([self.word characterAtIndex:i] == kUNICHARSPACE) {
+                // Do nothing
+            }
+            else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:(i + 1)]]) {
+                // Do nothing
+            }
+            else {
+                UITextField *tf = (UITextField *)[self.view viewWithTag:(i + 1)];
+                [tf becomeFirstResponder];
+                self.tf_answer = tf;
+                break;
+            }
+        }
+    }
+}
+
+-(void)moveToPreviousTextField {
+    // Make the previous textfield active moving right to left
+    if (self.tf_answer.tag > 1) {
+        for (int i = self.tf_answer.tag; i > 1; i--) {
+            if ([self.word characterAtIndex:(i - 2)] == kUNICHARSPACE) {
+                // Do nothing
+            }
+            else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:i - 1]]) {
+                // Do nothing
+            }
+            else {
+                UITextField *tf = (UITextField *)[self.view viewWithTag:(i - 1)];
+                [tf becomeFirstResponder];
+                self.tf_answer = tf;
+                break;
+            }
+        }
+    }
+    else {
+        // Loop back to the last
+        for (int i = [self.word length]; i > 0; i--) {
+            if ([self.word characterAtIndex:(i - 1)] == kUNICHARSPACE) {
+                // Do nothing
+            }
+            else if ([self.revealedIndexes containsObject:[NSNumber numberWithInt:i]]) {
+                // Do nothing
+            }
+            else {
+                UITextField *tf = (UITextField *)[self.view viewWithTag:i];
+                [tf becomeFirstResponder];
+                self.tf_answer = tf;
+                break;
+            }
+        }
+    }
 }
 
 #pragma mark - Statics

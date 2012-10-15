@@ -175,6 +175,32 @@
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         else {
+//            // Mark user who have MimeMe installed already or who have already been sent invites
+//            
+//            ResourceContext* resourceContext = [ResourceContext instance];
+//            NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:FB_USER_ID ascending:YES];
+//            User *user = (User*)[resourceContext resourcesWithType:USER withValueEqual:[contact.facebookid stringValue] forAttribute:FB_USER_ID sortBy:[NSArray arrayWithObject:sortDescriptor]];
+//            
+//            if (user != nil) {
+//                // Mark comment as "new" if user has not previously seen it
+//                if ( boolValue] == NO) {
+//                    UILabel *lbl_new = [[UILabel alloc] initWithFrame:CGRectMake(270.0f, 0.0f, 40.0f, 21.0f)];
+//                    lbl_new.text = @"New!";
+//                    lbl_new.backgroundColor = [UIColor clearColor];
+//                    lbl_new.font =[UIFont systemFontOfSize:14.0f];
+//                    lbl_new.adjustsFontSizeToFitWidth = YES;
+//                    lbl_new.textColor = [UIColor blueColor];
+//                    lbl_new.textAlignment = UITextAlignmentRight;
+//                    
+//                    cell.accessoryView = lbl_new;
+//                    [lbl_new release];
+//                }
+//                else {
+//                    cell.accessoryView = nil;
+//                    cell.accessoryType = UITableViewCellAccessoryNone;
+//                }
+//            }
+            
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
         

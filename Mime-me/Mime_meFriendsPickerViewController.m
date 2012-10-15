@@ -43,6 +43,7 @@
 @synthesize selectedFriendsArrayCopy = m_selectedFriendsArrayCopy;
 @synthesize gad_bannerView          = m_gad_bannerView;
 @synthesize didMakeWord             = m_didMakeWord;
+@synthesize facebookMimeMeUsersEnumerator = m_facebookMimeMeUsersEnumerator;
 
 #pragma mark - Enumerators
 - (void)showHUDForFacebookFriendsEnumerator {
@@ -73,6 +74,30 @@
     }
     
     [self showHUDForFacebookFriendsEnumerator];
+}
+
+- (void) enumerateUsersFromArrayOfFacebookContacts:(NSArray *)facebookContacts {
+    //this method will enumerate for user objects who have mime me and match the given facebook id
+    
+    NSMutableArray *facebookIDs = [[NSMutableArray alloc] initWithCapacity:[facebookContacts count]];
+    
+    for (Contact *contact in facebookContacts) {
+        if (contact.facebookid != nil) {
+            [facebookIDs addObject:contact.facebookid];
+        }
+    }
+    
+    if (self.facebookMimeMeUsersEnumerator != nil && [self.facebookMimeMeUsersEnumerator canEnumerate]) {
+        [self.facebookMimeMeUsersEnumerator enumerateUntilEnd:nil];
+    }
+    else
+    {
+        self.facebookMimeMeUsersEnumerator = nil;
+        self.facebookMimeMeUsersEnumerator = [CloudEnumerator enumerateForUsersByFacebookID:facebookIDs];
+        self.facebookMimeMeUsersEnumerator.delegate = self;
+        [self.facebookMimeMeUsersEnumerator enumerateUntilEnd:nil];
+    }
+    
 }
 
 #pragma mark - Helpers
@@ -787,20 +812,40 @@
         }
     }
     
-     self.facebookFriendsArray = [self partitionContacts:facebookFriendsList collationStringSelector:@selector(name)];
+    // Now that we have the array of facebook friends we need to enumerate for users who have mime installed
+    [self enumerateUsersFromArrayOfFacebookContacts:facebookFriendsList];
     
-//    [sortedFacebookFriendsList release];
-//    [facebookFriendsList release];
+    // Make a sorted array of the contacts
+    self.facebookFriendsArray = [self partitionContacts:facebookFriendsList collationStringSelector:@selector(name)];
     
-    // Hide the progress bar and move to the frields list view controller
+//    // Hide the progress bar and move to the frields list view controller
+//    [self hideProgressBar];
+//    
+//    Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
+//    friendsListTableViewController.delegate = self;
+//    friendsListTableViewController.contacts = self.facebookFriendsArray;
+//    self.selectedFriendsArray = self.selectedFriendsArrayCopy;
+//    
+//    [self.navigationController pushViewController:friendsListTableViewController animated:YES];
+}
+
+#pragma mark - CloudEnumeratorDelegate
+- (void) onEnumerateComplete:(CloudEnumerator*)enumerator
+                 withResults:(NSArray *)results
+                withUserInfo:(NSDictionary *)userInfo
+{
+    
+    // Hide the progress bar and move to the friends list view controller
     [self hideProgressBar];
     
-    Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
-    friendsListTableViewController.delegate = self;
-    friendsListTableViewController.contacts = self.facebookFriendsArray;
-    self.selectedFriendsArray = self.selectedFriendsArrayCopy;
-    
-    [self.navigationController pushViewController:friendsListTableViewController animated:YES];
+    if (enumerator == self.facebookMimeMeUsersEnumerator) {
+        Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
+        friendsListTableViewController.delegate = self;
+        friendsListTableViewController.contacts = self.facebookFriendsArray;
+        self.selectedFriendsArray = self.selectedFriendsArrayCopy;
+        
+        [self.navigationController pushViewController:friendsListTableViewController animated:YES];
+    }
 }
 
 #pragma mark - ImageManager Delegate Methods
