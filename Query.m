@@ -510,7 +510,7 @@
         queryExpression.opCode = opcode_QUERYEQUALITY;
         queryExpression.value = [facebookUserID stringValue];
         
-        [queryExpressions addObject:facebookUserID];
+        [queryExpressions addObject:queryExpression];
         [queryExpression release];
     }
     
