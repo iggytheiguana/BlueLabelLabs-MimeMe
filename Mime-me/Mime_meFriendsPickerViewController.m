@@ -835,16 +835,20 @@
                 withUserInfo:(NSDictionary *)userInfo
 {
     
-    // Hide the progress bar and move to the friends list view controller
-    [self hideProgressBar];
-    
     if (enumerator == self.facebookMimeMeUsersEnumerator) {
         Mime_meFriendsListTableViewController *friendsListTableViewController = [Mime_meFriendsListTableViewController createInstance];
         friendsListTableViewController.delegate = self;
         friendsListTableViewController.contacts = self.facebookFriendsArray;
         self.selectedFriendsArray = self.selectedFriendsArrayCopy;
         
+        // Hide the progress bar and move to the friends list view controller
+        [self hideProgressBar];
+        
         [self.navigationController pushViewController:friendsListTableViewController animated:YES];
+    }
+    else {
+        // Hide the progress bar
+        [self hideProgressBar];
     }
 }
 

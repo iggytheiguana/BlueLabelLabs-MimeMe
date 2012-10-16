@@ -16,6 +16,7 @@
 #import "ImageManager.h"
 #import "ImageDownloadResponse.h"
 #import "UIImage+UIImageCategory.h"
+#import "UserState.h"
 
 #define kCONTACTID @"contactid"
 #define kTABLEVIEW @"tableview"
@@ -175,33 +176,56 @@
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         else {
-//            // Mark user who have MimeMe installed already or who have already been sent invites
-//            
-//            ResourceContext* resourceContext = [ResourceContext instance];
-//            NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:FB_USER_ID ascending:YES];
-//            User *user = (User*)[resourceContext resourcesWithType:USER withValueEqual:[contact.facebookid stringValue] forAttribute:FB_USER_ID sortBy:[NSArray arrayWithObject:sortDescriptor]];
-//            
-//            if (user != nil) {
-//                // Mark comment as "new" if user has not previously seen it
-//                if ( boolValue] == NO) {
-//                    UILabel *lbl_new = [[UILabel alloc] initWithFrame:CGRectMake(270.0f, 0.0f, 40.0f, 21.0f)];
-//                    lbl_new.text = @"New!";
-//                    lbl_new.backgroundColor = [UIColor clearColor];
-//                    lbl_new.font =[UIFont systemFontOfSize:14.0f];
-//                    lbl_new.adjustsFontSizeToFitWidth = YES;
-//                    lbl_new.textColor = [UIColor blueColor];
-//                    lbl_new.textAlignment = UITextAlignmentRight;
-//                    
-//                    cell.accessoryView = lbl_new;
-//                    [lbl_new release];
-//                }
-//                else {
-//                    cell.accessoryView = nil;
-//                    cell.accessoryType = UITableViewCellAccessoryNone;
-//                }
-//            }
+            // Mark user who have MimeMe installed already or who have already been sent invites
+            
+            // Set up the state label for this contact
+            UILabel *lbl_new = [[UILabel alloc] initWithFrame:CGRectMake(260.0f, 0.0f, 50.0f, 36.0f)];
+            lbl_new.backgroundColor = [UIColor clearColor];
+            lbl_new.numberOfLines = 0;
+            lbl_new.font =[UIFont systemFontOfSize:11.0f];
+            lbl_new.adjustsFontSizeToFitWidth = YES;
+            lbl_new.textColor = [UIColor blueColor];
+            lbl_new.textAlignment = UITextAlignmentCenter;
+            
+            ResourceContext *resourceContext = [ResourceContext instance];
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:FB_USER_ID ascending:YES];
+            NSArray *users = [resourceContext resourcesWithType:USER withValueEqual:[contact.facebookid stringValue] forAttribute:FB_USER_ID sortBy:[NSArray arrayWithObject:sortDescriptor]];
+            
+            if ([users count] > 0) {
+                User *user = (User *)[users objectAtIndex:0];
+                
+                if (user != nil) {
+                    if ([user.state intValue] == kMIMEMEUSER) {
+                        // Mark user as "Already on Mime-Me"
+                        lbl_new.text = @"On\nMime-Me!";
+                        lbl_new.textColor = [UIColor greenColor];
+                    }
+                    else if ([user.state intValue] == kINVITED) {
+                        // Mark user as "Invited!"
+                        lbl_new.text = @"Invited!";
+                        lbl_new.textColor = [UIColor lightGrayColor];
+                    }
+                    else {
+                        // Mark user as ready for invite
+                        lbl_new.text = @"Invite to\nMime-Me!";
+                        lbl_new.textColor = [UIColor blueColor];
+                    }
+                }
+                else {
+                    // Mark user as ready for invite
+                    lbl_new.text = @"Invite to\nMime-Me!";
+                    lbl_new.textColor = [UIColor blueColor];
+                }
+            }
+            else {
+                // Mark user as ready for invite
+                lbl_new.text = @"Invite to\nMime-Me!";
+                lbl_new.textColor = [UIColor blueColor];
+            }
             
             cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.accessoryView = lbl_new;
+            [lbl_new release];
         }
         
         cell.textLabel.text = contact.name;
@@ -348,6 +372,7 @@
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         
         // Toggle the checkmark accessory on the cell
+        cell.accessoryView = nil;   // remove the state label
         cell.accessoryType = cell.accessoryType==UITableViewCellAccessoryCheckmark ? UITableViewCellAccessoryNone : UITableViewCellAccessoryCheckmark;
         
         Contact *friend = nil;
@@ -367,9 +392,59 @@
         }
         else {
             [friendsPickerViewController.selectedFriendsArray removeObject:friend];
+            
+            // Mark user who have MimeMe installed already or who have already been sent invites
+            
+            // Set up the state label for this contact
+            UILabel *lbl_new = [[UILabel alloc] initWithFrame:CGRectMake(260.0f, 0.0f, 50.0f, 36.0f)];
+            lbl_new.backgroundColor = [UIColor clearColor];
+            lbl_new.numberOfLines = 0;
+            lbl_new.font =[UIFont systemFontOfSize:11.0f];
+            lbl_new.adjustsFontSizeToFitWidth = YES;
+            lbl_new.textColor = [UIColor blueColor];
+            lbl_new.textAlignment = UITextAlignmentCenter;
+            
+            ResourceContext *resourceContext = [ResourceContext instance];
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:FB_USER_ID ascending:YES];
+            NSArray *users = [resourceContext resourcesWithType:USER withValueEqual:[friend.facebookid stringValue] forAttribute:FB_USER_ID sortBy:[NSArray arrayWithObject:sortDescriptor]];
+            
+            if ([users count] > 0) {
+                User *user = (User *)[users objectAtIndex:0];
+                
+                if (user != nil) {
+                    if ([user.state intValue] == kMIMEMEUSER) {
+                        // Mark user as "Already on Mime-Me"
+                        lbl_new.text = @"On\nMime-Me!";
+                        lbl_new.textColor = [UIColor greenColor];
+                    }
+                    else if ([user.state intValue] == kINVITED) {
+                        // Mark user as "Invited!"
+                        lbl_new.text = @"Invited!";
+                        lbl_new.textColor = [UIColor lightGrayColor];
+                    }
+                    else {
+                        // Mark user as ready for invite
+                        lbl_new.text = @"Invite to\nMime-Me!";
+                        lbl_new.textColor = [UIColor blueColor];
+                    }
+                }
+                else {
+                    // Mark user as ready for invite
+                    lbl_new.text = @"Invite to\nMime-Me!";
+                    lbl_new.textColor = [UIColor blueColor];
+                }
+            }
+            else {
+                // Mark user as ready for invite
+                lbl_new.text = @"Invite to\nMime-Me!";
+                lbl_new.textColor = [UIColor blueColor];
+            }
+            
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.accessoryView = lbl_new;
+            [lbl_new release];
         }
     }
-    
 }
 
 #pragma mark - UIButton Handlers

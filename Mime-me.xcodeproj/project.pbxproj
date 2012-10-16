@@ -363,6 +363,7 @@
 		52D926EF15D1CE8B00DA16BC /* SocialSharingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialSharingManager.h; sourceTree = "<group>"; };
 		52D926F015D1CE8B00DA16BC /* SocialSharingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialSharingManager.m; sourceTree = "<group>"; };
 		52DBBC1F15BF566A0076A27C /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		52EFBB47162E1210008D482E /* UserState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserState.h; sourceTree = "<group>"; };
 		52F53A5315EC1BD2002930D4 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		52F53A5515EC1BD7002930D4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		52F5BA5B15C72D9300509E8B /* MimeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MimeType.h; sourceTree = "<group>"; };
@@ -775,6 +776,7 @@
 				52B8762A15B08EEB001C9EF8 /* ViewMimeCase.h */,
 				52B8764115B0F21A001C9EF8 /* ColorPalette.h */,
 				5277E7C615D95120003A1DCF /* GADPublisherID.h */,
+				52EFBB47162E1210008D482E /* UserState.h */,
 			);
 			name = Constants;
 			sourceTree = "<group>";
