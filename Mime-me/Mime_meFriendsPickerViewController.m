@@ -256,47 +256,37 @@
 - (void)setUserDefaultFriendsArray {
     // Get the ids of the selected friends
     
-//    NSMutableArray *friendsIDsArray = [[NSMutableArray alloc] init];
-//    
-//    for (Contact *friend in self.selectedFriendsArrayCopy) {
-//        [friendsIDsArray addObject:friend.objectID];
-//    }
+    NSMutableArray *jContacts = [[[NSMutableArray alloc] init] autorelease];
+    for (Contact *contact in self.selectedFriendsArrayCopy)
+    {
+        [jContacts addObject:[contact toJSONDictionary]];
+    }
     
+    NSString *jContactsJSONFormat = [jContacts JSONString];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-//    [userDefaults setObject:friendsIDsArray forKey:setting_DEFAULTFRIENDSIDS];
-    [userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:self.selectedFriendsArrayCopy] forKey:setting_DEFAULTFRIENDSIDS];
+    [userDefaults setObject:jContactsJSONFormat forKey:setting_DEFAULTFRIENDSJSONDICTIONARY];
     
     [userDefaults synchronize];
 }
 
 - (NSMutableArray *)getUserDefaultFriendsArray {
     // Load default selected friends
-    NSMutableArray *friendsMtblArray = nil;
+    NSMutableArray *friendsMtblArray = [[NSMutableArray alloc] init];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//    NSArray *friendsIDsArray = [userDefaults objectForKey:setting_DEFAULTFRIENDSIDS];
-//    
-//    if (friendsIDsArray != nil) {
-//        friendsMtblArray = [[NSMutableArray alloc] init];
-//        
-//        ResourceContext *resourceContext = [ResourceContext instance];
-//        
-//        for (NSNumber *friendID in friendsIDsArray) {
-//            Contact *contact = (Contact *)[resourceContext resourceWithType:CONTACT withID:friendID];
-//            [friendsMtblArray addObject:contact];
-//        }
-//    }
     
-    NSData *dataRepresentingSavedArray = [userDefaults objectForKey:setting_DEFAULTFRIENDSIDS];
-    if (dataRepresentingSavedArray != nil)
+    NSString *jsonString = [userDefaults objectForKey:setting_DEFAULTFRIENDSJSONDICTIONARY];
+    
+    NSArray *friendsArray = [jsonString objectFromJSONString];
+    
+    for (int i = 0; i < [friendsArray count]; i++)
     {
-        NSArray *oldSavedArray = [NSKeyedUnarchiver unarchiveObjectWithData:dataRepresentingSavedArray];
-        if (oldSavedArray != nil)
-            friendsMtblArray = [[NSMutableArray alloc] initWithArray:oldSavedArray];
-        else
-            friendsMtblArray = [[NSMutableArray alloc] init];
+        NSDictionary* friendJSON = [friendsArray objectAtIndex:i];
+        
+        Contact* friend = [Contact createInstanceFromJSON:friendJSON isFromFacebook:NO];
+        [friendsMtblArray addObject:friend];
     }
     
     return friendsMtblArray;
@@ -324,6 +314,7 @@
     // Add the navigation header
     Mime_meUINavigationHeaderView *navigationHeader = [[Mime_meUINavigationHeaderView alloc]initWithFrame:[Mime_meUINavigationHeaderView frameForNavigationHeader]];
     navigationHeader.delegate = self;
+    navigationHeader.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     navigationHeader.btn_back.hidden = YES;
     navigationHeader.btn_gemCount.hidden = YES;
     navigationHeader.btn_settings.hidden = YES;
@@ -340,10 +331,10 @@
     
     // Initialize the array of selected friends
     self.selectedFriendsArray = [[NSMutableArray alloc] init];
-//    self.selectedFriendsArray = [self getUserDefaultFriendsArray];
-//    if (self.selectedFriendsArray == nil) {
-//        self.selectedFriendsArray = [[NSMutableArray alloc] init];
-//    }
+    self.selectedFriendsArray = [self getUserDefaultFriendsArray];
+    if (self.selectedFriendsArray == nil) {
+        self.selectedFriendsArray = [[NSMutableArray alloc] init];
+    }
     
     // Initialize Google AdMob Banner view
     [self initializeGADBannerView];
@@ -720,8 +711,8 @@
         int newGemTotal = [self.loggedInUser.numberofpoints intValue] + gemsForNewMime;
         self.loggedInUser.numberofpoints = [NSNumber numberWithInt:newGemTotal];
         
-//        // Save the selected friends to the user defaults for next time
-//        [self setUserDefaultFriendsArray];
+        // Save the selected friends to the user defaults for next time
+        [self setUserDefaultFriendsArray];
         
         // Save
         [self showHUDForMimeUpload];
@@ -806,7 +797,7 @@
         {
             NSDictionary* friendJSON = [friendsList objectAtIndex:i];
             
-            Contact* facebookFriend = [Contact createInstanceFromJSON:friendJSON];
+            Contact* facebookFriend = [Contact createInstanceFromJSON:friendJSON isFromFacebook:YES];
             [facebookFriendsList addObject:facebookFriend];
             
         }

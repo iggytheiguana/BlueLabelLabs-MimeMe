@@ -238,6 +238,7 @@
     // Add the navigation header
     Mime_meUINavigationHeaderView *navigationHeader = [[Mime_meUINavigationHeaderView alloc]initWithFrame:[Mime_meUINavigationHeaderView frameForNavigationHeader]];
     navigationHeader.delegate = self;
+    navigationHeader.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     navigationHeader.btn_back.hidden = NO;
     navigationHeader.btn_gemCount.hidden = YES;
     self.nv_navigationHeader = navigationHeader;

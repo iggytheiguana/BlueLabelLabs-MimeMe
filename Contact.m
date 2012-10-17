@@ -22,40 +22,34 @@
 @dynamic imageurl;
 @dynamic hasinstalled;
 
-#pragma mark - Properties
-//- (id)facebookid {
-//    return self.facebookid;
-//}
-//
-//- (void)setFacebookid:(NSNumber *)fid
-//{
-//    self.facebookid = fid;
-//}
 
-- (void)encodeWithCoder:(NSCoder *)coder
-{
-    [coder encodeObject:self.facebookid forKey:@"facebookid"];
-    [coder encodeObject:self.name forKey:@"name"];
-    [coder encodeObject:self.email forKey:@"email"];
-    [coder encodeObject:self.imageurl forKey:@"imageurl"];
-    [coder encodeObject:self.hasinstalled forKey:@"hasinstalled"];
-}
-
-- (id)initWithCoder:(NSCoder *)coder
-{
-    self = [[Contact alloc] init];
-    if (self != nil)
-    {
-        self.facebookid = [[coder decodeObjectForKey:@"facebookid"] retain];
-        self.name = [[coder decodeObjectForKey:@"name"] retain];
-        self.email = [[coder decodeObjectForKey:@"email"] retain];
-        self.imageurl = [[coder decodeObjectForKey:@"imageurl"] retain];
-        self.hasinstalled = [[coder decodeObjectForKey:@"hasinstalled"] retain];
+- (NSDictionary *) toJSONDictionary {
+    NSMutableDictionary *jContact = [[[NSMutableDictionary alloc] init] autorelease];
+    
+    if (self.facebookid != nil) {
+        [jContact setObject:self.facebookid forKey:@"id"];
     }
-    return self;
+    
+    if (self.name != nil) {
+        [jContact setObject:self.name forKey:@"name"];
+    }
+    
+    if (self.email != nil) {
+        [jContact setObject:self.email forKey:@"email"];
+    }
+    
+    if (self.imageurl != nil) {
+        [jContact setObject:self.imageurl forKey:@"url"];
+    }
+    
+    if (self.hasinstalled != nil) {
+        [jContact setObject:self.hasinstalled forKey:@"installed"];
+    }
+    
+    return jContact;
 }
 
-- (void) readAttributesFromJSONDictionary:(NSDictionary*)jsonDictionary
+- (void) readAttributesFromFacebookJSONDictionary:(NSDictionary*)jsonDictionary
 {
   
     NSString* facebookid = [jsonDictionary objectForKey:@"id"];
@@ -90,9 +84,43 @@
 
 }
 
+- (void) readAttributesFromJSONDictionary:(NSDictionary*)jsonDictionary
+{
+    
+    NSNumber* facebookid = [jsonDictionary objectForKey:@"id"];
+    NSString* name = [jsonDictionary objectForKey:@"name"];
+    NSString* email = [jsonDictionary objectForKey:@"email"];
+    
+    NSNumber* hasinstalled = [jsonDictionary objectForKey:@"installed"];
+    
+//    NSNumber* facebookIDNumber = [facebookid numberValue];
+    
+    
+    self.facebookid = facebookid;
+    self.name  = name;
+    self.email  = email;
+    
+    NSString* imageurl = [jsonDictionary objectForKey:@"url"];
+    
+    if (imageurl != nil)
+    {
+        self.imageurl = imageurl;
+    }
+    
+    if (hasinstalled != nil)
+    {
+        self.hasinstalled = hasinstalled;
+    }
+    else {
+        self.hasinstalled = [NSNumber numberWithBool:NO];
+    }
+    
+}
+
 - (id) initFromJSONDictionary:(NSDictionary*)jsonDictionary 
         withEntityDescription:(NSEntityDescription*)entity 
     insertIntoResourceContext:(ResourceContext*)resourceContext
+               isFromFacebook:(BOOL)isFromFacebook
 {
     if (resourceContext != nil) {
         self = [super initWithEntity:entity insertIntoManagedObjectContext:resourceContext.managedObjectContext];
@@ -102,20 +130,23 @@
     }
     
     if (self)  {
-        
-        [self readAttributesFromJSONDictionary:jsonDictionary];
-        
+        if (isFromFacebook == YES) {
+            [self readAttributesFromFacebookJSONDictionary:jsonDictionary];
+        }
+        else {
+            [self readAttributesFromJSONDictionary:jsonDictionary];
+        }
     }
     return self;
 
 }
 
-+ (id) createInstanceFromJSON:(NSDictionary *)jsonDictionary
++ (id) createInstanceFromJSON:(NSDictionary *)jsonDictionary isFromFacebook:(BOOL)isFromFacebook
 {
     ResourceContext* resourceContext = [ResourceContext instance];
     NSEntityDescription* entity = [NSEntityDescription entityForName:CONTACT inManagedObjectContext:resourceContext.managedObjectContext];
     
-    Contact* facebookFriend = [[Contact alloc]initFromJSONDictionary:jsonDictionary withEntityDescription:entity insertIntoResourceContext:nil];
+    Contact* facebookFriend = [[Contact alloc] initFromJSONDictionary:jsonDictionary withEntityDescription:entity insertIntoResourceContext:nil isFromFacebook:isFromFacebook];
     
     [facebookFriend autorelease];
     return facebookFriend;

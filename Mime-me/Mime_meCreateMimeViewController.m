@@ -257,6 +257,7 @@
     // Add the navigation header
     Mime_meUINavigationHeaderView *navigationHeader = [[Mime_meUINavigationHeaderView alloc]initWithFrame:[Mime_meUINavigationHeaderView frameForNavigationHeader]];
     navigationHeader.delegate = self;
+    navigationHeader.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     navigationHeader.btn_back.hidden = YES;
     navigationHeader.btn_gemCount.hidden = NO;
     [navigationHeader.btn_gemCount setTitle:[self.loggedInUser.numberofpoints stringValue] forState:UIControlStateNormal];
@@ -337,6 +338,15 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotate {
+    return NO;
 }
 
 #pragma mark - Table view data source

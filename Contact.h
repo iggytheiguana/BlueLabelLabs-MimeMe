@@ -18,14 +18,13 @@
 @property (nonatomic,copy) NSString* imageurl;
 @property (nonatomic,copy) NSNumber* hasinstalled;
 
-- (void)encodeWithCoder:(NSCoder *)coder;
-- (id)initWithCoder:(NSCoder *)coder;
+- (NSDictionary *) toJSONDictionary;
 
 - (id) initFromJSONDictionary:(NSDictionary*)jsonDictionary 
         withEntityDescription:(NSEntityDescription*)entity 
     insertIntoResourceContext:(ResourceContext*)resourceContext;
 
-+ (id)          createInstanceFromJSON:(NSDictionary*)jsonDictionary;
++ (id) createInstanceFromJSON:(NSDictionary *)jsonDictionary isFromFacebook:(BOOL)isFromFacebook;
 
 + (Contact *)createContactWithName:(NSString *)name
                          withEmail:(NSString *)email
