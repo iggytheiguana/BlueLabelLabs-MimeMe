@@ -11,11 +11,12 @@
 #import "AuthenticationManager.h"
 #import "ApplicationSettingsManager.h"
 #import "UIProgressHUDView.h"
+#import "AutorotatingUINavigationController.h"
 
 @interface Mime_meAppDelegate : UIResponder < UIApplicationDelegate, CloudEnumeratorDelegate > {
     NSString*               m_deviceToken;
     
-    UINavigationController  *m_navigationController;
+    AutorotatingUINavigationController  *m_navigationController;
 }
 
 @property (strong, nonatomic) UIWindow *window;
@@ -29,7 +30,7 @@
 @property (nonatomic, retain)           UIProgressHUDView*              progressView;
 @property (nonatomic, retain)           NSString*                       deviceToken;
 
-@property (nonatomic, strong)           UINavigationController          *navigationController;
+@property (nonatomic, strong)           AutorotatingUINavigationController          *navigationController;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

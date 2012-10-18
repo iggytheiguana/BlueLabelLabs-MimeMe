@@ -105,6 +105,15 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
 #pragma mark - UIButton Handlers
 - (IBAction) onMimeButtonPressed:(id)sender {
     Mime_meCreateMimeViewController* mimeViewController = [Mime_meCreateMimeViewController createInstance];

@@ -61,6 +61,7 @@
 		525C7CCF15B75D6100035802 /* Mime_meScrapbookMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 525C7CCD15B75D6100035802 /* Mime_meScrapbookMenuViewController.xib */; };
 		525C7CD415B795AD00035802 /* Mime_meScrapbookFullTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 525C7CD215B795AC00035802 /* Mime_meScrapbookFullTableViewController.m */; };
 		525C7CD515B795AD00035802 /* Mime_meScrapbookFullTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 525C7CD315B795AC00035802 /* Mime_meScrapbookFullTableViewController.xib */; };
+		526848E016304ADB00E80BFF /* AutorotatingUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 526848DF16304ADB00E80BFF /* AutorotatingUINavigationController.m */; };
 		5277E7BF15D94527003A1DCF /* libGoogleAdMobAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5277E78A15D94527003A1DCF /* libGoogleAdMobAds.a */; };
 		5277E7C515D94A74003A1DCF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5277E7C415D94A74003A1DCF /* AudioToolbox.framework */; };
 		5277E7C915D97ED7003A1DCF /* gem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5277E7C715D97ED7003A1DCF /* gem.png */; };
@@ -310,6 +311,8 @@
 		525C7CD115B795AC00035802 /* Mime_meScrapbookFullTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mime_meScrapbookFullTableViewController.h; sourceTree = "<group>"; };
 		525C7CD215B795AC00035802 /* Mime_meScrapbookFullTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mime_meScrapbookFullTableViewController.m; sourceTree = "<group>"; };
 		525C7CD315B795AC00035802 /* Mime_meScrapbookFullTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mime_meScrapbookFullTableViewController.xib; sourceTree = "<group>"; };
+		526848DE16304ADB00E80BFF /* AutorotatingUINavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutorotatingUINavigationController.h; sourceTree = "<group>"; };
+		526848DF16304ADB00E80BFF /* AutorotatingUINavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutorotatingUINavigationController.m; sourceTree = "<group>"; };
 		5277E78115D94527003A1DCF /* GADAdMobExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADAdMobExtras.h; sourceTree = "<group>"; };
 		5277E78215D94527003A1DCF /* GADAdNetworkExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADAdNetworkExtras.h; sourceTree = "<group>"; };
 		5277E78315D94527003A1DCF /* GADAdSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADAdSize.h; sourceTree = "<group>"; };
@@ -698,6 +701,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		526848DB1630495500E80BFF /* Subclasses */ = {
+			isa = PBXGroup;
+			children = (
+				526848DE16304ADB00E80BFF /* AutorotatingUINavigationController.h */,
+				526848DF16304ADB00E80BFF /* AutorotatingUINavigationController.m */,
+			);
+			name = Subclasses;
+			sourceTree = "<group>";
+		};
 		5277E72615D94517003A1DCF /* Externals */ = {
 			isa = PBXGroup;
 			children = (
@@ -1370,6 +1382,7 @@
 		C523A1C3159F8E69004AA39C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				526848DB1630495500E80BFF /* Subclasses */,
 				529BE9D315A22EDA00B7346A /* Abstract */,
 				52324CD015ABA28D00D5DD91 /* LoginViewController.h */,
 				52324CD115ABA28D00D5DD91 /* LoginViewController.m */,
@@ -1703,6 +1716,7 @@
 				52FDC02E15E2D6C2005DDA6B /* Mime_meAnswersTableViewController.m in Sources */,
 				52B3E7DD15E531D2004E9C4A /* Mime_meCommentsTableViewController.m in Sources */,
 				C58D8785160E603F006166DE /* PlatformDataModel-v2.xcdatamodeld in Sources */,
+				526848E016304ADB00E80BFF /* AutorotatingUINavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

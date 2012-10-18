@@ -80,7 +80,8 @@
 }
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    return (UIInterfaceOrientationMaskPortrait);
+    return (UIInterfaceOrientationMaskAllButUpsideDown);
+//    return (UIInterfaceOrientationMaskPortrait);
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -136,7 +137,7 @@
             
             // Launch into the Guess Menu view controller
             Mime_meGuessMenuViewController* guessMenuViewController = [Mime_meGuessMenuViewController createInstance];
-            self.navigationController = [[[UINavigationController alloc]initWithRootViewController:guessMenuViewController] autorelease];
+            self.navigationController = [[[AutorotatingUINavigationController alloc]initWithRootViewController:guessMenuViewController] autorelease];
         }
     }
     else {
@@ -146,7 +147,7 @@
         
         // Launch login view controller
         LoginViewController* loginViewController = [LoginViewController createAuthenticationInstance:NO shouldGetTwitter:NO onSuccessCallback:onSucccessCallback onFailureCallback:onFailCallback];
-        self.navigationController = [[[UINavigationController alloc]initWithRootViewController:loginViewController] autorelease];
+        self.navigationController = [[[AutorotatingUINavigationController alloc]initWithRootViewController:loginViewController] autorelease];
         
     }
     
@@ -292,7 +293,7 @@
             
             // Launch login view controller
             LoginViewController* loginViewController = [LoginViewController createAuthenticationInstance:NO shouldGetTwitter:NO onSuccessCallback:onSucccessCallback onFailureCallback:onFailCallback];
-            self.navigationController = [[[UINavigationController alloc]initWithRootViewController:loginViewController] autorelease];
+            self.navigationController = [[[AutorotatingUINavigationController alloc]initWithRootViewController:loginViewController] autorelease];
         }
         else
         {
@@ -311,7 +312,7 @@
             
             // Launch into the Guess Menu view controller
             Mime_meGuessMenuViewController* guessMenuViewController = [Mime_meGuessMenuViewController createInstance];
-            self.navigationController = [[[UINavigationController alloc]initWithRootViewController:guessMenuViewController] autorelease];
+            self.navigationController = [[[AutorotatingUINavigationController alloc]initWithRootViewController:guessMenuViewController] autorelease];
         }
     }
     else {
@@ -321,7 +322,7 @@
         
         // Launch login view controller
         LoginViewController* loginViewController = [LoginViewController createAuthenticationInstance:NO shouldGetTwitter:NO onSuccessCallback:onSucccessCallback onFailureCallback:onFailCallback];
-        self.navigationController = [[[UINavigationController alloc]initWithRootViewController:loginViewController] autorelease];
+        self.navigationController = [[[AutorotatingUINavigationController alloc]initWithRootViewController:loginViewController] autorelease];
         
     }
     

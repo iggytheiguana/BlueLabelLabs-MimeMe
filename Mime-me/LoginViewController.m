@@ -257,8 +257,16 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotate {
+    return NO;
 }
 
 
@@ -680,7 +688,7 @@
     //lets load up the signup controller in modal view
     SignUpViewController* signUpViewController = [SignUpViewController createInstance];
     
-    UINavigationController* navigationController = [[UINavigationController alloc]initWithRootViewController:signUpViewController];
+    AutorotatingUINavigationController* navigationController = [[AutorotatingUINavigationController alloc]initWithRootViewController:signUpViewController];
     navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     

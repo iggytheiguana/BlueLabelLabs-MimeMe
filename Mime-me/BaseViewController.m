@@ -14,6 +14,7 @@
 #import "ImageManager.h"
 #import "UIStrings.h"
 #import "LoginViewController.h"
+#import "AutorotatingUINavigationController.h"
 
 #define kSELECTOR       @"selector"
 #define kTARGETOBJECT   @"targetobject"
@@ -213,9 +214,18 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+- (BOOL)shouldAutorotate {
+    return YES;
+}
+
 #pragma mark - Progress bar management
 - (void) showDeterminateProgressBarWithMaximumDisplayTime: (NSNumber*)maximumTimeInSeconds
                       withHeartbeat:(NSNumber*)heartbeatInSeconds 
@@ -398,7 +408,7 @@
 {
     LoginViewController* loginViewController = [LoginViewController createAuthenticationInstance:getFaceobook shouldGetTwitter:getTwitter onSuccessCallback:successCallback onFailureCallback:failCallback];
    
-    UINavigationController* navigationController = [[UINavigationController alloc]initWithRootViewController:loginViewController];
+    AutorotatingUINavigationController* navigationController = [[AutorotatingUINavigationController alloc]initWithRootViewController:loginViewController];
  
 //    navigationController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 //    [navigationController.navigationBar setBarStyle:UIBarStyleBlack];
