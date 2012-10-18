@@ -182,37 +182,71 @@
         // Mark the row as selected if this friend is already in our list selected contacts
         Mime_meFriendsPickerViewController *friendsPickerViewController = (Mime_meFriendsPickerViewController *)self.delegate;
         if ([friendsPickerViewController.selectedFriendsArray indexOfObject:contact] != NSNotFound) {
+            cell.accessoryView = nil;   // remove the state label
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         else {
-            // Mark user who have MimeMe installed already or who have already been sent invites
+            BOOL match = NO;
             
-            // Set up the state label for this contact
-            UILabel *lbl_new = [[UILabel alloc] initWithFrame:CGRectMake(260.0f, 0.0f, 50.0f, 36.0f)];
-            lbl_new.backgroundColor = [UIColor clearColor];
-            lbl_new.numberOfLines = 0;
-            lbl_new.font =[UIFont systemFontOfSize:11.0f];
-            lbl_new.adjustsFontSizeToFitWidth = YES;
-            lbl_new.textColor = [UIColor blueColor];
-            lbl_new.textAlignment = UITextAlignmentCenter;
+            // We need to search the selected Friends array and try to,
+            // match on facebookid or email since the array might be from user defaults
+            Contact *savedContact;
+            for (Contact *defaultContact in friendsPickerViewController.selectedFriendsArray) {
+                if ([contact.facebookid isEqualToNumber:defaultContact.facebookid] ||
+                    [contact.email isEqualToString:defaultContact.email]) {
+                    // We have a match
+                    match = YES;
+                    
+                    savedContact = defaultContact;
+                    
+                    break;
+                }
+            }
             
-            ResourceContext *resourceContext = [ResourceContext instance];
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:FB_USER_ID ascending:YES];
-            NSArray *users = [resourceContext resourcesWithType:USER withValueEqual:[contact.facebookid stringValue] forAttribute:FB_USER_ID sortBy:[NSArray arrayWithObject:sortDescriptor]];
-            
-            if ([users count] > 0) {
-                User *user = (User *)[users objectAtIndex:0];
+            if (match == YES) {
+                // Swap the old saved default contact for this new instance
+                [friendsPickerViewController.selectedFriendsArray addObject:contact];
+                [friendsPickerViewController.selectedFriendsArray removeObject:savedContact];
                 
-                if (user != nil) {
-                    if ([user.state intValue] == kMIMEMEUSER) {
-                        // Mark user as "Already on Mime-Me"
-                        lbl_new.text = @"On\nMime-Me!";
-                        lbl_new.textColor = [UIColor greenColor];
-                    }
-                    else if ([user.state intValue] == kINVITED) {
-                        // Mark user as "Invited!"
-                        lbl_new.text = @"Invited!";
-                        lbl_new.textColor = [UIColor lightGrayColor];
+                // Mark this contact selected
+                cell.accessoryView = nil;   // remove the state label
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            }
+            else {
+                // Mark user who have MimeMe installed already or who have already been sent invites
+                
+                // Set up the state label for this contact
+                UILabel *lbl_new = [[UILabel alloc] initWithFrame:CGRectMake(260.0f, 0.0f, 50.0f, 36.0f)];
+                lbl_new.backgroundColor = [UIColor clearColor];
+                lbl_new.numberOfLines = 0;
+                lbl_new.font =[UIFont systemFontOfSize:11.0f];
+                lbl_new.adjustsFontSizeToFitWidth = YES;
+                lbl_new.textColor = [UIColor blueColor];
+                lbl_new.textAlignment = UITextAlignmentCenter;
+                
+                ResourceContext *resourceContext = [ResourceContext instance];
+                NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:FB_USER_ID ascending:YES];
+                NSArray *users = [resourceContext resourcesWithType:USER withValueEqual:[contact.facebookid stringValue] forAttribute:FB_USER_ID sortBy:[NSArray arrayWithObject:sortDescriptor]];
+                
+                if ([users count] > 0) {
+                    User *user = (User *)[users objectAtIndex:0];
+                    
+                    if (user != nil) {
+                        if ([user.state intValue] == kMIMEMEUSER) {
+                            // Mark user as "Already on Mime-Me"
+                            lbl_new.text = @"On\nMime-Me!";
+                            lbl_new.textColor = [UIColor greenColor];
+                        }
+                        else if ([user.state intValue] == kINVITED) {
+                            // Mark user as "Invited!"
+                            lbl_new.text = @"Invited!";
+                            lbl_new.textColor = [UIColor lightGrayColor];
+                        }
+                        else {
+                            // Mark user as ready for invite
+                            lbl_new.text = @"Invite to\nMime-Me!";
+                            lbl_new.textColor = [UIColor blueColor];
+                        }
                     }
                     else {
                         // Mark user as ready for invite
@@ -225,20 +259,15 @@
                     lbl_new.text = @"Invite to\nMime-Me!";
                     lbl_new.textColor = [UIColor blueColor];
                 }
+                
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                cell.accessoryView = lbl_new;
+                [lbl_new release];
             }
-            else {
-                // Mark user as ready for invite
-                lbl_new.text = @"Invite to\nMime-Me!";
-                lbl_new.textColor = [UIColor blueColor];
-            }
-            
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.accessoryView = lbl_new;
-            [lbl_new release];
         }
-        
+    
         cell.textLabel.text = contact.name;
-        
+    
         // Display contact image
         ImageManager* imageManager = [ImageManager instance];
         NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:contact.objectID, kCONTACTID, tableView, kTABLEVIEW, nil];
